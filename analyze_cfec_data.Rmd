@@ -1,10 +1,11 @@
 ---
 title: "Analyzing portfolio effects in commercial catch data"
 author: "NCEAS commercial catch portfolio working group"
-date: "October 30, 2015"
+date: "February 22, 2016"
 output:
   pdf_document:
     fig_caption: yes
+  html_document: default
 ---
 
 ## Overview
@@ -16,7 +17,7 @@ We are interested in multiple metrics of diversity. For this first paper, we pla
 - variation in permit holdings over time  
 2. Using diversity as the predictor, look at absolute or relative change revenue / vessel (or revenue / vessel / days fished) as the response.  
 
-For both of the above, there's a large number of other perturbations including EVOS, management changes, climate shifts, changes in gear or processsing capacity, hatchery production of salmon, market conditions (such as Japanese crash in mid-1990s), constraints on limited entry or quotas, and biological conditions or shifts (abundance, distribution, size structure, etc).  
+For both of the above, there's a large number of other perturbations including EVOS, management changes, climate shifts, changes in gear or processsing capacity, hatchery production of salmon, market conditions (such as Japanese crash in mid-1990s), constraints on limited entry or quotas, and biological conditions or shifts (abundance, distribution, size structure, etc). 
 
 We'll initially restrict our analysis to data after 1984, since the data from 1975-1984 were dominated by foreign vessels (which we don't have). For more information, see AFSC technical reports (such as http://www.afsc.noaa.gov/Publications/AFSC-TM/NOAA-TM-AFSC-54.pdf). The cutoff of 1984/1985 is also consistent with the ADFG use. Further, the species reporting changes drastically before / after 1985 -- examples include no rockfish (demersal, pelagic, slope categories below), flatfish (shallow, deep categories below).  
 
@@ -28,11 +29,18 @@ Commercial areas: http://www.adfg.alaska.gov/index.cfm?adfg=fishingCommercialByF
 Halibut areas: http://www.iphc.int/publications/techrep/tech0049.pdf  
 
 ```{r chunkSet, cache=FALSE, echo=FALSE,warning=FALSE,message=FALSE}
+library(MASS)
 library(knitr)
 library(dplyr)
 library(ggplot2)
 library(vegan)
 library(mgcv)
+library(lme4)
+library(scales)
+library(fields)
+library(reshape)
+library(reshape2)
+library(cluster)
 opts_chunk$set(tidy=TRUE, message=FALSE)
 ```
 
@@ -41,12 +49,12 @@ Load the data from the saved workspace. This is the raw cfec data that has been 
 
 ### Note: for any confidentiality concerns, the workspace loaded here has been slightly jittered. This will need to be replaced with the real data for the final model. 
 ```{r loadData}
-load("cfec_jitter.Rdata")
+load("cfec.Rdata")
 # initially only use data 1985+
 cfec = cfec[cfec$year>1984,]
 ```
 
-The first data processing step is to aggregate some of the species. This is largely needed because of changes in reporting over time. For example, some of the rockfishes weren't reported to the same species level. For other species, there are unidentified groups, so there's additional aggregation required. 
+The first data processing step is to aggregate some of the species. This is largely needed because of changes in reporting over time (before 1985 for example, lots of the catch was from foreign fleets & not reported to species level -- for example, some of the rockfishes). For other species, there are unidentified groups, so there's additional aggregation required. 
 
 ```{r specLump}
 # Lump all skates together
@@ -67,7 +75,7 @@ cfec$specn[cfec$specn==129] = 119 # starry flounder
 cfec$specn[cfec$specn==127] = 119 # yellowfin
 cfec$specn[cfec$specn==126] = 119 # butter
 cfec$spec[cfec$specn==119] = "FLAT.shallow"
-
+# 5, 6, 7, 15, 26, 47, 61, 
 # Lump flatfish (deep)
 cfec$specn[cfec$specn==124] = 118 # dover
 cfec$specn[cfec$specn==134] = 118 # greenland turbot
@@ -110,9 +118,21 @@ cfec$spec[cfec$spec%in%c("GKCR","BKCR","UKCR","RKCR")] = "KCRB" # king
 cfec$spec[cfec$spec%in%c("UTCR","BTCR")] = "TCRB" # tanner
 # Lump shrimp - spot prawn, pink shrimp, 
 cfec$spec[cfec$spec%in%c("SPRW","PSHP","USRM")] = "USRM" # shrimp
-
+# Correct REX and "REX "
+cfec$spec[cfec$spec%in%c("REX ")] = "REX"
 # drop records with no spp
 cfec = cfec[-which(cfec$spec==""),]
+```
+
+Next, we have to clean up a few of the gears. Drop a few gears that are sporadically used, and combine longline gears.
+
+```{r}
+# 8 = fishwheel, used at start / end
+# 13 = dipnet, only last 2 years
+# 99 = other, stopped reporting
+cfec = cfec[-which(cfec$gearn%in%c(8, 13, 99)),]
+# Merge 6 and 61 into longline
+cfec$gearn[which(cfec$gearn==61)] = 6
 ```
 
 Next, we'll deal with processing the areas. We have multiple types of area codes. The 6-digit codes represent groundfish management areas, the 5-digit codes are state salmon/shellfish areas, and the 3-digit codes are the halibut areas. For the groundfish and salmon areas, there are sub-areas that are also reported (as the last 2-digits), so we'll lump sub-areas together by stripping off the last 2-digits.  
@@ -120,27 +140,25 @@ Next, we'll deal with processing the areas. We have multiple types of area codes
 ```{r}
 # Filter out sub-districts and group things at larger areas
 # Lump statistical areas by district -- groundfish
-cfec$stat6 = as.character(as.numeric(cfec$stat6)) # as.numeric needed because of dumb integer
+cfec$stat6 = as.numeric(cfec$stat6) # as.numeric needed because of integer
 cfec$areaType = NA
 cfec$stat6_char = NA
 indx = which(cfec$stat6 > 99999 & cfec$stat6 < 999999)
-cfec$stat6_char[indx] = nchar(cfec$stat6[indx])
+cfec$stat6_char[indx] = nchar(as.character(cfec$stat6[indx]))
 cfec$areaType[indx] = "groundfish"
 # This is just turning the last digit - sub region - into 0
-cfec$stat6[indx] = paste(substr(cfec$stat6[indx],1,5), "0",sep="")
-cfec$stat6[indx] = as.numeric(cfec$stat6[indx])
+cfec$stat6[indx] = as.numeric(paste(substr(as.character(cfec$stat6[indx]),1,5), "0",sep=""))
 # Now do salmon / shellfish - This is just turning the last 2 digits - sub region - into 00
 indx = which(cfec$stat6 > 9999 & cfec$stat6 < 100000)
-cfec$stat6[indx] = paste(substr(cfec$stat6[indx],1,3), "00",sep="")
+cfec$stat6[indx] = as.numeric(paste(substr(as.character(cfec$stat6[indx]), 1, 3), "00", sep=""))
 cfec$areaType[indx] = "salmonShellfish"
 
-cfec$stat6 = as.numeric(cfec$stat6)
 # Deal with the IPHC areas too. We can verify that nearly all spp caught in 3-digit areas are halibut,
 #sort(table(cfec$spec[which(cfec$stat6 < 1000)]))
 ```
 
-Next, we'll aggregate the stat6 codes into larger geographic regions. The focus here is on Prince William Sound, but for contrast we'll include Southeast Alaska, Kodiak W / E, and Cook Inlet. 
-  
+Next, we'll aggregate the stat6 codes into larger geographic regions. The focus here is on Prince William Sound, but for contrast we'll include Southeast Alaska, Kodiak W / E, Cook Inlet, and Bristol Bay. 
+
 ```{r}
 # Add the areas -- 5 digit are salmon/shellfish, 6-digit are groundfish
 cfec$area = NA
@@ -257,6 +275,43 @@ cfec$area[cfec$stat6%in%c(615600, 615630, 615700, 615730, 615800, 615830)] = "Br
 # Area to add - Alaska peninsula - Halibut areas 300-340?
 ```
   
+Another alternative approach to grouping would be to perform a cluster analysis on vessels / areas. Here we'll make a table of vessels (rows) and areas (column) then use 'clara' to construct 8 groups. This is somewhat arbitrary, but reflects roughly the number constructed above.  
+
+```{r}
+T = table(cfec$adfg, cfec$stat6)
+CC = clara(T, k = 8)
+cluster_vesselArea = t(CC$medoids)
+```
+
+Next we can sort out the mutually exclusive areas in the medoids to identify how the areas are being clustered.  
+```{r}
+cluster_vesselArea = ceiling(cluster_vesselArea / 1.0e10)
+cluster_vesselArea = cluster_vesselArea[-which(apply(cluster_vesselArea,1,sum)!=1),]
+```
+
+For example, the 6th medoid is clearly pulling out vessels in Southeast, 
+```{r}
+names(which(cluster_vesselArea[,6]==1))
+```
+
+Similarly, medoid 1 is PWS, medoid 2 is Cook Inlet, medoid 4 is Bristol Bay, medoid 5 is ~ 700 records of halibut (from a southern area not in GoA), medoid 6 is Southeast, medoid 7 is Kodiak, medoids 3 and 8 are Bering. So this seems to agree with our clustering, maybe with the exception of not splitting Kodiak into W/E.
+
+We can look at how the species landed varies by area (table in 1000s), 
+```{r}
+kable(round(table(cfec$spec, cfec$area)/1000, 2))
+```
+
+We can filter out rare species, and turn this table into catch composition (by occurence, not weight or earnings) to highlight how the areas are different,  
+
+```{r}
+specArea = table(cfec$spec, cfec$area)
+# normalize by area
+for(i in 1:dim(specArea)[2]) {
+specArea[,i] = specArea[,i]/sum(specArea[,i])
+}
+kable(round(specArea[-which(apply(specArea,1,max) < 0.01),], 2))
+```
+  
 ## Exploratory data analysis
 
 Drop all species records that have less than 1000 total observations. This is discarding about 5000 of 20 million records. 
@@ -265,10 +320,8 @@ cfecClean = group_by(cfec, spec) %>%
   mutate(nspecies = n()) %>%
   filter(nspecies > 1000) %>%
   data.frame
-
 # Also drop out unid groundfish, unid flatfish, smelts, grenadier, english sole -- all very rare
 cfecClean = cfecClean[-which(cfecClean$spec%in%c("UFLT","UGRN","SMLT","GRDR","EGLS")),]
-
 ```
 
 Drop all species records with gears occuring < 1000 times. This is discarding about 1250 records.
@@ -279,15 +332,57 @@ cfecClean = group_by(cfecClean, gearn) %>%
   data.frame
 ```
 
-Delete catch from fisheries that have less than 100 total records. This simplifies the dimension of the fishery codes a lot (from 378 to 234), removes about 3050 records, and doesn't affect the total earnings (these fisheries represent 0.0009 of total g_earn).  
+Delete catch from fisheries that have less than 100 total records. This simplifies the dimension of the fishery codes a lot (from 378 to 234), removes about 3050 records, and doesn't affect the total revenue (these fisheries represent 0.0009 of total g_earn).  
 ```{r discardFishery}
 cfecClean = group_by(cfecClean, p_fshy) %>%
   mutate(nfshy = n()) %>%
   filter(nfshy > 100) %>%
   data.frame
+
+# Write the SSL related sites to a workspace
+sslStat6 = c(355630,
+365730, 375830, 345530, 335430, 335430, 335430,
+335430, 335430, 365800, 355700, 345530, 355630,
+355700, 335700, 335700, 355700, 445930, 495930, 
+476000, 485930, 495930, 325600, 495930, 476000,
+475930, 555530, 565600, 525700, 525700, 525830,
+525700, 515800, 515830, 535630, 365800, 575630,
+535630, 565630, 525830, 595500, 595430, 595500,
+595430, 635430, 635430, 605430, 615430, 635504,
+585500)
+
+# calculate areas in circle around square of interest
+sslStat6.square = c(sslStat6, sslStat6 +- 9970, sslStat6 +- 10000, 
+sslStat6 +- 10070, sslStat6 +- 70, sslStat6 +- 9930, sslStat6 +- 10000, 
+sslStat6 +- 10030, sslStat6 +- 30)
+sslStat6.label = rep(sslStat6,9)
+
+cfecSSL = cfecClean[cfecClean$stat6%in%sslStat6.square,]
+cfecSSL$label = sslStat6.label[match(cfecSSL$stat6, sslStat6.square)]
+save(cfecSSL, file="cfecSSL.Rdata")
+
 ```
 
-Subset the data to only include vessels that fished at any point in Prince William Sound.  
+Tabulate the gears and species remaining.  
+```{r tableOfGears}
+m = as.matrix(sort(table(cfecClean$gearn)), ncol=1)
+# Normalize percent of all records
+m = cbind(m, round(100*m[,1]/sum(m[,1]),2))
+colnames(m) = c("Records","Percent")
+kable(m)
+```
+
+This shows that 79% of the records in the database are salmon!   
+```{r tableOfSpec}
+m = as.matrix(sort(table(cfecClean$spec)), ncol=1)
+# Normalize percent of all records
+m = cbind(m, round(100*m[,1]/sum(m[,1]),2))
+colnames(m) = c("Records","Percent")
+kable(m)
+```
+
+Subset the data to only include vessels that ever fished in Prince William Sound. This data frame becomes 'cfecPWS'.
+
 ```{r useOnlyPWS}
 cfecPWS = group_by(cfecClean, adfg) %>%
   mutate(in_PWS = any(area%in%"PWS")) %>%
@@ -298,21 +393,83 @@ cfecPWS = group_by(cfecClean, adfg) %>%
 
 Alan suggested looking at some coarse plots. First, we can show participation of vessels over time. Halibut fishing pre-1995 needed to get quota by catching halibut in 1988-1990.  
 ```{r,fig.cap="Time series of participation by year",fig.pos="placeHere"}
-plot(min(cfecPWS$year):max(cfecPWS$year), specnumber(table(cfecPWS$year,cfecPWS$adfg)), xlab="",ylab="# Vessels", type="b")
+plot(min(cfecPWS$year):max(cfecPWS$year), specnumber(table(cfecPWS$year,cfecPWS$adfg)), xlab="",ylab="# Vessels", type="b", main = "Participation in PWS region")
 ```
   
-We can also look at species by year  
+We can also look at species landed by year. This is not terribly informative -- for example the total number of species landed in the dataset has ranged from 38-41. An alternative would be to take the average (below).  
   
 ```{r,fig.cap="Time series of species caught by year",fig.pos="placeHere"}
 # total species
-par(mfrow = c(2,1), mgp = c(2,1,0), mai=c(0.5,0.5,0.3,0.1))
-plot(min(cfecPWS$year):max(cfecPWS$year), specnumber(table(cfecPWS$year, cfecPWS$spec)), xlab="",ylab="# Species", type="b",main="Catch from vessels that ever fished in PWS")
+par(mfrow = c(3,1), mgp = c(2,1,0), mai=c(0.5,0.5,0.3,0.1))
+plot(min(cfecPWS$year) : max(cfecPWS$year) , 
+     specnumber( table (cfecPWS$year, cfecPWS$spec)), xlab="", 
+     ylab="# Species", type="b", 
+     main="Catch from vessels that ever fished in PWS")
 
-plot(min(cfecPWS$year):max(cfecPWS$year), specnumber(table(cfecPWS$year[cfecPWS$area=="PWS"], cfecPWS$spec[cfecPWS$area=="PWS"])), xlab="",ylab="# Species", type="b",main="Catch only in PWS")
+plot(min(cfecPWS$year) : max(cfecPWS$year), 
+     specnumber(table(cfecPWS$year[cfecPWS$area=="PWS"], 
+                      cfecPWS$spec[cfecPWS$area=="PWS"])), 
+     xlab="",ylab="# Species", type="b",main="Catch only in PWS")
+
+plot(min(cfecClean$year) : max(cfecClean$year), 
+     specnumber(table(cfecClean$year,  cfecClean$spec)), 
+     xlab="",ylab="# Species", type="b", 
+     main="All vessels in dataset")
+```
+
+Now we can calculate the average species landed / year, where the average is calculated as the total number of species landed divided by the total number of vessels fishing. 
+  
+```{r,fig.cap="Time series of avg species caught by year per vessel",fig.pos="placeHere"}
+# total species
+par(mfrow = c(3,1), mgp = c(2,1,0), mai=c(0.5,0.5,0.3,0.1))
+plot(min(cfecPWS$year):max(cfecPWS$year), 
+     specnumber(table(cfecPWS$year, cfecPWS$spec)) / 
+       specnumber(table(cfecPWS$year,  cfecPWS$adfg)), 
+     xlab="", ylab="Avg # Species / Ves", 
+     type="b", main="Catch from vessels that ever fished in PWS")
+
+plot(min(cfecPWS$year):max(cfecPWS$year), 
+     specnumber(table(cfecPWS$year[cfecPWS$area=="PWS"], 
+     cfecPWS$spec[cfecPWS$area=="PWS"])) / 
+       specnumber(table(cfecPWS$year[cfecPWS$area=="PWS"], 
+     cfecPWS$adfg[cfecPWS$area=="PWS"])), 
+     xlab="",ylab="Avg # Species / Ves", 
+     type="b",main="Catch only in PWS")
+
+plot(min(cfecClean$year):max(cfecClean$year), 
+     specnumber(table(cfecClean$year,  cfecClean$spec)) / 
+       specnumber(table(cfecClean$year,  cfecClean$adfg)), 
+     xlab="",ylab="Avg # Species / Ves",
+     type="b", main="All vessels in dataset")
+```
+  
+Another way to calculate the average is total # species landed divided by the total number of fishing records per year.  
+  
+```{r,fig.cap="Time series of avg species caught by year per vessel",fig.pos="placeHere"}
+# total species
+par(mfrow = c(3,1), mgp = c(2,1,0), mai=c(0.5,0.5,0.3,0.1))
+plot(min(cfecPWS$year):max(cfecPWS$year), 
+     specnumber(table(cfecPWS$year, cfecPWS$spec)) / 
+       as.numeric(table(cfecPWS$year)), xlab="", 
+     ylab = "Avg # Species / Haul", type = "b",  
+     main = "Catch from vessels that ever fished in PWS")
+
+plot(min(cfecPWS$year):max(cfecPWS$year), 
+     specnumber(table(cfecPWS$year[cfecPWS$area=="PWS"], 
+    cfecPWS$spec[cfecPWS$area=="PWS"])) / 
+      as.numeric(table(cfecPWS$year[cfecPWS$area=="PWS"])), 
+    xlab = "", ylab = "Avg # Species / Haul", 
+    type = "b",main = "Catch only in PWS")
+
+plot(min(cfecClean$year):max(cfecClean$year), 
+     specnumber(table(cfecClean$year,  cfecClean$spec)) / 
+       as.numeric(table(cfecClean$year)), xlab = "", 
+     ylab = "Avg # Species / Haul", 
+     type = "b", main = "All vessels in dataset")
 ```
   
 Look at species diversity using Vegan. How has diversity in # species fished changed over time?   
-```{r veganSpecies,echo=FALSE, fig.cap="Time series of species diversity",fig.pos="placeHere"}
+```{r veganSpecies,echo=FALSE, fig.cap="Time series of species diversity (for vessels that have ever fished in Prince William Sound)",fig.pos="placeHere"}
 nSpecies.mean = NA # mean richness
 nSpecies.cv = NA # cv richness
 simp.mean = NA # mean simpson
@@ -338,7 +495,7 @@ plot(min(cfecPWS$year):max(cfecPWS$year),shannon.cv,ylab="CV Shannon div",type="
 ```
   
 We can do similar plots for the number of gears used / vessel  
-```{r veganGears,echo=FALSE, fig.cap="Time series of diversity of number of fishing gears",fig.pos="placeHere"}
+```{r veganGears,echo=FALSE, fig.cap="Time series of diversity of number of fishing gears (for vessels that have ever fished in Prince William Sound)",fig.pos="placeHere"}
 nGears.mean = NA # mean richness
 nGears.cv = NA # cv richness
 simp.mean = NA # mean simpson
@@ -390,34 +547,34 @@ plot(min(cfecPWS$year):max(cfecPWS$year),shannon.cv,ylab="CV Shannon div",type="
 ```  
   
 ```{r, echo=FALSE,include=FALSE}
-group_by(cfecPWS, adfg) %>%
-  summarize(n = length(unique(year))) %>%
-  ggplot(aes(n)) + geom_histogram()
+group_by(cfecPWS, adfg) %>% 
+  summarize(n = length(unique(year))) %>% 
+  ggplot(aes(n)) + geom_histogram() 
 # To do: 7 - year peaks are weird. Survey? 
 ```
   
 Make exploratory plot of vessels that fished only before and after 1989. These aren't shown -- but we looked at them in Santa Barbara, and the major take home point is that more vessels left the fishery after 1989 than joined.
   
 ```{r,fig.cap="Histogram of vessels that only fished in PWS before 1990",fig.pos="placeHere", include=FALSE,echo=FALSE}
-group_by(cfecPWS, adfg) %>%
-mutate(before = ifelse(min(year) < 1990, 1, 0)) %>% 
-  filter(before == 1) %>%
-  summarize(n = length(unique(year))) %>%
-  ggplot(aes(n)) + geom_histogram()
+group_by(cfecPWS, adfg) %>%  
+mutate(before = ifelse(min(year) < 1990, 1, 0)) %>%  
+  filter(before == 1) %>%  
+  summarize(n = length(unique(year))) %>%  
+  ggplot(aes(n)) + geom_histogram()  
 ```
   
 ```{r,fig.cap="Histogram of vessels that only fished in PWS after 1990",fig.pos="placeHere", include=FALSE,echo=FALSE}
-group_by(cfecPWS, adfg) %>%
-mutate(after = ifelse(min(year) >= 1990, 1, 0)) %>% 
-  filter(after == 1) %>%
-  summarize(n = length(unique(year))) %>%
-  ggplot(aes(n)) + geom_histogram()
+group_by(cfecPWS, adfg) %>%  
+mutate(after = ifelse(min(year) >= 1990, 1, 0)) %>%  
+  filter(after == 1) %>%  
+  summarize(n = length(unique(year))) %>%  
+  ggplot(aes(n)) + geom_histogram()  
 ```
   
 ## Metric of change
-We can use absolute or relative earnings over time, by vessel. We adopted the relative measure, because we're comparing vessels of very different size classes. Sizes of individual vessels may change slowly over time. The earning metric is calculated as the first-differenced log earnings from time (t+1) to time (t), $log(earn_{t+1}) - log(earn_{t})$. 
+We can use absolute or relative revenue over time, by vessel. We adopted the relative measure, because we're comparing vessels of very different size classes. Sizes of individual vessels may change slowly over time. The revenue metric is calculated as the first-differenced log revenue from time (t+1) to time (t), $log(earn_{t+1}) - log(earn_{t})$. 
 
-The key challenge here is that we need a metric of earnings that will allow us to compare different types of vessels (e.g. large, small) that don't overlap in time. For example, we need a metric that standardizes catches or earnings from a small vessel fishing 1985-1990 to that of a large vessel fishing 2000-2005. The relative change is universal across vessels, and can be interpreted as percent change (e.g. a value of -1 = exp(-1) = 0.367, or a ~ 63% decline in earnings between years).  
+The key challenge here is that we need a metric of revenue that will allow us to compare different types of vessels (e.g. large, small) that don't overlap in time. For example, we need a metric that standardizes catches or revenue from a small vessel fishing 1985-1990 to that of a large vessel fishing 2000-2005. The relative change is universal across vessels, and can be interpreted as percent change (e.g. a value of -1 = exp(-1) = 0.367, or a ~ 63% decline in revenue between years).  
 
 We'll need to be cautious in putting together the covariates if the response is first differenced. If we code up indicators for press / pulse perturbations, those need to be first differenced too. 
 
@@ -445,7 +602,9 @@ totalPWS$nfishery[totalPWS$nfishery>4] = 4
 Add in NAs for missing years. We need these values to be included so that when we first difference, we're not taking differences across > 1 year. When we take the differences, we're also having variables for number of species, gears, etc (along with the differences of each predictor). For the undifferenced data, the number of species, gears, etc. corresponds to the value in the second year. We may want to replace this with a 2-year mean or something.  
   
 ```{r mergeYears}
-dummyDF = expand.grid(adfg = unique(totalPWS$adfg), year = min(totalPWS$year):max(totalPWS$year), stringsAsFactors = F)
+dummyDF = expand.grid(adfg = unique(totalPWS$adfg), 
+  year = min(totalPWS$year) : max(totalPWS$year), 
+  stringsAsFactors = F)
 # expand the data frame w/missing years
 totalPWSExp = left_join(dummyDF, totalPWS) %>%
   arrange(adfg, year)
@@ -462,71 +621,71 @@ Now with our aggregated dataset, we can make histograms of each predictor.
   
 ```{r,fig.cap="Histogram of predictors (across all years and data)",fig.pos="placeHere"}
 par(mfrow = c(2,2), mai=c(0.6,0.6,0.1,0.1))
-#hist(log(totalPWSExp$totalearnings), main="Log of earnings",xlab="",col="grey")
+#hist(log(totalPWSExp$totalearnings), main="Log of revenue",xlab="",col="grey")
 hist(totalPWSExp$nspecies, main="Number of species", xlab="", col="grey")
 hist(totalPWSExp$ngear, main="Number of gears", xlab="", col="grey")
 hist(totalPWSExp$narea, main="Number of areas", xlab="", col="grey")
 hist(totalPWSExp$nfishery, main="Number of fisheries", xlab="", col="grey")
 ```
   
-We can also look at change in these predictors over time -- we can also look at the response, which is change in earnings from time t to time t+1.
+We can also look at change in these predictors over time -- we can also look at the response, which is change in revenue from time t to time t+1.
 ```{r,fig.cap="Histogram of change in predictors (across all years and data)",fig.pos="placeHere"}
 par(mfrow = c(3,2), mai=c(0.6,0.6,0.2,0.1))
-hist(totalPWSExp$difflog, main="Log of change in earnings", xlab="", col="grey")
+hist(totalPWSExp$difflog, main="Log of change in revenue", xlab="", col="grey")
 hist(totalPWSExp$diffspec, main="Change in species", xlab="", col="grey")
 hist(totalPWSExp$diffgear, main="Change in gears", xlab="", col="grey")
 hist(totalPWSExp$diffarea, main="Change in areas", xlab="", col="grey")
 hist(totalPWSExp$difffishery, main="Change in fisheries", xlab="", col="grey")
 ```
   
-## Plotting change in earnings through time
+## Plotting change in revenue through time
 
 We can start by making plots for individual data points where the dimension doesn't change (e.g. individuals fish 1 species in both time t and time t+1).
 
-```{r,fig.cap="Median and quartiles of change in earnings, by species, for individuals that don't change number of species fished through time",fig.pos="placeHere"}
-group_by(totalPWSExp[totalPWSExp$diffspec==0,], year, nspecies) %>% 
+```{r,fig.cap="Median and quartiles of change in revenue, by species, for individuals that don't change number of species fished through time",fig.pos="placeHere"}
+group_by(totalPWSExp[totalPWSExp$diffspec==0, ], year, nspecies) %>%  
   summarize(medDiffLog = median(difflog),  
-  lower = quantile(difflog,probs = 0.25), 
-  upper = quantile(difflog,probs = 0.75)) %>% 
+  lower = quantile(difflog,probs = 0.25),  
+  upper = quantile(difflog,probs = 0.75)) %>%  
 ggplot(aes(year, medDiffLog)) + geom_line() + facet_wrap(~nspecies) +  geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2)
 ```
   
-```{r,fig.cap="Median and quartiles of change in earnings, by gears, for individuals that don't change number of gears fished through time",fig.pos="placeHere"}
-group_by(totalPWSExp[totalPWSExp$diffgear==0,], year, ngear) %>% 
-  summarize(medDiffLog = median(difflog), 
-  lower = quantile(difflog,probs = 0.25), 
-  upper = quantile(difflog,probs = 0.75)) %>% 
+```{r,fig.cap="Median and quartiles of change in revenue, by gears, for individuals that don't change number of gears fished through time",fig.pos="placeHere"}
+group_by(totalPWSExp[totalPWSExp$diffgear==0, ], year, ngear) %>%  
+  summarize(medDiffLog = median(difflog),  
+  lower = quantile(difflog,probs = 0.25),  
+  upper = quantile(difflog,probs = 0.75)) %>%  
 ggplot(aes(year, medDiffLog)) + geom_line() + facet_wrap(~ngear) +  geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2)
 ```
   
-```{r,fig.cap="Median and quartiles of change in earnings, by areas, for individuals that don't change number of areas fished through time",fig.pos="placeHere"}
-group_by(totalPWSExp[totalPWSExp$diffarea==0,], year, narea) %>% 
-  summarize(medDiffLog = median(difflog), 
-  lower = quantile(difflog,probs = 0.25), 
-  upper = quantile(difflog,probs = 0.75)) %>% 
+```{r,fig.cap="Median and quartiles of change in revenue, by areas, for individuals that don't change number of areas fished through time",fig.pos="placeHere"}
+group_by(totalPWSExp[totalPWSExp$diffarea==0, ], year, narea) %>%  
+  summarize(medDiffLog = median(difflog),  
+  lower = quantile(difflog,probs = 0.25),  
+  upper = quantile(difflog,probs = 0.75)) %>%  
 ggplot(aes(year, medDiffLog)) + geom_line() + facet_wrap(~narea) +  geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2)
 ```
   
-```{r,fig.cap="Median and quartiles of change in earnings, by areas, for individuals that don't change number of fisheries fished through time",fig.pos="placeHere"}
-group_by(totalPWSExp[totalPWSExp$difffishery==0,], year, nfishery) %>% 
-  summarize(medDiffLog = median(difflog), 
-  lower = quantile(difflog,probs = 0.25), 
-  upper = quantile(difflog,probs = 0.75)) %>% 
-ggplot(aes(year, medDiffLog)) + geom_line() + facet_wrap(~nfishery) +  geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2)
+```{r,fig.cap="Median and quartiles of change in revenue, by areas, for individuals that don't change number of fisheries fished through time",fig.pos="placeHere"}
+group_by(totalPWSExp[totalPWSExp$difffishery==0, ], year, nfishery) %>%  
+  summarize(medDiffLog = median(difflog),  
+  lower = quantile(difflog,probs = 0.25),  
+  upper = quantile(difflog,probs = 0.75)) %>%  
+ggplot(aes(year, medDiffLog)) + geom_line() + facet_wrap(~nfishery) +   geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2)
 ```
   
 We can break the differences out further, by species (across columns) and by number of areas fished. The areas are grouped by vessels fishing in one area (just PWS) versus vessels that fish in PWS and 1 or more other regions. This plot includes some confounding, so don't read too much into it. 
-```{r,fig.cap="Median and quartiles of change in earnings, by species x areas",fig.pos="placeHere"}
-totalPWSExp2 = totalPWSExp
+```{r,fig.cap="Median and quartiles of change in revenue, by species x areas",fig.pos="placeHere"}
+totalPWSExp2 = totalPWSExp 
 totalPWSExp2$nspecies[totalPWSExp2$nspecies > 5] = 5
-group_by(totalPWSExp2, year, nspecies, narea) %>% 
-  summarize(medDiffLog = median(difflog), 
-            lower = quantile(difflog,probs = 0.25), 
-            upper = quantile(difflog,probs = 0.75)) %>% 
-  ggplot(aes(year, medDiffLog)) + geom_line() + facet_grid(narea~nspecies) +  geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2) 
+group_by(totalPWSExp2, year, nspecies, narea) %>%  
+  summarize(medDiffLog = median(difflog),  
+            lower = quantile(difflog,probs = 0.25),  
+            upper = quantile(difflog,probs = 0.75)) %>%  
+  ggplot(aes(year, medDiffLog)) + geom_line() + facet_grid(narea~nspecies) +   geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2) 
 ```
   
-Make some summary tables of vessels fishing in 1988 / 1989 that only landed one species. Make tables of the most common species landed, both by records and earnings. 
+Make some summary tables of vessels fishing in 1988 / 1989 that only landed one species. Make tables of the most common species landed, both by records and revenue. 
 ```{r}
 vOne = filter(totalPWSExp,nspecies==1 & diffspec==0) %>%
   select(adfg) %>% #select(year,adfg)
@@ -539,7 +698,7 @@ head(table(LJ$spec[LJ$year%in%seq(1988,1989)]) %>%
   sort %>%
   rev)
 
-# Look at earnings of fishers that people are specializing on
+# Look at revenue of fishers that people are specializing on
 LJ89 = LJ[LJ$year==1989,]
 LJ89table = aggregate(g_earn ~ spec, LJ89, sum)
 head(LJ89table[with(LJ89table, order(-g_earn)), ])
@@ -559,7 +718,7 @@ We can also get really into the weeds and make plots of individual annual landin
   
 Before we fit anything, we need to calculate the mean of each predictor (# species, gears, areas) over the 2 year period. This will basically scale the effect, and will be included alongside predictors representing the change in each of these variables. 
 
-Are a priori expectation is that if diversity (species, gear, area) is beneficial, all of the differenced predictors (diffspec, diffgear, diffarea) will have positive effects on the response (change in earnings). But if the differenced values are small, it means individual strategy is relatively constant, and we'd also expect the effects of diverification on the mean values (nspecies, narea, ngear).
+Are a priori expectation is that if diversity (species, gear, area) is beneficial, all of the differenced predictors (diffspec, diffgear, diffarea) will have positive effects on the response (change in revenue). But if the differenced values are small, it means individual strategy is relatively constant, and we'd also expect the effects of diverification on the mean values (nspecies, narea, ngear).
   
 ```{r runningMean}
 totalPWSExp$nspecies = (totalPWSExp$nspecies + (totalPWSExp$nspecies + totalPWSExp$diffspec))/2
@@ -574,7 +733,7 @@ lm.simple = lm(difflog~as.factor(year) + nspecies + ngear + narea + diffspec + d
 summary(lm.simple)
 ```
   
-We can also fit a gam, with spline over year, and basically get the same result. These models show that changing strategy (increasing gears used or areas fished correlates with more earnings, but the overall strategy of more areas or gears doesn't have a positive effect). In contrast, the effect of species is positive in both, suggesting that fishing more species translates to positive revenue. Other splines can be included (nspecies, diffspec) but the effects are basically linear (not shown).  
+We can also fit a gam, with spline over year, and basically get the same result. These models show that changing strategy (increasing gears used or areas fished correlates with more revenue, but the overall strategy of more areas or gears doesn't have a positive effect). In contrast, the effect of species is positive in both, suggesting that fishing more species translates to positive revenue. Other splines can be included (nspecies, diffspec) but the effects are basically linear (not shown).  
   
 ```{r simpleGam}
 gam.simple = gam(difflog~s(year) + nspecies + ngear + narea + diffspec + diffgear + diffarea,data=totalPWSExp)
@@ -589,10 +748,10 @@ tableVesselArea = table(cfecClean$adfg, cfecClean$area)
 tableVesselArea = ceiling(tableVesselArea/1.0e10)
 T = table(apply(tableVesselArea,1,sum))
 m = matrix(NA, 3, 2)
-colnames(m) = c("# Vessels", "% Total")
+colnames(m) = c("# Vessels", "Percent")
 rownames(m) = c("1","2","3+")
 m[,1] = c(T[2],T[3],sum(T[-c(1:3)]))
-m[,2] = round(m[,1]/sum(m[,1]),3)
+m[,2] = round(100*m[,1]/sum(m[,1]),3)
 
 kable(m) # Make simple table w/ knitr
 ```
@@ -629,7 +788,9 @@ for(i in 1:length(colnames(tableVesselArea))) {
 }
 
 # Fill in missing years and difference
-dummyDF = expand.grid(adfg = unique(totalSingles$adfg), year =  min(totalSingles$year):max(totalSingles$year), stringsAsFactors = F)
+dummyDF = expand.grid(adfg = unique(totalSingles$adfg), 
+ year =  min(totalSingles$year) : max(totalSingles$year), 
+ stringsAsFactors = F)
 # expand the data frame w/missing years
 totalSingles = left_join(dummyDF, totalSingles) %>%
   arrange(adfg, year)
@@ -653,12 +814,419 @@ plot(gam.area)
 
 
 ## To do list
-1. Fit GAMs to diversity metrics to characterize change over time. This could be done with the full dataset, 1975-present. 
+1. Fit GAMs to diversity metrics to characterize change over time. This could be done with the full dataset, 1985-present. 
 2. We're going to repeat this kind of analysis on different areas. Some things to consider are:  
 - for estimation of random effects, we may need to only include vessels with 3+ records  
 - we may want to think about avoiding double counting. The way we have the sorting set up now, a vessel fishing in SEAK and PWS would be counted in both areas / analyses
 3. For comparison between areas, we're interested in characterizing differences in year to year patterns, whether or not diversity relationships/coefficients are shared or random across areas (shared vs random effects), and possibly whether impacts of diversity are changing over time (think DLMs).
 
-## Data issues:
-1. Why are there no data for longline (gearn == 6) in 2009-2010? 
+******
+# More rigorous analysis  
+
+Above, we focued on breaking the paper into 2 parts: (1) analyzing patterns over time in diversity by fitting GAMs, and then (2) doing statistical modeling of change in revenue as a function of diversification metrics. 
+
+## Change in diversity metrics through time  
+
+We're going to do some harder filtering, first only retaining vessels / permits that ever fished in one of the designated areas. In other words, they can't have an NA in the record - ever. 
+
+```{r}
+cfecCleaned = cfecClean
+cfecCleaned$isNA = 0 # is an area ever NA?
+cfecCleaned$isNA[is.na(cfecCleaned$area)] = 1
+vessel.isna = table(cfecCleaned$adfg,cfecCleaned$isNA)
+cfecCleaned = cfecCleaned[cfecCleaned$adfg %in% names(which(vessel.isna[, 2] ==
+0)), ]
+```
+
+```{r}
+# Of this restricted dataset, 93% of vessels don't move between areas -
+# ever. So the primary focus of our analysis can be on gears and species
+# landed. Just so the area switching won't matter, let's delete those
+# records that have multiple areas
+t = ceiling(table(cfecCleaned$adfg, cfecCleaned$area)/1e+10)
+# delete vessels that fish in 2+ areas
+cfecCleaned = cfecCleaned[cfecCleaned$adfg %in% names(which(apply(t, 1, sum) ==
+1)), ]
+
+# Now tabulate summaries of species, gears, fisheries, etc
+totalVessels = group_by(cfecCleaned, adfg, year) %>%  
+  summarize(totalearnings = sum(g_earn),  
+  nspecies = length(unique(spec)),  
+  ngear = length(unique(gearn)),  
+  nfishery = length(unique(p_fshy)),
+  area = area[1])  
+
+# calculate landings by species, year, vessel
+landBySpec = group_by(cfecCleaned, adfg, year, spec) %>%  
+summarize(totalpounds = sum(g_pounds))  
+# calculate effective number of species by exp() for shannon
+# http://jonlefcheck.net/2012/10/23/diversity-as-effective-numbers/
+landBySpec = group_by(landBySpec, adfg, year) %>%  
+   summarize(effectiveSpec = exp(diversity(totalpounds)))
+
+totalVessels$effectiveSpec = landBySpec$effectiveSpec
+
+# calculate landings by gear, year, vessel
+landByGear = group_by(cfecCleaned, adfg, year, gearn) %>%  
+  summarize(totalpounds = sum(g_pounds))  
+landByGear = group_by(landByGear, adfg, year) %>%  
+  summarize(effectiveGear = exp(diversity(totalpounds)))  
+
+totalVessels$effectiveGear = landByGear$effectiveGear  
+
+# calculate landings by fishery, year, vessel
+landByFshy = group_by(cfecCleaned, adfg, year, p_fshy) %>%  
+summarize(totalpounds = sum(g_pounds))  
+landByFshy = group_by(landByFshy, adfg, year) %>%  
+summarize(effectiveFshy = exp(diversity(totalpounds)))  
+
+totalVessels$effectiveFshy = landByFshy$effectiveFshy  
+
+# Lump larger groups
+totalVessels$nspecies[totalVessels$nspecies > 10] = 10
+totalVessels$ngear[totalVessels$ngear > 3] = 3
+totalVessels$nfishery[totalVessels$nfishery > 4] = 4
+```
+
+### GAM fitting  
+
+Without area included, our 3 dimensions are (1) species, (2) gears, and (3) fisheries. For both metrics, we can fit GAMS examining either the raw counts, or use the effective number, which we calculated above. For each diversity metric, we can also do model selection to ask whether the spline over time is constant or shared across areas. 
+
+#### Change in species over time  
+
+We can fit 4 models to the species data. We're not comparing Raw / Effective counts, but constant versus area-specific splines. We can see that the area splines are strongly favored, suggesting regional patterns in diversity with respect to species. 
+```{r}
+rawspec.ConstantSpline = gam(log(nspecies) ~ s(year), data=totalVessels)
+rawspec.AreaSpline = gam(log(nspecies) ~ s(year, by = as.factor(area)), data=totalVessels)
+effspec.ConstantSpline = gam(log(effectiveSpec) ~ s(year), data=totalVessels)
+effspec.AreaSpline = gam(log(effectiveSpec) ~ s(year, by = as.factor(area)), data=totalVessels)
+spec.mat = matrix(c("Raw","Raw","Effective","Effective", "Constant", "Area", "Constant", "Area", 
+             round(AIC(rawspec.ConstantSpline),2), round(AIC(rawspec.AreaSpline),2), round(AIC(effspec.ConstantSpline),2), round(AIC(effspec.AreaSpline),2)), 4, 3)
+colnames(spec.mat) = c("Counts", "Spline", "AIC")
+kable(spec.mat)
+```
+
+#### Change in gears over time  
+
+We can fit the same 4 models to the gear data. We're not comparing Raw / Effective counts, but constant versus area-specific splines. Like with species, the area splines are strongly favored, suggesting regional patterns in diversity with respect to gears fished.  
+```{r}
+rawgear.ConstantSpline = gam(log(ngear) ~ s(year), data=totalVessels)
+rawgear.AreaSpline = gam(log(ngear) ~ s(year, by = as.factor(area)), data=totalVessels)
+effgear.ConstantSpline = gam(log(effectiveGear) ~ s(year), data=totalVessels)
+effgear.AreaSpline = gam(log(effectiveGear) ~ s(year, by = as.factor(area)), data=totalVessels)
+gear.mat = matrix(c("Raw","Raw","Effective","Effective", "Constant", "Area", "Constant", "Area", 
+             round(AIC(rawgear.ConstantSpline),2), round(AIC(rawgear.AreaSpline),2), round(AIC(effgear.ConstantSpline),2), round(AIC(effgear.AreaSpline),2)), 4, 3)
+colnames(gear.mat) = c("Counts", "Spline", "AIC")
+kable(gear.mat)
+```
+
+#### Change in fisheries over time  
+
+We can fit the same 4 models to the fishery data. We're not comparing Raw / Effective counts, but constant versus area-specific splines. Like with species and gears, the area splines are strongly favored, suggesting regional patterns in diversity with respect to fisheries fished. 
+```{r}
+rawfshy.ConstantSpline = gam(log(nfishery) ~ s(year), data=totalVessels)
+rawfshy.AreaSpline = gam(log(nfishery) ~ s(year, by = as.factor(area)), data=totalVessels)
+efffshy.ConstantSpline = gam(log(effectiveFshy) ~ s(year), data=totalVessels)
+efffshy.AreaSpline = gam(log(effectiveFshy) ~ s(year, by = as.factor(area)), data=totalVessels)
+fshy.mat = matrix(c("Raw","Raw","Effective","Effective", "Constant", "Area", "Constant", "Area", round(AIC(rawfshy.ConstantSpline),2), round(AIC(rawfshy.AreaSpline),2), round(AIC(efffshy.ConstantSpline),2), round(AIC(efffshy.AreaSpline),2)), 4, 3)
+colnames(fshy.mat) = c("Counts", "Spline", "AIC")
+kable(fshy.mat)
+```
+
+So in all cases, the diversity changes over time varies spatially. Finally, we'll plot the model output for the best models. 
+
+```{r, fig.pos="placeHere",fig.cap="GAM predictions of responses (species, gears, fisheries) by metric (raw, effective). Colors represent regions."}
+# make a 3 x 2 plot with diversity measure on rows, and raw/effect on cols
+areas = levels(as.factor(totalVessels$area))
+ys = 1985:2014
+par(mfrow = c(3,2), mgp=c(2,1,0), mai=c(0.5,0.5,0.05,0.05))
+# BristolBay CookInlet Kodiak.east Kodiak.west PWS Southeast
+
+plot(ys, predict(rawspec.AreaSpline, 
+newdata=expand.grid(area="BristolBay",year=ys)), type="l", 
+col = tim.colors(6)[1], ylim=c(0, max(rawspec.AreaSpline$fitted.values)), 
+xlab="", ylab = "Predicted log(raw spec)")
+for(i in 2:length(areas)) {
+lines(ys, predict(rawspec.AreaSpline, newdata=expand.grid(area=areas[i],year=ys)), col = tim.colors(6)[i])
+}
+legend("topleft", areas, col = tim.colors(6), lty=1, bty="n")
+
+plot(ys, predict(effspec.AreaSpline, 
+newdata=expand.grid(area="BristolBay",year=ys)), type="l", 
+col = tim.colors(6)[1], ylim=c(0, max(effspec.AreaSpline$fitted.values)), 
+xlab="", ylab = "Predicted log(eff. spec)")
+for(i in 2:length(areas)) {
+lines(ys, predict(effspec.AreaSpline, newdata=expand.grid(area=areas[i],year=ys)), col = tim.colors(6)[i])
+}
+
+plot(ys, predict(rawgear.AreaSpline, 
+newdata=expand.grid(area="BristolBay",year=ys)), type="l", 
+col = tim.colors(6)[1], ylim=c(0, max(rawgear.AreaSpline$fitted.values)), 
+xlab="", ylab = "Predicted log(raw gears)")
+for(i in 2:length(areas)) {
+lines(ys, predict(rawgear.AreaSpline, newdata=expand.grid(area=areas[i],year=ys)), col = tim.colors(6)[i])
+}
+
+plot(ys, predict(effgear.AreaSpline, 
+newdata=expand.grid(area="BristolBay",year=ys)), type="l", 
+col = tim.colors(6)[1], ylim=c(0, max(effgear.AreaSpline$fitted.values)), 
+xlab="", ylab = "Predicted log(eff gears)")
+for(i in 2:length(areas)) {
+lines(ys, predict(effgear.AreaSpline, newdata=expand.grid(area=areas[i],year=ys)), col = tim.colors(6)[i])
+}
+
+plot(ys, predict(rawfshy.AreaSpline, 
+newdata=expand.grid(area="BristolBay",year=ys)), type="l", 
+col = tim.colors(6)[1], ylim=c(0, max(rawfshy.AreaSpline$fitted.values)), 
+xlab="", ylab = "Predicted log(raw fshy)")
+for(i in 2:length(areas)) {
+lines(ys, predict(rawfshy.AreaSpline, newdata=expand.grid(area=areas[i],year=ys)), col = tim.colors(6)[i])
+}
+
+plot(ys, predict(efffshy.AreaSpline, 
+newdata=expand.grid(area="BristolBay",year=ys)), type="l", 
+col = tim.colors(6)[1], ylim=c(0, max(efffshy.AreaSpline$fitted.values)), 
+xlab="", ylab = "Predicted log(eff fshy)")
+for(i in 2:length(areas)) {
+lines(ys, predict(efffshy.AreaSpline, newdata=expand.grid(area=areas[i],year=ys)), col = tim.colors(6)[i])
+}
+```
+
+## Clustering vessel-years by diversity in species  
+
+Our response (revenue) and predictors are on an annual scale, so one analysis that might be interesting to look at would be to try to reduce the dimension of the dataset. In other words, is it possible to classify vessel-year landings into salmon v non-salmon fishers? Or are other patterns of specialists evident? 
+
+One way to do this is to create a matrix with rows = vessel-year combinations, and columns = species landed.
+
+```{r}
+# summarize landings by year/spec/
+totalLandings = group_by(cfecCleaned, adfg, year, spec) %>%  
+  summarize(totallandings = sum(g_pounds))
+# cast to wide format with species across cols
+totalLandings = as.data.frame(totalLandings)
+#totalLandings = totalLandings[-which(is.na(totalLandings$adfg)),]
+lmlt <- melt(totalLandings, id.vars = c("adfg", "year","spec"))
+newdf <- dcast(lmlt, year + adfg ~ spec)
+```
+
+Now we can apply MDS to look at clusters. Turn all NAs to 0s. 
+
+```{r}
+for(i in 3:dim(newdf)[2]) {
+  newdf[which(is.na(newdf[,i])),i] = 0
+  #newdf[,i] = as.numeric(newdf[,i])
+}
+# Let's sample ~ 10000 data points for starters
+s = sample(seq(1, dim(newdf)[1]), size=5000, replace=F)
+#distMat = dist(log(newdf[s,-c(1:2)]+1))
+
+#avgWidth = 100
+#for(i in 2:10) {
+#  clust = pam(log(newdf[s,-c(1:2)]+1), k = i)
+#  avgWidth[i] = clust$silinfo$avg.width
+#}
+#bestClust = which.min(avgWidth)
+
+# Using mean(silhouette(clust)) we find that 3 clusters
+# has the lowest mean silhouette width
+bestClust = 3
+clust = pam(log(newdf[s,-c(1:2)]+1), k = bestClust)
+
+# We can look at what the medoids represent, 
+m = t(clust$medoids)
+colnames(m) = paste("Group",seq(1,dim(m)[2]))
+kable(m)
+```
+  
+What follows out here is that the data are dividing annual landings into 3 larger groups: Sockeye fishing, Non-sockeye salmon fishing, and halibut fishing (PHLB).  
+
+Just for general interest, we could basically repeat the same analysis after dropping out the salmon records. This shows that herring and halibut landings are the largest groups (and everything else as 3rd group).
+
+```{r}
+#avgWidth = 100
+dropnames = which(colnames(newdf)%in%c("year", "adfg", "CHNK", "CHUM", "COHO", "PINK", "SOCK"))
+#for(i in 2:10) {
+#  clust = pam(log(newdf[s,-dropnames]+1), k = i)
+#  avgWidth[i] = clust$silinfo$avg.width
+#}
+#bestClust = which.min(avgWidth)
+# Using mean(silhouette(clust)) we find that 3 clusters
+# has the lowest mean silhouette width
+bestClust=3
+clust = pam(log(newdf[s,-dropnames]+1), k = bestClust)
+
+# We can look at what the medoids represent, 
+m = t(clust$medoids)
+colnames(m) = paste("Group",seq(1,dim(m)[2]))
+kable(m)
+```
+
+One potential criticism of this approach is that the separation / group medoids are largely affected by landed weight. An alternative approach would be to do the same clustering using binary classification with 'mona'. 
+
+```{r}
+newdf01 = ceiling(newdf[,-c(1:2)]/1.0e10)
+avgWidth = 100
+dropnames = which(colnames(newdf)%in%c("year", "adfg", "CHNK", "CHUM", "COHO", "PINK", "SOCK"))
+for(i in 2:10) {
+  clust = pam(log(newdf01[s,-dropnames]+1), k = i)
+  avgWidth[i] = clust$silinfo$avg.width
+}
+
+bestClust = which.min(avgWidth)
+clust = pam(log(newdf01[s,-dropnames]+1), k = bestClust)
+
+# We can look at what the medoids represent, 
+m = t(clust$medoids)
+colnames(m) = paste("Group",seq(1,dim(m)[2]))
+kable(m)
+```
+
+So basically the groups are the same before, with 2 kinds of salmon fishermen and halibut defining the 3rd cluster.
+
+## Linear modeling of changing diversity on revenue  
+
+Add in NAs for missing years. For the undifferenced data, the number of species, gears, etc. corresponds to the value in the second year. We may want to replace this with a 2-year mean or something.
+
+```{r}
+dummyDF = expand.grid(adfg = unique(totalVessels$adfg), 
+  year = min(totalVessels$year) : max(totalVessels$year),
+  stringsAsFactors = F)
+
+# expand the data frame w/missing years
+totalVesselsExp = left_join(dummyDF, totalVessels) %>%
+  arrange(adfg, year)
+totalVesselsExp = group_by(totalVesselsExp, adfg) %>%
+  mutate(difflog = c(NA, diff(log(totalearnings))),  
+         diffspec = c(NA, diff(nspecies)),  
+         diffgear = c(NA, diff(ngear)),  
+         difffishery = c(NA, diff(nfishery)),  
+         diffeffspec = c(NA, diff(effectiveSpec)),  
+         diffeffgear = c(NA, diff(effectiveGear)),  
+         diffefffishery = c(NA, diff(effectiveFshy))) %>%  
+  filter(!is.na(difflog))
+```
+
+We may also want to calculate the weighted average of each of the predictors, with weights being pounds landed. For example, if someone catches 2000 kg of sockeye and 5 kg of chum, the weights may better reflect divserification. 
+
+## Inclusion of vessel random effects  
+
+We’re modeling revenue (or change in revenue) across a large number of vessels (5000+). One way to make this model hierarchical would be to include random effects in vessel. The intercept here represents Bristol Bay in 1986 – all factors (year / area) are offsets.
+
+```{r}
+lme.vess.1trend = lmer(difflog ~ area + as.factor(year) + 
+  nspecies + diffspec + ngear + diffgear + (1 | adfg), 
+  data = totalVesselsExp)
+summary(lme.vess.1trend)
+```
+
+We can plot the overall annual trend for Bristol Bay, the patterns for other regions are all just offset from the Bristol Bay trend.
+
+```{r, fig.pos="placeHere",fig.cap="Mixed effects model output of fixed year effects for the Bristol Bay region."}
+ycoef = c(0, fixef(lme.vess.1trend)[7:34])
+ycoef = ycoef + fixef(lme.vess.1trend)[1]
+plot(1986:2014, ycoef, type = "b", xlab = "", 
+     ylab = "Year effect across vessels in Bristol Bay")
+```
+
+The key point here is that inclusion of random effects, or more complicated interactions (below) doesn’t change the magnitude or sign of the fixed coefficients we care about – namely, the number of species fished (and change) or number of gears fished (and change). These more complicated models are largely a way to think about how the larger trends / year-to-year variability are changing across space.  
+
+Next, we can make the model maybe a little more realistic by allowing the year effects to vary over space, by including a year x area interaction.
+
+```{r}
+lme.vess.int = lmer(difflog ~ area * as.factor(year) + nspecies + diffspec + ngear + diffgear + (1 | adfg), data = totalVesselsExp)
+summary(lme.vess.int)
+```
+
+Does this improve the model? Based on the AIC values, the answer is yes. One of the interesting things with both models is that both 'diffspec' and 'diffgear' are statistically significant, and have positive effects [interpretation: increasing either species landed or gears fished from one year to the next increases revenue].
+
+```{r}
+m = matrix(c("1 trend", "Regional trends", round(AIC(lme.vess.1trend), 1), round(AIC(lme.vess.int), 1)), 2, 2)
+colnames(m) = c("Model", "AIC")
+kable(m)
+```
+
+We can look at how the year effects vary by region:
+
+```{r, fig.pos="placeHere",fig.cap="Fixed effects by region from the mixed effects model (represents area x time interaction)."}
+coef.bb = c(0, fixef(lme.vess.int)[7:34])# Bristol Bay
+coef.ci = coef.bb + fixef(lme.vess.int)[2] + 
+  c(0, fixef(lme.vess.int)[grep("areaCookInlet",  
+  names(fixef(lme.vess.int)))[-1]])
+coef.ke = coef.bb + fixef(lme.vess.int)[3] + 
+  c(0, fixef(lme.vess.int)[grep("areaKodiak.east", 
+  names(fixef(lme.vess.int)))[-1]])
+coef.kw = coef.bb + fixef(lme.vess.int)[4] + 
+  c(0, fixef(lme.vess.int)[grep("areaKodiak.west", 
+  names(fixef(lme.vess.int)))[-1]])
+coef.pw = coef.bb + fixef(lme.vess.int)[5] + 
+  c(0, fixef(lme.vess.int)[grep("areaPWS", 
+  names(fixef(lme.vess.int)))[-1]])
+coef.se = coef.bb + fixef(lme.vess.int)[6] + 
+  c(0, fixef(lme.vess.int)[grep("areaSoutheast", 
+  names(fixef(lme.vess.int)))[-1]])
+
+plot(1986:2014, coef.bb, type = "l", col = tim.colors(6)[1], ylim = c(-2, 2), ylab = "Year effects by region")
+lines(1986:2014, coef.ci, type = "l", col = tim.colors(6)[2])
+lines(1986:2014, coef.kw, type = "l", col = tim.colors(6)[3])
+lines(1986:2014, coef.ke, type = "l", col = tim.colors(6)[4])
+lines(1986:2014, coef.se, type = "l", col = tim.colors(6)[5])
+lines(1986:2014, coef.pw, type = "l", col = tim.colors(6)[6])
+legend("topleft", c("Bristol Bay", "Cook Inlet", "Kodiak - east", "Kodiak - west",
+"Southeast", "PWS"), col = tim.colors(6), lty = 1)
+```
+
+But if we look at the model output more closely, we see that the variance of the vessel specific random effects is driven to 0. This may be because of the large number of vessels with single values (remember, each value indicates a vessel that fishes in consecutive years, because our response is based on the difference).
+
+```{r}
+ # Calculate proportion of vessels with 1 observation
+round(length(table(totalVesselsExp$adfg))/length(which(table(totalVesselsExp$adfg) == 1)), 2)
+```
+
+We could also refine the model to concentrate on vessels that we more active – e.g. vessels with 10 or more years of observations.
+
+```{r}
+activeVess = names(which(table(totalVesselsExp$adfg) >= 10))
+lme.vess.int10 = lmer(difflog ~ area + as.factor(year) + nspecies + diffspec +
+    ngear + diffgear + (1 | adfg), data = totalVesselsExp[totalVesselsExp$adfg %in%
+activeVess, ])
+summary(lme.vess.int10)
+```
+
+It might be worth looking at these active vessels, and going back to the original data to get a better sense for the relationship between increasing species fished and increasing profit.
+
+```{r, fig.pos="placeHere",fig.cap="Individual performance (log total revenue in red) and species landed (raw = black, effective = blue)."}
+activeVess = names(which(table(totalVesselsExp$adfg) >= 10))
+activeVess.id = names(rev(sort(table(totalVesselsExp[totalVesselsExp$adfg %in% activeVess, ]$adfg))))
+
+par(mfrow = c(5, 5), mai = c(0.01, 0.01, 0.01, 0.01))
+for (i in 1:25) {
+  df = as.data.frame(totalVesselsExp[totalVesselsExp$adfg == activeVess.id[i], ])
+  plot(df$nspecies, type = "l")
+  lines(rescale(log(df$totalearnings), range(df$nspecies)), col = "red")
+  lines(rescale(log(df$effectiveSpec), range(df$nspecies)), col = "blue")
+}
+```
+
+Another way to make the model more complex would be to allow for time varying effects. For all models above, the variable ‘diffspec’ is the strongest, so we could allow this variable to vary over time and / or space.
+
+```{r}
+lme.vess.int.area = lmer(difflog ~ area * as.factor(year) + nspecies + area * diffspec + ngear + diffgear + (1 | adfg), data = totalVesselsExp)
+lme.vess.int.time = lmer(difflog ~ area * as.factor(year) + nspecies + as.factor(year) * diffspec + ngear + diffgear + (1 | adfg), data = totalVesselsExp)
+lme.vess.int.timearea = lmer(difflog ~ area * as.factor(year) + nspecies + area * as.factor(year) * diffspec + ngear + diffgear + (1 | adfg), data = totalVesselsExp)
+```
+
+In this case, the comparison among the three models suggests that there’s more support for the coefficient varying spatially and temporally. [interpretation: the benefit of increasing species landed varies over time, and has a different pattern for each spatial region included here].
+
+```{r}
+m = matrix(c("Area", "Time", "Area-Time", round(AIC(lme.vess.int.area), 1), round(AIC(lme.vess.int.time), 1), round(AIC(lme.vess.int.timearea), 1)), 3, 2)
+colnames(m) = c("Model of diffspec", "AIC")
+kable(m)
+```
+
+We can also explore whether the effective number of species fished is a better proxy for species diversity, in comparing our two variables. 
+
+```{r}
+lme.vess.int.area.effective = lmer(difflog ~ area * as.factor(year) + effectiveSpec + area * diffspec + effectiveGear + diffeffgear + (1 | adfg), data = totalVesselsExp)
+```
+
 
