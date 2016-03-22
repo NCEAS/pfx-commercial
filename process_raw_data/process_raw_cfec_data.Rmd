@@ -34,6 +34,11 @@ The file "cfec_w_IDs" is a zip file of an R workspace created by Jordan Watson o
 load("cfec_w_IDs")
 cfec = cfecnew
 rm(cfecnew) # remove the old named object
+
+# Remove A80 and CP vessels
+A80<-c(68870,29923,22011,39798,59870,8500,41219,62545,56965,54693,1119,57228,69038,61081,61083,55921,57211,56964,36202,43260,54392,51873,48183,55767)
+CP <-c(56987,59378,57621,59170,55767,57450,54886,56991,60407,60795,60202,60660,56789,56618,59503)
+cfec <- filter(cfec,!adfg %in% c(A80,CP))
 ```
 
 For clarity, this workspace contains some variables that have been renamed. The original variable names were changed with the following commented out code,  
@@ -139,6 +144,7 @@ cfec$gearn[which(cfec$gearn%in%c(9, 19, 29, 39, 49, 59, 69, 91))] = 9
 ### Species  
 Because of changes in species reporting (examples = rockfish, the use of unidentified species), we need to do some lumping some species. Groupings were consistent to be consistent with the ADFG codes, so for example rockfish are grouped into a 'pelagic', 'demersal', and 'slope' group.  
 ```{r specLump}
+cfec$specn.orig = cfec$specn
 
 # Lump all skates together
 cfec$specn[cfec$specn==700] = 700
@@ -394,7 +400,7 @@ cfec$cadfg = as.numeric(as.factor(cfec$cadfg))
 cfec$p_serial = as.numeric(as.factor(cfec$p_serial))
 
 # number fish tickets sequentially
-cfec$f_ticket = seq(1, dim(cfec)[1])
+cfec$f_ticket = as.numeric(as.factor(cfec$f_ticket))
 cfec$F_PERMIT = as.numeric(as.factor(cfec$F_PERMIT))
 ```
 
