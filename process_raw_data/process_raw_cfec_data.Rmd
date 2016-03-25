@@ -31,14 +31,18 @@ Halibut areas: http://www.iphc.int/publications/techrep/tech0049.pdf
 The file "cfec_w_IDs" is a zip file of an R workspace created by Jordan Watson on 03/15/2016. This file is a large workspace (~ 15 GB) that contains a single names object ('cfecnew'). The size of the data frame is approximately 19.8 million rows by 77 variables.  
 
 ```{r dataload, warnings=FALSE, message = FALSE}
-load("cfec_w_IDs")
+load("Data/cfec_w_IDs.RData")
 cfec = cfecnew
 rm(cfecnew) # remove the old named object
 
+#idx = grep("S 04T", cfec$p_fshy)
+#group_by(cfec[idx,], year) %>% 
+#  summarize(nSetnet = length(unique(p_holder)))
 # Remove A80 and CP vessels
 A80<-c(68870,29923,22011,39798,59870,8500,41219,62545,56965,54693,1119,57228,69038,61081,61083,55921,57211,56964,36202,43260,54392,51873,48183,55767)
 CP <-c(56987,59378,57621,59170,55767,57450,54886,56991,60407,60795,60202,60660,56789,56618,59503)
 cfec <- filter(cfec,!adfg %in% c(A80,CP))
+rm(A80,CP)
 ```
 
 For clarity, this workspace contains some variables that have been renamed. The original variable names were changed with the following commented out code,  
@@ -77,6 +81,7 @@ isNull = c("F_FG_MGT","C_CFACT", "F_DISTRC", "F_ERRFLG", "F_AYK", "G_FED_AR","F_
 "F_MPGMNM", "D_OPER", "D_O_FSHY", "D_O_PNUM", "D_O_PCHK", "D_O_YSEQ", "F_SIZE", 
 "D_O_YCHK", "adfg")
 cfec = cfec[,-which(names(cfec)%in%isNull)]
+rm(isNull)
 ```
 
 This significantly reduces the size of the dataset, to the remaining 29 variables,  
@@ -109,8 +114,8 @@ Finally, we can use the 'P_TYPE' field to include the following 4 types of permi
 ```{r}
 cfec = cfec[which(cfec$C_LANDST == "C"), ]
 
-cfec = cfec[-which(cfec$cadfg == ""), ]
-cfec = cfec[-which(cfec$cadfg < 10000 | cfec$cadfg >= 98000), ]
+#cfec = cfec[-which(cfec$cadfg == ""), ]
+#cfec = cfec[-which(cfec$cadfg < 10000 | cfec$cadfg >= 98000), ]
 
 cfec = cfec[-which(cfec$P_STATUS%in%c("", "O")), ]
 
@@ -232,7 +237,7 @@ cfec <- dplyr::select(cfec,-F_DELIVR)
 
 #------------------------------------------
 # To add text species codes, load and join with Species lookup table
-load("SpeciesTable.RData")  
+load("Data/SpeciesTable.RData")  
 
 #  000,033 and 095 don't show up in the species codes (they account for only 7 records)
 #  Remove them
