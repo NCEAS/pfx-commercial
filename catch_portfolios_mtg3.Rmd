@@ -20,6 +20,7 @@ library(mgcv)
 library(ggplot2)
 library(randomForest)
 library(MASS)
+library(zoo)
 library(MatchIt)
 load("cfecCleaned.Rdata")
 ```
@@ -47,6 +48,111 @@ simp.div = function(x) {
 #  double y = 1/sum((x/sum(x))^2);
 #  return y;
 #}')
+```
+# Paper 1: 
+
+To start, we can coarsely summarize the variability in total revenue by species through time, 
+```{r, fig.pos="placeHere", fig.cap = "Log(total) revenue of each spp"}
+spTot = group_by(cfec, specn, year) %>%
+  summarize(totRev.bySpec = log(sum(g_earn, na.rm=T))) %>% 
+  as.data.frame() %>%
+  filter(is.finite(totRev.bySpec)) %>%   
+  as.data.frame
+ggplot(spTot, aes(x=year,y=totRev.bySpec,group=as.factor(specn))) +geom_line(aes(x=year,y=totRev.bySpec, color=as.factor(specn)))
+```
+
+```{r, fig.pos="placeHere", fig.cap = "CV of log(total revenue) across species (sd in log space)"}
+spTot = group_by(spTot, year) %>%
+  summarize(sd_yr = sd(totRev.bySpec, na.rm=T)) %>% 
+  as.data.frame()
+ggplot(spTot, aes(x=year,y=sd_yr)) + geom_point()
+
+```
+
+## Filtering out unique vessel - person combinations  
+Filter out people who only use 1 vessel / year , and similarly filter out boats with more than 1 person / year. Some people might fish on multiple vessels within a year, and vessels might be used by multiple people within a year.  
+
+For each individual in each year, we can calculate the effective number of vessels used, and trends in that (mean across people).   
+```{r}
+# calculate diversity of individuals across vessels / time
+cfec.boatDiv = group_by(cfec, p_holder, year) %>% 
+  summarize(effBoats = 1 / sum((table(cadfg) / sum(table(cadfg)))^2) ) %>% 
+  data.frame
+
+cfec.boatDiv = as.data.frame(cfec.boatDiv)
+g = gam(as.numeric(effBoats) ~ s(as.numeric(year)), data=cfec.boatDiv)
+gpred = predict(g, newdata=list(year=1985:2014), se.fit=TRUE)
+plot(1985:2014, gpred$fit, type="l", lwd=3, ylim=c(1.03,1.1))
+lines(1985:2014, gpred$fit+2*gpred$se.fit)
+lines(1985:2014, gpred$fit-2*gpred$se.fit)
+```
+
+Now we'll filter out individuals who only used 1 boat in a year, and boats with only one permit holder fishing in a year.  
+```{r}
+cfecnew = cfec
+cfec.1boat = group_by(cfecnew, p_holder, year) %>% 
+  summarize(nBoat = length(unique(cadfg))) %>%
+  filter(nBoat==1) %>% 
+  left_join(cfecnew)
+
+# Deal with setnet fisheries, where lots of p_holder
+# share same codes
+cfec.1boat = group_by(cfec.1boat, cadfg, year) %>% 
+  summarize(nPerson = length(unique(p_holder))) %>%
+  filter((nPerson==1 & cadfg %in% c(27960,27961) == FALSE) | cadfg %in% c(27960,27961)) %>% 
+  left_join(cfec.1boat)
+
+cfecnew = cfec.1boat
+dim(cfecnew)[1]
+```
+
+So there's about 50% of the records remaining -- these are unique individial / vessel combinations. Side note: all of the set net / razor clam permits and individuals have been included. Not sure we want to drop them out [Milo - thoughts? ]
+
+Now we can create a unique *id* column for individual - vessel combinations.  
+
+```{r}
+cfecnew$id = paste(cfecnew$p_holder,cfecnew$cadfg)
+# calculate number of unique person - vessel pairs ~ 40700
+length(unique(cfecnew$id))
+```
+
+Just for demo purposes, we can start by plotting mean - CV relationships for each of these individual- vessel combinations (across years).
+
+```{r, fig.pos="placeHere", fig.cap="Mean and variability (CV) of annual earnings (across time) for unique people-vessel combinations."}
+meanVar = group_by(cfecnew, id, year) %>% 
+  summarize(totRev = sum(g_earn)) %>% 
+  as.data.frame() %>%
+  group_by(id) %>%
+  summarize(m = mean(log(totRev+1),na.rm=T), cv = sd(totRev,na.rm=T)/mean(totRev,na.rm=T))
+plot(meanVar$m, meanVar$cv, xlab="Mean log(annual revenue)", ylab = "CV annual revenue")
+```
+
+One question we also were chatting about was what the distribution of the percent change metric looked like. 
+```{r mergeYears}
+
+totalcfec = group_by(cfecnew, id, year) %>% 
+  summarize(totrev = sum(g_earn))
+
+totalcfec$year = as.numeric(totalcfec$year)
+dummyDF = expand.grid(id = unique(totalcfec$id), 
+  year = min(totalcfec$year) : max(totalcfec$year), 
+  stringsAsFactors = F)
+# expand the data frame w/missing years
+cfecExp = left_join(dummyDF, totalcfec) %>%
+  arrange(id, year)
+cfecExp = group_by(cfecExp, id) %>%
+  mutate(difflog = c(NA, diff(log(totrev))), meanRev = c(NA, zoo::rollmean(totrev, 2))) %>%
+  filter(!is.na(difflog))
+```
+
+This shows the pattern we'd hope to expect -- no trend as a function of mean revenue, . Namely that people making less than about 35K / year tend to have negative returns from one year to the next, and people with revenues > 35K -- especially the high earners -- tend to have positive returns. We also see decreased variability as a function of returns -- maybe because investments in technology, permits, etc.
+```{r, fig.pos="placeHere", fig.cap = "Distribution of percent change in total revenue + relationship (or lack of) with total annual revenue"}
+par(mfrow = c(2,1), mai=c(0.5,0.5,0.1,0.1))
+plot(log(cfecExp$meanRev), cfecExp$difflog, xlab = "log(revenue)", ylab="percent change in revenue", cex=0.7)
+abline(0, 0, col="red")
+
+hist(cfecExp$difflog, 80, xlab="Percent return (empirical)", col="grey", xlim= quantile(cfecExp$difflog, c(.005,0.995)), main="")
+
 ```
 
 # Paper 2: Investigating relative effects of management changes (IFQ) relative to EVOS
