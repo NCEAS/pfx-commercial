@@ -1,0 +1,38 @@
+---
+title: "Vessel Characteristics"
+author: "Anne Beaudreau & Jordan Watson"
+date: "March 25, 2016"
+output: pdf_document
+---
+
+We want to add vessel information to the catch data.These characteristics lie in annual files pulled from the cfec dataset via individual queries. These data are in the "Vessel" folder within the Commercial Catch Portfolios folder in the Google Doc.
+
+
+```{r setup, include=FALSE}
+
+setwd("~/Desktop/NCEAS")
+years<-c(1985:2014)
+#  Create an empty data.frame in which to store the data
+vessel=data.frame()
+
+for (i in (1:length(years))){
+  #  All the data files have the same naming structure so we can paste the names via a loop
+  xx=read.csv(paste("Data/Vessels/Vessels",years[i],".csv",sep=""))
+  #  The zip codes are funky and cause an error if we don't specify them. 
+  xx$Zip.Code<-as.factor(xx$Zip.Code)
+  #  Bind each successive year into the same data frame. 
+  vessel=bind_rows(vessel,xx) %>% data.frame
+}
+rm(i,years,xx)
+#  The vessel data.frame will be joined with the cfec data using the year and adfg columns. The vessel data have different names though so rename the columns to make them consistent with the cfec dataset. I also rename the "Length" field to "VLength" so as to avoid any issues associated with using a column name that is so similar to the R function length().
+
+vessel <- rename(vessel,year=Year,adfg=ADFG.Number,VLength=Length)
+```
+
+A single vessel may have multiple owners in one year. When this happens, a single adfg number may have multiple different entries where the vessel data are duplicated but the owner data are unique. The problem is that this creates duplicate records for the vessel components that we are matching to the cfec data. Filter out the duplicated vessel data by unique combinations of "year" and "adfg" and then select only the vessel characterstic columns. 
+
+```{r}
+vessel<-distinct(vessel,year,adfg) %>% dplyr::select(year,adfg,Year.Built,VLength,Gross.Tons,Net.Tons,Horse.Power,Hold.Tank.Capacity,Live.Tank.Capacity,Fuel.Capacity)
+
+save.image("Data/vessel.RData")
+```
