@@ -1,7 +1,7 @@
 ---
 title: "Description of raw CFEC data processing for NCEAS portfolio effects working group"
 author: "Jordan Watson & Eric Ward"
-date: "March 16, 2016"
+date: "March 16, 2016 (Update 4/7/2016)""
 output: pdf_document
 ---
 
@@ -9,7 +9,7 @@ output: pdf_document
 library(knitr)
 library(dplyr)
 library(ggplot2)
-library(mgcv)
+#library(mgcv)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -31,6 +31,7 @@ Halibut areas: http://www.iphc.int/publications/techrep/tech0049.pdf
 The file "cfec_w_IDs" is a zip file of an R workspace created by Jordan Watson on 03/15/2016. This file is a large workspace (~ 15 GB) that contains a single names object ('cfecnew'). The size of the data frame is approximately 19.8 million rows by 77 variables.  
 
 ```{r dataload, warnings=FALSE, message = FALSE}
+setwd("//nmfs.local/AKC-ABL/Users2/jordan.watson/Desktop/AFSC/GOA/AKFIN/Meeting")
 load("Data/cfec_w_IDs.RData")
 cfec = cfecnew
 rm(cfecnew) # remove the old named object
@@ -77,7 +78,7 @@ isNull = c("F_FG_MGT","C_CFACT", "F_DISTRC", "F_ERRFLG", "F_AYK", "G_FED_AR","F_
 "C_ADFGST", "F_CTDATE", "F_LNDATE", "F_NUMBER", "F_VALUE", "F_POUNDS", "F_TNUMB",  
 "F_BATCH", "F_PERIOD",  "F_EMBSEQ", "F_PROCCK", "F_WEEK",  "F_TTYPE",    
 "F_ITEM", "F_FSHERY",  "G_GEAR", "G_AREA", "G_PRC_AR",  "P_YEAR", "P_PMTSEQ", 
-"p_check", "P_ID", "P_FEETYP", "P_ADFG", "P_FEEFLG", "P_FSHBLE", "F_DISPOS", 
+"p_check", "P_ID", "P_FEETYP", "P_ADFG", "P_FEEFLG", "P_FSHBLE", 
 "F_MPGMNM", "D_OPER", "D_O_FSHY", "D_O_PNUM", "D_O_PCHK", "D_O_YSEQ", "F_SIZE", 
 "D_O_YCHK", "adfg")
 cfec = cfec[,-which(names(cfec)%in%isNull)]
@@ -119,7 +120,7 @@ cfec = cfec[which(cfec$C_LANDST == "C"), ]
 
 cfec = cfec[-which(cfec$P_STATUS%in%c("", "O")), ]
 
-table(cfec$P_STATUS)
+#table(cfec$P_STATUS)
 ```
 
 ## Merging species and gears
@@ -160,8 +161,9 @@ cfec$specn[cfec$specn==704] = 700
 cfec$specn[cfec$specn==705] = 700
 
 # Lump all sharks together
-cfec$specn[cfec$specn==691] = 689
 cfec$specn[cfec$specn==689] = 689
+cfec$specn[cfec$specn==690] = 689
+cfec$specn[cfec$specn==691] = 689
 cfec$specn[cfec$specn==692] = 689
 
 # Lump flatfish (Shallow)
@@ -169,6 +171,14 @@ cfec$specn[cfec$specn==123] = 119 # rock
 cfec$specn[cfec$specn==129] = 119 # starry flounder
 cfec$specn[cfec$specn==127] = 119 # yellowfin
 cfec$specn[cfec$specn==126] = 119 # butter
+cfec$specn[cfec$specn==122] = 119 # flathead
+cfec$specn[cfec$specn==125] = 119 # rex
+cfec$specn[cfec$specn==128] = 119 # English
+cfec$specn[cfec$specn==131] = 119 # petrale
+cfec$specn[cfec$specn==132] = 119 # sand
+cfec$specn[cfec$specn==133] = 119 # Alaska plaice
+cfec$specn[cfec$specn==116] = 119 # Bering flounder
+cfec$specn[cfec$specn==117] = 119 # Kamchatka flounder
 
 # 5, 6, 7, 15, 26, 47, 61, 
 # Lump flatfish (deep)
@@ -177,32 +187,65 @@ cfec$specn[cfec$specn==134] = 118 # greenland turbot
 
 # Lump rockfish, codes from here:
 # Slope rockfish
-cfec$specn[cfec$specn==141] = 144 # POP
 cfec$specn[cfec$specn==136] = 144 # northern
+cfec$specn[cfec$specn==137] = 144 # bocaccio
+cfec$specn[cfec$specn==141] = 144 # POP
+cfec$specn[cfec$specn==143] = 144 # thornyhead
+cfec$specn[cfec$specn==144] = 144 # unid
 cfec$specn[cfec$specn==151] = 144 # rougheye
-cfec$specn[cfec$specn==166] = 144 # sharpchin
 cfec$specn[cfec$specn==152] = 144 # shortraker
 cfec$specn[cfec$specn==153] = 144 # redbanded
 cfec$specn[cfec$specn==157] = 144 # silvergray
 cfec$specn[cfec$specn==158] = 144 # redstripe
-cfec$specn[cfec$specn==137] = 144 # bocaccio
-cfec$specn[cfec$specn==144] = 144 # unid
+cfec$specn[cfec$specn==159] = 144 # darkblotched
+cfec$specn[cfec$specn==166] = 144 # sharpchin
+cfec$specn[cfec$specn==176] = 144 # harlequin
+cfec$specn[cfec$specn==177] = 144 # blackgill
+cfec$specn[cfec$specn==179] = 144 # pygmy
+cfec$specn[cfec$specn==181] = 144 # shortbelly
+cfec$specn[cfec$specn==182] = 144 # splitnose
+cfec$specn[cfec$specn==183] = 144 # stripe tail
+cfec$specn[cfec$specn==184] = 144 # vermillion
+cfec$specn[cfec$specn==185] = 144 # aurora
+
 # Demersal rockfish
+cfec$specn[cfec$specn==135] = 168 # greenstripe
 cfec$specn[cfec$specn==138] = 168 # copper
+cfec$specn[cfec$specn==139] = 168 # unid
+cfec$specn[cfec$specn==140] = 168 # red
 cfec$specn[cfec$specn==145] = 168 # yelloweye
 cfec$specn[cfec$specn==146] = 168 # Canary
 cfec$specn[cfec$specn==147] = 168 # quillback
 cfec$specn[cfec$specn==148] = 168 # tiger
 cfec$specn[cfec$specn==149] = 168 # China
 cfec$specn[cfec$specn==150] = 168 # rosethorn
+cfec$specn[cfec$specn==171] = 168 # shortraker/rougheye
+cfec$specn[cfec$specn==175] = 168 # yellowmouth
+cfec$specn[cfec$specn==178] = 168 # chilipepper
+
 # Pelagic rockfish
+cfec$specn[cfec$specn==142] = 169 # black
 cfec$specn[cfec$specn==154] = 169 # dusky
 cfec$specn[cfec$specn==155] = 169 # yellowtail
 cfec$specn[cfec$specn==156] = 169 # widow
+cfec$specn[cfec$specn==167] = 169 # blue
 cfec$specn[cfec$specn==172] = 169 # dusky
 cfec$specn[cfec$specn==173] = 169 # dark
-cfec$specn[cfec$specn==142] = 169 # black
-cfec$specn[cfec$specn==167] = 169 # blue
+
+# Group sculpins
+cfec$specn[cfec$specn %in% c(160:165)] = 160
+
+# Group greenlings (not AMCK or lingcod)
+cfec$specn[cfec$specn %in% c(190,191,192,194)] = 190
+
+# Group all osmerids together
+cfec$specn[cfec$specn %in% c(510:516)] <- 510
+
+# Group all char
+cfec$specn[cfec$specn %in% c(520:532)] <- 520  # char
+
+# Group all trout
+cfec$specn[cfec$specn%in%c(540:562)] <- 540  # trout
 
 #  Whitefish and trout did not have text labels in the species database.
 #  We created our own for easier reference but given this lack of detail
@@ -213,24 +256,59 @@ cfec$specn[cfec$specn==583] <- 580  # Least cisco
 cfec$specn[cfec$specn==584] <- 580  # Arctic cisco
 cfec$specn[cfec$specn==585] <- 580  # Bering cisco
 cfec$specn[cfec$specn==589] <- 580  # Humpback whitefish
-# Trout - convert all to the same number - we'll label as "trout" later
-cfec$specn[cfec$specn==520] <- 520  # Arctic char
-cfec$specn[cfec$specn==530] <- 520  # Dolly varden
-cfec$specn[cfec$specn==531] <- 520  # Dolly varden anadromous
-cfec$specn[cfec$specn==540] <- 520  # Steelhead
-cfec$specn[cfec$specn==560] <- 520  # Cutthroat
 
 # Halibut - appear under several different historic species codes so we consolidate these
 cfec$specn[cfec$specn %in% c(200:204)] <- 200
 
-# Salmon roe (by species)
-# We consolidate roe of different species into a single roe category
-cfec$specn[cfec$specn %in% c(400:405)] <- 400
-# In early years, there were separate specn for salmon roe and salmon. In later years,
-# salmon roe got absorbed into the specn for salmon but given a F_DELIVR==14.
-# We may want to change this at some point, but for now, if F_DELIVR==14, then change
-# the specn to that for roe instead of the specn "salmon."
-cfec$specn[(cfec$specn %in% c(410,420,430,440,450)) & cfec$F_DELIVR=="14"] <- 400
+# Chinook have two species codes. Consolidate.
+cfec$specn[cfec$specn==411] <- 410
+
+# Salmon roe (by species) get lumped into a single salmon roe category. This was a topic of much discussion but ultimately, since much of the roe is unidentified, any other assignments would end up omitting a large percentage of the roe landings. 
+cfec$specn[cfec$specn %in% c(401:405)] <- 400
+cfec$specn[cfec$specn%in%c(410:450) & cfec$F_DELIVR==14] <- 400
+
+# Herring are listed under 5 different species codes but 231:235 only account for a few thousand bucks. They are mostly bycatch or non-commercial.
+# We'll lump them into the sac-roe species code because they will have no effect on the numbers. But this way we are consolidating codes instead
+# of making a bunch of extra ones.
+cfec$specn[cfec$specn %in% c(231:235)] <- 23043
+
+# Most herring landings occur under species 230, with different F_DELIVR codes
+# Create a species code for the sac-roe fishery
+cfec$specn[cfec$specn==230 & cfec$F_DELIVR==43] <- 23043
+# Create a species code for the bait/food fishery
+cfec$specn[cfec$specn==230 & cfec$F_DELIVR==44] <- 23044
+# Create a species code for the pound fishery
+cfec$specn[cfec$specn==230 & cfec$F_DELIVR==45] <- 23045
+# There may be 1 or 2 records with other codes, and which probably have no dollar value.
+# Lump them into the sac roe fishery to avoid having extra codes
+cfec$specn[cfec$specn==230] <- 23043
+
+# Lump all king crabs
+cfec$specn[cfec$specn %in% c(920:925)] <- 920
+
+# Lump all king crabs
+cfec$specn[cfec$specn %in% c(930:934)] <- 930
+
+# Lump all remaining crabs (not Dungeness)
+cfec$specn[cfec$specn %in% c(900,940:953)] <- 940
+
+# Lump all shrimp
+cfec$specn[cfec$specn %in% c(960:965)] <- 960
+
+# Lump non-geoduck and non-razor clams together
+cfec$specn[cfec$specn %in% c(810,812,820,825,840,842)] <- 810
+
+# Lump weathervane and pink scallops
+cfec$specn[cfec$specn %in% c(850:851)] <- 850
+
+# Lump urchins
+cfec$specn[cfec$specn %in% c(892:893,896)] <- 892
+
+# Lump sea cucumbers
+cfec$specn[cfec$specn %in% c(894:895)] <- 895
+
+# Create an "OTHER" category that includes misc freshwater and a bunch of random trawl caught spec
+cfec$specn[cfec$specn %in% c(100,101,112,170,180,190,206:220,250,260,310:380,490,500,520,540,570,580,590,600:683,714:800,880,890,855,899,998,999)] <- 206
 
 # We no longer need the F_DELIVR column and can remove it
 cfec <- dplyr::select(cfec,-F_DELIVR)
@@ -250,26 +328,34 @@ cfec <- left_join(cfec,spec.tbl)
 
 #  Rename some of the groups
 cfec$spec <- as.character(cfec$spec)
-cfec$spec[cfec$specn==700] = "SKATE"
-cfec$spec[cfec$specn==689] = "SHARK"
-cfec$spec[cfec$specn==119] = "FLAT.shallow"
+
+#  Rename some of the groups
+cfec$spec <- as.character(cfec$spec)
 cfec$spec[cfec$specn==118] = "FLAT.deep"
+cfec$spec[cfec$specn==119] = "FLAT.shallow"
 cfec$spec[cfec$specn==144] = "ROCK.slope"
 cfec$spec[cfec$specn==168] = "ROCK.demersal"
 cfec$spec[cfec$specn==169] = "ROCK.pelagic"
-cfec$spec[cfec$specn==520] = "TROUT"
-
-# Lump king crabs
-cfec$spec[cfec$spec%in%c("GKCR","BKCR","UKCR","RKCR")] = "KCRB" # king
-# Lump tanner crabs
-cfec$spec[cfec$spec%in%c("UTCR","BTCR","aTCGR","aTCTR")] = "TCRB" # tanner
-# Lump shrimp - spot prawn, pink shrimp, coonstriped 
-cfec$spec[cfec$spec%in%c("SPRW","PSHP","USRM","aSSHP","aCOOS")] = "USRM" # shrimp
+cfec$spec[cfec$specn==206] = "OTHER"
+cfec$spec[cfec$specn==400] = "aUROE"
+cfec$spec[cfec$specn==689] = "SHARK"
+cfec$spec[cfec$specn==700] = "SKATE"
+cfec$spec[cfec$specn==810] = "OCLM"
+cfec$spec[cfec$specn==850] = "SCAL"
+cfec$spec[cfec$specn==892] = "URCH"
+cfec$spec[cfec$specn==920] = "KCRB"
+cfec$spec[cfec$specn==930] = "TCRB"
+cfec$spec[cfec$specn==940] = "OCRB"
+cfec$spec[cfec$specn==960] = "USRM"
+cfec$spec[cfec$specn==23043] = "SAC"
+cfec$spec[cfec$specn==23044] = "BAIT"
+cfec$spec[cfec$specn==23045] = "POUND"
 
 cfec$spec[cfec$spec==""] <- NA
 
 # drop records with no spp
 cfec = cfec[-which(is.na(cfec$spec)),]
+rm(spec.tbl)
 ```
 
 ## Assigning coarse spatial regions  
@@ -392,8 +478,29 @@ cfec$area[cfec$stat6%in%c(585700, 585730, 585800, 585830)] = "BristolBay"
 cfec$area[cfec$stat6%in%c(595630, 595700, 595730, 595800, 595830)] = "BristolBay"
 cfec$area[cfec$stat6%in%c(605600, 605630, 605700, 605730, 605800, 605830)] = "BristolBay"
 cfec$area[cfec$stat6%in%c(615600, 615630, 615700, 615730, 615800, 615830)] = "BristolBay"
-   
+
+cfec <- as.data.frame(cfec)   
 ```
+
+Add vessel lengths to data
+```{r}
+#  Load the vessel characteristics data that were created using "Vessel_Characteristics.Rmd."
+load("Data/vessel.RData")
+
+#  For now, we only really need the vessel length data but different/additional fields can be added later by changing the select statement below. Note, I use "dplyr::select" instead of just "select" because if you have the plyr package loaded also, the select statement may get confused.
+
+#  Convert fields to make them compatible with the vessel data.
+cfec$cadfg2 <- as.numeric(cfec$cadfg)
+cfec$year <- as.numeric(cfec$year)
+
+#  I use a right join here instead of left join for continuity since "vessel" was the already loaded data frame which automatically puts it as the first argument of the piped command.
+cfec <- dplyr::select(vessel,year,adfg,VLength) %>% right_join(cfec,by=c("adfg"="cadfg2","year"="year")) %>% rename(cadfg2=adfg) 
+
+#  Create an index value so that we can link back to the original (unscrambled data) if necessary.
+cfec$INDEX <- 1:nrow(cfec)
+
+```
+
 
 ## Strip the permit holder's identity
 
@@ -409,9 +516,10 @@ cfec$f_ticket = as.numeric(as.factor(cfec$f_ticket))
 cfec$F_PERMIT = as.numeric(as.factor(cfec$F_PERMIT))
 ```
 
+
 ## Output data file for use on other projects
 ```{r}
-save(cfec, file = "cfecCleaned.Rdata")
+save(cfec, file = "cfecCleaned2.Rdata")
 ```
 
 # Meta-data for saved variables
@@ -435,6 +543,10 @@ save(cfec, file = "cfecCleaned.Rdata")
 *harvest* This was *F_HARVST* in original CFEC data. This code is used to separate the common property commercial catch from a variety of specialty fisheries. Examples of specialty fisheries are test fisheries, educational fisheries, hatchery controlled fisheries, and derbies. 
 
 *specn* This was *F_SPCS* in original CFEC data. Species number. As a note of caution, care should be taken in merging our cleaned databases with other datasets because of how we changed the species codes in some cases (e.g. all halibut 200-204 became 200, or see rockfish groups above). 
+
+*specn.orig* The original version of the specn field before species were lumped into categories. 
+
+*spec* A text code created for each species. Some of these are the original AKFIN names and others were created by us. See the Species_Categories.xls file for descriptions.
 
 *stat6* This was *F_STAT* in original CFEC data. The 3, 5, or 6 digit ADF&G statistical code denoting a specific area of catch.  
 
