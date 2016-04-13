@@ -9,6 +9,8 @@ output:
   html_document: default
 ---
 
+## This file summarizes the cfec catch data into a few different objects. These objects contain p_holder annual summaries of landed pounds and earnings by gear type, area fished and by species. Both wide and long formats are provided for easier modeling / plotting. The output of this file is an RData image called "cfecModelsetup.RData."
+
 ```{r chunkSet, cache=FALSE, echo=FALSE,warning=FALSE,message=FALSE}
 library(dplyr)
 library(ggplot2)
