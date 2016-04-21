@@ -1,0 +1,34 @@
+gearn,ADFG Description,Gear
+1,Purse seine,Purse seine
+2,Beach seine,Other
+3,Drift gillnet,Drift Gillnet
+4,Set gillnet,Set Gillnet
+5,Hand troll,Troll
+6,Longline,Longline
+7,Non-pelagic/bottom trawl,Bottom trawl
+8,Fish wheel,Other
+9,Pot,Pot
+10,Ring net,Pot
+11,Diving,Diving_Hand
+12,Handpicked,Diving_Hand
+13,Dip net,Other
+14,Weir,Other
+15,Power gurdy troll,Troll
+17,Beam trawl,Bottom trawl
+18,Shovel,Diving_Hand
+21,Pound,Pound
+22,Dredge,Dredge
+23,Hydro/mechanical dredge,Dredge
+25,Dinglebar troll,Troll
+26,Mechanical jigs,Jig
+27,Double otter trawl,Bottom trawl
+34,Herring gillnet,Drift Gillnet
+37,Pair trawl,Pelagic trawl
+41,Sunken gillnet,Drift Gillnet
+47,Pelagic/mid-water trawl,Pelagic trawl
+61,Longline,Longline
+77,Fish ladder/race way,Other
+90,Trap,Pot
+91,Pot ,Pot
+98,Interim Value,Other
+99,Other/unspecified/missing,Other

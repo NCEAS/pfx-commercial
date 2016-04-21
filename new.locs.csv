@@ -1,0 +1,379 @@
+Location,New.Loc,p_fshy
+Adak,Aleutian Islands,T91R
+Alaska Peninsula,Alaska Peninsula,D09M
+Alaska Peninsula,Alaska Peninsula,D91M
+Alaska Peninsula,Alaska Peninsula,G01M
+Alaska Peninsula,Alaska Peninsula,G34M
+Alaska Peninsula,Alaska Peninsula,H01M
+Alaska Peninsula,Alaska Peninsula,H34M
+Alaska Peninsula,Alaska Peninsula,K09M
+Alaska Peninsula,Alaska Peninsula,K91M
+Alaska Peninsula,Alaska Peninsula,S01M
+Alaska Peninsula,Alaska Peninsula,S03M
+Alaska Peninsula,Alaska Peninsula,S04M
+Alaska Peninsula,Alaska Peninsula,T09M
+Alaska Peninsula,Alaska Peninsula,T91M
+"Aleutian CDQ, APICD",Aleutian Islands,K91OA
+"Aleutian CDQ, BBED",Aleutian Islands,K91OB
+"Aleutian CDQ, CBSF",Aleutian Islands,K91OC
+"Aleutian CDQ, CVR",Aleutian Islands,K91OD
+"Aleutian CDQ, NSED",Aleutian Islands,K91OE
+"Aleutian CDQ, YDFD",Aleutian Islands,K91OF
+"Aleutian Islands ACA, ACDC",Aleutian Islands,K09OG
+"Aleutian Islands ACA, ACDC",Aleutian Islands,K91OG
+"Aleutian Islands CDQ, APICD",Aleutian Islands,K09OA
+"Aleutian Islands CDQ, BBED",Aleutian Islands,K09OB
+"Aleutian Islands CDQ, CBSF",Aleutian Islands,K09OC
+"Aleutian Islands CDQ, CVR",Aleutian Islands,K09OD
+"Aleutian Islands CDQ, NSED",Aleutian Islands,K09OE
+"Aleutian Islands CDQ, YDFD",Aleutian Islands,K09OF
+Atka/Amlia Islands,Aleutian Islands,S04F
+Bering Sea,Bering Sea,E09Q
+Bering Sea,Bering Sea,E91Q
+Bering Sea,Bering Sea,K09Q
+Bering Sea,Bering Sea,K91Q
+Bering Sea,Bering Sea,T09Q
+Bering Sea,Bering Sea,T91Q
+Bering Sea (Vessel Permit),Bering Sea,E91QV
+"Bering Sea CDQ, APICD",Bering Sea,K09QA
+"Bering Sea CDQ, APICD",Bering Sea,K91QA
+"Bering Sea CDQ, APICD",Bering Sea,T09QA
+"Bering Sea CDQ, APICD",Bering Sea,T91QA
+"Bering Sea CDQ, BBED",Bering Sea,K09QB
+"Bering Sea CDQ, BBED",Bering Sea,K91QB
+"Bering Sea CDQ, BBED",Bering Sea,T09QB
+"Bering Sea CDQ, BBED",Bering Sea,T91QB
+"Bering Sea CDQ, CBSF",Bering Sea,K09QC
+"Bering Sea CDQ, CBSF",Bering Sea,K91QC
+"Bering Sea CDQ, CBSF",Bering Sea,T09QC
+"Bering Sea CDQ, CBSF",Bering Sea,T91QC
+"Bering Sea CDQ, CVR",Bering Sea,K09QD
+"Bering Sea CDQ, CVR",Bering Sea,K91QD
+"Bering Sea CDQ, CVR",Bering Sea,T09QD
+"Bering Sea CDQ, CVR",Bering Sea,T91QD
+"Bering Sea CDQ, NSED",Bering Sea,K09QE
+"Bering Sea CDQ, NSED",Bering Sea,K91QE
+"Bering Sea CDQ, NSED",Bering Sea,T09QE
+"Bering Sea CDQ, NSED",Bering Sea,T91QE
+"Bering Sea CDQ, YDFD",Bering Sea,K09QF
+"Bering Sea CDQ, YDFD",Bering Sea,K91QF
+"Bering Sea CDQ, YDFD",Bering Sea,T09QF
+"Bering Sea CDQ, YDFD",Bering Sea,T91QF
+Bristol Bay,Bristol Bay,G01T
+Bristol Bay,Bristol Bay,G34T
+Bristol Bay,Bristol Bay,K09T
+Bristol Bay,Bristol Bay,K91T
+Bristol Bay,Bristol Bay,L12T
+Bristol Bay,Bristol Bay,S03T
+Bristol Bay,Bristol Bay,S04T
+Bristol Bay,Bristol Bay,S77T
+"Bristol Bay CDQ, APICD",Bristol Bay,K09TA
+"Bristol Bay CDQ, APICD",Bristol Bay,K91TA
+"Bristol Bay CDQ, BBED",Bristol Bay,K09TB
+"Bristol Bay CDQ, BBED",Bristol Bay,K91TB
+"Bristol Bay CDQ, CBSF",Bristol Bay,K09TC
+"Bristol Bay CDQ, CBSF",Bristol Bay,K91TC
+"Bristol Bay CDQ, CVR",Bristol Bay,K09TD
+"Bristol Bay CDQ, CVR",Bristol Bay,K91TD
+"Bristol Bay CDQ, NSED",Bristol Bay,K09TE
+"Bristol Bay CDQ, NSED",Bristol Bay,K91TE
+"Bristol Bay CDQ, YDFD",Bristol Bay,K09TF
+"Bristol Bay CDQ, YDFD",Bristol Bay,K91TF
+Cape Avinof,Bering Sea,G34V
+Cape Romanzof,Bering Sea,G34Y
+Chignik,Alaska Peninsula,D09L
+Chignik,Alaska Peninsula,D91L
+Chignik,Alaska Peninsula,G01L
+Chignik,Alaska Peninsula,H01L
+Chignik,Alaska Peninsula,S01L
+Chignik,Alaska Peninsula,T09L
+Cook Inlet,Cook Inlet,D10H
+Cook Inlet,Cook Inlet,D91H
+Cook Inlet,Cook Inlet,G01H
+Cook Inlet,Cook Inlet,G34H
+Cook Inlet,Cook Inlet,H34H
+Cook Inlet,Cook Inlet,K09H
+Cook Inlet,Cook Inlet,K91H
+Cook Inlet,Cook Inlet,P07H
+Cook Inlet,Cook Inlet,P09H
+Cook Inlet,Cook Inlet,P17H
+Cook Inlet,Cook Inlet,P91H
+Cook Inlet,Cook Inlet,S01H
+Cook Inlet,Cook Inlet,S03H
+Cook Inlet,Cook Inlet,S04H
+Cook Inlet,Cook Inlet,S77H
+Cook Inlet,Cook Inlet,T09H
+Cook Inlet,Cook Inlet,T91H
+Dutch Harbor,Dutch Harbor,K09O
+Dutch Harbor,Dutch Harbor,K91O
+Dutch Harbor,Dutch Harbor,T09O
+Dutch Harbor,Dutch Harbor,T91O
+GOA,GOA,M01G
+GOA,GOA,M02G
+GOA,GOA,M05G
+GOA,GOA,M06G
+GOA,GOA,M09G
+GOA,GOA,M17G
+GOA,GOA,M25G
+GOA,GOA,M26G
+GOA,GOA,M37G
+GOA,GOA,M6AG
+GOA,GOA,M6BG
+GOA,GOA,M7FG
+GOA,GOA,M7GG
+GOA,GOA,M7HG
+GOA,GOA,M7IG
+GOA,GOA,M91G
+Goodnews Bay,Bering Sea,G34W
+Kodiak,Kodiak,G01K
+Kodiak,Kodiak,G31K
+Kodiak,Kodiak,G34K
+Kodiak,Kodiak,H1DK
+Kodiak,Kodiak,H7BK
+Kodiak,Kodiak,H7CK
+Kodiak,Kodiak,H7DK
+Kodiak,Kodiak,K09K
+Kodiak,Kodiak,K91K
+Kodiak,Kodiak,Q11K
+Kodiak,Kodiak,S01K
+Kodiak,Kodiak,S02K
+Kodiak,Kodiak,S04K
+Kodiak,Kodiak,S77K
+Kodiak,Kodiak,T09K
+Kodiak,Kodiak,T91K
+Kodiak,Kodiak,T9AK
+Kodiak,Kodiak,T9BK
+Kodiak,Kodiak,U11K
+Kotzebue,Bering Sea,G01X
+Kotzebue,Bering Sea,G02X
+Kotzebue,Bering Sea,G34X
+Kotzebue,Bering Sea,H02X
+Kotzebue,Bering Sea,H34X
+Kotzebue,Bering Sea,K09X
+Kotzebue,Bering Sea,K91X
+Kotzebue,Bering Sea,S04X
+Kuskokwim,Bering Sea,S04W
+Kuskokwim,Bering Sea,S77W
+Lower Yukon,Bering Sea,S04Y
+Lower Yukon,Bering Sea,S77Y
+Nelson Island,Bering Sea,G34N
+Northern SE-Test ADF&G Only,Southeast,C91A
+Northern Southeast,Southeast,C61A
+Northern Southeast,Southeast,L21A
+Norton Sound,Bering Sea,G02Z
+Norton Sound,Bering Sea,G34Z
+Norton Sound,Bering Sea,H34Z
+Norton Sound,Bering Sea,K09Z
+Norton Sound,Bering Sea,K91Z
+Norton Sound,Bering Sea,S04Z
+Norton Sound (Educational Permit),Bering Sea,G77Z
+"Norton Sound CDQ, NSED",Bering Sea,K09ZE
+"Norton Sound CDQ, YDFD",Bering Sea,K09ZF
+Nunivak Island,Bering Sea,G01U
+Nunivak Island,Bering Sea,G34U
+Prince William Sound,Prince William Sound,C4CE
+Prince William Sound,Prince William Sound,C5AE
+Prince William Sound,Prince William Sound,C5BE
+Prince William Sound,Prince William Sound,C5CE
+Prince William Sound,Prince William Sound,C5DE
+Prince William Sound,Prince William Sound,C9CE
+Prince William Sound,Prince William Sound,D09E
+Prince William Sound,Prince William Sound,D91E
+Prince William Sound,Prince William Sound,G01E
+Prince William Sound,Prince William Sound,G34E
+Prince William Sound,Prince William Sound,H01E
+Prince William Sound,Prince William Sound,H34E
+Prince William Sound,Prince William Sound,K09E
+Prince William Sound,Prince William Sound,K91E
+Prince William Sound,Prince William Sound,L12E
+Prince William Sound,Prince William Sound,L21E
+Prince William Sound,Prince William Sound,P07E
+Prince William Sound,Prince William Sound,P09E
+Prince William Sound,Prince William Sound,P17E
+Prince William Sound,Prince William Sound,P91E
+Prince William Sound,Prince William Sound,S01E
+Prince William Sound,Prince William Sound,S03E
+Prince William Sound,Prince William Sound,S04E
+Prince William Sound,Prince William Sound,S77E
+Prince William Sound,Prince William Sound,T09E
+Prince William Sound,Prince William Sound,T91E
+Security Cove,Bering Sea,G34S
+Southeast,Southeast,A11A
+Southeast,Southeast,All
+Southeast,Southeast,D10A
+Southeast,Southeast,D11A
+Southeast,Southeast,D9AA
+Southeast,Southeast,D9BA
+Southeast,Southeast,D9CA
+Southeast,Southeast,D9DA
+Southeast,Southeast,G01A
+Southeast,Southeast,G34A
+Southeast,Southeast,H01A
+Southeast,Southeast,H21A
+Southeast,Southeast,J11A
+Southeast,Southeast,J97A
+Southeast,Southeast,K19A
+Southeast,Southeast,K29A
+Southeast,Southeast,K39A
+Southeast,Southeast,K49A
+Southeast,Southeast,K59A
+Southeast,Southeast,K69A
+Southeast,Southeast,P07A
+Southeast,Southeast,P17A
+Southeast,Southeast,P91A
+Southeast,Southeast,Q11A
+Southeast,Southeast,S01A
+Southeast,Southeast,S03A
+Southeast,Southeast,S77A
+Southeast,Southeast,T10A
+Southeast,Southeast,T19A
+Southeast,Southeast,U11A
+Southeast,Southeast,Y05A
+Southeast,Southeast,Y06A
+Southeast,Southeast,Y25A
+Southeast,Southeast,Y26A
+Southeast,Southeast,Y61A
+Southeast,Southeast,Y99A
+Southern Southeast,Southeast,C61C
+Southern Southeast,Southeast,C91C
+Southern Southeast,Southeast,L21C
+Statewide,Statewide,B05B
+Statewide,Statewide,B06B
+Statewide,Statewide,B25B
+Statewide,Statewide,B26B
+Statewide,Statewide,B61B
+Statewide,Statewide,C06B
+Statewide,Statewide,C07B
+Statewide,Statewide,C09B
+Statewide,Statewide,C25B
+Statewide,Statewide,C26B
+Statewide,Statewide,C61B
+Statewide,Statewide,C91B
+Statewide,Statewide,E09B
+Statewide,Statewide,E91B
+Statewide,Statewide,F02B
+Statewide,Statewide,F04B
+Statewide,Statewide,F05B
+Statewide,Statewide,F06B
+Statewide,Statewide,F08B
+Statewide,Statewide,F09B
+Statewide,Statewide,F26B
+Statewide,Statewide,F99B
+Statewide,Statewide,I05B
+Statewide,Statewide,I06B
+Statewide,Statewide,I09B
+Statewide,Statewide,I25B
+Statewide,Statewide,I26B
+Statewide,Statewide,I61B
+Statewide,Statewide,I91B
+Statewide,Statewide,M01B
+Statewide,Statewide,M02B
+Statewide,Statewide,M05B
+Statewide,Statewide,M06B
+Statewide,Statewide,M09B
+Statewide,Statewide,M17B
+Statewide,Statewide,M25B
+Statewide,Statewide,M26B
+Statewide,Statewide,M37B
+Statewide,Statewide,M6AB
+Statewide,Statewide,M6BB
+Statewide,Statewide,M7FB
+Statewide,Statewide,M7GB
+Statewide,Statewide,M7HB
+Statewide,Statewide,M7IB
+Statewide,Statewide,M91B
+Statewide,Statewide,M99B
+Statewide,Statewide,N09B
+Statewide,Statewide,N91B
+Statewide,Statewide,N99B
+Statewide,Statewide,O06B
+Statewide,Statewide,O09B
+Statewide,Statewide,O26B
+Statewide,Statewide,O61B
+Statewide,Statewide,O91B
+Statewide,Statewide,O99B
+Statewide,Statewide,Q11B
+Statewide,Statewide,R18B
+Statewide,Statewide,R23B
+Statewide,Statewide,S05B
+Statewide,Statewide,S15B
+Statewide,Statewide,U11B
+Statewide,Statewide,W2AB
+Statewide,Statewide,W2ABV
+Statewide,Statewide,W2BB
+Statewide,Statewide,W2BBV
+Statewide,Statewide,Z09B
+Statewide,Statewide,Z12B
+Statewide,Statewide,Z99B
+Upper Yukon,Bering Sea,S04P
+Upper Yukon,Bering Sea,S08P
+Westward,Dutch Harbor,D09J
+Westward,Dutch Harbor,D91J
+Westward,Dutch Harbor,P07J
+Westward,Dutch Harbor,P09J
+Westward,Dutch Harbor,P17J
+Westward,Dutch Harbor,P91J
+Yakutat,Southeast,D09D
+Yakutat,Southeast,D10D
+Yakutat,Southeast,D91D
+Yakutat,Southeast,K09D
+Yakutat,Southeast,K91D
+Yakutat,Southeast,P07D
+Yakutat,Southeast,P09D
+Yakutat,Southeast,P17D
+Yakutat,Southeast,P91D
+Yakutat,Southeast,S04D
+Yakutat,Southeast,T09D
+Yakutat,Southeast,T10D
+Yakutat,Southeast,T91D
+Statewide,Statewide,A11B
+Statewide,Statewide,A12B
+EEZ,EEZ,B06ZL
+EEZ,EEZ,B61ZL
+Southern Southeast,Southeast,C06A
+Northern Southeast,Southeast,C06C
+EEZ,EEZ,C06ZL
+Northern Southeast,Southeast,C09C
+EEZ,EEZ,C61ZL
+Southeast,Southeast,D09A
+Statewide,Statewide,D09B
+Cook Inlet,Cook Inlet,D09H
+Statewide,Statewide,D10B
+Westward,Dutch Harbor,D10J
+Statewide,Statewide,D12B
+Statewide,Statewide,D91A
+Statewide,Statewide,D91B
+Statewide,Statewide,D99B
+Yakutat,Southeast,H01D
+Kodiak,Kodiak,H01K
+Prince William Sound,Prince William Sound,H07E
+Kodiak,Kodiak,H07K
+Kodiak,Kodiak,H34K
+Statewide,Statewide,I07B
+Adak,Aleutian Islands,K91R
+Southeast,Southeast,K99A
+Statewide,Statewide,M04B
+Statewide,Statewide,M07B
+Statewide,Statewide,M61B
+Statewide,Statewide,N12B
+Statewide,Statewide,P07B
+Southeast,Southeast,P09A
+Statewide,Statewide,P09B
+Statewide,Statewide,P17B
+Statewide,Statewide,P91B
+Statewide,Statewide,R12B
+Adak,Aleutian Islands,T09R
+Cook Inlet,Cook Inlet,T10H
+Southeast,Southeast,T99A
+Cook Inlet,Cook Inlet,T99H
+Kodiak,Kodiak,TB9AK
+Kodiak,Kodiak,TB9BK
+Statewide,Statewide,U12B
+Statewide,Statewide,W22B
+Statewide,Statewide,W2AFW
+Statewide,Statewide,W2ASW
+Statewide,Statewide,W2BFW
+Statewide,Statewide,W2BSW
+Statewide,Statewide,Z18B
+Statewide,Statewide,Z61B
+Statewide,Statewide,Z91B
