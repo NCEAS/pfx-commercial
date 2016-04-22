@@ -172,93 +172,12 @@ plot_polygons_facets(portfolio_window_data_frame,
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-cv-time-window.pdf", width = 12, height = 10)
 
-species_diversity_list <- split(species_diversity,
-  species_diversity$diversity_group)
-
-pdf("figs/portfolio-cv-gross-earnings.pdf", height = 5, width = 5)
-par(cex = 0.75)
-metafolio::plot_cons_plans(
-  species_diversity_list,
-  plans_name = names(species_diversity_list),
-  cols = RColorBrewer::brewer.pal(length(names(species_diversity_list)),
-    "YlOrRd"),
-  xlab = "CV of gross earnings",
-  ylab = "log10 of gross earnings",
-  add_all_efs = FALSE)
-dev.off()
-
-species_diversity_list <- lapply(species_diversity_list, function(x) {
-  x$v <- NULL
-  x$v <- sqrt(x$semivariance)
-  # x$v <- -x$cvar
-  x
-})
-
-pdf("figs/portfolio-semideviation-gross-earnings.pdf", height = 5, width = 5)
-par(cex = 0.75)
-metafolio::plot_cons_plans(
-  species_diversity_list,
-  plans_name = names(species_diversity_list),
-  cols = RColorBrewer::brewer.pal(length(names(species_diversity_list)), "YlOrRd"),
-  xlab = "Semideviation of log10 gross earnings",
-  ylab = "log10 of gross earnings",
-  add_all_efs = FALSE)
-dev.off()
-
-species_diversity_returns <-
-  group_by(species_diversity_by_year, p_holder) %>%
-  mutate(returns = c(NA, diff(log(totIndRev)))) %>%
-  na.omit %>%
-  summarize(
-    diversity_by_earnings = mean(eff.earn),
-    m = log10(mean(totIndRev)),
-    v = var(returns),
-    semivariance = semi_variance(returns),
-    cvar = cvar(returns)
-  ) %>%
-  filter(!is.na(v)) %>%
-  mutate(diversity_group = cut(diversity_by_earnings, breaks = breaks,
-    right = FALSE))
-
-species_diversity_list_returns <- split(species_diversity_returns,
-  species_diversity_returns$diversity_group)
-
-species_diversity_list_returns <- lapply(species_diversity_list_returns, function(x) {
-  x$v <- NULL
-  x$v <- sqrt(x$semivariance)
-  x$v <- -x$cvar
-  x
-})
-
-pdf("figs/portfolio-cvar-gross-earnings.pdf", height = 5, width = 5)
-par(cex = 0.8)
-metafolio::plot_cons_plans(
-  species_diversity_list_returns,
-  plans_name = names(species_diversity_list_returns),
-  cols = RColorBrewer::brewer.pal(length(names(species_diversity_list_returns)), "YlOrRd"),
-  xlab = "-1 * Expected shortfall (95%) of gross earnings returns",
-  ylab = "log10 of gross earnings",
-  add_all_efs = FALSE)
-abline(v = 1, col = "#00000050", lwd = 1.5)
-dev.off()
-#
-# cols = RColorBrewer::brewer.pal(length(names(species_diversity_list)), "YlOrRd")
-# cols <- paste0(cols, "50")
-# for (i in 1:length(cols)) {
-#   if (i == 1)
-#     plot(species_diversity_list[[i]]$v, species_diversity_list[[i]]$m, col = cols[i])
-#   else
-#     points(species_diversity_list[[i]]$v, species_diversity_list[[i]]$m, col = cols[i])
-# }
-#
-# with(species_diversity_list[[2]], points(v, m, col = "red"))
-
-
 # TODO
 # - [x] try a downside risk (semivariance, cvar)
-# - [ ] try viridis colors
+# - [x] try viridis colors
 # - [ ] make plots by various groups: goa-se alaska, boat size, ear
-# - [ ] make plots across time windows
-# - [ ] try making the plots in ggpllllt2
+# - [x] make plots across time windows
+# - [x] try making the plots in ggpllllt2
+
 
 
