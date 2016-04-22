@@ -19,7 +19,8 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
       totRev = sum(g_earn, na.rm = TRUE),
       totN = n(),
       totWeight = sum(g_pounds, na.rm = TRUE),
-      days = length(unique(day))
+      days = length(unique(day)),
+      area = ifelse(length(unique(area)) == 1, area[1], NA_character_)
     ) %>%
     as.data.frame() %>%
     filter(is.finite(totRev) &
@@ -31,7 +32,8 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
       eff.earn = simp.div(totRev),
       eff.lbs = simp.div(totWeight),
       totIndRev = sum(totRev),
-      nCalDays = sum(days)
+      nCalDays = sum(days),
+      area = ifelse(length(unique(area)) == 1, area[1], NA_character_)
     ) %>%
     filter(!is.na(eff.freq) &
         !is.na(eff.earn) & !is.na(eff.lbs)) %>%
@@ -99,6 +101,31 @@ for (yr in seq(1985, 2004, 3)) {
 }
 portfolio_window_data_frame <- bind_rows(portfolio_window)
 
+# Now grouped by area
+portfolio_by_area <- species_diversity_by_year %>%
+  group_by(area, p_holder) %>%
+    mutate(returns = c(NA, diff(log(totIndRev)))) %>%
+    na.omit %>%
+    summarize(
+      # diversity_by_frequency = mean(eff.freq),
+      diversity_by_earnings = mean(eff.earn),
+      # diversity_by_weight = mean(eff.lbs),
+
+      m = log10(mean(totIndRev)),
+      cv = sd(totIndRev) / mean(totIndRev),
+      semivariance = semi_variance(log10(totIndRev)),
+      cvar = cvar(log10(totIndRev)),
+
+      m_returns = mean(returns),
+      var_returns = var(returns),
+      semivariance_returns = semi_variance(returns),
+      cvar_returns = cvar(returns)
+  ) %>%
+    filter(!is.na(cv)) %>%
+    mutate(diversity_group = cut(diversity_by_earnings, breaks = breaks,
+  right = FALSE))
+
+
 plot_polygons <- function(polygon_data, x_column, y_column,
   xlab = "Variance", ylab = "Mean", prob = 0.75) {
   polygon_data <- plyr::ddply(polygon_data, "diversity_group",
@@ -113,8 +140,8 @@ plot_polygons <- function(polygon_data, x_column, y_column,
 }
 
 plot_polygons_facets <- function(polygon_data, x_column, y_column,
-  xlab = "Variance", ylab = "Mean", prob = 0.75) {
-  polygon_data <- plyr::ddply(polygon_data, c("diversity_group", "window"),
+  xlab = "Variance", ylab = "Mean", prob = 0.75, group = "window") {
+  polygon_data <- plyr::ddply(polygon_data, c("diversity_group", group),
     function(x) add_dens_polygon(x[,x_column], x[,y_column], plot = FALSE, alpha = c(0.5, prob)))
   p <- polygon_data %>%
     ggplot(aes(x, y, color = diversity_group, fill = diversity_group)) +
@@ -152,6 +179,12 @@ plot_polygons_facets(portfolio_window_data_frame,
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-cv-time-window.pdf", width = 12, height = 10)
 
+plot_polygons_facets(portfolio_by_area,
+  "cv", "m",
+  group = "area",
+  xlab = "Coefficient of variation of gross earnings",
+  ylab = "log10 of mean gross earnings")
+ggsave("figs/portfolio-gross-earnings-cv-by-area.pdf", width = 12, height = 10)
 # TODO
 # - [x] try a downside risk (semivariance, cvar)
 # - [x] try viridis colors
