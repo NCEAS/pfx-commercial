@@ -213,7 +213,13 @@ group_by(portfolio_by_area, diversity_group, area) %>% summarize(n = n()) %>% as
 # TODO
 # - [x] try a downside risk (semivariance, cvar)
 # - [x] try viridis colors
-# - [ ] make plots by various groups: goa-se alaska, boat size, ear
+# - [ ] make plots by various groups: goa-se alaska, boat size, groundfish
+#       versus salmon, invertebrates versus fish, pelagic versus benthic, gear type
+# - [ ] consider doing cvar from a mean or a running mean
 # - [x] make plots across time windows
 # - [x] try making the plots in ggpllllt2
-
+# - [ ] make a plot of upper semideviation
+# - [ ] remove other category from species
+# - [ ] try modeling the 2 dimensions
+# - [ ] try pulling out pollock
+# - [ ] make sure I'm working with the latest data
