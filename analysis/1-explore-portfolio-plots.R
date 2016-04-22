@@ -44,7 +44,8 @@ species_diversity_by_year <-
   effectiveDiversity_by_personYear(cfec, variable = "specn")
 
 breaks <- c(1, 1.01, 1.5, 2, 2.5, 3, 3.5, 10)
-
+# breaks <- c(1, 1.01, 2, 3, 10)
+breaks <- c(1, 1.01, 1.5, 2, 2.5, 10)
 species_diversity <-
   group_by(species_diversity_by_year, p_holder) %>%
   mutate(returns = c(NA, diff(log(totIndRev)))) %>%
