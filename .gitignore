@@ -11,3 +11,9 @@
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
+.Rproj.user
+
+*.feather
+*.pdf
+*.Rdata.gz
+*.Rproj
