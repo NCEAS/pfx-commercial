@@ -104,6 +104,7 @@ portfolio_window_data_frame <- bind_rows(portfolio_window)
 
 # Now grouped by area
 portfolio_by_area <- species_diversity_by_year %>%
+  mutate(area = ifelse(area == "Southeast", "Southeast", "GOA")) %>%
   group_by(area, p_holder) %>%
     mutate(returns = c(NA, diff(log(totIndRev)))) %>%
     na.omit %>%
@@ -124,48 +125,67 @@ portfolio_by_area <- species_diversity_by_year %>%
   ) %>%
     filter(!is.na(cv)) %>%
     mutate(diversity_group = cut(diversity_by_earnings, breaks = breaks,
-  right = FALSE))
+  right = FALSE)) %>%
+    as.data.frame()
 
+get_contour <- function(df, x_variable, y_variable, prob = 0.8, n = 200, ...) {
+  # print(unique(df$diversity_group))
+  x <- dplyr::select_(df, x_variable, y_variable) %>%
+    data.matrix()  %>%
+      coda::mcmc() %>%
+        emdbook::HPDregionplot(prob = prob, n = n, ...)
 
-plot_polygons <- function(polygon_data, x_column, y_column,
-  xlab = "Variance", ylab = "Mean", prob = 0.75) {
-  polygon_data <- plyr::ddply(polygon_data, "diversity_group",
-    function(x) add_dens_polygon(x[,x_column], x[,y_column], plot = FALSE, alpha = c(0.5, prob)))
-  p <- polygon_data %>%
-    ggplot(aes(x, y, color = diversity_group, fill = diversity_group)) +
-    geom_polygon(alpha = 0.3) +
-    scale_fill_viridis(discrete = TRUE) + scale_color_viridis(discrete = TRUE) +
-    theme_bw() +
-    xlab(xlab) + ylab(ylab)
-  print(p)
+  for (j in length(x)) x[[j]]$contour_group <- j
+
+  x <- x %>% lapply(as.data.frame) %>%
+    bind_rows()
+
+  x <- mutate(x, contour_group =
+    ifelse(!is.na(contour_group), contour_group, 1))
+
+  x[,c("x", "y", "contour_group")]
 }
 
-plot_polygons_facets <- function(polygon_data, x_column, y_column,
-  xlab = "Variance", ylab = "Mean", prob = 0.75, group = "window") {
-  polygon_data <- plyr::ddply(polygon_data, c("diversity_group", group),
-    function(x) add_dens_polygon(x[,x_column], x[,y_column], plot = FALSE, alpha = c(0.5, prob)))
-  p <- polygon_data %>%
-    ggplot(aes(x, y, color = diversity_group, fill = diversity_group)) +
-    geom_polygon(alpha = 0.3) +
+plot_polygons <- function(polygon_data, x_column, y_column,
+  xlab = "Variance", ylab = "Mean", prob = 0.75,
+  grouping = c("diversity_group"), ...) {
+  contours <- plyr::ddply(polygon_data, grouping,
+    function(x) get_contour(x, x_column, y_column, prob = prob))
+# We need unique IDs in case there are multiple polygons for one group
+  contours$id <- paste(contours$contour_group, contours[,grouping[1]])
+  polygon_data <- mutate(polygon_data, id = 1)
+
+  p <- contours %>%
+    ggplot(aes_string("x", "y", group = "id", color = grouping[1],
+      fill = grouping[1]))
+
+  p <- p + geom_point(data = polygon_data, aes_string(x_column, y_column), alpha = 0.1)
+  p <- p + geom_polygon(alpha = 0.3) +
     scale_fill_viridis(discrete = TRUE) + scale_color_viridis(discrete = TRUE) +
     theme_bw() +
-    facet_wrap(~window) +
     xlab(xlab) + ylab(ylab)
+
+  if (length(grouping) > 1)
+    p <- p + facet_wrap(grouping[2])
+
   print(p)
+  invisible(contours)
 }
 
 plot_polygons(species_diversity, "cv", "m",
-  xlab = "CV of gross earnings",
+  xlab = "CV of gross earnings", n = 50,
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-cv.pdf", width = 6.5, height = 5)
 
+# table(species_diversity$diversity_group)
 plot_polygons(species_diversity, "semideviation", "m",
   xlab = "Semideviation of log10 gross earnings",
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-semideviation.pdf", width = 6.5, height = 5)
 
+# table(species_diversity$diversity_group)
 plot_polygons(species_diversity, "cvar", "m",
-  xlab = "Expected shortfall (95%) of gross earnings returns",
+  xlab = "-1 * Expected shortfall (95%) of gross earnings returns",
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-cvar.pdf", width = 6.5, height = 5)
 
@@ -174,18 +194,22 @@ plot_polygons(species_diversity, "cvar_returns", "m",
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-cvar-returns.pdf", width = 6.5, height = 5)
 
-plot_polygons_facets(portfolio_window_data_frame,
+plot_polygons(portfolio_window_data_frame,
   "cv", "m",
+  grouping = c("diversity_group", "window"),
   xlab = "Coefficient of variation of gross earnings",
   ylab = "log10 of mean gross earnings")
-ggsave("figs/portfolio-gross-earnings-cv-time-window.pdf", width = 12, height = 10)
+ggsave("figs/portfolio-gross-earnings-cv-time-window.pdf", width = 9, height = 5)
 
-plot_polygons_facets(portfolio_by_area,
+plot_polygons(portfolio_by_area,
   "cv", "m",
-  group = "area",
+  grouping = c("diversity_group", "area"),
   xlab = "Coefficient of variation of gross earnings",
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-cv-by-area.pdf", width = 12, height = 10)
+
+group_by(portfolio_by_area, diversity_group, area) %>% summarize(n = n()) %>% as.data.frame() %>% arrange(area, diversity_group)
+
 # TODO
 # - [x] try a downside risk (semivariance, cvar)
 # - [x] try viridis colors
