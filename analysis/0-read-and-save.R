@@ -1,7 +1,7 @@
 # Read in, cleanup, and write out a version of the data
 
 library(dplyr)
-load("../data/cfecCleaned_new")
+load("data/cfecCleaned_new")
 names(cfec) <- tolower(names(cfec))
 cfec <- as_data_frame(cfec)
 names(cfec) <- gsub("\\.", "_", names(cfec))
@@ -24,7 +24,7 @@ cfec <- mutate(cfec, g_price = g_price / defl, g_earn = g_earn / defl)
 cfec$defl <- NULL
 
 # devtools::install_github("wesm/feather/R")
-feather::write_feather(cfec, "../data/cfec.feather")
+feather::write_feather(cfec, "data/cfec.feather")
 
 # saveRDS(cfec, file = "../data/cfec.rds")
 # system.time({d <- readRDS("../data/cfec.rds")})
