@@ -1,5 +1,9 @@
 # setwd("../")
 library(dplyr)
+library(ggplot2)
+library(viridis)
+source("analysis/plot_cons_plans.R")
+source("analysis/downside-risk.R")
 
 if (!exists("cfec")) {
   cfec <- feather::read_feather("data/cfec.feather")
@@ -34,27 +38,6 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
     as.data.frame()
 }
 
-semi_variance <- function(x, mar = mean(x, na.omit = TRUE), full = TRUE) {
-  x <- na.omit(x)
-  x_mar <- x[x < mar]
-  if (full)
-    len <- length(x)
-  else
-    len <- length(x_mar)
-  sum((x_mar - mar)^2)/len
-}
-semi_deviation <- function(x, ...) {
-  sqrt(semi_variance(x, ...))
-}
-# Variance at Risk:
-var_ <- function(x, prob = 0.05, ...) {
-  quantile(x, probs = prob, ...)
-}
-# Conditional Value at Risk:
-cvar <- function(x, prob = 0.05, ...) {
-  mean(x[x < var_(x, prob = prob, ...)])
-}
-
 species_diversity_by_year <-
   effectiveDiversity_by_personYear(cfec, variable = "specn")
 
@@ -83,9 +66,38 @@ species_diversity <-
   mutate(diversity_group = cut(diversity_by_earnings, breaks = breaks,
     right = FALSE))
 
-library(ggplot2)
-library(viridis)
-source("analysis/plot_cons_plans.R")
+# Now try grouping this in various ways
+portfolio_window <- list()
+ii <- 1
+for (yr in seq(1985, 2004, 3)) {
+  message(yr)
+  portfolio_window[[ii]] <- species_diversity_by_year %>%
+    filter(year %in% yr:(yr + 10)) %>%
+    group_by(p_holder) %>%
+    mutate(returns = c(NA, diff(log(totIndRev)))) %>%
+    na.omit %>%
+    summarize(
+      # diversity_by_frequency = mean(eff.freq),
+      diversity_by_earnings = mean(eff.earn),
+      # diversity_by_weight = mean(eff.lbs),
+
+      m = log10(mean(totIndRev)),
+      cv = sd(totIndRev) / mean(totIndRev),
+      semivariance = semi_variance(log10(totIndRev)),
+      cvar = cvar(log10(totIndRev)),
+
+      m_returns = mean(returns),
+      var_returns = var(returns),
+      semivariance_returns = semi_variance(returns),
+      cvar_returns = cvar(returns)
+  ) %>%
+    filter(!is.na(cv)) %>%
+    mutate(diversity_group = cut(diversity_by_earnings, breaks = breaks,
+  right = FALSE))
+    portfolio_window[[ii]]$window <- yr
+    ii <- ii + 1
+}
+portfolio_window_data_frame <- bind_rows(portfolio_window)
 
 plot_polygons <- function(polygon_data, x_column, y_column,
   xlab = "Variance", ylab = "Mean", prob = 0.75) {
@@ -99,6 +111,7 @@ plot_polygons <- function(polygon_data, x_column, y_column,
     xlab(xlab) + ylab(ylab)
   print(p)
 }
+
 plot_polygons_facets <- function(polygon_data, x_column, y_column,
   xlab = "Variance", ylab = "Mean", prob = 0.75) {
   polygon_data <- plyr::ddply(polygon_data, c("diversity_group", "window"),
@@ -133,39 +146,6 @@ plot_polygons(species_diversity, "cvar_returns", "m",
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-cvar-returns.pdf", width = 6.5, height = 5)
 
-# Now try grouping this in various ways
-portfolio_window <- list()
-ii <- 1
-for (yr in seq(1985, 2004, 3)) {
-  message(yr)
-  portfolio_window[[ii]] <- species_diversity_by_year %>%
-    filter(year %in% yr:(yr + 10)) %>%
-    group_by(p_holder) %>%
-    mutate(returns = c(NA, diff(log(totIndRev)))) %>%
-    na.omit %>%
-    summarize(
-      # diversity_by_frequency = mean(eff.freq),
-      diversity_by_earnings = mean(eff.earn),
-      # diversity_by_weight = mean(eff.lbs),
-
-      m = log10(mean(totIndRev)),
-      cv = sd(totIndRev) / mean(totIndRev),
-      semivariance = semi_variance(log10(totIndRev)),
-      cvar = cvar(log10(totIndRev)),
-
-      m_returns = mean(returns),
-      var_returns = var(returns),
-      semivariance_returns = semi_variance(returns),
-      cvar_returns = cvar(returns)
-  ) %>%
-    filter(!is.na(cv)) %>%
-    mutate(diversity_group = cut(diversity_by_earnings, breaks = breaks,
-  right = FALSE))
-    portfolio_window[[ii]]$window <- yr
-    ii <- ii + 1
-}
-
-portfolio_window_data_frame <- bind_rows(portfolio_window)
 plot_polygons_facets(portfolio_window_data_frame,
   "cv", "m",
   xlab = "Coefficient of variation of gross earnings",
@@ -178,6 +158,4 @@ ggsave("figs/portfolio-gross-earnings-cv-time-window.pdf", width = 12, height = 
 # - [ ] make plots by various groups: goa-se alaska, boat size, ear
 # - [x] make plots across time windows
 # - [x] try making the plots in ggpllllt2
-
-
 
