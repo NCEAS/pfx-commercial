@@ -65,7 +65,8 @@ calculate_metrics <- function(x) {
 
       m = log10(mean(totIndRev)),
       cv = sd(totIndRev) / mean(totIndRev),
-      semivariance = semi_variance(log10(totIndRev)),
+      semideviation = semi_deviation(log10(totIndRev)),
+      semideviation_upside = semi_deviation(log10(totIndRev), downside = FALSE),
       cvar = cvar(log10(totIndRev)),
 
       m_returns = mean(returns),
@@ -171,6 +172,11 @@ plot_polygons(species_diversity, "semideviation", "m",
 ggsave("figs/portfolio-gross-earnings-semideviation.pdf", width = 6.5, height = 5)
 
 # table(species_diversity$diversity_group)
+plot_polygons(species_diversity, "semideviation_upside", "m",
+  xlab = "Semideviation (upside) of log10 gross earnings",
+  ylab = "log10 of mean gross earnings")
+ggsave("figs/portfolio-gross-earnings-semideviation-upside.pdf", width = 6.5, height = 5)
+
 plot_polygons(species_diversity, "cvar", "m",
   xlab = "-1 * Expected shortfall (95%) of gross earnings returns",
   ylab = "log10 of mean gross earnings")

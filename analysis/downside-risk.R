@@ -1,15 +1,25 @@
-semi_variance <- function(x, mar = mean(x, na.omit = TRUE), full = TRUE) {
+semi_variance <- function(x, mar = mean(x, na.omit = TRUE), full = TRUE,
+  downside = TRUE) {
+
   x <- na.omit(x)
-  x_mar <- x[x < mar]
+
+  if (downside)
+    x_mar <- x[x < mar]
+  else
+    x_mar <- x[x >= mar]
+
   if (full)
     len <- length(x)
   else
     len <- length(x_mar)
+
   sum((x_mar - mar)^2)/len
 }
+
 semi_deviation <- function(x, ...) {
   sqrt(semi_variance(x, ...))
 }
+
 # Variance at Risk:
 var_ <- function(x, prob = 0.05, ...) {
   quantile(x, probs = prob, ...)
