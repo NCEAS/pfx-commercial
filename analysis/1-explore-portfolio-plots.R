@@ -6,6 +6,7 @@ source("analysis/downside-risk.R")
 if (!exists("cfec")) {
   cfec <- feather::read_feather("data/cfec.feather")
 }
+cfec <- mutate(cfec, pollock = ifelse(spec == "PLCK", TRUE, FALSE))
 
 simp.div <- function(x) {
   1 / sum((x / sum(x)) ^ 2)
@@ -20,6 +21,7 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
       days = length(unique(day)),
       mean_vessel_length = mean(vlength),
       area = ifelse(length(unique(area)) == 1, area[1], NA_character_),
+      pollock = ifelse("PLCK" %in% spec, TRUE, FALSE),
       region = ifelse(length(unique(region)) == 1, region[1], NA_character_),
       taxa = ifelse(length(unique(group1)) == 1, group1[1], NA_character_),
       salmon = ifelse(length(unique(salmon)) == 1, salmon[1], as.logical(NA))
@@ -37,6 +39,7 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
       nCalDays = sum(days),
       mean_vessel_length = mean(mean_vessel_length),
       area = ifelse(length(unique(area)) == 1, area[1], NA_character_),
+      pollock = ifelse(TRUE %in% pollock, TRUE, FALSE),
       region = ifelse(length(unique(region)) == 1, region[1], NA_character_),
       taxa = ifelse(length(unique(taxa)) == 1, taxa[1], NA_character_),
       salmon = ifelse(length(unique(salmon)) == 1, salmon[1], as.logical(NA))
@@ -115,6 +118,9 @@ species_diversity_by_year <- mutate(species_diversity_by_year,
 
 portfolio_by_vlength <- species_diversity_by_year %>%
   plyr::ddply("vessel_length_category", calculate_metrics)
+
+portfolio_by_pollock <- species_diversity_by_year %>%
+  plyr::ddply("pollock", calculate_metrics)
 
 get_contour <- function(df, x_variable, y_variable, prob = 0.8, n = 200, ...) {
   x <- dplyr::select_(df, x_variable, y_variable) %>%
@@ -218,6 +224,11 @@ plot_polygons(portfolio_by_vlength, "cv", "m",
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-cv-vessel-length.pdf", width = 9, height = 5)
 
+plot_polygons(portfolio_by_pollock, "cv", "m",
+  grouping = c("diversity_group", "pollock"),
+  xlab = "Coefficient of variation of gross earnings",
+  ylab = "log10 of mean gross earnings")
+ggsave("figs/portfolio-gross-earnings-cv-pollock.pdf", width = 9, height = 5)
 # group_by(portfolio_by_area, diversity_group, area) %>% summarize(n = n()) %>% as.data.frame() %>% arrange(area, diversity_group)
 
 # TODO
