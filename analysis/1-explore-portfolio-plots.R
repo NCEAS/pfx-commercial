@@ -171,13 +171,11 @@ plot_polygons(species_diversity, "cv", "m",
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-cv.pdf", width = 6.5, height = 5)
 
-# table(species_diversity$diversity_group)
 plot_polygons(species_diversity, "semideviation", "m",
   xlab = "Semideviation of log10 gross earnings",
   ylab = "log10 of mean gross earnings")
 ggsave("figs/portfolio-gross-earnings-semideviation.pdf", width = 6.5, height = 5)
 
-# table(species_diversity$diversity_group)
 plot_polygons(species_diversity, "semideviation_upside", "m",
   xlab = "Semideviation (upside) of log10 gross earnings",
   ylab = "log10 of mean gross earnings")
@@ -234,14 +232,14 @@ ggsave("figs/portfolio-gross-earnings-cv-pollock.pdf", width = 9, height = 5)
 # TODO
 # - [x] try a downside risk (semivariance, cvar)
 # - [x] try viridis colors
-# - [-] make plots by various groups: goa-se alaska, boat size, groundfish
+# - [x] make plots by various groups: goa-se alaska, boat size, groundfish
 #       versus salmon, invertebrates versus fish, pelagic versus benthic, gear type
 # - [ ] consider doing cvar from a mean or a running mean
 # - [x] make plots across time windows
 # - [x] try making the plots in ggpllllt2
-# - [ ] make a plot of upper semideviation
+# - [x] make a plot of upper semideviation
 # - [ ] remove other category from species
 # - [ ] try modeling the 2 dimensions
-# - [ ] try pulling out pollock
+# - [x] try pulling out pollock
 # - [x] make sure I'm working with the latest data
 # - [ ] allow for option for adding points or not
