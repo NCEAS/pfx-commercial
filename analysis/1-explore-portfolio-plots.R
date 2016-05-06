@@ -1,12 +1,20 @@
-# setwd("../")
 library(dplyr)
 library(ggplot2)
 library(viridis)
-source("analysis/plot_cons_plans.R")
 source("analysis/downside-risk.R")
 
 if (!exists("cfec")) {
   cfec <- feather::read_feather("data/cfec.feather")
+  regions <- read.csv("data/regions.csv", stringsAsFactors = FALSE)
+  cfec <- left_join(cfec, regions)
+
+  groupings <- readxl::read_excel("data/Species_Groupings.xlsx")
+  names(groupings) <- tolower(names(groupings))
+  names(groupings) <- gsub(" \\(spec\\)", "", names(groupings))
+  groupings <- select(groupings, specn, group1)
+  cfec <- left_join(cfec, groupings)
+  cfec <- mutate(cfec, salmon = ifelse(spec %in%
+    c("CHNK", "SOCK", "COHO", "PINK", "CHUM"), TRUE, FALSE))
 }
 
 simp.div <- function(x) {
@@ -20,7 +28,11 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
       totN = n(),
       totWeight = sum(g_pounds, na.rm = TRUE),
       days = length(unique(day)),
-      area = ifelse(length(unique(area)) == 1, area[1], NA_character_)
+      mean_vessel_length = mean(vlength),
+      area = ifelse(length(unique(area)) == 1, area[1], NA_character_),
+      region = ifelse(length(unique(region)) == 1, region[1], NA_character_),
+      taxa = ifelse(length(unique(group1)) == 1, group1[1], NA_character_),
+      salmon = ifelse(length(unique(salmon)) == 1, salmon[1], as.logical(NA))
     ) %>%
     as.data.frame() %>%
     filter(is.finite(totRev) &
@@ -33,7 +45,11 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
       eff.lbs = simp.div(totWeight),
       totIndRev = sum(totRev),
       nCalDays = sum(days),
-      area = ifelse(length(unique(area)) == 1, area[1], NA_character_)
+      mean_vessel_length = mean(mean_vessel_length),
+      area = ifelse(length(unique(area)) == 1, area[1], NA_character_),
+      region = ifelse(length(unique(region)) == 1, region[1], NA_character_),
+      taxa = ifelse(length(unique(taxa)) == 1, taxa[1], NA_character_),
+      salmon = ifelse(length(unique(salmon)) == 1, salmon[1], as.logical(NA))
     ) %>%
     filter(!is.na(eff.freq) &
         !is.na(eff.earn) & !is.na(eff.lbs)) %>%
@@ -46,39 +62,12 @@ species_diversity_by_year <-
 breaks <- c(1, 1.01, 1.5, 2, 2.5, 3, 3.5, 10)
 # breaks <- c(1, 1.01, 2, 3, 10)
 breaks <- c(1, 1.01, 1.5, 2, 2.5, 10)
-species_diversity <-
-  group_by(species_diversity_by_year, p_holder) %>%
-  mutate(returns = c(NA, diff(log(totIndRev)))) %>%
-  na.omit %>%
-  summarize(
-    # diversity_by_frequency = mean(eff.freq),
-    diversity_by_earnings = mean(eff.earn),
-    # diversity_by_weight = mean(eff.lbs),
 
-    m = log10(mean(totIndRev)),
-    cv = sd(totIndRev) / mean(totIndRev),
-    semideviation = semi_deviation(log10(totIndRev)),
-    cvar = -cvar(log10(totIndRev)),
-
-    m_returns = mean(returns),
-    var_returns = var(returns),
-    semivariance_returns = semi_variance(returns),
-    cvar_returns = -cvar(returns)
-  ) %>%
-  filter(!is.na(cv)) %>%
-  mutate(diversity_group = cut(diversity_by_earnings, breaks = breaks,
-    right = FALSE))
-
-# Now try grouping this in various ways
-portfolio_window <- list()
-ii <- 1
-for (yr in seq(1985, 2004, 3)) {
-  message(yr)
-  portfolio_window[[ii]] <- species_diversity_by_year %>%
-    filter(year %in% yr:(yr + 10)) %>%
+calculate_metrics <- function(x) {
+  x %>%
     group_by(p_holder) %>%
     mutate(returns = c(NA, diff(log(totIndRev)))) %>%
-    na.omit %>%
+    filter(!is.na(returns)) %>%
     summarize(
       # diversity_by_frequency = mean(eff.freq),
       diversity_by_earnings = mean(eff.earn),
@@ -97,39 +86,46 @@ for (yr in seq(1985, 2004, 3)) {
     filter(!is.na(cv)) %>%
     mutate(diversity_group = cut(diversity_by_earnings, breaks = breaks,
   right = FALSE))
-    portfolio_window[[ii]]$window <- yr
-    ii <- ii + 1
+}
+
+species_diversity <- calculate_metrics(species_diversity_by_year)
+
+# Now try grouping this in various ways
+# Grouped over time:
+portfolio_window <- list()
+ii <- 1
+for (yr in seq(1985, 2004, 3)) {
+  message(yr)
+  portfolio_window[[ii]] <- species_diversity_by_year %>%
+    filter(year %in% yr:(yr + 10)) %>%
+    calculate_metrics()
+  portfolio_window[[ii]]$window <- yr
+  ii <- ii + 1
 }
 portfolio_window_data_frame <- bind_rows(portfolio_window)
 
-# Now grouped by area
-portfolio_by_area <- species_diversity_by_year %>%
-  mutate(area = ifelse(area == "Southeast", "Southeast", "GOA")) %>%
-  group_by(area, p_holder) %>%
-    mutate(returns = c(NA, diff(log(totIndRev)))) %>%
-    na.omit %>%
-    summarize(
-      # diversity_by_frequency = mean(eff.freq),
-      diversity_by_earnings = mean(eff.earn),
-      # diversity_by_weight = mean(eff.lbs),
+portfolio_by_taxa <- species_diversity_by_year %>%
+  plyr::ddply("taxa", calculate_metrics)
 
-      m = log10(mean(totIndRev)),
-      cv = sd(totIndRev) / mean(totIndRev),
-      semivariance = semi_variance(log10(totIndRev)),
-      cvar = cvar(log10(totIndRev)),
+portfolio_by_region <- species_diversity_by_year %>%
+  plyr::ddply("region", calculate_metrics)
 
-      m_returns = mean(returns),
-      var_returns = var(returns),
-      semivariance_returns = semi_variance(returns),
-      cvar_returns = cvar(returns)
-  ) %>%
-    filter(!is.na(cv)) %>%
-    mutate(diversity_group = cut(diversity_by_earnings, breaks = breaks,
-  right = FALSE)) %>%
-    as.data.frame()
+portfolio_by_salmon <- species_diversity_by_year %>%
+  plyr::ddply("salmon", calculate_metrics)
+portfolio_by_salmon <- filter(portfolio_by_salmon, !is.na(salmon))
+
+vessel_length_cuts <-
+  quantile(species_diversity_by_year$mean_vessel_length, probs =
+  c(0, 0.33, 0.66, 1), na.rm = TRUE)
+
+species_diversity_by_year <- mutate(species_diversity_by_year,
+  vessel_length_category = cut(mean_vessel_length, breaks = vessel_length_cuts,
+  right = FALSE))
+
+portfolio_by_vlength <- species_diversity_by_year %>%
+  plyr::ddply("vessel_length_category", calculate_metrics)
 
 get_contour <- function(df, x_variable, y_variable, prob = 0.8, n = 200, ...) {
-  # print(unique(df$diversity_group))
   x <- dplyr::select_(df, x_variable, y_variable) %>%
     data.matrix()  %>%
       coda::mcmc() %>%
@@ -159,7 +155,8 @@ plot_polygons <- function(polygon_data, x_column, y_column,
     ggplot(aes_string("x", "y", group = "id", color = grouping[1],
       fill = grouping[1]))
 
-  p <- p + geom_point(data = polygon_data, aes_string(x_column, y_column), alpha = 0.1)
+  p <- p + geom_point(data = polygon_data, aes_string(x_column, y_column),
+    alpha = 0.1)
   p <- p + geom_polygon(alpha = 0.3) +
     scale_fill_viridis(discrete = TRUE) + scale_color_viridis(discrete = TRUE) +
     theme_bw() +
@@ -199,21 +196,38 @@ plot_polygons(portfolio_window_data_frame,
   grouping = c("diversity_group", "window"),
   xlab = "Coefficient of variation of gross earnings",
   ylab = "log10 of mean gross earnings")
-ggsave("figs/portfolio-gross-earnings-cv-time-window.pdf", width = 9, height = 5)
+ggsave("figs/portfolio-gross-earnings-cv-time-window.pdf", width = 10, height = 10)
 
-plot_polygons(portfolio_by_area,
-  "cv", "m",
-  grouping = c("diversity_group", "area"),
+plot_polygons(portfolio_by_taxa, "cv", "m",
+  grouping = c("diversity_group", "taxa"),
   xlab = "Coefficient of variation of gross earnings",
   ylab = "log10 of mean gross earnings")
-ggsave("figs/portfolio-gross-earnings-cv-by-area.pdf", width = 12, height = 10)
+ggsave("figs/portfolio-gross-earnings-cv-taxa.pdf", width = 9, height = 9)
 
-group_by(portfolio_by_area, diversity_group, area) %>% summarize(n = n()) %>% as.data.frame() %>% arrange(area, diversity_group)
+# plot_polygons(portfolio_by_region, "cv", "m",
+#   grouping = c("diversity_group", "region"),
+#   xlab = "Coefficient of variation of gross earnings",
+#   ylab = "log10 of mean gross earnings")
+# ggsave("figs/portfolio-gross-earnings-cv-taxa.pdf", width = 9, height = 5)
+
+plot_polygons(portfolio_by_salmon, "cv", "m",
+  grouping = c("diversity_group", "salmon"),
+  xlab = "Coefficient of variation of gross earnings",
+  ylab = "log10 of mean gross earnings")
+ggsave("figs/portfolio-gross-earnings-cv-salmon.pdf", width = 9, height = 5)
+
+plot_polygons(portfolio_by_vlength, "cv", "m",
+  grouping = c("diversity_group", "vessel_length_category"),
+  xlab = "Coefficient of variation of gross earnings",
+  ylab = "log10 of mean gross earnings")
+ggsave("figs/portfolio-gross-earnings-cv-vessel-length.pdf", width = 9, height = 5)
+
+# group_by(portfolio_by_area, diversity_group, area) %>% summarize(n = n()) %>% as.data.frame() %>% arrange(area, diversity_group)
 
 # TODO
 # - [x] try a downside risk (semivariance, cvar)
 # - [x] try viridis colors
-# - [ ] make plots by various groups: goa-se alaska, boat size, groundfish
+# - [-] make plots by various groups: goa-se alaska, boat size, groundfish
 #       versus salmon, invertebrates versus fish, pelagic versus benthic, gear type
 # - [ ] consider doing cvar from a mean or a running mean
 # - [x] make plots across time windows
@@ -222,4 +236,5 @@ group_by(portfolio_by_area, diversity_group, area) %>% summarize(n = n()) %>% as
 # - [ ] remove other category from species
 # - [ ] try modeling the 2 dimensions
 # - [ ] try pulling out pollock
-# - [ ] make sure I'm working with the latest data
+# - [x] make sure I'm working with the latest data
+# - [ ] allow for option for adding points or not
