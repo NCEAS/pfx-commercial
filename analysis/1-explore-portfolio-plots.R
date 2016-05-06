@@ -5,16 +5,6 @@ source("analysis/downside-risk.R")
 
 if (!exists("cfec")) {
   cfec <- feather::read_feather("data/cfec.feather")
-  regions <- read.csv("data/regions.csv", stringsAsFactors = FALSE)
-  cfec <- left_join(cfec, regions)
-
-  groupings <- readxl::read_excel("data/Species_Groupings.xlsx")
-  names(groupings) <- tolower(names(groupings))
-  names(groupings) <- gsub(" \\(spec\\)", "", names(groupings))
-  groupings <- select(groupings, specn, group1)
-  cfec <- left_join(cfec, groupings)
-  cfec <- mutate(cfec, salmon = ifelse(spec %in%
-    c("CHNK", "SOCK", "COHO", "PINK", "CHUM"), TRUE, FALSE))
 }
 
 simp.div <- function(x) {

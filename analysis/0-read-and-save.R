@@ -23,6 +23,18 @@ cfec <- inner_join(cfec, deflationTable)
 cfec <- mutate(cfec, g_price = g_price / defl, g_earn = g_earn / defl)
 cfec$defl <- NULL
 
+
+regions <- read.csv("data/regions.csv", stringsAsFactors = FALSE)
+cfec <- left_join(cfec, regions)
+
+groupings <- read.csv("data/species-groupings.csv", stringsAsFactors = FALSE)
+names(groupings) <- tolower(names(groupings))
+names(groupings) <- gsub(" \\(spec\\)", "", names(groupings))
+groupings <- select(groupings, specn, group1)
+cfec <- left_join(cfec, groupings)
+cfec <- mutate(cfec, salmon = ifelse(spec %in%
+  c("CHNK", "SOCK", "COHO", "PINK", "CHUM"), TRUE, FALSE))
+
 # devtools::install_github("wesm/feather/R")
 feather::write_feather(cfec, "data/cfec.feather")
 
