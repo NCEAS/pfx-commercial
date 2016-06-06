@@ -31,9 +31,11 @@ groupings <- read.csv("data/species-groupings.csv", stringsAsFactors = FALSE)
 names(groupings) <- tolower(names(groupings))
 names(groupings) <- gsub(" \\(spec\\)", "", names(groupings))
 groupings <- select(groupings, specn, group1)
+groupings <- rename(groupings, taxa_broad = group1)
 cfec <- left_join(cfec, groupings)
 cfec <- mutate(cfec, salmon = ifelse(spec %in%
   c("CHNK", "SOCK", "COHO", "PINK", "CHUM"), TRUE, FALSE))
+cfec <- mutate(cfec, pollock = ifelse(spec == "PLCK", TRUE, FALSE))
 
 # devtools::install_github("wesm/feather/R")
 feather::write_feather(cfec, "data/cfec.feather")
