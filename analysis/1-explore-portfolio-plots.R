@@ -2,11 +2,11 @@ library(dplyr)
 library(ggplot2)
 library(viridis)
 source("analysis/downside-risk.R")
+source("analysis/contours.R")
 
 if (!exists("cfec")) {
   cfec <- feather::read_feather("data/cfec.feather")
 }
-cfec <- mutate(cfec, pollock = ifelse(spec == "PLCK", TRUE, FALSE))
 
 simp.div <- function(x) {
   1 / sum((x / sum(x)) ^ 2)
@@ -23,7 +23,7 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
       area = ifelse(length(unique(area)) == 1, area[1], NA_character_),
       pollock = ifelse("PLCK" %in% spec, TRUE, FALSE),
       region = ifelse(length(unique(region)) == 1, region[1], NA_character_),
-      taxa = ifelse(length(unique(group1)) == 1, group1[1], NA_character_),
+      taxa = ifelse(length(unique(taxa_broad)) == 1, taxa_broad[1], NA_character_),
       salmon = ifelse(length(unique(salmon)) == 1, salmon[1], as.logical(NA))
     ) %>%
     as.data.frame() %>%
@@ -49,14 +49,15 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
     as.data.frame()
 }
 
-species_diversity_by_year <-
-  effectiveDiversity_by_personYear(cfec, variable = "specn")
+if (!file.exists("generated-data/species_diversity_by_year.rds")) {
+  species_diversity_by_year <-
+    effectiveDiversity_by_personYear(cfec, variable = "specn")
+  saveRDS(species_diversity_by_year, file = "generated-data/species_diversity_by_year.rds")
+} else {
+  species_diversity_by_year <- readRDS("generated-data/species_diversity_by_year.rds")
+}
 
-breaks <- c(1, 1.01, 1.5, 2, 2.5, 3, 3.5, 10)
-# breaks <- c(1, 1.01, 2, 3, 10)
-breaks <- c(1, 1.01, 1.5, 2, 2.5, 10)
-
-calculate_metrics <- function(x) {
+calculate_metrics <- function(x, breaks = c(1, 1.01, 1.5, 2, 2.5, 10) {
   x %>%
     group_by(p_holder) %>%
     mutate(returns = c(NA, diff(log(totIndRev)))) %>%
@@ -83,6 +84,7 @@ calculate_metrics <- function(x) {
 }
 
 species_diversity <- calculate_metrics(species_diversity_by_year)
+saveRDS(species_diversity, file = "generated-data/species_diversity_metrics.rds")
 
 # Now try grouping this in various ways
 # Grouped over time:
@@ -121,50 +123,6 @@ portfolio_by_vlength <- species_diversity_by_year %>%
 
 portfolio_by_pollock <- species_diversity_by_year %>%
   plyr::ddply("pollock", calculate_metrics)
-
-get_contour <- function(df, x_variable, y_variable, prob = 0.8, n = 200, ...) {
-  x <- dplyr::select_(df, x_variable, y_variable) %>%
-    data.matrix()  %>%
-      coda::mcmc() %>%
-        emdbook::HPDregionplot(prob = prob, n = n, ...)
-
-  for (j in length(x)) x[[j]]$contour_group <- j
-
-  x <- x %>% lapply(as.data.frame) %>%
-    bind_rows()
-
-  x <- mutate(x, contour_group =
-    ifelse(!is.na(contour_group), contour_group, 1))
-
-  x[,c("x", "y", "contour_group")]
-}
-
-plot_polygons <- function(polygon_data, x_column, y_column,
-  xlab = "Variance", ylab = "Mean", prob = 0.75,
-  grouping = c("diversity_group"), ...) {
-  contours <- plyr::ddply(polygon_data, grouping,
-    function(x) get_contour(x, x_column, y_column, prob = prob))
-# We need unique IDs in case there are multiple polygons for one group
-  contours$id <- paste(contours$contour_group, contours[,grouping[1]])
-  polygon_data <- mutate(polygon_data, id = 1)
-
-  p <- contours %>%
-    ggplot(aes_string("x", "y", group = "id", color = grouping[1],
-      fill = grouping[1]))
-
-  p <- p + geom_point(data = polygon_data, aes_string(x_column, y_column),
-    alpha = 0.1)
-  p <- p + geom_polygon(alpha = 0.3) +
-    scale_fill_viridis(discrete = TRUE) + scale_color_viridis(discrete = TRUE) +
-    theme_bw() +
-    xlab(xlab) + ylab(ylab)
-
-  if (length(grouping) > 1)
-    p <- p + facet_wrap(grouping[2])
-
-  print(p)
-  invisible(contours)
-}
 
 plot_polygons(species_diversity, "cv", "m",
   xlab = "CV of gross earnings", n = 50,
@@ -220,7 +178,7 @@ plot_polygons(portfolio_by_vlength, "cv", "m",
   grouping = c("diversity_group", "vessel_length_category"),
   xlab = "Coefficient of variation of gross earnings",
   ylab = "log10 of mean gross earnings")
-ggsave("figs/portfolio-gross-earnings-cv-vessel-length.pdf", width = 9, height = 5)
+ggsave("figs/portfolio-gross-earnings-cv-vessel-length.pdf", width = 10, height = 9)
 
 plot_polygons(portfolio_by_pollock, "cv", "m",
   grouping = c("diversity_group", "pollock"),
