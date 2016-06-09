@@ -1,0 +1,454 @@
+---
+title: "Changes in diversity and variability in diversity through time: Catch portfolios paper 1A"
+date: "April 7, 2016"
+output:
+  pdf_document:
+    fig_caption: yes
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
+```
+
+## Load cleaned data  
+```{r dataLoad, warning = FALSE, message=FALSE, results="hide"}
+library(dplyr)
+library(knitr)
+library(mgcv)
+library(ggplot2)
+library(randomForest)
+library(MASS)
+library(zoo)
+library(MatchIt)
+library(metafolio)
+load("cfecCleaned2.Rdata")
+```
+
+We need to adjust the landed values and prices for inflation. To do this, we'll use the data Alan pulled together (adjusting to 2009 dollars). 
+
+https://docs.google.com/spreadsheets/d/1hRLYTX1nZBLKnYXwTCOtU7-XnDoMZf_1ufdTiNQFd4U/edit#gid=0
+
+```{r}
+deflationTable = data.frame(year = 1985:2014, defl = c(0.57236, 0.58393, 0.59879, 0.61974,  
+0.64388, 0.66774, 0.68993, 0.70564, 0.72244, 0.73781,  
+0.75321, 0.76695, 0.78009, 0.78855, 0.80061,  
+0.81883, 0.83753, 0.85038, 0.86729, 0.89114,  
+0.91981, 0.94812, 0.97334, 0.9925, 1,  
+1.01217, 1.03307, 1.05213, 1.06926, 1.08682))
+
+# Adjust price and g_earn for inflation
+cfec$year = as.numeric(cfec$year)
+cfec$day = substr(cfec$landdate, 6, 10)
+cfec$g_price = cfec$g_price/deflationTable$defl[cfec$year-1984]
+cfec$g_earn = cfec$g_earn/deflationTable$defl[cfec$year-1984]
+```
+
+### Function definiton  
+We need to define a few functions for calculating diversity. We'll use the Simpson's diversity index (HHH) to calculate the entropy-based inverse, which is a proxy for effective species diversity. Note the C++ version is commented out below,   
+```{r, warning = FALSE, message=FALSE}
+
+simp.div = function(x) {
+  1/sum((x/sum(x))^2)
+}
+
+#library(Rcpp)
+#cppFunction('double simpCpp(NumericVector x) {
+#  double y = 1/sum((x/sum(x))^2);
+#  return y;
+#}')
+
+# Note that the first line of this function uses group_by_ because 
+# we need to pass in a string for 'variable'
+effectiveDiversity_by_personYear = function(dataFrame, variable) {
+  effDiv = group_by_(dataFrame, variable, "year", "p_holder") %>%
+  summarize(totRev = sum(g_earn, na.rm=T),
+  totN = n(),
+  totWeight = sum(g_pounds, na.rm=T),
+    days = length(unique(day))) %>% 
+  as.data.frame() %>%
+  filter(is.finite(totRev) & is.finite(totN) & is.finite(totWeight)) %>%   
+  as.data.frame() %>%
+  group_by(p_holder, year) %>% 
+  summarize(eff.freq = simp.div(totN),
+  eff.earn = simp.div(totRev),
+  eff.lbs = simp.div(totWeight),
+    totIndRev = sum(totRev),
+    nCalDays = sum(days)) %>% 
+  filter(!is.na(eff.freq) & !is.na(eff.earn) & !is.na(eff.lbs)) %>%
+  as.data.frame()
+  return(effDiv)
+}
+
+# This function takes the output of the one above and 
+# summmarizes diversity metrics
+summarize_effectiveDiversity = function(dataFrame) {
+  effDiv = group_by(dataFrame, year) %>% 
+  summarize(mean.freq = mean(eff.freq),
+  sd.freq = sd(eff.freq),
+  mean.earn = mean(eff.earn),
+  sd.earn = sd(eff.earn),
+  mean.lbs = mean(eff.lbs),
+  sd.lbs = sd(eff.lbs)) %>% 
+  as.data.frame()  
+  return(effDiv)
+}
+```
+
+## Diversity by species, gear, and fisheries. 
+
+We have 3-4 dimensions we're interested in calculating diversity (species, gears, fisheries, space). And for each dimension, there's 3 ways we can calculate diversity: diversity based on fish ticket frequency, diversity based on revenue of each (weighted by g_earn) and diversity based on the weight of catch (g_pounds).  
+
+To calculate the uncertainty (CV, quartiles, whatever) we need to calculate the diversity for each individual in each year (p_holder), and then summarize variability across individuals. We'll do this two ways: first using the whole dataset, and then using Eric's more restricted version (limiting the analysis to single people : vessel combinations)
+
+### Calculations
+
+We can calculate diversity across all metrics in the same block.
+  
+```{r}
+spDiv_personYear = effectiveDiversity_by_personYear(cfec, variable="specn")
+spTot = summarize_effectiveDiversity( spDiv_personYear )
+
+gearDiv_personYear = effectiveDiversity_by_personYear(cfec, variable="gearn")
+gearTot = summarize_effectiveDiversity( gearDiv_personYear )
+
+fishDiv_personYear = effectiveDiversity_by_personYear(cfec, variable="p_fshy")
+fishTot = summarize_effectiveDiversity( fishDiv_personYear )
+```
+
+### Boxplots
+
+We can coarsely group individuals based on their species, gear, and fisheries diversity through time (e.g. 1-1.5, 1.5-2, 2-2.5, etc.) and make boxplots of revenue by group over time (similar to Jordan's boxplots). 
+```{r}
+brks = c(1, 1.01, 1.5, 2, 2.5, 3, 3.5, 4, 10)
+spDiv_personYear$group = cut(spDiv_personYear$eff.earn, breaks = brks, right=FALSE)
+gearDiv_personYear$group = cut(gearDiv_personYear$eff.earn, breaks = brks, right=FALSE)
+fishDiv_personYear$group = cut(fishDiv_personYear$eff.earn, breaks = brks, right=FALSE)
+```
+
+```{r, fig.pos="placeHere", fig.cap="Revenue by effective species diversity and year"}
+ggplot(spDiv_personYear, aes(x = factor(year), y = log10(totIndRev), fill = factor(group))) + 
+  geom_boxplot(outlier.shape=NA) + 
+  ggtitle("Revenue by species diversity ('specn') and year") + 
+xlab("Year") + ylab("log10(revenue)")
+```
+
+```{r, fig.pos="placeHere", fig.cap="Revenue by effective species diversity across years"}
+ggplot(spDiv_personYear, aes(x = factor(group), y = log10(totIndRev))) + 
+  geom_boxplot(outlier.shape=NA) + 
+  ggtitle("Revenue by species diversity ('specn')") + 
+xlab("Year") + ylab("log10(revenue)")
+```
+
+```{r, fig.pos="placeHere", fig.cap="Number of unique landed dates by effective species diversity across years"}
+ggplot(spDiv_personYear, aes(x = factor(group), y = log(nCalDays))) + 
+  geom_boxplot(outlier.shape=NA) + 
+  ggtitle("Unique landed dates by species diversity ('specn')") + 
+xlab("Year") + ylab("log(unique days)")
+```
+
+```{r, fig.pos="placeHere", fig.cap="Revenue by effective gear diversity and year"}
+ggplot(gearDiv_personYear, aes(x = factor(year), y = log10(totIndRev), fill = factor(group))) + 
+  geom_boxplot(outlier.shape=NA) + 
+  ggtitle("Revenue by gear diversity ('gearn') and year") + 
+xlab("Year") + ylab("log10(revenue)")
+```
+
+```{r, fig.pos="placeHere", fig.cap="Revenue by effective gear diversity across years"}
+ggplot(gearDiv_personYear, aes(x = factor(group), y = log10(totIndRev))) + 
+  geom_boxplot(outlier.shape=NA) + 
+  ggtitle("Revenue by gear diversity ('gearn')") + 
+xlab("Year") + ylab("log10(revenue)")
+```
+
+```{r, fig.pos="placeHere", fig.cap="Number of unique landed dates by effective gear diversity across years"}
+ggplot(gearDiv_personYear, aes(x = factor(group), y = log(nCalDays))) + 
+  geom_boxplot(outlier.shape=NA) + 
+  ggtitle("Unique landed dates by gear diversity ('gearn')") + 
+xlab("Year") + ylab("log(unique days)")
+```
+
+```{r, fig.pos="placeHere", fig.cap="Revenue by effective permit diversity and year"}
+ggplot(fishDiv_personYear, aes(x = factor(year), y = log10(totIndRev), fill = factor(group))) + 
+  geom_boxplot(outlier.shape=NA) + 
+  ggtitle("Revenue by permit diversity ('p_fshy') and year") + 
+xlab("Year") + ylab("log10(revenue)")
+```
+
+```{r, fig.pos="placeHere", fig.cap="Revenue by effective permit diversity across years"}
+ggplot(fishDiv_personYear, aes(x = factor(group), y = log10(totIndRev))) + 
+  geom_boxplot(outlier.shape=NA) + 
+  ggtitle("Revenue by permit diversity ('p_fshy')") + 
+xlab("Year") + ylab("log10(revenue)")
+```
+
+```{r, fig.pos="placeHere", fig.cap="Number of unique landed dates by effective permit diversity across years"}
+ggplot(fishDiv_personYear, aes(x = factor(group), y = log(nCalDays))) + 
+  geom_boxplot(outlier.shape=NA) + 
+  ggtitle("Unique landed dates by permit diversity ('p_fshy')") + 
+xlab("Year") + ylab("log(unique days)")
+```
+
+### Species  
+
+```{r, fig.pos="placeHere", fig.cap="Species diversity (all individuals/vessels) by frequency in fish ticket data"}
+ggplot(spTot, aes(x=year, y=mean.freq)) + geom_line(col="blue") +  
+geom_ribbon(aes(ymin=mean.freq - sd.freq/mean.freq, 
+  ymax=mean.freq + sd.freq/mean.freq), 
+  alpha=0.2, fill="blue") + 
+ggtitle("Effective species diversity ('specn') by fishTix") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+   
+```{r, fig.pos="placeHere", fig.cap="Species diversity (all individuals/vessels) weighted by landed value and catch weights"}
+# Plot by earning / weight on diff scale
+ggplot(spTot, aes(x=year, y=mean.earn)) + geom_line(col="red") + 
+geom_ribbon(aes(x = year, ymin=mean.earn - sd.earn/mean.earn, 
+  ymax = mean.earn + sd.earn/mean.earn), 
+  alpha=0.2, fill="red") + 
+geom_line(aes(x=year,y=mean.lbs), col="green") + 
+geom_ribbon(aes(x = year, ymin=mean.lbs - sd.lbs/mean.lbs, 
+  ymax=mean.lbs + sd.lbs/mean.lbs),  alpha=0.2, fill="green") + 
+ggtitle("Effective species diversity ('specn') [red = $, green=weight]") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+  
+```
+ 
+### Gears 
+
+```{r, fig.pos="placeHere", fig.cap="Gear diversity (all individuals/vessels) by frequency in fish ticket data"}
+ggplot(gearTot, aes(x=year, y=mean.freq)) + geom_line(col="blue") + 
+geom_ribbon(aes(ymin=mean.freq - sd.freq/mean.freq, 
+  ymax=mean.freq + sd.freq/mean.freq), 
+  alpha=0.2, fill="blue") + 
+ggtitle("Effective gear diversity ('gearn') by fishTix") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+ 
+```{r, fig.pos="placeHere", fig.cap="Gear diversity (all individuals/vessels) weighted by landed value and weight of catch"}
+# Plot by earning / weight on diff scale
+ggplot(gearTot, aes(x=year, y=mean.earn)) + geom_line(col="red") + 
+geom_ribbon(aes(x = year, ymin=mean.earn - sd.earn/mean.earn, 
+  ymax = mean.earn + sd.earn/mean.earn), alpha=0.2, fill="red") + 
+geom_line(aes(x=year,y=mean.lbs), col="green") + 
+geom_ribbon(aes(x = year, ymin=mean.lbs - sd.lbs/mean.lbs, 
+  ymax=mean.lbs + sd.lbs/mean.lbs), alpha=0.2, fill="green") + 
+ggtitle("Effective gear diversity ('gearn') [red = $, green=weight]") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+
+### Fisheries 
+
+```{r, fig.pos="placeHere", fig.cap="Permit diversity (all individuals/vessels) by frequency in fish ticket data"}
+ggplot(fishTot, aes(x=year, y=mean.freq)) + geom_line(col="blue") + 
+geom_ribbon(aes(ymin=mean.freq - sd.freq/mean.freq, 
+  ymax=mean.freq + sd.freq/mean.freq), alpha=0.2, fill="blue") + 
+ggtitle("Effective permit diversity ('p_fshy') by fishTix") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+ 
+```{r, fig.pos="placeHere", fig.cap="Permit diversity (all individuals/vessels) weighted by landed value and weight of catch"} 
+# Plot by earning / weight on diff scale
+ggplot(fishTot, aes(x=year, y=mean.earn)) + geom_line(col="red") + 
+geom_ribbon(aes(x = year, ymin=mean.earn - sd.earn/mean.earn, 
+  ymax = mean.earn + sd.earn/mean.earn), alpha=0.2, fill="red") + 
+geom_line(aes(x=year,y=mean.lbs), col="green") + 
+geom_ribbon(aes(x = year, ymin=mean.lbs - sd.lbs/mean.lbs, 
+  ymax=mean.lbs + sd.lbs/mean.lbs), alpha=0.2, fill="green") +
+ggtitle("Effective permit diversity ('p_fshy') [red = $, green=weight]") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+
+## Filtering of unique people:vessel combinations
+
+Filter out people who only use 1 vessel / year , and similarly filter out boats with more than 1 person / year. Some people might fish on multiple vessels within a year, and vessels might be used by multiple people within a year.  
+
+Now we'll filter out individuals who only used 1 boat in a year, and boats with only one permit holder fishing in a year.  
+```{r}
+cfecnew = cfec
+cfec.1boat = group_by(cfecnew, p_holder, year) %>% 
+  summarize(nBoat = length(unique(cadfg))) %>%
+  filter(nBoat==1) %>% 
+  left_join(cfecnew)
+
+# Deal with setnet fisheries, where lots of p_holder
+# share same codes
+cfec.1boat = group_by(cfec.1boat, cadfg, year) %>% 
+  summarize(nPerson = length(unique(p_holder))) %>%
+  filter((nPerson==1 & cadfg %in% c(27960,27961) == FALSE) | cadfg %in% c(27960,27961)) %>% 
+  left_join(cfec.1boat)
+
+cfecnew = cfec.1boat
+dim(cfecnew)[1]
+
+#Now we can create a unique *id* column for individual - vessel combinations.  
+cfecnew$id = paste(cfecnew$p_holder,cfecnew$cadfg)
+# calculate number of unique person - vessel pairs ~ 40700
+length(unique(cfecnew$id))
+```
+### Re-calculating diversity
+
+
+```{r}
+spDiv_personYear = effectiveDiversity_by_personYear(cfecnew, variable="specn")
+spTot = summarize_effectiveDiversity( spDiv_personYear )
+
+gearDiv_personYear = effectiveDiversity_by_personYear(cfecnew, variable="gearn")
+gearTot = summarize_effectiveDiversity( gearDiv_personYear )
+
+fishDiv_personYear = effectiveDiversity_by_personYear(cfecnew, variable="p_fshy")
+fishTot = summarize_effectiveDiversity( fishDiv_personYear )
+```
+
+### Species  
+
+```{r, fig.pos = "placeHere", fig.cap = "Species diversity by frequency of fish tickets of unique id:vessel combinations (excluding people who fish multiple vessels / year, or vessels that are fished by multiple individuals in a year."}
+
+ggplot(spTot, aes(x=year, y=mean.freq)) + geom_line(col="blue") +
+  geom_ribbon(aes(ymin=mean.freq - sd.freq/mean.freq, 
+  ymax=mean.freq + sd.freq/mean.freq), alpha=0.2, fill="blue") + 
+ggtitle("Effective species diversity ('specn') by fishTix") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+
+```{r, fig.pos = "placeHere", fig.cap = "Species diversity by revenue and landed weight of unique id:vessel combinations (excluding people who fish multiple vessels / year, or vessels that are fished by multiple individuals in a year."}
+
+# Plot by earning / weight on diff scale
+ggplot(spTot, aes(x=year, y=mean.earn)) + geom_line(col="red") + 
+geom_ribbon(aes(x = year, ymin=mean.earn - sd.earn/mean.earn, 
+  ymax = mean.earn + sd.earn/mean.earn), alpha=0.2, fill="red") + 
+geom_line(aes(x=year,y=mean.lbs), col="green") + 
+geom_ribbon(aes(x = year, ymin=mean.lbs - sd.lbs/mean.lbs, 
+  ymax=mean.lbs + sd.lbs/mean.lbs), alpha=0.2, fill="green") +
+ggtitle("Effective species diversity ('specn') [red = $, green=weight]") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+ 
+### Gears 
+  
+```{r, fig.pos = "placeHere", fig.cap = "Gear diversity by fish tickets of unique id:vessel combinations (excluding people who fish multiple vessels / year, or vessels that are fished by multiple individuals in a year."}
+ggplot(gearTot, aes(x=year, y=mean.freq)) + geom_line(col="blue") + 
+geom_ribbon(aes(ymin=mean.freq - sd.freq/mean.freq, 
+  ymax=mean.freq + sd.freq/mean.freq), alpha=0.2, fill="blue") + 
+ggtitle("Effective gear diversity ('gearn') by fishTix") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+
+```{r, fig.pos = "placeHere", fig.cap = "Gear diversity by revenue and landed weight of unique id:vessel combinations (excluding people who fish multiple vessels / year, or vessels that are fished by multiple individuals in a year."}
+# Plot by earning / weight on diff scale
+ggplot(gearTot, aes(x=year, y=mean.earn)) + geom_line(col="red") + 
+geom_ribbon(aes(x = year, ymin=mean.earn - sd.earn/mean.earn, 
+  ymax = mean.earn + sd.earn/mean.earn), alpha=0.2, fill="red") + 
+geom_line(aes(x=year,y=mean.lbs), col="green") + 
+geom_ribbon(aes(x = year, ymin=mean.lbs - sd.lbs/mean.lbs, 
+  ymax=mean.lbs + sd.lbs/mean.lbs), alpha=0.2, fill="green") + 
+ggtitle("Effective gear diversity ('gearn') [red = $, green=weight]") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+
+### Fisheries 
+```{r, fig.pos = "placeHere", fig.cap = "Permit diversity by fish ticket frequency of unique id:vessel combinations (excluding people who fish multiple vessels / year, or vessels that are fished by multiple individuals in a year."}
+
+ggplot(fishTot, aes(x=year, y=mean.freq)) + geom_line(col="blue") +
+geom_ribbon(aes(ymin=mean.freq - sd.freq/mean.freq, 
+  ymax=mean.freq + sd.freq/mean.freq), alpha=0.2, fill="blue") + 
+ggtitle("Effective permit diversity ('p_fshy') by fishTix") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+
+```{r, fig.pos = "placeHere", fig.cap = "Permit diversity by revenue and landed weight of unique id:vessel combinations (excluding people who fish multiple vessels / year, or vessels that are fished by multiple individuals in a year."}
+
+# Plot by earning / weight on diff scale
+ggplot(fishTot, aes(x=year, y=mean.earn)) + geom_line(col="red") + 
+geom_ribbon(aes(x = year, ymin=mean.earn - sd.earn/mean.earn, 
+  ymax = mean.earn + sd.earn/mean.earn), alpha=0.2, fill="red") + 
+geom_line(aes(x=year,y=mean.lbs), col="green") + 
+geom_ribbon(aes(x = year, ymin=mean.lbs - sd.lbs/mean.lbs, 
+  ymax=mean.lbs + sd.lbs/mean.lbs), alpha=0.2, fill="green") + 
+ggtitle("Effective permit diversity ('p_fshy') [red = $, green=weight]") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+
+## Comparing diversity between vessels and individuals
+
+Just out of curiousity, we can summarize diversity by year taking the approach used by Kasperski and Holland (based on CADFG number) and compare that to the same criteria using people ("p_holder"). We'll only do this comparison on the species diversity, but use the same restriction: use only vessels or people who had participated continuously for the entire time period (this throws out 90%+ of the data). 
+
+First, based on vessels:
+```{r}
+contVessels = group_by(cfec, cadfg) %>% 
+  summarize(nYear = length(unique(year))) %>% 
+  filter(nYear == 30)
+
+cfecnew = left_join(contVessels, cfec)
+
+# calculate diversity by species by CADFG (vessel #)
+effDiv.vessel = group_by(cfecnew, specn, year, cadfg) %>%
+  summarize(totRev = sum(g_earn, na.rm=T),
+  totN = n(),
+  totWeight = sum(g_pounds, na.rm=T),
+    days = length(unique(day))) %>% 
+  as.data.frame() %>%
+  filter(is.finite(totRev) & is.finite(totN) & is.finite(totWeight)) %>%   
+  as.data.frame() %>%
+  group_by(cadfg, year) %>% 
+  summarize(eff.freq = simp.div(totN),
+  eff.earn = simp.div(totRev),
+  eff.lbs = simp.div(totWeight),
+    totIndRev = sum(totRev),
+    nCalDays = sum(days)) %>% 
+  filter(!is.na(eff.freq) & !is.na(eff.earn) & !is.na(eff.lbs)) %>%
+  as.data.frame()
+
+effDiv.vessel = summarize_effectiveDiversity(effDiv.vessel)
+
+effDiv.person = effectiveDiversity_by_personYear(cfecnew, variable="specn")
+effDiv.person = summarize_effectiveDiversity( effDiv.person )
+```
+
+```{r, fig.pos="placeHere", fig.cap="Comparison of species diversity using vessel versus individuals"}
+ggplot(effDiv.vessel, aes(x=year, y=mean.earn)) + geom_line(col="red") + 
+geom_ribbon(aes(x = year, ymin=mean.earn - sd.earn/mean.earn, 
+  ymax = mean.earn + sd.earn/mean.earn), alpha=0.2, fill="red") + 
+geom_line(aes(x=year,y=effDiv.person$mean.earn), col="green") + 
+geom_ribbon(aes(x = year, ymin=effDiv.person$mean.earn - 
+    effDiv.person$sd.earn/effDiv.person$mean.earn, 
+  ymax=effDiv.person$mean.earn + effDiv.person$sd.earn/effDiv.person$mean.earn), 
+  alpha=0.2, fill="green") + 
+ggtitle("Effective species diversity ('specn') [red = vessel, green=person]") + 
+xlab("Year") + ylab("Mean (+/- CV)")
+```
+
+Now make the portfolio plots from the metafolio package:
+
+```{r}
+species_diversity_by_year <-
+  effectiveDiversity_by_personYear(cfec, variable = "specn")
+breaks = c(1, 1.01, 1.5, 2, 2.5, 3, 3.5, 4, 10)
+species_diversity <-
+  group_by(species_diversity_by_year, p_holder) %>%
+  summarize(
+    # diversity_by_frequency = mean(eff.freq),
+    diversity_by_earnings = mean(eff.earn),
+    # diversity_by_weight = mean(eff.lbs),
+    m = log10(mean(totIndRev)),
+    v = sd(totIndRev) / mean(totIndRev)
+  ) %>%
+  filter(!is.na(v)) %>%
+  mutate(diversity_group = cut(diversity_by_earnings, breaks = breaks,
+    right = FALSE))
+
+species_diversity_list <- split(species_diversity,
+  species_diversity$diversity_group)
+
+#pdf("earnings_portfolio_by_species_diversity.pdf", height = 5, width = 5)
+par(cex = 0.8)
+metafolio::plot_cons_plans(
+  species_diversity_list,
+  plans_name = names(species_diversity_list),
+  cols = RColorBrewer::brewer.pal(length(names(species_diversity_list)),
+    "YlOrRd"),
+  xlab = "CV of gross earnings",
+  ylab = "log10 of gross earnings",
+  add_all_efs = FALSE)
+#dev.off()
+```

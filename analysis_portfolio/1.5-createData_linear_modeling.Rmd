@@ -1,0 +1,270 @@
+---
+title: "createData_linear_modeling"
+author: ""
+date: "June 05, 2016"
+output:
+  pdf_document:
+    fig_caption: yes
+  html_document: default
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
+```
+
+## Load cleaned data  
+```{r dataLoad, warning = FALSE, message=FALSE, results="hide", echo=FALSE}
+library(dplyr)
+library(knitr)
+library(mgcv)
+library(ggplot2)
+library(randomForest)
+library(MASS)
+library(zoo)
+library(MatchIt)
+library(metafolio)
+library(randomForest)
+library(date)
+
+#load("cfecCleaned2.Rdata")
+cfec <- feather::read_feather("data/cfec.feather")
+
+# convert 6-dig p_fshy codes to 5 digits
+# removing blank space - now they're all length(5)
+idx = which(nchar(cfec$p_fshy)==6)
+cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1), 
+  substr(cfec$p_fshy[idx], 3, 6), sep="")
+
+# remove white space in 2nd position
+idx = which(substr(cfec$p_fshy, 2, 2) == " ")
+cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1), 
+  substr(cfec$p_fshy[idx], 3, length(cfec$p_fshy[idx])), sep="")
+
+region<-read.csv("areas/regions.csv")
+region<-region[,c(1:2)] #don’t include “assigned by” column
+cfec<-left_join(cfec,region)
+#cfec$region <- replace(cfec$region, is.na(cfec$region), "Unassigned")
+```
+
+We need to adjust the landed values and prices for inflation. To do this, we'll use the data Alan pulled together (adjusting to 2009 dollars). 
+
+https://docs.google.com/spreadsheets/d/1hRLYTX1nZBLKnYXwTCOtU7-XnDoMZf_1ufdTiNQFd4U/edit#gid=0
+
+```{r, echo=FALSE}
+deflationTable = data.frame(year = 1985:2014, defl = c(0.57236, 0.58393, 0.59879, 0.61974,  
+0.64388, 0.66774, 0.68993, 0.70564, 0.72244, 0.73781,  
+0.75321, 0.76695, 0.78009, 0.78855, 0.80061,  
+0.81883, 0.83753, 0.85038, 0.86729, 0.89114,  
+0.91981, 0.94812, 0.97334, 0.9925, 1,  
+1.01217, 1.03307, 1.05213, 1.06926, 1.08682))
+
+# Adjust price and g_earn for inflation
+cfec$year = as.numeric(cfec$year)
+cfec$day = substr(cfec$landdate, 6, 10)
+cfec$g_price = cfec$g_price/deflationTable$defl[cfec$year-1984]
+cfec$g_earn = cfec$g_earn/deflationTable$defl[cfec$year-1984]
+```
+
+### Function definiton  
+We need to define a few functions for calculating diversity. We'll use the Simpson's diversity index (HHI) to calculate the entropy-based inverse, which is a proxy for effective species diversity. Note the C++ version is commented out below,   
+
+```{r, warning = FALSE, message=FALSE, echo=FALSE}
+
+simp.div = function(x) {
+  1/sum((x/sum(x))^2)
+}
+
+#library(Rcpp)
+#cppFunction('double simpCpp(NumericVector x) {
+#  double y = 1/sum((x/sum(x))^2);
+#  return y;
+#}')
+
+# Note that the first line of this function uses group_by_ because 
+# we need to pass in a string for 'variable'
+effectiveDiversity_by_personYear = function(dataFrame, variable) {
+  effDiv = group_by_(dataFrame, variable, "year", "p_holder") %>%
+  summarize(totRev = sum(g_earn, na.rm=T),
+  totN = n(),
+  totWeight = sum(g_pounds, na.rm=T),
+    days = length(unique(day))) %>% 
+  as.data.frame() %>%
+  filter(is.finite(totRev) & is.finite(totN) & is.finite(totWeight)) %>%   
+  as.data.frame() %>%
+  group_by(p_holder, year) %>% 
+  summarize(eff.freq = simp.div(totN),
+  eff.earn = simp.div(totRev),
+  eff.lbs = simp.div(totWeight),
+    totIndRev = sum(totRev),
+    nCalDays = sum(days)) %>% 
+  filter(!is.na(eff.freq) & !is.na(eff.earn) & !is.na(eff.lbs)) %>%
+  as.data.frame()
+  return(effDiv)
+}
+
+# Note that the first line of this function uses group_by_ because 
+# we need to pass in a string for 'variable'
+effectiveDiversity_by_personYear2 = function(dataFrame, variable1, variable2) {
+  effDiv = group_by_(dataFrame, variable1, variable2, "year", "p_holder") %>%
+  summarize(totRev = sum(g_earn, na.rm=T),
+  totN = n(),
+  totWeight = sum(g_pounds, na.rm=T),
+    days = length(unique(day))) %>% 
+  as.data.frame() %>%
+  filter(is.finite(totRev) & is.finite(totN) & is.finite(totWeight)) %>%   
+  as.data.frame() %>% 
+  group_by_("p_holder", "year", variable2) %>% 
+  summarize(eff.freq = simp.div(totN),
+  eff.earn = simp.div(totRev),
+  eff.lbs = simp.div(totWeight),
+    totIndRev = sum(totRev),
+    nCalDays = sum(days)) %>% 
+  filter(!is.na(eff.freq) & !is.na(eff.earn) & !is.na(eff.lbs)) %>%
+  as.data.frame()
+  return(effDiv)
+}
+
+effectiveDiversity_by_Year = function(dataFrame, variable) {
+  effDiv = group_by_(dataFrame, variable, "year") %>%
+  summarize(totRev = sum(g_earn, na.rm=T),
+  totN = n(),
+  totWeight = sum(g_pounds, na.rm=T),
+    days = length(unique(day))) %>% 
+  as.data.frame() %>%
+  filter(is.finite(totRev) & is.finite(totN) & is.finite(totWeight)) %>%   
+  as.data.frame() %>%
+  group_by(year) %>% 
+  summarize(eff.freq = simp.div(totN),
+  eff.earn = simp.div(totRev),
+  eff.lbs = simp.div(totWeight),
+    totIndRev = sum(totRev),
+    nCalDays = sum(days)) %>% 
+  filter(!is.na(eff.freq) & !is.na(eff.earn) & !is.na(eff.lbs)) %>%
+  as.data.frame()
+  return(effDiv)
+}
+
+# This function takes the output of the one above and 
+# summmarizes diversity metrics
+summarize_effectiveDiversity = function(dataFrame) {
+  effDiv = group_by(dataFrame, year) %>% 
+  summarize(mean.freq = mean(eff.freq),
+  sd.freq = sd(eff.freq),
+  mean.earn = mean(eff.earn),
+  sd.earn = sd(eff.earn),
+  mean.lbs = mean(eff.lbs),
+  sd.lbs = sd(eff.lbs)) %>% 
+  as.data.frame()  
+  return(effDiv)
+}
+
+# This function takes the output of the one above and 
+# summmarizes diversity metrics
+summarize_effectiveDiversity2 = function(dataFrame, variable2) {
+  effDiv = group_by_(dataFrame, "year", variable2) %>% 
+  summarize(mean.freq = mean(eff.freq),
+  sd.freq = sd(eff.freq),
+  mean.earn = mean(eff.earn),
+  sd.earn = sd(eff.earn),
+  mean.lbs = mean(eff.lbs),
+  sd.lbs = sd(eff.lbs)) %>% 
+  as.data.frame()  
+  return(effDiv)
+}
+```
+
+## Filtering out unique vessel - person combinations  
+Filter out people who only use 1 vessel / year , and similarly filter out boats with more than 1 person / year. Some people might fish on multiple vessels within a year, and vessels might be used by multiple people within a year.  
+
+Now we'll filter out individuals who only used 1 boat in a year, and boats with only one permit holder fishing in a year.  
+
+```{r}
+cfecnew = cfec
+cfec.1boat = group_by(cfecnew, p_holder, year) %>% 
+  summarize(nBoat = length(unique(cadfg))) %>%
+  filter(nBoat==1) %>% 
+  left_join(cfecnew)
+
+# Deal with setnet fisheries, where lots of p_holder
+# share same codes
+cfec.1boat = group_by(cfec.1boat, cadfg, year) %>% 
+  summarize(nPerson = length(unique(p_holder))) %>%
+  filter((nPerson==1 & cadfg %in% c(27960,27961) == FALSE) | cadfg %in% c(27960,27961)) %>% 
+  left_join(cfec.1boat)
+
+cfecnew = cfec.1boat
+dim(cfecnew)[1]
+```
+
+Aggregate annual metrics by person, 
+
+```{r}
+
+cfecnew$day = mdy.date(as.numeric(lapply(strsplit(cfecnew$day, "-"), getElement, 1)), as.numeric(lapply(strsplit(cfecnew$day, "-"), getElement, 2)), cfecnew$year) - mdy.date(1, 1, cfecnew$year)
+
+cfecAnnual = group_by(cfecnew, p_holder, year) %>%
+  summarize(permit = p_fshy[1], boat = cadfg2[1], 
+    days = diff(range(day) + 1), 
+    ngear = length(unique(gearn)),
+    nspec = length(unique(specn)),
+    npermit = length(unique(p_fshy)),
+    revenue = sum(g_earn),
+    length = mean(VLength, na.rm=T)) %>% 
+  filter(npermit == 1)
+
+# also calculate weighted simpson diversity of gears and species
+cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, specn) %>% 
+  summarize(totRev.spec = sum(g_earn)) %>% 
+  group_by(p_holder, year) %>% 
+  summarize(specDiv = simp.div(totRev.spec)))
+
+# also calculate weighted simpson diversity of gears and species
+cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, gearn) %>% 
+  summarize(totRev.gear = sum(g_earn)) %>% 
+  group_by(p_holder, year) %>% 
+  summarize(gearDiv = simp.div(totRev.gear)))
+
+temp = group_by(cfecnew, p_holder, year, specn) %>% 
+  summarize(totRev.spec = sum(g_earn), 
+    permit = p_fshy[1])
+temp = left_join(temp, group_by(cfecnew, p_holder, year) %>% 
+    summarize(totRev = sum(g_earn)))
+temp$totRev.spec = temp$totRev.spec / temp$totRev
+
+mkt = group_by(cfecnew, p_fshy, year, specn) %>% 
+  summarize(totRev.mkt.spec = sum(g_earn)) 
+mkt = left_join(mkt, group_by(mkt, p_fshy, year) %>% 
+  summarize(totRev.mkt = sum(totRev.mkt.spec))) 
+mkt$totRev.mkt.spec = mkt$totRev.mkt.spec / mkt$totRev.mkt
+names(mkt)[1] = "permit"
+
+# combine individual and market datasets
+temp = left_join(temp, mkt)
+
+# Calculate squared proportions
+temp$p2 = (temp$totRev.spec - temp$totRev.mkt.spec)^2
+
+cfecAnnual = left_join(cfecAnnual, dplyr::select(temp, p_holder, year, p2))
+
+# Also merge in previous revenue. Idx stores index of people last year
+idx = match(paste(cfecAnnual$p_holder,cfecAnnual$year-1), paste(cfecAnnual$p_holder,cfecAnnual$year))
+
+cfecAnnual$permit.prev = cfecAnnual$permit[idx]
+cfecAnnual$ngear.prev = cfecAnnual$ngear[idx]
+cfecAnnual$nspec.prev = cfecAnnual$nspec[idx]
+cfecAnnual$npermit.prev = cfecAnnual$npermit[idx]
+cfecAnnual$revenue.prev = cfecAnnual$revenue[idx]
+cfecAnnual$specdiv.prev = cfecAnnual$specDiv[idx]
+cfecAnnual$geardiv.prev = cfecAnnual$gearDiv[idx]
+cfecAnnual$p2.prev = cfecAnnual$p2[idx]
+
+cfecAnnual$specDiv.change = cfecAnnual$specDiv - cfecAnnual$specdiv.prev
+
+# Filter out salmon people
+cfecAnnual$salmon = ifelse(substr(cfecAnnual$permit,1,1)=="S", "Y", "N")
+
+cfecAnnual.salmon = cfecAnnual[cfecAnnual$salmon=="Y",]
+
+cfecAnnual.salmon = cfecAnnual.salmon[is.na(cfecAnnual.salmon$specDiv.change)==F, ]
+saveRDS(cfecAnnual.salmon, file="salmon_linearModeling_complete.rds")
+```

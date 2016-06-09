@@ -1,0 +1,663 @@
+---
+title: "salmon_deepDive"
+author: "Eric Ward"
+date: "May 18, 2016"
+output:
+  pdf_document:
+    fig_caption: yes
+  html_document: default
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
+```
+
+## Load cleaned data  
+```{r dataLoad, warning = FALSE, message=FALSE, results="hide", echo=FALSE}
+library(dplyr)
+library(knitr)
+library(mgcv)
+library(ggplot2)
+library(randomForest)
+library(MASS)
+library(zoo)
+library(MatchIt)
+library(metafolio)
+library(randomForest)
+library(date)
+load("cfecCleaned2.Rdata")
+
+# convert 6-dig p_fshy codes to 5 digits
+# removing blank space - now they're all length(5)
+idx = which(nchar(cfec$p_fshy)==6)
+cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1), 
+  substr(cfec$p_fshy[idx], 3, 6), sep="")
+
+# remove white space in 2nd position
+idx = which(substr(cfec$p_fshy, 2, 2) == " ")
+cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1), 
+  substr(cfec$p_fshy[idx], 3, length(cfec$p_fshy[idx])), sep="")
+
+# Pull in "new.locs" from Anne/Jordan/Rich/Ben/Ole
+newlocs = read.csv("new.locs.csv")
+newlocs$p_fshy = as.character(newlocs$p_fshy)
+
+# Match cfec codes in newlocs to identify new 
+# locations (Anne/Jordan/Rich/Ben/Ole)
+cfec$landedLoc = newlocs$New.Loc[match(cfec$p_fshy, newlocs$p_fshy)]
+cfec$landedLoc[which(is.na(cfec$landedLoc))] = "Statewide" # C04B
+
+# Split out permit types
+cfec$pType = ""
+cfec$pType[substr(cfec$p_fshy,1,2)=="S0"] = "Salm.other"
+cfec$pType[cfec$p_fshy == "S01A"] = "SE.ps"
+cfec$pType[cfec$p_fshy == "S03A"] = "SE.dn"
+cfec$pType[cfec$p_fshy == "S01E"] = "PWS.ps"
+cfec$pType[cfec$p_fshy == "S03E"] = "PWS.dn"
+cfec$pType[cfec$p_fshy == "S04E"] = "PWS.sn"
+cfec$pType[cfec$p_fshy == "S01H"] = "CI.ps"
+cfec$pType[cfec$p_fshy == "S03H"] = "CI.dn"
+cfec$pType[cfec$p_fshy == "S04H"] = "CI.sn"
+cfec$pType[cfec$p_fshy == "S01K"] = "K.ps"
+cfec$pType[cfec$p_fshy == "S04K"] = "K.sn"
+cfec$pType[cfec$p_fshy == "S01L"] = "CH.ps"
+cfec$pType[cfec$p_fshy == "S01M"] = "AP.ps"
+cfec$pType[cfec$p_fshy == "S03M"] = "AP.dn"
+cfec$pType[cfec$p_fshy == "S04M"] = "AP.sn"
+cfec$pType[cfec$p_fshy == "S03T"] = "BB.dn"
+cfec$pType[cfec$p_fshy == "S04T"] = "BB.sn"
+```
+
+We need to adjust the landed values and prices for inflation. To do this, we'll use the data Alan pulled together (adjusting to 2009 dollars). 
+
+https://docs.google.com/spreadsheets/d/1hRLYTX1nZBLKnYXwTCOtU7-XnDoMZf_1ufdTiNQFd4U/edit#gid=0
+
+```{r, echo=FALSE}
+deflationTable = data.frame(year = 1985:2014, defl = c(0.57236, 0.58393, 0.59879, 0.61974,  
+0.64388, 0.66774, 0.68993, 0.70564, 0.72244, 0.73781,  
+0.75321, 0.76695, 0.78009, 0.78855, 0.80061,  
+0.81883, 0.83753, 0.85038, 0.86729, 0.89114,  
+0.91981, 0.94812, 0.97334, 0.9925, 1,  
+1.01217, 1.03307, 1.05213, 1.06926, 1.08682))
+
+# Adjust price and g_earn for inflation
+cfec$year = as.numeric(cfec$year)
+cfec$day = substr(cfec$landdate, 6, 10)
+cfec$g_price = cfec$g_price/deflationTable$defl[cfec$year-1984]
+cfec$g_earn = cfec$g_earn/deflationTable$defl[cfec$year-1984]
+```
+
+### Function definiton  
+We need to define a few functions for calculating diversity. We'll use the Simpson's diversity index (HHI) to calculate the entropy-based inverse, which is a proxy for effective species diversity. Note the C++ version is commented out below,   
+
+```{r, warning = FALSE, message=FALSE, echo=FALSE}
+
+simp.div = function(x) {
+  1/sum((x/sum(x))^2)
+}
+
+#library(Rcpp)
+#cppFunction('double simpCpp(NumericVector x) {
+#  double y = 1/sum((x/sum(x))^2);
+#  return y;
+#}')
+
+# Note that the first line of this function uses group_by_ because 
+# we need to pass in a string for 'variable'
+effectiveDiversity_by_personYear = function(dataFrame, variable) {
+  effDiv = group_by_(dataFrame, variable, "year", "p_holder") %>%
+  summarize(totRev = sum(g_earn, na.rm=T),
+  totN = n(),
+  totWeight = sum(g_pounds, na.rm=T),
+    days = length(unique(day))) %>% 
+  as.data.frame() %>%
+  filter(is.finite(totRev) & is.finite(totN) & is.finite(totWeight)) %>%   
+  as.data.frame() %>%
+  group_by(p_holder, year) %>% 
+  summarize(eff.freq = simp.div(totN),
+  eff.earn = simp.div(totRev),
+  eff.lbs = simp.div(totWeight),
+    totIndRev = sum(totRev),
+    nCalDays = sum(days)) %>% 
+  filter(!is.na(eff.freq) & !is.na(eff.earn) & !is.na(eff.lbs)) %>%
+  as.data.frame()
+  return(effDiv)
+}
+
+# Note that the first line of this function uses group_by_ because 
+# we need to pass in a string for 'variable'
+effectiveDiversity_by_personYear2 = function(dataFrame, variable1, variable2) {
+  effDiv = group_by_(dataFrame, variable1, variable2, "year", "p_holder") %>%
+  summarize(totRev = sum(g_earn, na.rm=T),
+  totN = n(),
+  totWeight = sum(g_pounds, na.rm=T),
+    days = length(unique(day))) %>% 
+  as.data.frame() %>%
+  filter(is.finite(totRev) & is.finite(totN) & is.finite(totWeight)) %>%   
+  as.data.frame() %>% 
+  group_by_("p_holder", "year", variable2) %>% 
+  summarize(eff.freq = simp.div(totN),
+  eff.earn = simp.div(totRev),
+  eff.lbs = simp.div(totWeight),
+    totIndRev = sum(totRev),
+    nCalDays = sum(days)) %>% 
+  filter(!is.na(eff.freq) & !is.na(eff.earn) & !is.na(eff.lbs)) %>%
+  as.data.frame()
+  return(effDiv)
+}
+
+effectiveDiversity_by_Year = function(dataFrame, variable) {
+  effDiv = group_by_(dataFrame, variable, "year") %>%
+  summarize(totRev = sum(g_earn, na.rm=T),
+  totN = n(),
+  totWeight = sum(g_pounds, na.rm=T),
+    days = length(unique(day))) %>% 
+  as.data.frame() %>%
+  filter(is.finite(totRev) & is.finite(totN) & is.finite(totWeight)) %>%   
+  as.data.frame() %>%
+  group_by(year) %>% 
+  summarize(eff.freq = simp.div(totN),
+  eff.earn = simp.div(totRev),
+  eff.lbs = simp.div(totWeight),
+    totIndRev = sum(totRev),
+    nCalDays = sum(days)) %>% 
+  filter(!is.na(eff.freq) & !is.na(eff.earn) & !is.na(eff.lbs)) %>%
+  as.data.frame()
+  return(effDiv)
+}
+
+# This function takes the output of the one above and 
+# summmarizes diversity metrics
+summarize_effectiveDiversity = function(dataFrame) {
+  effDiv = group_by(dataFrame, year) %>% 
+  summarize(mean.freq = mean(eff.freq),
+  sd.freq = sd(eff.freq),
+  mean.earn = mean(eff.earn),
+  sd.earn = sd(eff.earn),
+  mean.lbs = mean(eff.lbs),
+  sd.lbs = sd(eff.lbs)) %>% 
+  as.data.frame()  
+  return(effDiv)
+}
+
+# This function takes the output of the one above and 
+# summmarizes diversity metrics
+summarize_effectiveDiversity2 = function(dataFrame, variable2) {
+  effDiv = group_by_(dataFrame, "year", variable2) %>% 
+  summarize(mean.freq = mean(eff.freq),
+  sd.freq = sd(eff.freq),
+  mean.earn = mean(eff.earn),
+  sd.earn = sd(eff.earn),
+  mean.lbs = mean(eff.lbs),
+  sd.lbs = sd(eff.lbs)) %>% 
+  as.data.frame()  
+  return(effDiv)
+}
+```
+
+# Overview
+
+Based on the larger coarse plots, I thought it'd worth diving into the bigget group of specialists (= salmon fishermen). I'm defining this as people who are fishing with gillnets / seinenets (gearn = 1, 3, 4) and landing salmon.  
+
+```{r, echo=FALSE}
+# Add effective species diversity, weighted by earnings
+effSpec = group_by(cfec, year, p_holder, specn) %>% 
+  summarize(earn = sum(g_earn)) %>% 
+  group_by(year, p_holder) %>% 
+  summarize(effSpec = simp.div(earn), p.pink=sum(earn[specn==440])/sum(earn), p.chum=sum(earn[specn==450])/sum(earn))
+
+cfec = left_join(cfec, effSpec)
+
+salmonSpecialists = group_by(cfec[cfec$pType!="",], year, p_holder, pType) %>% 
+  summarize(gears = length(unique(gearn)), 
+    salmonGears = length(unique(gearn[gearn%in%c(1,3,4)])),
+    salmonSpec = length(unique(specn[specn%in%c(410,420,430,440,450)])),
+    totRev = sum(g_earn), 
+    effSpec = mean(effSpec),
+    p.pink = mean(p.pink,na.rm=T),
+    p.chum = mean(p.chum,na.rm=T)) %>% 
+  filter(salmonGears == gears & salmonSpec >= 1) 
+
+# Calculate total participation
+n.salmonSpecialists  = group_by(salmonSpecialists, year) %>% 
+  summarize(n = length(unique(p_holder)))
+n.tot= group_by(cfec, year) %>% 
+  summarize(n = length(unique(p_holder)))
+
+# In each year, we can also categorize our population of salmon specialists as:
+# 1. new fisherman
+# 2. pre-existing salmon specialist
+# 3. someone who was fishing salmon and something else
+# 4. someone who wasn't fishing salmon
+# 5. someone who didn't fish last year, but did in the past
+salmonParticipation.nofilter = group_by(cfec, p_holder, year) %>% 
+  summarize(gears = length(unique(gearn)), 
+    salmonGears = length(unique(gearn[gearn%in%c(1,3,4)])),
+    salmonSpec = length(unique(specn[specn%in%c(410,420,430,440,450)])))
+
+salmonParticipation.filter = filter(salmonParticipation.nofilter, salmonGears == gears & salmonSpec > 0)
+
+# Find matches in previous years 
+idx = match(paste(salmonParticipation.filter$p_holder, salmonParticipation.filter$year-1), paste(salmonParticipation.nofilter$p_holder, salmonParticipation.nofilter$year))
+salmonParticipation.filter$prev.gear = salmonParticipation.nofilter$gears[idx]
+salmonParticipation.filter$prev.salmgear = salmonParticipation.nofilter$salmonGears[idx]
+salmonParticipation.filter$prev.spec = salmonParticipation.nofilter$salmonSpec[idx]
+
+# Find matches in later years 
+idx = match(paste(salmonParticipation.filter$p_holder, salmonParticipation.filter$year+1), paste(salmonParticipation.nofilter$p_holder, salmonParticipation.nofilter$year))
+salmonParticipation.filter$next.gear = salmonParticipation.nofilter$gears[idx]
+salmonParticipation.filter$next.salmgear = salmonParticipation.nofilter$salmonGears[idx]
+salmonParticipation.filter$next.spec = salmonParticipation.nofilter$salmonSpec[idx]
+
+startYear = group_by(cfec, p_holder) %>% 
+  summarize(start = min(year))
+endYear = group_by(cfec, p_holder) %>% 
+  summarize(end = max(year))
+salmonParticipation.filter = left_join(salmonParticipation.filter, startYear)
+salmonParticipation.filter = left_join(salmonParticipation.filter, endYear)
+
+salmonParticipation.filter$group = 5
+salmonParticipation.filter$group[which(salmonParticipation.filter$year == salmonParticipation.filter$start)] = 1
+salmonParticipation.filter$group[which(salmonParticipation.filter$prev.salmgear == salmonParticipation.filter$prev.gear & salmonParticipation.filter$prev.spec > 0)] = 2
+salmonParticipation.filter$group[which(salmonParticipation.filter$prev.salmgear < salmonParticipation.filter$prev.gear & salmonParticipation.filter$prev.spec > 0)] = 3
+salmonParticipation.filter$group[which(salmonParticipation.filter$prev.spec==0)] = 4
+
+salmonParticipation.filter$nextgroup = 5
+salmonParticipation.filter$nextgroup[which(salmonParticipation.filter$year == salmonParticipation.filter$end)] = 1
+salmonParticipation.filter$nextgroup[which(salmonParticipation.filter$next.salmgear == salmonParticipation.filter$next.gear & salmonParticipation.filter$next.spec > 0)] = 2
+salmonParticipation.filter$nextgroup[which(salmonParticipation.filter$next.salmgear != salmonParticipation.filter$next.gear & salmonParticipation.filter$next.spec > 0)] = 3
+salmonParticipation.filter$nextgroup[which(salmonParticipation.filter$next.salmgear == salmonParticipation.filter$next.gear & salmonParticipation.filter$next.spec == 0)] = 4
+
+salmonSummary = group_by(salmonSpecialists, year, pType) %>% 
+  summarize(ngear = mean(gears), ngear2 = length(which(gears == 2)), npeople = length(unique(p_holder)), nspec = mean(salmonSpec), neffspec = mean(effSpec),
+    p.pink = mean(p.pink, na.rm=T), p.chum = mean(p.chum, na.rm=T)) 
+```
+
+```{r, fig.cap="Mean effective species diversity, by permit type", fig.pos="placeHere", echo=FALSE, warning=FALSE, message = FALSE}
+group_by(cfec[cfec$pType!="", ], year, pType) %>% 
+  summarize(meanEff = mean(effSpec)) %>% 
+  ggplot(aes(x = year, y = meanEff, color = factor(pType))) + geom_line() + facet_wrap(~ pType) + ylab("Effective species diversity")
+```
+
+## Interesting observations:  
+### 1. Like trends in total fishermen, salmon specialists have declined since the 1990s, but at a much slower rate. Thus, more people are becoming salmon specialists -- using purse-seine / gillnet gears exclusively. Participation overall has been flat since rationalization (early 2000s) but a greater proportion of fishermen are specializing on salmon. 
+  
+```{r, fig.cap = "Trends in salmon specialists (defined above), and total people fishing, 1985-2014", fig.pos = "placeHere", echo=FALSE}
+par(mfrow = c(2,1), mai=c(0.5,0.6,0.1,0.1), mgp=c(2,1,0))
+plot(n.salmonSpecialists, col="tomato1", lwd=3, type="b", ylim=c(5000,15000), xlab = "", ylab="People")
+lines(n.tot$year, n.tot$n, col="grey", lwd=3)
+points(n.tot$year, n.tot$n, col="grey", lwd=3)
+legend('topright', c("Salmon","Total"), col=c("tomato1", "grey"), bty='n', lwd=3)
+plot(n.tot$year, n.salmonSpecialists$n/n.tot$n, lwd=3, type="b", xlab="", ylab="% Salmon specialists")
+```
+
+### Perhaps the drop in Bristol Bay drift / set nets in the early 2000s is a response to low prices & low abundance (and a consequence of portfolio not being diversified).  
+
+```{r, fig.pos="placeHere", fig.cap = "Participation by permit fishery (number of unique permit holders actively fishing). For the purposes of display, people fishing in other areas (Yakutat, etc) or with troll gear not included.", echo=FALSE}
+group_by(cfec[cfec$pType!="" & cfec$pType!="Salm.other",], year, pType) %>% 
+summarize(n = length(unique(p_holder))) %>%
+ggplot(aes(x = year, y = n, color = factor(pType))) + geom_line()
+```
+
+Coincident with rationalization, the participation in the early 2000s may have also been influenced by price drops of all salmon species, 
+  
+```{r, fig.cap = "Trends in salmon prices, 1985-2014", fig.pos = "placeHere", echo=FALSE}
+# https://www.cfec.state.ak.us/pmtvalue/mnusalm.htm
+group_by(cfec[cfec$specn%in%c(410:450) & cfec$pType != "",], spec, year, pType) %>% 
+summarize(price = mean(g_price)) %>% 
+ggplot(aes(x=year, y=(price), color = factor(spec)) ) + geom_line() + ylab("Price (dollars)") + facet_wrap(~ pType, scales="free_y")
+```
+  
+```{r, fig.cap = "Trends in natural-log salmon prices, 1985-2014", fig.pos = "placeHere", echo=FALSE}
+group_by(cfec[cfec$specn%in%c(410:450) & cfec$pType != "",], spec, year, pType) %>% 
+summarize(price = mean(g_price)) %>% 
+ggplot(aes(x=year, y=log(price), color = factor(spec)) ) + geom_line() + ylab("Ln Price (dollars)") + facet_wrap(~ pType, scales="free_y")
+```
+
+```{r, fig.cap = "Tradeoff between average prices, and year-to-year variation in prices, 1985-2014", fig.pos = "placeHere", echo=FALSE}
+grp = group_by(cfec[cfec$specn%in%c(410:450) & cfec$pType != "",], spec, year, pType) %>% 
+summarize(logprice = log(mean(g_price)), meanprice = mean(g_price)) %>%
+group_by(spec, pType) %>% 
+  summarize(sd = sd(diff(logprice)), mu = mean(meanprice), cv = sd(meanprice)/mean(meanprice))
+  
+ggplot(grp, aes(x=log(mu), y=log(cv), color = factor(spec)) ) + geom_point() + xlab("Ln avg price") + ylab("Ln CV")
+#ggplot(grp, aes(x=log(mu), y=log(cv), color = factor(spec)) ) + geom_point() + xlab("Ln avg price") + ylab("Ln CV")
+```  
+  
+We can also do some work looking at price elasticity (basically how much landings of one species goes up in relation to prices of others). 
+
+```{r, echo=FALSE, include=FALSE}
+grp = group_by(cfec[cfec$specn%in%c(410:450) & cfec$pType != "",], spec, year, pType) %>% 
+summarize(abund = sum(g_pounds)) %>% 
+  data.frame
+
+price.spec = group_by(cfec[cfec$specn%in%c(410:450) & cfec$pType != "",], year, pType) %>% 
+  summarize(price.chum=mean(g_price[spec=="CHUM"]),
+  price.coho=mean(g_price[spec=="COHO"]),
+  price.chnk=mean(g_price[spec=="CHNK"]),
+  price.pink=mean(g_price[spec=="PINK"]),
+  price.sock=mean(g_price[spec=="SOCK"]))
+
+grp = left_join(grp, price.spec)
+
+group_by(grp, pType, spec) %>% 
+  summarize(d.chum = diff(price.chum),
+    d.coho = diff(price.coho),
+    d.sock = diff(price.sock),
+    d.pink = diff(price.pink),
+    d.chnk = diff(price.chnk))
+
+grp$abund = log(grp$abund)
+grp$price.chum=log(grp$price.chum)
+grp$price.coho=log(grp$price.coho)
+grp$price.pink=log(grp$price.pink)
+grp$price.sock=log(grp$price.sock)
+grp$price.chnk=log(grp$price.chnk)
+library(lme4)
+chum.model = lm(abund ~ price.sock + price.coho + price.chnk + price.pink, grp[grp$spec=="CHUM",])
+coho.model = lm(abund ~ price.chum + price.sock + price.chnk + price.pink, grp[grp$spec=="COHO",])
+chnk.model = lm(abund ~ price.chum + price.coho + price.sock + price.pink, grp[grp$spec=="CHNK",])
+pink.model = lm(abund ~ price.chum + price.coho + price.chnk + price.sock, grp[grp$spec=="PINK",])
+
+coho.model = lmer(abund ~ price.sock + (1+price.sock|pType) + price.chnk + (1+price.chnk|pType) + price.chum + (1+price.chum|pType)+price.pink + (1+price.pink|pType), grp[grp$spec=="COHO",])
+
+pink.model = lmer(abund ~ price.sock + (1+price.sock|pType) + price.chnk + (1+price.chnk|pType), grp[grp$spec=="PINK",])
+
+chum.model = lmer(abund ~ price.sock + (1+price.sock|pType) + price.chnk + (1+price.chnk|pType), grp[grp$spec=="CHUM",])
+
+chnk.model = lmer(abund ~ price.chnk + (1+price.chnk|pType) + price.coho + (1+price.coho|pType), grp[grp$spec=="SOCK",])
+
+# Chum abund positively affected by price of pink, coho, negatively affected by sockeye price
+# - chum abund goes down when sockeye price goes up
+# Coho abund goes up with price of pink / chnk, down with price of chum
+# Chnk abund goes up as price of chum/sockeye drop, goes up with price of pink
+# Pink abund goes up with price of chum, down as price of coho/chnk increase
+# Sock abund goes up as price of chum/chnk drops, or as price of coho/pink increase
+
+
+```
+
+  
+### Is the increase in people targeting salmon a result of new people entering the fishery, or people switching from other things? New fisherman entering as salmon specialists has declined, but remained constant since ~ 2005 (at 400 people / year). People switching from non-salmon (groundfish / shellfish) to salmon is relatively low compared to the number of people who were fishing salmon + non-salmon species. This latter group represents people specializing toward salmon from a more diverse portfolio + peaked in the mid-1990s.  
+  
+```{r, fig.pos="placeHere", echo=FALSE, fig.cap = "Separating salmon specialists into what they were doing the previous year"}
+salmonParticipation.filter$group[which(salmonParticipation.filter$group==1)] = "New entrants"
+salmonParticipation.filter$group[which(salmonParticipation.filter$group==2)] = "Was salmon specialist"
+salmonParticipation.filter$group[which(salmonParticipation.filter$group==3)] = "Fished salmon & other"
+salmonParticipation.filter$group[which(salmonParticipation.filter$group==4)] = "Fished, but not salmon"
+salmonParticipation.filter$group[which(salmonParticipation.filter$group==5)] = "Skipped at least a year"
+
+group_by(salmonParticipation.filter[salmonParticipation.filter$year > 1985 & is.na(salmonParticipation.filter$group)==FALSE,], year, group) %>% 
+  summarize(n = n()) %>% 
+  filter(is.na(n)==FALSE) %>% 
+ggplot(aes(x = year, y = n, color = factor(group))) + geom_line() + facet_wrap(~ group, scales="free_y")
+```
+  
+  
+```{r, fig.pos="placeHere", echo=FALSE, fig.cap = "Separating salmon specialists into what they were doing the next year"}
+salmonParticipation.filter$nextgroup[which(salmonParticipation.filter$nextgroup==1)] = "Never fished again"
+salmonParticipation.filter$nextgroup[which(salmonParticipation.filter$nextgroup==2)] = "Stayed salmon specialist"
+salmonParticipation.filter$nextgroup[which(salmonParticipation.filter$nextgroup==3)] = "Fished salmon & other"
+salmonParticipation.filter$nextgroup[which(salmonParticipation.filter$nextgroup==4)] = "Fished, but no salmon"
+salmonParticipation.filter$nextgroup[which(salmonParticipation.filter$nextgroup==5)] = "Skipped at least a year"
+
+group_by(salmonParticipation.filter[salmonParticipation.filter$year < 2013 & is.na(salmonParticipation.filter$nextgroup)==FALSE,], year, nextgroup) %>% 
+  summarize(n = n()) %>% 
+  filter(is.na(n)==FALSE) %>% 
+ggplot(aes(x = year, y = n, color = factor(nextgroup))) + geom_line() + facet_wrap(~ nextgroup, scales="free_y")
+```
+
+The latent permits can be broken out as well (not exactly latent permits, but people who are salmon specialists who aren't fishing at all).
+
+```{r, fig.cap = "Proportion of salmon specialists not fishing", fig.pos = "placeHere", echo=FALSE}
+
+dummy = expand.grid("p_holder"=unique(salmonParticipation.filter$p_holder), "year"=unique(salmonParticipation.filter$year))
+latentSalmon = left_join(dummy, salmonParticipation.filter)
+latentSalmon$active = 0
+latentSalmon$active[which(latentSalmon$gear > 0)] =1
+
+startEnd=group_by(latentSalmon, p_holder) %>%
+  summarize(endYr = max(end, na.rm=T), startYr = min(start, na.rm=T)) 
+latentSalmon = left_join(latentSalmon, startEnd)
+
+latentSalmon=latentSalmon[which(latentSalmon$year <= latentSalmon$endYr & latentSalmon$year >= latentSalmon$startYr),]
+
+group_by(latentSalmon[latentSalmon$year < 2014 & latentSalmon$year > 1985,], year) %>% 
+  summarize(n = n(), nActive = length(which(active==1))) %>% 
+  ggplot(aes(x = year, y = (n-nActive)/n)) + geom_line() + ylab("Proportion of salmon specialists not fishing")
+
+#group_by(latentSalmon, startYr) %>% 
+#  summarize(n = length(which(endYr==startYr))) %>% 
+#  ggplot(aes(x = startYr, y = n)) + geom_line()
+```
+
+```{r, fig.cap = "Proportion of salmon specialists not fishing, by area", fig.pos = "placeHere", echo=FALSE}
+
+# add the fishing location to the latentSalmon object
+loc = group_by(cfec[cfec$pType!="",], p_holder, year) %>% 
+  summarize(loc = pType[1])
+latentSalmon = left_join(latentSalmon, loc)
+
+group_by(latentSalmon[is.na(latentSalmon$loc) == FALSE & latentSalmon$loc != "" & latentSalmon$year < 2014 & latentSalmon$year > 1985,], year, loc) %>% 
+  summarize(n = n(), nActive = length(which(active==1))) %>% 
+  ggplot(aes(x = year, y = (n-nActive)/n, , color=factor(loc))) + geom_line() + ylab("Proportion of salmon specialists not fishing") + facet_wrap(~loc)
+```
+
+\newpage
+
+### 2. PWS is an outlier in that there are now more salmon specialists than there ever have been 
+  
+```{r, fig.cap = "Trends in salmon specialists (defined above), by region, 1985-2014", fig.pos = "placeHere", echo=FALSE}
+
+salmonSpecialists = group_by(cfec, year, p_holder, landedLoc) %>% 
+  summarize(gears = length(unique(gearn)), 
+    salmonGears = length(unique(gearn[gearn%in%c(1,3,4)])),
+    salmonSpec = length(unique(specn[specn%in%c(410,420,430,440,450)])),
+    totRev = sum(g_earn), 
+    effSpec = mean(effSpec),
+    p.pink = mean(p.pink,na.rm=T),
+    p.chum = mean(p.chum,na.rm=T),
+    pType = pType[1]) %>% 
+  filter(salmonGears == gears & salmonSpec >= 1) 
+
+salmonSummary = group_by(salmonSpecialists, year, landedLoc) %>% 
+  summarize(ngear = mean(gears), ngear2 = length(which(gears == 2)), npeople = length(unique(p_holder)), nspec = mean(salmonSpec), neffspec = mean(effSpec),
+    p.pink = mean(p.pink, na.rm=T), p.chum = mean(p.chum, na.rm=T), pType=pType[1]) %>% 
+  filter(landedLoc %in% c("Bering Sea", "Aleutian Islands", "Dutch Harbor", "Statewide", "GOA", "EEZ")==FALSE)
+
+ggplot(salmonSummary, aes(x=year, y=npeople) ) + geom_line() + facet_wrap(~ landedLoc, scales="free_y") + ylab("People exclusively using gears 1,3,4")
+```
+    
+```{r, fig.cap = "Trends in salmon specialists (defined above), by region, 1985-2014", fig.pos = "placeHere", echo=FALSE}
+group_by(cfec[cfec$pType!="",], year, pType) %>% 
+  summarize(npeople = length(unique(p_holder))) %>%
+ggplot(aes(x=year, y=npeople, color=factor(pType)) ) + geom_line() + facet_wrap(~ pType, scales="free_y") + ylab("People")
+```
+    
+\newpage
+  
+### 3. As we saw in previous plots, trends in gear diversity and permit diversity are also declining. The number of people fishing 2 of the 3 gear types (set gillnets, drift gillnets, seine) has declined over time -- so people are reducing their portfolio of gears (+ potential species caught).  
+  
+```{r, fig.cap = "Trends in salmon specialists using 2 gears, 1985-2014", fig.pos = "placeHere", echo=FALSE}
+ggplot(salmonSummary, aes(x=year, y=ngear2/npeople) ) + geom_line() + facet_wrap(~ landedLoc, scales="free_y") + ylab("% People using 2 salmon gears")
+```
+  
+\newpage
+  
+### 4. Effective species diversity is variable from year to year, and considerably lower in Bristol Bay than other places. However, decreased diversity of landings in Bristol Bay doesn't translate to more variable year-to-year revenue. Bristol Bay is among the lower CVs (below)  
+  
+```{r, fig.cap = "Trends in effective species diversity (incl. non-salmon landed by gears 1,3,4, weighted by revenue), 1985-2014", fig.pos = "placeHere", echo=FALSE}
+ggplot(salmonSummary, aes(x=year, y=neffspec) ) + geom_line() + facet_wrap(~ landedLoc) + ylab("Mean effective species diversity")
+```  
+  
+We can calculate the CV of each person (across years) and then plot these by region,  
+
+```{r, fig.cap = "CV of revenue, 1985-2014", fig.pos = "placeHere", echo=FALSE}
+group_by(salmonSpecialists[salmonSpecialists$landedLoc%in%c("Aleutian Islands", "Bering Sea", "GOA")==FALSE,], p_holder) %>% 
+  summarize(cv = sd(totRev, na.rm=T)/mean(totRev, na.rm=T), landedLoc = landedLoc[1]) %>% 
+ggplot(aes(x = factor(landedLoc), y = cv)) + 
+  geom_boxplot()
+```
+
+It may be also helpful to show the quartiles of the distribution,  
+
+```{r, fig.cap = "Quartile of revenue, 1985-2014", fig.pos = "placeHere", echo=FALSE}
+salmonSpecialists$landedLoc = as.character(salmonSpecialists$landedLoc)
+salmonQuantile = group_by(salmonSpecialists[salmonSpecialists$landedLoc%in%c("Aleutian Islands", "Bering Sea", "GOA")==FALSE,], p_holder) %>% 
+  summarize(cv = sd(totRev, na.rm=T)/mean(totRev, na.rm=T), landedLoc = landedLoc[1]) %>% 
+  group_by(landedLoc) %>% 
+  summarize(lower25 = quantile(cv, 0.25, na.rm=T), 
+    median50 = quantile(cv, 0.5, na.rm=T), 
+    upper75 = quantile(cv,0.75, na.rm=T)) 
+
+plot(as.factor(salmonQuantile$landedLoc), salmonQuantile$median50, ylab="CV", lwd=3, ylim=c(0,1.2))
+points(as.factor(salmonQuantile$landedLoc), salmonQuantile$lower25, lwd=3)
+points(as.factor(salmonQuantile$landedLoc), salmonQuantile$upper75, lwd=3)
+  
+```
+  
+We can also split this same trends in diversity out by gear / area (see Figure 2). 
+
+  
+\newpage
+  
+### 5. The salmon specialists highlight the need to standardize by effort (days fished). We can calculate days fished as max (calendar day) - min (calendar day). The strongest trend is with respect to sockeye -- more days fished equals higher revenue (particularly in Alaska Peninsula, Bristol Bay, Kodiak, Cook Inlet).  
+
+```{r, echo=FALSE, fig.cap = "Time series of average days fished (max - min calendar days)", fig.pos = "placeHere"}
+# Calculate season length
+cfec$month = as.numeric(substr(cfec$day, 1, 2))
+cfec$day = as.numeric(substr(cfec$day, 4,5))
+cfec$calday = mdy.date(cfec$month, cfec$day, cfec$year) - mdy.date(1, 1, cfec$year)
+
+salmonSpecialists = group_by(cfec, year, p_holder) %>% 
+  summarize(gears = length(unique(gearn)), 
+    salmonGears = length(unique(gearn[gearn%in%c(1,3,4)])),
+    salmonSpec = length(unique(specn[specn%in%c(410,420,430,440,450)]))) %>% 
+  filter(salmonGears == gears & salmonSpec >= 1) 
+salmonSpecialists = left_join(salmonSpecialists, cfec)
+
+# for each person find max day
+maxDay = group_by(salmonSpecialists, p_holder, year) %>%
+  summarize(maxDate = max(calday), minDate = min(calday))
+salmonSpecialists = left_join(salmonSpecialists, maxDay)
+
+group_by(salmonSpecialists[salmonSpecialists$landedLoc%in%c("Aleutian Islands", "GOA", "Statewide", "Bering Sea")==FALSE,], year, landedLoc) %>% 
+  summarize(meanDays = mean(maxDate - minDate)) %>% 
+  ggplot(aes(x=year, y=meanDays) ) + geom_line() + facet_wrap(~ landedLoc, scales="free") + ylab("Mean days fished")
+```
+
+```{r, echo=FALSE, fig.cap = "Time series of average days fished (max - min calendar days) by permit", fig.pos = "placeHere"}
+group_by(salmonSpecialists[salmonSpecialists$pType!="",], year, pType) %>% 
+  summarize(meanDays = mean(maxDate - minDate)) %>% 
+  ggplot(aes(x=year, y=meanDays, color = factor(pType)) ) + geom_line() + facet_wrap(~ pType, scales="free") + ylab("Mean days fished")
+```
+
+```{r, echo=FALSE, fig.cap = "Time series of salmon revenue versus days fished", fig.pos="placeHere"}
+# calculate total earnings of pink salmon versus mean cal days
+salmSummary = group_by(salmonSpecialists[salmonSpecialists$specn%in%c(410:450),], year, p_holder, spec) %>% 
+  summarize(totalDollars = sum(g_earn), 
+    days = maxDate[1] - minDate[1],
+    landedLoc = landedLoc[1]) %>% 
+  group_by(year, landedLoc, spec) %>% 
+  summarize(dollars = mean(totalDollars),
+    days = mean(days))
+
+ggplot(salmSummary, aes(x=log(dollars), y = days, color=factor(spec))) + geom_line() + facet_wrap(~ landedLoc, scales="free") + xlab("Ln Dollars") + ylab("Days fished")
+```
+
+```{r, echo=FALSE, fig.cap = "Time series of sockeye salmon revenue versus days fished", fig.pos="placeHere"}
+ggplot(salmSummary[salmSummary$spec=="SOCK" & salmSummary$landedLoc%in%c("Bristol Bay", "Alaska Peninsula", "Prince William Sound", "Kodiak", "Southeast", "Cook Inlet"),], aes(x=log(dollars), y = days, color=factor(landedLoc))) + geom_line() + xlab("Ln Dollars") + ylab("Days fished")
+```
+
+```{r, echo=FALSE, fig.cap = "Time series of salmon revenue versus days fished", fig.pos="placeHere"}
+# calculate total earnings of pink salmon versus mean cal days
+salmSummary = group_by(salmonSpecialists[salmonSpecialists$specn%in%c(410:450),], year, p_holder, spec) %>% 
+  summarize(totalDollars = sum(g_earn), 
+    days = maxDate[1] - minDate[1],
+    pType = pType[1]) %>% 
+  group_by(year, pType) %>% 
+  summarize(dollars = mean(totalDollars),
+    days = mean(days))
+
+ggplot(salmSummary, aes(x=log(dollars), y = days, color=factor(pType))) + geom_line() + facet_wrap(~ pType, scales="free") + xlab("Ln Dollars") + ylab("Days fished")
+```
+
+\newpage 
+
+## Focus on pink / chum salmon
+
+To look at potential hatchery influences, we can examine the fraction of pink / chum landings relative to the total. 
+
+### This shows that the percentage landings of pink / sockeye salmon have been in the opposite direction for Kodiak / PWS / SEAK, increasing a bit for Cook Inlet / Alaska Peninsula.  
+  
+```{r, fig.cap="Total percentage of earnings by species in each region", fig.pos="placeHere", echo=FALSE}
+summary = group_by(salmonSpecialists[salmonSpecialists$specn%in%c(410:450) & salmonSpecialists$landedLoc%in%c("Aleutian Islands","Bering Sea","Statewide","GOA")==FALSE,], landedLoc, year, spec) %>% 
+  summarize(spec.earn = sum(g_earn))
+summary.tot = group_by(summary, year, landedLoc) %>% 
+  summarize(n = sum(spec.earn))
+summary = left_join(summary, summary.tot)
+
+ggplot(summary, aes(x=year, y=spec.earn/n, color=factor(spec))) + facet_wrap(~ landedLoc) + geom_line() + ylab("Proportion of earnings")
+```
+  
+```{r, fig.cap="Total percentage of earnings by species and permit", fig.pos="placeHere", echo=FALSE}
+summary = group_by(salmonSpecialists[salmonSpecialists$specn%in%c(410:450),],  pType, year, spec) %>% 
+  summarize(spec.earn = sum(g_earn))
+summary.tot = group_by(summary, year, pType) %>% 
+  summarize(n = sum(spec.earn))
+summary = left_join(summary, summary.tot)
+
+ggplot(summary[summary$pType!="",], aes(x=year, y=spec.earn/n, color=factor(spec))) + facet_wrap(~ pType) + geom_line() + ylab("Proportion of earnings")
+```  
+  
+  
+```{r, fig.cap="Total earnings by species in each region", echo=FALSE, fig.pos="placeHere"}
+group_by(salmonSpecialists[salmonSpecialists$specn%in%c(410:450) & salmonSpecialists$landedLoc%in%c("Aleutian Islands","Bering Sea","Statewide","GOA")==FALSE,], landedLoc, year, spec) %>% 
+  summarize(dollars = sum(g_earn)) %>% 
+ggplot(aes(x=year, y=log(dollars), color=factor(spec))) + geom_line() + facet_wrap(~ landedLoc)
+
+#group_by(salmonSpecialists[salmonSpecialists$specn%in%c(410:450) & #salmonSpecialists$landedLoc%in%c("Aleutian Islands","Bering Sea","Statewide","GOA")==FALSE,], #landedLoc, year) %>% 
+#  summarize(dollars = sum(g_earn)) %>% 
+#ggplot(aes(x=year, y=log(dollars))) + geom_line() + facet_wrap(~ landedLoc)
+```
+  
+```{r, fig.cap="Total earnings by species by permit", echo=FALSE, fig.pos="placeHere"}
+group_by(salmonSpecialists[salmonSpecialists$specn%in%c(410:450) & salmonSpecialists$pType!="",], pType, year, spec) %>% 
+  summarize(dollars = sum(g_earn)) %>% 
+ggplot(aes(x=year, y=log(dollars), color=factor(spec))) + geom_line() + facet_wrap(~ pType)
+```
+  
+```{r, fig.cap="Total landings by species in each region", echo=FALSE, fig.pos="placeHere"}
+group_by(salmonSpecialists[salmonSpecialists$specn%in%c(410:450) & salmonSpecialists$landedLoc%in%c("Aleutian Islands","Bering Sea","Statewide","GOA")==FALSE,], landedLoc, year, spec) %>% 
+  summarize(dollars = sum(g_pounds)) %>% 
+ggplot(aes(x=year, y=log(dollars), color=factor(spec))) + geom_line() + facet_wrap(~ landedLoc) + ylab("Ln Pounds")
+```
+
+```{r, fig.cap="Total landings by species by permit", echo=FALSE, fig.pos="placeHere"}
+group_by(salmonSpecialists[salmonSpecialists$specn%in%c(410:450) & salmonSpecialists$pType!="",], pType, year, spec) %>% 
+  summarize(pounds = sum(g_pounds)) %>% 
+ggplot(aes(x=year, y=log(pounds), color=factor(spec))) + geom_line() + facet_wrap(~ pType) + ylab("Ln Pounds")
+```
+  
+One way to look at the effect of this diversification would be to compare the CV of revenue of people only fishing in the early 1990s to people only fishing in recent years (say 2005+). 
+  
+```{r, echo=FALSE, fig.pos="placeHere"}
+pinkChumFishers = group_by(salmonSpecialists[salmonSpecialists$pType!="",], p_holder, year) %>% 
+  summarize(meanEarn = sum(g_earn),
+    pType = pType[1]) %>% 
+  group_by(p_holder, pType) %>% 
+  summarize(cv.early = sd(meanEarn[year%in%c(1990:1999)]) / mean(meanEarn[year%in%c(1990:1999)]),
+    cv.late = sd(meanEarn[year%in%c(2005:2014)]) / mean(meanEarn[year%in%c(2005:2014)])) %>%
+  group_by(pType) %>% 
+  summarize(cv.early = mean(cv.early,na.rm=T), cv.late = mean(cv.late,na.rm=T))
+```
+  
+  
+```{r, echo=FALSE}
+kable(pinkChumFishers)
+```
+  
+  
+```{r, echo=FALSE, fig.pos="placeHere"}
+ggplot(salmonSummary, aes(x = p.pink+p.chum, y = neffspec, color = factor(landedLoc))) + geom_line() + xlab("Proportion of pink and chum salmon") + ylab("Effective species diversity")
+```

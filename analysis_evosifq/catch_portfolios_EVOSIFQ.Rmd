@@ -1,0 +1,652 @@
+---
+title: "Results for working group papers"
+author: 'Catch portfolios subgroup: NCEAS meeting 3'
+date: "March 18, 2016"
+output:
+  pdf_document:
+    fig_caption: yes
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
+```
+
+## Load cleaned data  
+```{r dataLoad, warning = FALSE, message=FALSE, results="hide"}
+library(dplyr)
+library(knitr)
+library(mgcv)
+library(ggplot2)
+library(randomForest)
+library(MASS)
+library(zoo)
+library(MatchIt)
+load("cfecCleaned2.Rdata")
+```
+
+We need to adjust the landed values and prices for inflation. To do this, we'll use the data Alan pulled together (adjusting to 2009 dollars). 
+
+https://docs.google.com/spreadsheets/d/1hRLYTX1nZBLKnYXwTCOtU7-XnDoMZf_1ufdTiNQFd4U/edit#gid=0
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+deflationTable = data.frame(year = 1985:2014, defl = c(0.57236, 0.58393, 0.59879, 0.61974,  
+0.64388, 0.66774, 0.68993, 0.70564, 0.72244, 0.73781,  
+0.75321, 0.76695, 0.78009, 0.78855, 0.80061,  
+0.81883, 0.83753, 0.85038, 0.86729, 0.89114,  
+0.91981, 0.94812, 0.97334, 0.9925, 1,  
+1.01217, 1.03307, 1.05213, 1.06926, 1.08682))
+
+# Adjust price and g_earn for inflation
+cfec$year = as.numeric(cfec$year)
+cfec$g_price = cfec$g_price/deflationTable$defl[cfec$year-1984]
+cfec$g_earn = cfec$g_earn/deflationTable$defl[cfec$year-1984]
+
+simp.div = function(x) {
+  1/sum((x/sum(x))^2)
+}
+```
+
+## Filtering out unique vessel - person combinations  
+Filter out people who only use 1 vessel / year , and similarly filter out boats with more than 1 person / year. Some people might fish on multiple vessels within a year, and vessels might be used by multiple people within a year.  
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+cfecnew = cfec
+cfec.1boat = group_by(cfecnew, p_holder, year) %>% 
+  summarize(nBoat = length(unique(cadfg))) %>%
+  filter(nBoat==1) %>% 
+  left_join(cfecnew)
+
+# Deal with setnet fisheries, where lots of p_holder
+# share same codes
+cfec.1boat = group_by(cfec.1boat, cadfg, year) %>% 
+  summarize(nPerson = length(unique(p_holder))) %>%
+  filter((nPerson==1 & cadfg %in% c(27960,27961) == FALSE) | cadfg %in% c(27960,27961)) %>% 
+  left_join(cfec.1boat)
+
+cfecnew = cfec.1boat
+dim(cfecnew)[1]
+```
+
+  
+# Paper 2: Investigating relative effects of management changes (IFQ) relative to EVOS
+### Alan's tenatively co-leading  
+  
+We'll restrict our analysis initially to a few years before and after the IFQ change, in 1995. People had to land halibut or sablefish in 1988, 1989, or 1990 to qualify for quota, and 5 of their best 6 years fished were used to calculate quota (so continuous fishing not a requirement). Alan's previously used 1992:1994 versus 1995:1997. We'll slightly expand this range initially, but may want to change it. [Side note: Eric and Sean already explored this, and there's no qualitative difference between the shorter/longer time periods].  
+
+Alan defined 4 primary groups of individuals (or vessels):  
+1. Individuals who fished halibut / sablefish before and after 1995 (IFQ group)  
+2. Individuals who only fished halibut / sablefish before 1995 ["Pre"]
+3. Individuals who only fished halibut / sablefish after 1995 ["Post"]  
+4. Individuals who never fished halibut / sablefish ["Control group"]  
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+# We'll use 3 years before/after IFQ. This is consistent with the work that
+# Alan has done. Years up to 1990 were included in the calculation of future
+# quota, and 1998 is problematic because the ratio of our halibut earnings to 
+# AKFIN's is ~ 60% -- suggesting there may be something systemic that we're
+# missing. 
+cfec$year = as.numeric(cfec$year)
+
+dat = cfec[cfec$year %in% seq(1992,1997),]
+#dat$p_holder = NULL
+#dat = rename(dat, p_holder = cadfg)
+
+# Create an indicator for species codes halibut (200) and sablefish (710)
+dat$HS = 0
+dat$HS[dat$g_earn > 0 & dat$specn%in%c(200, 710)] = 1
+
+# Create a data frame that we'll use to assign years to pre- and post- groups  
+df.years = data_frame(year=1992:1997, 
+  ind = c(rep("Pre",3), rep("Post",3)))
+dat =left_join(dat, df.years)
+dat$ind = factor(dat$ind, levels = c("Pre","Post"))
+
+dat.hs = group_by(dat, p_holder, ind) %>% 
+  summarize(HS = sum(g_earn[HS==1]) > 0 ) 
+hs.tbl = reshape2::dcast(dat.hs , p_holder ~ ind)
+hs.tbl$Post[is.na(hs.tbl$Post)] = FALSE
+hs.tbl$Pre[is.na(hs.tbl$Pre)] = FALSE
+
+# Assign groups
+hs.tbl = mutate(hs.tbl, group = ifelse(Post & Pre, "IFQ", 
+  ifelse(Post & !Pre, "Post.only", 
+    ifelse(!Post & Pre, "Pre.only", "Cntl"))))
+
+dat = left_join(dat, hs.tbl)
+
+# Even though we initially defined a control group, get rid of it because
+# after a lot of group discussion, these people are not true controls:
+dat = dat[dat$group != "Cntl", ]
+```
+
+## IFQ Results:  
+We want to look at a number of different responses, based on revenue (mean revenue, and variability in revenue) as well as metrics of diversity (species) and metrics of effort or participation (days fished, etc).  
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+
+# Convert date string to a character -- we only care about unique values
+dat$day = substr(dat$landdate, 6, 10)
+
+# We're first going to group over the indicator (pre-post), group, individual (p_holder), 
+# and year. We'll calculate total revenue, total revenue made up of halibut or sablefish, 
+# total pounds, total pounds made up of halibut or sablefish, effective species diversity, 
+# effective gear diversity (which is likely not that interesting since most of these 
+# individuals are landing halibut/sablefish on longlines), # days fished per year. 
+# Second, we'll then aggregate these annual metrics across years to calculate means and 
+# CVs, when possible (the CV == 0 when 2 years of participation present, NA with 1 year). 
+# We'll make no restriction about # of years that someone needs to participate either 
+# before or after 1995 [side note: Eric and Sean looked at this, and qualitatively, 
+# results don't change]. Taking the mean of the 'annual means' will also allow us to 
+# compare the revenue of someone who fishes say ~ 4 years pre-IFQ and 1 year post-IFQ.  
+
+hs.summary = group_by(dat, ind, group, p_holder, year) %>% 
+  summarize(tot.revenue.ind = sum(g_earn), 
+    tot.revenue.ind.h = sum(g_earn[specn==200]), 
+    tot.revenue.ind.s = sum(g_earn[specn==710]),
+    tot.pounds.ind = sum(g_pounds), 
+    tot.pounds.ind.h = sum(g_pounds[specn==200]), 
+    tot.pounds.ind.s = sum(g_pounds[specn==710]),
+    eff.spec.div = simp.div(table(specn)), 
+    eff.gear.div = simp.div(table(gearn)),
+    numDays = length(unique(day)),
+    numHalibutDays = length(unique(day[specn==200]))) %>% 
+  as.data.frame %>% 
+  group_by(ind, group, p_holder) %>% 
+  summarize(cv.revenue.ind = sd(tot.revenue.ind,na.rm=T) / mean(tot.revenue.ind,na.rm=T),
+    mean.revenue.ind = mean(tot.revenue.ind,na.rm=T), 
+    mean.revenue.ind.h = mean(tot.revenue.ind.h,na.rm=T),
+    mean.revenue.ind.s = mean(tot.revenue.ind.s,na.rm=T),
+    mean.pounds.ind = mean(tot.pounds.ind,na.rm=T),
+    mean.pounds.ind.h = mean(tot.pounds.ind.h,na.rm=T),
+    mean.pounds.ind.s = mean(tot.pounds.ind.s,na.rm=T),
+    eff.spec.div.cv = sd(eff.spec.div,na.rm=T)/mean(eff.spec.div,na.rm=T),
+    eff.spec.div.mean = mean(eff.spec.div,na.rm=T),
+    eff.gear.div.cv = sd(eff.gear.div,na.rm=T)/mean(eff.gear.div,na.rm=T),
+    eff.gear.div.mean = mean(eff.gear.div,na.rm=T),
+    records.per.ind = n(), nYears = length(unique(year)), 
+    nDays = mean(numDays, na.rm=T),
+    nHalibutDays = mean(numHalibutDays, na.rm=T)) 
+
+# Here we calculate the weighted diversity metrics. 
+# We'll generate 3 versions of the estimates to make sure the results are robust:  
+# 1. Diversity based on frequency in fish tickets  
+# 2. Diversity weighted by sum of earnings  
+# 3. Diversity weighted by sum of biomass (catch, in pounds)  
+hs.div = group_by(dat, ind, group, p_holder, year, specn) %>% 
+  summarize(tot.weight.sp = sum(g_pounds), 
+    tot.revenue.sp = sum(g_earn)) %>% 
+  group_by(ind, group, p_holder, year) %>% 
+  summarize(eff.spec.div.mean.earn = simp.div(tot.revenue.sp),
+    eff.spec.div.mean.weight = simp.div(tot.weight.sp)) %>%
+  group_by(ind, group, p_holder) %>% 
+  summarize(eff.spec.div.cv.earn = 
+      sd(eff.spec.div.mean.earn) / mean(eff.spec.div.mean.earn), 
+    eff.spec.div.mean.earn = mean(eff.spec.div.mean.earn), 
+    eff.spec.div.cv.weight = 
+      sd(eff.spec.div.mean.weight) / mean(eff.spec.div.mean.weight),
+    eff.spec.div.mean.weight = mean(eff.spec.div.mean.weight))
+hs.summary = left_join(hs.summary, hs.div)
+
+# Calculate vessels used per individual and join
+vessels.per.ind = group_by(dat, ind, group, p_holder) %>% 
+  summarize(boat.per.ind = length(unique(cadfg)))
+hs.summary = left_join(hs.summary, vessels.per.ind)
+
+# We proposed calculating diversity across fish tix -- but that's impossible because
+# each fish ticket is delivery of a single species. But we can calculate the diversity 
+# by day (lumping all catch / fish tickets for that day). 
+
+# This is a bit complicated, so we'll do it using a series of group_by statements that are 
+# broken out here for clarity. First, calculate total weight, earnings, and 
+# frequency (counts) over species by fish ticket, year, indicator, and group
+hs.day = group_by(dat, ind, group, p_holder, year, day, specn) %>% 
+  summarize(tot.weight.sp = sum(g_pounds), 
+    tot.earn.sp = sum(g_earn), 
+    tot.freq.sp = n()) %>%
+  as.data.frame
+
+# Second, calculate the diversity metrics integrating across species. We can also calculate 
+# the derived proportion of halibut and sablefish that are contributing to individual 
+# fish tickets (so that we can examine the distribution of these across days)
+hs.day = group_by(hs.day, ind, group, p_holder, year, day) %>% 
+  summarize(pHal.weight = sum(tot.weight.sp[specn==200])/sum(tot.weight.sp), 
+    pHal.earn = sum(tot.earn.sp[specn==200])/sum(tot.earn.sp), 
+    pHal.freq = sum(tot.freq.sp[specn==200])/sum(tot.freq.sp), 
+    pSabl.weight = sum(tot.weight.sp[specn==710])/sum(tot.weight.sp), 
+    pSabl.earn = sum(tot.earn.sp[specn==710])/sum(tot.earn.sp), 
+    pSabl.freq = sum(tot.freq.sp[specn==710])/sum(tot.freq.sp), 
+    tot.weight.sp = simp.div(tot.weight.sp), 
+    tot.earn.sp = simp.div(tot.earn.sp), 
+    tot.freq.sp = simp.div(tot.freq.sp)) %>% 
+  as.data.frame()
+
+# Third, we'll calculate the quantiles of these metrics across fish tickets. This will 
+# help us plot the CDF style plots  
+hs.day.summary = group_by(hs.day, ind, group, year) %>% 
+  summarize(l.weight = quantile(tot.weight.sp, 0.25, na.rm=TRUE), 
+    m.weight = quantile(tot.weight.sp, 0.5, na.rm=TRUE), 
+    u.weight = quantile(tot.weight.sp, 0.75, na.rm=TRUE),
+    l.freq = quantile(tot.freq.sp, 0.25, na.rm=TRUE), 
+    m.freq = quantile(tot.freq.sp, 0.5, na.rm=TRUE), 
+    u.freq = quantile(tot.freq.sp, 0.75, na.rm=TRUE), 
+    l.earn = quantile(tot.earn.sp, 0.25, na.rm=TRUE), 
+    m.earn = quantile(tot.earn.sp, 0.5, na.rm=TRUE), 
+    u.earn = quantile(tot.earn.sp, 0.75, na.rm=TRUE), 
+    l.hal.earn = quantile(pHal.earn, 0.25, na.rm=TRUE),
+    m.hal.earn = quantile(pHal.earn, 0.5, na.rm=TRUE), 
+    u.hal.earn = quantile(pHal.earn, 0.75, na.rm=TRUE), 
+    l.hal.weight = quantile(pHal.weight, 0.25, na.rm=TRUE), 
+    m.hal.weight = quantile(pHal.weight, 0.5, na.rm=TRUE), 
+    u.hal.weight = quantile(pHal.weight, 0.75, na.rm=TRUE),
+    l.hal.freq = quantile(pHal.freq, 0.25, na.rm=TRUE), 
+    m.hal.freq = quantile(pHal.freq, 0.5, na.rm=TRUE), 
+    u.hal.freq = quantile(pHal.freq, 0.75, na.rm=TRUE),
+    l.sab.earn = quantile(pSabl.earn, 0.25, na.rm=TRUE), 
+    m.sab.earn = quantile(pSabl.earn, 0.5, na.rm=TRUE), 
+    u.sab.earn = quantile(pSabl.earn, 0.75, na.rm=TRUE),
+    l.sab.weight = quantile(pSabl.weight, 0.25, na.rm=TRUE), 
+    m.sab.weight = quantile(pSabl.weight, 0.5, na.rm=TRUE), 
+    u.sab.weight = quantile(pSabl.weight, 0.75, na.rm=TRUE),
+    l.sab.freq = quantile(pSabl.freq, 0.25, na.rm=TRUE), 
+    m.sab.freq = quantile(pSabl.freq, 0.5, na.rm=TRUE), 
+    u.sab.freq = quantile(pSabl.freq, 0.75, na.rm=TRUE))
+
+```
+
+```{r, fig.pos="placeHere", fig.cap="Plot of species diversity metrics (calculated by fish ticket freq.) through time for each of our 4 groups during the pre-post IFQ period. ", echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+ggplot(hs.day.summary, aes(year, m.freq)) + geom_line() + facet_wrap(~group) + 
+  geom_ribbon(aes(ymin=l.freq, ymax=u.freq), alpha=0.2)
+```
+
+```{r, fig.pos="placeHere", fig.cap="Plot of species diversity metrics (calculated by earnings) through time for each of our 4 groups during the pre-post IFQ period. ", echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+ggplot(hs.day.summary, aes(year, m.earn)) + geom_line() + facet_wrap(~group) + 
+  geom_ribbon(aes(ymin=l.earn, ymax=u.earn), alpha=0.2)
+```
+
+```{r, fig.pos="placeHere", fig.cap="Plot of species diversity metrics (calculated by pounds of catch) through time for each of our 4 groups during the pre-post IFQ period. ", echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+ggplot(hs.day.summary, aes(year, m.weight)) + geom_line() + facet_wrap(~group) + 
+  geom_ribbon(aes(ymin=l.weight, ymax=u.weight), alpha=0.2)
+```
+
+Getting back to the comparisons between groups (aggregated over years in our pre-post IFQ groupings), we can convert the landed halibut and sablefish revenue and weight into a proportion of the total catch.  
+
+First, make a dotplot (with quartile range) of the pre-post comparison for each metric of revenue.  
+```{r, fig.pos="placeHere", fig.cap = "Metric of annual revenue, with interquartile range, for each of the 4 IFQ groups.", echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+
+hs.summary$mean.revenue.ind.h = 
+  hs.summary$mean.revenue.ind.h / hs.summary$mean.revenue.ind
+hs.summary$mean.revenue.ind.s = 
+  hs.summary$mean.revenue.ind.s / hs.summary$mean.revenue.ind
+hs.summary$mean.pounds.ind.h = 
+  hs.summary$mean.pounds.ind.h / hs.summary$mean.pounds.ind
+hs.summary$mean.pounds.ind.s = 
+  hs.summary$mean.pounds.ind.s / hs.summary$mean.pounds.ind
+
+dplyr::select(hs.summary, group, ind, p_holder, 
+  contains("mean"), -contains("div")) %>%
+  reshape2::melt(id.vars = c("group", "ind","p_holder")) %>%
+  group_by(group, ind, variable) %>% 
+  filter(is.na(value)==F) %>% 
+  summarize(l = quantile(value, 0.25, na.rm=T), 
+    u = quantile(value, 0.75, na.rm=T), 
+    m = quantile(value, 0.5, na.rm=T)) %>%
+  ggplot(aes(x = ind, y = m, ymax = u, ymin = l)) + 
+  geom_pointrange() + facet_grid(variable ~ group, scales="free")
+
+```
+
+Look at the mean number of days where catch was recorded as landed, as well as how many of those days are when halibut are landed.  
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+dplyr::select(hs.summary, group, ind, p_holder, 
+  contains("nDays"), contains("nHalibutDays")) %>%
+  reshape2::melt(id.vars = c("group", "ind","p_holder")) %>%
+  group_by(group, ind, variable) %>% 
+  filter(is.na(value)==F) %>% 
+  summarize(l = quantile(value, 0.25, na.rm=T), 
+    u = quantile(value, 0.75, na.rm=T), 
+    m = quantile(value, 0.5, na.rm=T)) %>%
+  ggplot(aes(x = ind, y = m, ymax = u, ymin = l)) + 
+  geom_pointrange() + facet_grid(variable ~ group, scales="free")
+```
+
+
+```{r, fig.pos="placeHere", fig.cap = "Boxplots of revenue metrics (with interquartile range) by group and pre-post-IFQ. ", echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+#dplyr::select(hs.summary, group, ind, p_holder, contains("mean"), -contains("div")) %>% 
+#  reshape2::melt(id.vars = c("group", "ind","p_holder")) %>%
+#  ggplot(aes(ind, value)) + geom_boxplot(aes(fill=ind), alpha=0.5, outlier.size=NA) + 
+#  facet_grid(variable ~ group, scales="free")
+```
+
+```{r, fig.pos="placeHere", fig.cap = "Boxplots of diversity metrics (with interquartile range) by group and pre-post-IFQ. ", echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+dplyr::select(hs.summary, group, ind, p_holder, contains("eff.spec.div.mean"), contains("eff.gear.div.mean"), contains("eff.spec.div.mean")) %>% 
+  reshape2::melt(id.vars = c("group", "ind","p_holder")) %>%
+  ggplot(aes(ind, value)) + 
+  geom_boxplot(aes(fill=ind), alpha=0.5, outlier.size=NA) + 
+  facet_grid(variable ~ group, scales="free")
+# +  geom_point(alpha = 0.02, position = position_jitter(width = 0.4), cex = 0.2)
+
+```
+
+```{r, fig.pos="placeHere", fig.cap="Violin plot of individual differences (post-IFQ - pre-IFQ for the revenue and diversity metrics included in our analysis.", echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+hs.long = reshape2::melt(hs.summary, id.vars = c("group", "ind","p_holder"))
+hs.long = reshape2::dcast(hs.long, variable + p_holder + group ~ ind) %>%
+  mutate(diff_ = (Post-Pre)/Pre)
+
+ggplot(hs.long, aes(group, diff_)) + 
+  geom_violin(aes(fill=group), alpha=0.5) + 
+  facet_wrap(~ variable, scales="free") +
+  geom_point(alpha = 0.02, position = 
+      position_jitter(width = 0.4), cex = 0.2)
+```
+
+## Changes in gear diversity through time  
+Let's look at the change in gear diversity through time for each of the 4 groups in our analysis. 
+We'll start with effective gear diversity, by 
+
+```{r, fig.pos = "placeHere", fig.cap = "Gear diversity through time for each of the 3 groups, calculated based on the catch (black) and earnings (red).", echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+hs.summary.gear = group_by(dat, ind, group, year, gearn) %>% 
+  summarize(n = n(), nEarn = sum(g_earn), nWeight = sum(g_pounds)) %>% 
+  as.data.frame %>% 
+  group_by(ind, group, year) %>% 
+  summarize(gearDiv.freq = simp.div(n), 
+    gearDiv.earn = simp.div(nEarn), 
+    gearDiv.weight = simp.div(nWeight))
+
+ggplot(hs.summary.gear, aes(year, gearDiv.weight)) + 
+  geom_line() + facet_wrap(~ group, scales="free") + 
+  geom_line(aes(year, gearDiv.earn), col="red")
+```
+
+
+We'll break down the proportion used for the top 8 gears,
+```{r, fig.pos="placeHere", fig.cap = "Time series of proportion of gears used", echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+hs.gear.tot = group_by(dat, ind, group, year) %>% 
+  summarize(nTot = n())
+hs.summary.gear = group_by(dat, ind, group, year, gearn) %>% 
+  summarize(n = n()) %>%
+  left_join(hs.gear.tot)
+hs.summary.gear$p = hs.summary.gear$n/hs.summary.gear$nTot
+hs.summary.gear = filter(hs.summary.gear, gearn %in% c(1,6,15,7,9,47,4,5)) %>% 
+ggplot(aes(year, p)) + geom_line() + facet_grid(gearn ~ group, scales="free")
+
+```
+
+Can we predict effective species diversity as function of gear diversity?
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+#hs.geardiv = group_by(dat, ind, group, p_holder, year, gearn) %>% 
+#  summarize(tot.weight.sp = sum(g_pounds), 
+#    tot.revenue.sp = sum(g_earn)) %>% 
+#  group_by(ind, group, p_holder, year) %>% 
+#  summarize(eff.gear.div.mean.earn = simp.div(tot.revenue.sp),
+#    eff.gear.div.mean.weight = simp.div(tot.weight.sp)) %>%
+#  group_by(ind, group, p_holder) %>% 
+#  summarize(eff.gear.div.cv.earn = 
+#      sd(eff.gear.div.mean.earn) / mean(eff.gear.div.mean.earn), 
+#    eff.gear.div.mean.earn = mean(eff.gear.div.mean.earn), 
+#    eff.gear.div.cv.weight = 
+#      sd(eff.gear.div.mean.weight) / mean(eff.gear.div.mean.weight),
+#    eff.gear.div.mean.weight = mean(eff.gear.div.mean.weight))
+#hs.summary = left_join(hs.summary, hs.geardiv) %>% 
+#  as.data.frame()
+```
+
+\newpage  
+  
+## EVOS comparison
+
+We'll restrict our analysis initially to a few years before and after EVOS (1989). To make the comparison similar to the IFQ comparison, we will have an impacted group. We'll define 'impacted' as people who were landing catch in statistical areas over 1985-1988 that were later closed because of the spill (1989). These areas were then opened up for fishing in 1990. We'll restrict the analysis to only looking at immediate impacts, so we're interested in how affected / unaffected individuals fared in 1990-1991.  
+
+To create a control group, we'll use propensity matching (other clustering methods also an option). This procedure involves:  
+(1) defining attributes for all individuals during 1985-1988 (total catch, total revenue, % revenue from salmon, etc).  
+(2) Doing some simple model selection with a binomial GLM to reduce the number of variables included in our model (some will be redundant with others, and others will be uninformative)  
+(3) Run propensity matching to identify among the unaffected individuals a best match for each impacted individual. Note that this will only identify 1 match for each case. 
+(4) Using the affected individuals and new control group of 'matches', examine how the two groups fared post spill, in 1990-1991. (As an aside, Rich thought many individuals fishing salmon, etc. in these areas were going right back to the previously closed areas).  
+
+## Propensity matching for EVOS  
+
+We're interested in forming a control group for the comparison of the EVOS effects.  To do this, we adopted the following approach:  
+1.  Filter the data to be only 1985:1988, and 1990:1991 as our pre/post group. Only use data for people who fished before and after.    
+2.  Create an 'exposed' treatment effect for anyone who fished one of the following permits before 1989: Kodiak setnet, Kodiak purse seine, Cook Inlet drift net  
+3.  Calculate the pounds landed per species and earnings per species for the dominant ~ 15 species from these groups (mostly salmon, shellfish, etc).  Also calculate total annual revenue, mean days fished (landed days) and diversity metrics (species, gear, etc).  
+4.  Fit a GLM (logistic regression) to the pre-spill data to identify the best predictors of classifying exposure.    
+5.  With the same model in (4) use propensity score matching to find best matches for individual fisherman in the "pre" & exposed group, to create a control group  
+6. Calculate BACI style metrics, similar to the IFQ comparison to look at changes in groups (control, treatment) pre/post 1989
+
+### Take home: there doesn't seem to be a negative effect of revenue on the treatement / exposed group. But pounds (and revenue) of pink (#440) and chum (#450) salmon decreased more so for this group, and species diversity also appears to be affected. People in the not exposed group fished more coho post-EVOS. 
+
+```{r, warning = FALSE, message=FALSE, results = "hide", echo=FALSE}
+
+# Don't include 1989, but include before / after
+dat = cfec[cfec$year %in% c(1985:1988, 1990:1991),]
+dat$day = substr(dat$landdate, 6, 10)
+
+# Create an indicator based on the salmon / shellfish araes that were closed in PWS
+# If someone was fishing in the area before EVOS, they are affected
+#dat$exposed = 0
+#dat$exposed[dat$stat6%in%c(22710, 22720, 22730, 22610, 22620, 22630, 22640, 
+#  22650, 22510, 22520, 22530) & dat$year < 1989] = 1
+
+# For the new analysis (June 2016), based on Eric's plots of the salmon fisherment, the 
+# most obvious 'exposed' group are people who had the following permits:
+# Kodiak setnet, Kodiak purse seine, Cook Inlet drift net. PWS set net could potentially be incl,
+# but participation in 1989 dropped from 560 to 500 people -- didn't go to 0
+dat$exposed = 0
+dat$exposed[which(dat$p_fshy%in%c("S 03H","S 04K","S 01K") & dat$year <= 1989)] = 1
+
+# Exposed variable is the response, and we want to predict based on traits
+dat.ev = group_by(dat, p_holder, year) %>% 
+  summarize(tot.revenue.ind = sum(g_earn), 
+    tot.rev.230 = sum(g_earn[specn==230]),
+    tot.rev.420 = sum(g_earn[specn==420]), 
+    tot.rev.450 = sum(g_earn[specn==450]), 
+    tot.rev.430 = sum(g_earn[specn==430]), 
+    tot.rev.440 = sum(g_earn[specn==440]), 
+    tot.rev.410 = sum(g_earn[specn==410]),
+    tot.rev.710 = sum(g_earn[specn==710]),
+    tot.rev.910 = sum(g_earn[specn==910]), 
+    tot.rev.400 = sum(g_earn[specn==400]), 
+    tot.rev.168 = sum(g_earn[specn==168]), 
+    tot.rev.270 = sum(g_earn[specn==270]),    
+    tot.rev.130 = sum(g_earn[specn==130]),
+    tot.rev.931 = sum(g_earn[specn==931]),
+    tot.rev.830 = sum(g_earn[specn==830]),
+    tot.rev.520 = sum(g_earn[specn==520]),    
+    tot.pounds.ind = sum(g_pounds), 
+    tot.pnds.230 = sum(g_pounds[specn==230]),
+    tot.pnds.420 = sum(g_pounds[specn==420]), 
+    tot.pnds.450 = sum(g_pounds[specn==450]), 
+    tot.pnds.430 = sum(g_pounds[specn==430]), 
+    tot.pnds.440 = sum(g_pounds[specn==440]), 
+    tot.pnds.410 = sum(g_pounds[specn==410]),
+    tot.pnds.710 = sum(g_pounds[specn==710]),
+    tot.pnds.910 = sum(g_pounds[specn==910]), 
+    tot.pnds.400 = sum(g_pounds[specn==400]), 
+    tot.pnds.168 = sum(g_pounds[specn==168]), 
+    tot.pnds.270 = sum(g_pounds[specn==270]),    
+    tot.pnds.130 = sum(g_pounds[specn==130]),
+    tot.pnds.931 = sum(g_pounds[specn==931]),
+    tot.pnds.830 = sum(g_pounds[specn==830]),
+    tot.pnds.520 = sum(g_pounds[specn==520]),    
+    eff.spec.div = simp.div(table(specn)), 
+    eff.gear.div = simp.div(table(gearn)),
+    numDays = length(unique(day)),
+    exposed = max(exposed), 
+    ind = ifelse(year[1] < 1989, "Pre", "Post")) %>% 
+    as.data.frame()
+
+# Now summarize over years 
+  dat.ev = group_by(dat.ev, p_holder, ind) %>% 
+  summarize(tot.revenue.ind = mean(tot.revenue.ind), 
+    tot.pounds.ind = mean(tot.pounds.ind), 
+    eff.spec.div = mean(eff.spec.div), 
+    eff.gear.div = mean(eff.gear.div),
+    exposed = max(exposed),
+    meanDays = mean(numDays),
+    tot.rev.230 = mean(tot.rev.230)/tot.revenue.ind,
+    tot.rev.420 = mean(tot.rev.420)/tot.revenue.ind, 
+    tot.rev.450 = mean(tot.rev.450)/tot.revenue.ind, 
+    tot.rev.430 = mean(tot.rev.430)/tot.revenue.ind, 
+    tot.rev.440 = mean(tot.rev.440)/tot.revenue.ind, 
+    tot.rev.410 = mean(tot.rev.410)/tot.revenue.ind,
+    tot.rev.710 = mean(tot.rev.710)/tot.revenue.ind,
+    tot.rev.910 = mean(tot.rev.910)/tot.revenue.ind, 
+    tot.rev.400 = mean(tot.rev.400)/tot.revenue.ind, 
+    tot.rev.168 = mean(tot.rev.168)/tot.revenue.ind, 
+    tot.rev.270 = mean(tot.rev.270)/tot.revenue.ind,    
+    tot.rev.130 = mean(tot.rev.130)/tot.revenue.ind,
+    tot.rev.931 = mean(tot.rev.931)/tot.revenue.ind,
+    tot.rev.830 = mean(tot.rev.830)/tot.revenue.ind,
+    tot.rev.520 = mean(tot.rev.520)/tot.revenue.ind,    
+    tot.pnds.230 = mean(tot.pnds.230)/tot.pounds.ind,
+    tot.pnds.420 = mean(tot.pnds.420)/tot.pounds.ind, 
+    tot.pnds.450 = mean(tot.pnds.450)/tot.pounds.ind, 
+    tot.pnds.430 = mean(tot.pnds.430)/tot.pounds.ind, 
+    tot.pnds.440 = mean(tot.pnds.440)/tot.pounds.ind, 
+    tot.pnds.410 = mean(tot.pnds.410)/tot.pounds.ind,
+    tot.pnds.710 = mean(tot.pnds.710)/tot.pounds.ind,
+    tot.pnds.910 = mean(tot.pnds.910)/tot.pounds.ind, 
+    tot.pnds.400 = mean(tot.pnds.400)/tot.pounds.ind, 
+    tot.pnds.168 = mean(tot.pnds.168)/tot.pounds.ind, 
+    tot.pnds.270 = mean(tot.pnds.270)/tot.pounds.ind,    
+    tot.pnds.130 = mean(tot.pnds.130)/tot.pounds.ind,
+    tot.pnds.931 = mean(tot.pnds.931)/tot.pounds.ind,
+    tot.pnds.830 = mean(tot.pnds.830)/tot.pounds.ind,
+    tot.pnds.520 = mean(tot.pnds.520)/tot.pounds.ind
+    ) %>% 
+    as.data.frame()
+
+# fix exposure column 
+dat.ev = group_by(dat.ev, p_holder) %>% 
+  mutate(exposed = max(exposed)) %>% 
+  as.data.frame()
+
+# 1. Diversity based on frequency in fish tickets  
+# 2. Diversity weighted by sum of earnings  
+# 3. Diversity weighted by sum of biomass (catch, in pounds)  
+ev.div = group_by(dat, p_holder, year, specn) %>% 
+  summarize(ind = ifelse(year[1] < 1989, "Pre", "Post"), 
+    tot.weight.sp = sum(g_pounds), 
+    tot.revenue.sp = sum(g_earn)) %>% 
+  group_by(ind, p_holder, year) %>% 
+  summarize(eff.spec.div.mean.earn = simp.div(tot.revenue.sp),
+    eff.spec.div.mean.weight = simp.div(tot.weight.sp)) %>%
+  group_by(ind, p_holder) %>% 
+  summarize(eff.spec.div.cv.earn = 
+      sd(eff.spec.div.mean.earn) / mean(eff.spec.div.mean.earn), 
+    eff.spec.div.mean.earn = mean(eff.spec.div.mean.earn), 
+    eff.spec.div.cv.weight = 
+      sd(eff.spec.div.mean.weight) / mean(eff.spec.div.mean.weight),
+    eff.spec.div.mean.weight = mean(eff.spec.div.mean.weight))
+dat.ev = left_join(dat.ev, ev.div)
+
+# Filter out only individulas with pre / post (2 rows)
+dat.ev.count = group_by(dat.ev, p_holder) %>% 
+  summarize(n = n()) %>%
+  filter(n == 2) %>% 
+  as.data.frame
+
+dat.ev = inner_join(dat.ev, dplyr::select(dat.ev.count, p_holder))
+
+# Only find matches based on pre-EVOS data. We can then compare pre/post effects
+
+dat.ev$eff.spec.div.cv.earn = NULL
+dat.ev$eff.spec.div.cv.weight = NULL
+
+dat.ev.rf = filter(dat.ev, ind == "Pre")
+
+# We've calculated pounds and revenue of each of the top 15 spp -- including
+# both is potentially problematic though because they're correlated ,as expected.
+# So for now we'll just focus on revenue. 
+dat.ev.rf = dat.ev.rf[,-c(4, 24:38, 40)]
+
+#rf = randomForest(x = dat.ev.rf, y = as.factor(dat.ev.rf$exposed))
+
+dat.ev.rf[,c(3:5, 23)] = log(dat.ev.rf[,c(3:5, 23)] + 1)
+# Select variables that can help explain variation in exposure 
+m.glm = glm(exposed ~ ., data = dat.ev.rf[dat.ev.rf$ind=="Pre", -c(1,2)], family = "binomial")
+stepAIC(m.glm, direction="both")
+
+bestModel = glm(exposed ~ tot.revenue.ind + eff.spec.div + eff.gear.div + meanDays + 
+    tot.rev.420 + tot.rev.450 + tot.rev.430 + tot.rev.410 + 
+    tot.rev.710 + tot.rev.400 + tot.rev.168 + tot.rev.270, data = 
+    dat.ev.rf[dat.ev.rf$ind == "Pre", ])
+
+m.out <- matchit(exposed ~ tot.revenue.ind + eff.spec.div + eff.gear.div + meanDays + 
+    tot.rev.420 + tot.rev.450 + tot.rev.430 + tot.rev.410 + 
+    tot.rev.710 + tot.rev.400 + tot.rev.168 + tot.rev.270, method = "nearest", data = dat.ev.rf[dat.ev.rf$ind == "Pre", ])
+
+matches = match.data(m.out)
+
+#m.out <- matchit(exposed, method = "nearest", data = dat.ev[dat.ev$ind==0,], distance = rf$votes[,2])
+
+dat.matched = dat.ev[dat.ev$p_holder %in% unique(matches$p_holder), ]
+
+fn_bal <- function(dta, variable) {
+    dta$variable <- dta[, variable]
+    ggplot(dta, aes(y = distance, x = variable, color = as.factor(exposed))) +
+      geom_point(alpha = 0.2, size = 1.5) +
+      geom_smooth(method = "loess", se = F) +
+      ylab("Propensity score") +
+      xlab(variable) + 
+      theme_bw()  
+}
+fn_bal(matches, "tot.revenue.ind")
+
+dat.matched$plotind = ifelse(dat.matched$ind == "Pre", 0, 1)
+dat.matched$ind2 = dat.matched$plotind
+dat.matched$ind2[dat.matched$exposed==1] = 
+  dat.matched$ind2[dat.matched$exposed==1] + 0.2
+
+dat.matched.summary = reshape2::melt(dat.matched, id.vars = c("exposed","ind", "p_holder")) %>%
+  group_by(ind, exposed, variable) %>% 
+  filter(is.na(value)==F) %>% 
+  summarize(l = quantile(value, 0.25, na.rm=T), 
+    u = quantile(value, 0.75, na.rm=T), 
+    m = quantile(value, 0.5, na.rm=T))
+dat.matched.summary$ind2 = as.numeric(as.factor(dat.matched.summary$ind)) - 1
+dat.matched.summary$ind2[dat.matched.summary$exposed==1] =  dat.matched.summary$ind2[dat.matched.summary$exposed==1] + 0.2
+
+# break this into 2 plots because of the panel size
+ggplot(dat.matched.summary[dat.matched.summary$variable %in% unique(dat.matched.summary$variable)[1:10], ], aes(x = ind2, y = m, ymax = u, ymin = l, col = as.factor(exposed))) + 
+  geom_pointrange() + facet_wrap(~ variable, scales="free")
+
+ggplot(dat.matched.summary[dat.matched.summary$variable %in% unique(dat.matched.summary$variable)[11:19], ], aes(x = ind2, y = m, ymax = u, ymin = l, col = as.factor(exposed))) + 
+  geom_pointrange() + facet_wrap(~ variable, scales="free")
+
+ggplot(dat.matched.summary[dat.matched.summary$variable %in% unique(dat.matched.summary$variable)[20:29], ], aes(x = ind2, y = m, ymax = u, ymin = l, col = as.factor(exposed))) + 
+  geom_pointrange() + facet_wrap(~ variable, scales="free")
+
+ggplot(dat.matched.summary[dat.matched.summary$variable %in% unique(dat.matched.summary$variable)[30:39], ], aes(x = ind2, y = m, ymax = u, ymin = l, col = as.factor(exposed))) + 
+  geom_pointrange() + facet_wrap(~ variable, scales="free")
+
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+
+#ev.long = reshape2::melt(dat.matched, id.vars = c("exposed","ind","p_holder"))
+#ev.long = reshape2::dcast(ev.long, variable + p_holder + exposed ~ ind) %>%
+#  mutate(diff_ = (Post-Pre)/Pre)
+
+#ev.long = filter(ev.long, !is.na(diff_), is.finite(diff_))
+#ggplot(ev.long, aes(exposed, diff_)) + 
+#  geom_violin(aes(fill=exposed), alpha=0.5) + 
+#  facet_wrap(~ variable, scales="free") +
+#  geom_point(alpha = 0.02, position = 
+#  position_jitter(width = 0.4), cex = 0.2)
+  
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, results="hide"}
+#cfec$areaPermit = 0
+#cfec$areaPermit[grep("B", cfec$p_fshy)] = 1
+#cfec$areaPermit[grep("G", cfec$p_fshy)] = 1
+
+#permitTypes = group_by(cfec, p_holder) %>% 
+#summarize(nState = length(which(areaPermit==1)), n = length(which(areaPermit==0))) %>% as.data.frame()
+
+# 41113 individuals
+# 18383 just have regional permits, 12251 just have statewide/GOA, 10479 have both
+#length(which(permitTypes$nState==0 & permitTypes$n > 0))
+```
