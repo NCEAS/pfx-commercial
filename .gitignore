@@ -16,3 +16,6 @@ vignettes/*.pdf
 *.feather
 *.Rdata.gz
 *.Rproj
+
+*.so
+*.o
