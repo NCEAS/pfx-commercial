@@ -209,7 +209,9 @@ cfecAnnual = group_by(cfecnew, p_holder, year) %>%
     nspec = length(unique(specn)),
     npermit = length(unique(p_fshy)),
     revenue = sum(g_earn),
-    length = mean(VLength, na.rm=T)) %>% 
+    length = mean(VLength, na.rm=T)) 
+
+cfecAnnual = group_by(cfecAnnual, p_holder, year) %>%
   filter(npermit == 1)
 
 # also calculate weighted simpson diversity of gears and species
@@ -224,27 +226,27 @@ cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, gearn) %>%
   group_by(p_holder, year) %>% 
   summarize(gearDiv = simp.div(totRev.gear)))
 
-temp = group_by(cfecnew, p_holder, year, specn) %>% 
-  summarize(totRev.spec = sum(g_earn), 
-    permit = p_fshy[1])
-temp = left_join(temp, group_by(cfecnew, p_holder, year) %>% 
-    summarize(totRev = sum(g_earn)))
-temp$totRev.spec = temp$totRev.spec / temp$totRev
+#temp = group_by(cfecnew, p_holder, year, specn) %>% 
+#  summarize(totRev.spec = sum(g_earn), 
+#    permit = p_fshy[1])
+#temp = left_join(temp, group_by(cfecnew, p_holder, year) %>% 
+#    summarize(totRev = sum(g_earn)))
+#temp$totRev.spec = temp$totRev.spec / temp$totRev
 
-mkt = group_by(cfecnew, p_fshy, year, specn) %>% 
-  summarize(totRev.mkt.spec = sum(g_earn)) 
-mkt = left_join(mkt, group_by(mkt, p_fshy, year) %>% 
-  summarize(totRev.mkt = sum(totRev.mkt.spec))) 
-mkt$totRev.mkt.spec = mkt$totRev.mkt.spec / mkt$totRev.mkt
-names(mkt)[1] = "permit"
+#mkt = group_by(cfecnew, p_fshy, year, specn) %>% 
+#  summarize(totRev.mkt.spec = sum(g_earn)) 
+#mkt = left_join(mkt, group_by(mkt, p_fshy, year) %>% 
+#  summarize(totRev.mkt = sum(totRev.mkt.spec))) 
+#mkt$totRev.mkt.spec = mkt$totRev.mkt.spec / mkt$totRev.mkt
+#names(mkt)[1] = "permit"
 
 # combine individual and market datasets
-temp = left_join(temp, mkt)
+#temp = left_join(temp, mkt)
 
 # Calculate squared proportions
-temp$p2 = (temp$totRev.spec - temp$totRev.mkt.spec)^2
+#temp$p2 = (temp$totRev.spec - temp$totRev.mkt.spec)^2
 
-cfecAnnual = left_join(cfecAnnual, dplyr::select(temp, p_holder, year, p2))
+#cfecAnnual = left_join(cfecAnnual, dplyr::select(temp, p_holder, year, p2))
 
 # Also merge in previous revenue. Idx stores index of people last year
 idx = match(paste(cfecAnnual$p_holder,cfecAnnual$year-1), paste(cfecAnnual$p_holder,cfecAnnual$year))
@@ -256,7 +258,7 @@ cfecAnnual$npermit.prev = cfecAnnual$npermit[idx]
 cfecAnnual$revenue.prev = cfecAnnual$revenue[idx]
 cfecAnnual$specdiv.prev = cfecAnnual$specDiv[idx]
 cfecAnnual$geardiv.prev = cfecAnnual$gearDiv[idx]
-cfecAnnual$p2.prev = cfecAnnual$p2[idx]
+#cfecAnnual$p2.prev = cfecAnnual$p2[idx]
 
 cfecAnnual$specDiv.change = cfecAnnual$specDiv - cfecAnnual$specdiv.prev
 
@@ -264,7 +266,76 @@ cfecAnnual$specDiv.change = cfecAnnual$specDiv - cfecAnnual$specdiv.prev
 cfecAnnual$salmon = ifelse(substr(cfecAnnual$permit,1,1)=="S", "Y", "N")
 
 cfecAnnual.salmon = cfecAnnual[cfecAnnual$salmon=="Y",]
+cfecAnnual.nonsalmon = cfecAnnual[cfecAnnual$salmon=="N",]
 
 cfecAnnual.salmon = cfecAnnual.salmon[is.na(cfecAnnual.salmon$specDiv.change)==F, ]
+cfecAnnual.nonsalmon = cfecAnnual.nonsalmon[is.na(cfecAnnual.nonsalmon$specDiv.change)==F, ]
+
 saveRDS(cfecAnnual.salmon, file="salmon_linearModeling_complete.rds")
+saveRDS(cfecAnnual.nonsalmon, file="salmon_linearModeling_complete.rds")
 ```
+
+We can look at whether there's clear combinations of permit types that are combinations -- most of these people either have a single local permit (PWS, Bristol Bay, etc) or have multiple statewide permits. 
+
+```{r}
+
+cfecnew$area = substr(cfecnew$p_fshy,4,4)
+cfecnew$area[cfecnew$area %in% c("A","C")] = "Southeast"
+cfecnew$area[cfecnew$area == "B"] = "Statewide"
+cfecnew$area[cfecnew$area == "D"] = "Yakutat"
+cfecnew$area[cfecnew$area == "E"] = "PWS"
+cfecnew$area[cfecnew$area == "H"] = "CookInlet"
+cfecnew$area[cfecnew$area == "J"] = "Westward"
+cfecnew$area[cfecnew$area == "K"] = "Kodiak"
+cfecnew$area[cfecnew$area == "L"] = "Chignik"
+cfecnew$area[cfecnew$area == "M"] = "AlaskaPeninsula"
+cfecnew$area[cfecnew$area == "N"] = "Nelson"
+cfecnew$area[cfecnew$area == "Q"] = "BeringSea"
+cfecnew$area[cfecnew$area == "T"] = "BristolBay"
+cfecnew$area[cfecnew$area == "X"] = "Kotzebue"
+cfecnew$area[cfecnew$area == "Z"] = "NortonSound"
+
+cfecnew$spec = substr(cfecnew$p_fshy,1,1)
+cfecnew$spec[cfecnew$spec == "B"] = "Halibut"
+cfecnew$spec[cfecnew$spec == "C"] = "Sablefish"
+cfecnew$spec[cfecnew$spec %in% c("D","E","K","T")] = "Crab"
+cfecnew$spec[cfecnew$spec %in% c("F")] = "Freshwater"
+cfecnew$spec[cfecnew$spec %in% c("G","H","L")] = "Herring"
+cfecnew$spec[cfecnew$spec %in% c("I")] = "Lingcod"
+cfecnew$spec[cfecnew$spec %in% c("A","J","N","R","W")] = "Shellfish"
+cfecnew$spec[cfecnew$spec %in% c("O","P","Q","U","Z")] = "Invert"
+cfecnew$spec[cfecnew$spec %in% c("M")] = "Misc"
+cfecnew$spec[cfecnew$spec %in% c("S")] = "Salmon"
+cfecnew$area.spec = paste(cfecnew$area, cfecnew$spec, sep="_")
+
+cfecAnnual.multiplePermits = group_by(cfecnew, p_holder, year) %>%
+  summarize(npermit = length(unique(p_fshy)), 
+    allpermits = paste(sort(unique(p_fshy)), collapse = " "),
+    areaspec = paste(sort(unique(area.spec)), collapse = " ")) %>%
+  filter(npermit > 1)
+
+```
+
+## Model fitting 
+
+Start by fitting some lmer models to revenue for the non-salmon people as an example (smaller dataset). 
+
+```{r}
+library(lme4)
+
+cfecAnnual.salmon$spec = substr(cfecAnnual.salmon$permit,1,1)
+cfecAnnual.salmon$area = substr(cfecAnnual.salmon$permit,4,4)
+
+full.mod = lmer(log(revenue) ~ I(log(revenue.prev)) + specDiv +specDiv.change+ (1+specDiv|permit) + length + days, data = cfecAnnual.salmon[complete.cases(cfecAnnual.salmon),])
+
+full.mod.ind = lmer(log(revenue) ~ permit*as.factor(year) + specDiv + (1+specDiv|permit) + length + days + (1|p_holder), data = cfecAnnual.salmon[complete.cases(cfecAnnual.salmon),])
+
+group_by(cfecAnnual.salmon[complete.cases(cfecAnnual.salmon),], p_holder) %>% 
+  summarize(earn = mean(log(revenue)), cv = sd(log(revenue)) / earn, div = mean(specDiv), permit = permit[1]) %>%
+  as.data.frame %>%
+  group_by(permit) %>% 
+  mutate(n = n()) %>% 
+  filter(n > 50) %>% 
+  ggplot(aes(x = div, y = earn, color = cv)) + geom_point() + facet_wrap(~ permit, scales = "free")
+```
+
