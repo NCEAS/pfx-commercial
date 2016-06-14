@@ -1,0 +1,142 @@
+---
+title: "Bayesian_portfolio_modeling"
+author: ""
+date: "June 05, 2016"
+output:
+  pdf_document:
+    fig_caption: yes
+  html_document: default
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
+```
+
+## Load packages and such 
+```{r dataLoad, warning = FALSE, message=FALSE, results="hide", echo=FALSE}
+library(dplyr)
+library(knitr)
+library(mgcv)
+library(ggplot2)
+library(randomForest)
+library(MASS)
+library(zoo)
+library(MatchIt)
+library(metafolio)
+library(randomForest)
+library(date)
+library(rstan)
+
+```
+
+## LMER Model fitting 
+
+Start by fitting some lmer models to revenue for the non-salmon people as an example (smaller dataset). 
+
+```{r}
+cfecAnnual.salmon = readRDS(file="salmon_linearModeling_complete.rds")
+
+cfecAnnual.salmon$spec = substr(cfecAnnual.salmon$permit,1,1)
+cfecAnnual.salmon$area = substr(cfecAnnual.salmon$permit,4,4)
+
+full.mod = lmer(log(revenue) ~ I(log(revenue.prev)) + specDiv +specDiv.change+ (1+specDiv|permit) + length + days, data = cfecAnnual.salmon[complete.cases(cfecAnnual.salmon),])
+
+full.mod.ind = lmer(log(revenue) ~ permit*as.factor(year) + specDiv + (1+specDiv|permit) + length + days + (1|p_holder), data = cfecAnnual.salmon[complete.cases(cfecAnnual.salmon),])
+
+group_by(cfecAnnual.salmon[complete.cases(cfecAnnual.salmon),], p_holder) %>% 
+  summarize(earn = mean(log(revenue)), cv = sd(log(revenue)) / earn, div = mean(specDiv), permit = permit[1]) %>%
+  as.data.frame %>%
+  group_by(permit) %>% 
+  mutate(n = n()) %>% 
+  filter(n > 50) %>% 
+  ggplot(aes(x = div, y = earn, color = cv)) + geom_point() + facet_wrap(~ permit, scales = "free")
+```
+
+## Code for testing fitting the model using STAN. 
+
+```{r}
+cfecAnnual.nonsalmon = readRDS(file="nonsalmon_linearModeling_complete.rds")
+
+# Subset the data to include only p_holder - year combinations with > 100 records, basically the top 20 permits
+testData = cfecAnnual.nonsalmon[cfecAnnual.nonsalmon$permit%in%names(rev(sort(table(cfecAnnual.nonsalmon$permit)))[1:20]),]
+
+dim(testData)
+
+# Create numeric representation of characters/factors for linear modeling
+P_HOLDER = as.numeric(as.factor(testData$p_holder))
+PERMIT = as.numeric(as.factor(testData$permit))
+PERMIT_AREA = as.numeric(as.factor(substr(testData$permit, 4, 4)))
+PERMIT_SPEC = as.numeric(as.factor(substr(testData$permit, 1, 1)))
+SPEC_DIV = testData$specDiv
+DAYS = log(testData$days+1)
+
+# Calculate variables / matrices to plug into STAN. These variables / matrices can 
+# be changed to add or delete covariates. Covariates can be included in the following:
+# fixed effects in slope of mean (b1_cov)
+# fixed effects in slope of var (sigma1_cov)
+# random effects of intercept of mean (b0_re)
+# random effects of intercept of var (sigma0_re)
+# random effects of slope of mean (b1_re)
+# random effects of slope of var (sigma1_re)
+
+N = dim(testData)[1]
+b1_cov = cbind(SPEC_DIV, DAYS) # fixed effect covariate on slope
+sigma1_cov = cbind(SPEC_DIV, DAYS) # fixed effect covariate on slope
+b1_cov_re = cbind(SPEC_DIV)
+sigma1_cov_re = cbind(SPEC_DIV)
+
+b0_re = cbind(P_HOLDER, PERMIT, PERMIT_AREA, PERMIT_SPEC)
+b0_re_levels = apply(b0_re,2,max)
+b0_re_n = dim(b0_re)[2]
+
+b1_re = cbind(PERMIT, PERMIT_AREA, PERMIT_SPEC)
+b1_re_levels = apply(b1_re,2,max)
+b1_re_n = dim(b1_re)[2]
+
+sigma0_re = cbind(P_HOLDER, PERMIT, PERMIT_AREA, PERMIT_SPEC)
+sigma0_re_levels = apply(b0_re,2,max)
+sigma0_re_n = dim(sigma0_re)[2]
+
+sigma1_re = cbind(PERMIT, PERMIT_AREA, PERMIT_SPEC)
+sigma1_re_levels = apply(sigma1_re,2,max)
+sigma1_re_n = dim(sigma1_re)[2]
+
+K_mean = dim(b1_cov)[2]
+K_sig = dim(sigma1_cov)[2]
+K_mean_re = dim(b1_cov_re)[2]
+K_sig_re = dim(sigma1_cov_re)[2]
+y = log(testData$revenue)
+
+### Center all of the covariate matrices
+b1_cov = scale(b1_cov, scale=FALSE)
+sigma1_cov = scale(sigma1_cov, scale=FALSE)
+b1_cov_re = scale(b1_cov_re, scale=FALSE)
+sigma1_cov_re = scale(sigma1_cov_re, scale=FALSE)
+```
+
+```{r}
+# Named list of data
+list_data = list("N"=N, "K_mean"=K_mean, "b1_cov"=b1_cov, "sigma1_cov"=sigma1_cov,
+  "K_mean_re"=K_mean_re, "K_sig_re"=K_sig_re,"b1_cov_re"=b1_cov_re, "sigma1_cov_re"=sigma1_cov_re,
+  "b0_re"=b0_re, "b0_re_levels"=b0_re_levels, "b0_re_n"=b0_re_n,
+  "b1_re"=b1_re, "b1_re_levels"=b1_re_levels, "b1_re_n"=b1_re_n,
+  "sigma0_re"=sigma0_re, "sigma0_re_levels"=sigma0_re_levels, "sigma0_re_n"=sigma0_re_n,
+  "sigma1_re"=sigma1_re, "sigma1_re_levels"=sigma1_re_levels, "sigma1_re_n"=sigma1_re_n, "K_sig"=K_sig, "y"=y)
+# parameters to monitor
+list_pars = c("b0_mu","b0_dev","b0_tau", "b1_mu","b1_dev","b1_tau", "sigma0_mu","sigma0_dev","sigma0_tau", "sigma1_mu","sigma1_dev","sigma1_tau")
+
+# fit the model
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+
+stanMod = stan(file = 'portfolio_mixedModel.stan',data = list_data, 
+  verbose = TRUE, chains = 4, thin = 1, warmup = 500, iter = 1000, 
+  pars = list_pars)
+p = extract(stanMod, list_pars, permuted=TRUE)
+```
+
+## To-do list:
+### 1. model covariance of slope / intercept in random effects. maybe start with bivariate normal
+### 2. Make plots of random effects v permits
+
+
