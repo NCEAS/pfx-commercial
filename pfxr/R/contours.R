@@ -1,3 +1,7 @@
+#' @import ggplot2
+#' @import viridis
+#' @import dplyr
+
 get_contour <- function(df, x_variable, y_variable, prob = 0.8, n = 200, ...) {
   x <- dplyr::select_(df, x_variable, y_variable) %>%
     data.matrix()  %>%
@@ -16,7 +20,7 @@ get_contour <- function(df, x_variable, y_variable, prob = 0.8, n = 200, ...) {
 }
 
 plot_polygons <- function(polygon_data, x_column, y_column,
-  xlab = "Variance", ylab = "Mean", prob = 0.75,
+  xlab = "Variance", ylab = "Mean", prob = 0.8,
   grouping = c("diversity_group"), ...) {
   contours <- plyr::ddply(polygon_data, grouping,
     function(x) get_contour(x, x_column, y_column, prob = prob))

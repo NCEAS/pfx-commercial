@@ -2,8 +2,16 @@ Package: pfxr
 Type: Package
 Title: Common commercial-fishing portfolio analysis functions
 Version: 0.0.1
-Author: Various authors
-Maintainer: Sean C. Anderson <sean@seananderson.ca> [aut, cre]
-Description: Common commercial-fishing portfolio analysis functions
+Authors@R: c(person("Various", "authors", email =
+    "a@a.com", role = c("aut", "cre")))
+Description: Common commercial-fishing portfolio analysis functions.
 License: MIT + file LICENSE
+Imports:
+    plyr,
+    dplyr,
+    coda,
+    emdbook,
+    ggplot2,
+    viridis
 LazyData: TRUE
+RoxygenNote: 5.0.1
