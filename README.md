@@ -13,7 +13,7 @@ can be saved in a `data-generated` folder within a given project.
 The folder `pfxr` contains an R package with any reusable functions. It can be loaded from within any of the analysis folders with:
 
 ```r
-devtools::load_all("../../pfxr")
+devtools::load_all("../../pfxr/")
 ```
 
-(assuming you are working directory is in a given project).
+(assuming your working directory is in a given project).
