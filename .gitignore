@@ -21,3 +21,5 @@ vignettes/*.pdf
 *.o
 
 *.pdf
+
+Session.vim
