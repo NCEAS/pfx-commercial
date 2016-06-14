@@ -125,27 +125,28 @@ summary(sd_report)
 summary(sd_report, "fixed")
 
 # Add a random slope also in the variance
-set.seed(123)
+set.seed(12345)
 b0 <- 0.5
 b1 <- 0.3
 sigma0 <- 0.2
 sigma1 <- -0.2
-log_b0_sigma <- -1.8
+log_b0_sigma <- -1.4
 log_b1_sigma <- -1.2
-n_k <- 30
+n_k <- 40
+n_per_k <- 250
 b0_eta <- rnorm(n_k, 0, exp(log_b0_sigma))
-b0_eta_i <- rep(b0_eta, each = 1000)
+b0_eta_i <- rep(b0_eta, each = n_per_k)
 b1_eta <- rnorm(n_k, 0, exp(log_b1_sigma))
-b1_eta_i <- rep(b1_eta, each = 1000)
-k_i <- rep(0:(n_k - 1), each = 1000)
-N <- n_k * 1000
+b1_eta_i <- rep(b1_eta, each = n_per_k)
+k_i <- rep(0:(n_k - 1), each = n_per_k)
+N <- n_k * n_per_k
 
-log_sigma0_sigma <- -1.8
+log_sigma0_sigma <- -1.1
 log_sigma1_sigma <- -1.2
 sigma0_eta <- rnorm(n_k, 0, exp(log_sigma0_sigma))
-sigma0_eta_i <- rep(sigma0_eta, each = 1000)
+sigma0_eta_i <- rep(sigma0_eta, each = n_per_k)
 sigma1_eta <- rnorm(n_k, 0, exp(log_sigma1_sigma))
-sigma1_eta_i <- rep(sigma1_eta, each = 1000)
+sigma1_eta_i <- rep(sigma1_eta, each = n_per_k)
 
 s <- base::sample(seq(1, 10), N, replace = TRUE)
 u <- rnorm(N, b0 + b0_eta_i + b1*s + b1_eta_i*s,
