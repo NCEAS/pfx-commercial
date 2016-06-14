@@ -1,0 +1,9 @@
+Package: pfxr
+Type: Package
+Title: Common commercial-fishing portfolio analysis functions
+Version: 0.0.1
+Author: Various authors
+Maintainer: Sean C. Anderson <sean@seananderson.ca> [aut, cre]
+Description: Common commercial-fishing portfolio analysis functions
+License: MIT + file LICENSE
+LazyData: TRUE
