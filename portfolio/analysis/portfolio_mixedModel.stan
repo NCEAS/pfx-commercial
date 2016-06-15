@@ -9,19 +9,19 @@ data {
   matrix[N,K_mean_re] b1_cov_re; // fixed covariate on mean
   matrix[N,K_sig_re] sigma1_cov_re; // fixed covariate on mean  
   int<lower=0> b0_re_n; // random effects on intercept
-  int<lower=0> b0_re_levels[b0_re_n]; // number of levels of each
+  int<lower=0> b0_re_levels[b0_re_n+1]; // number of levels of each. Add +1 for case where n=1
   int b0_re[N,b0_re_n];
 
   int<lower=0> b1_re_n; // random effects on intercept
-  int<lower=0> b1_re_levels[b1_re_n]; // number of levels of each
+  int<lower=0> b1_re_levels[b1_re_n+1]; // number of levels of each. Add +1 for case where n=1
   int b1_re[N,b1_re_n];
 
   int<lower=0> sigma0_re_n; // random effects on intercept
-  int<lower=0> sigma0_re_levels[sigma0_re_n]; // number of levels of each
+  int<lower=0> sigma0_re_levels[sigma0_re_n+1]; // number of levels of each. Add +1 for case where n=1
   int sigma0_re[N,sigma0_re_n];
 
   int<lower=0> sigma1_re_n; // random effects on intercept
-  int<lower=0> sigma1_re_levels[sigma1_re_n]; // number of levels of each
+  int<lower=0> sigma1_re_levels[sigma1_re_n+1]; // number of levels of each. Add +1 for case where n=1
   int sigma1_re[N,sigma1_re_n];
   
   vector[N] y; // vector to hold observations

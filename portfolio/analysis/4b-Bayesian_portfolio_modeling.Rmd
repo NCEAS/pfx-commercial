@@ -80,24 +80,24 @@ DAYS = log(testData$days+1)
 # random effects of slope of var (sigma1_re)
 
 N = dim(testData)[1]
-b1_cov = cbind(SPEC_DIV, DAYS) # fixed effect covariate on slope
-sigma1_cov = cbind(SPEC_DIV, DAYS) # fixed effect covariate on slope
+b1_cov = cbind(SPEC_DIV) # fixed effect covariate on slope
+sigma1_cov = cbind(SPEC_DIV) # fixed effect covariate on slope
 b1_cov_re = cbind(SPEC_DIV)
 sigma1_cov_re = cbind(SPEC_DIV)
 
-b0_re = cbind(P_HOLDER, PERMIT, PERMIT_AREA, PERMIT_SPEC)
+b0_re = cbind(PERMIT) #cbind(P_HOLDER, PERMIT, PERMIT_AREA, PERMIT_SPEC)
 b0_re_levels = apply(b0_re,2,max)
 b0_re_n = dim(b0_re)[2]
 
-b1_re = cbind(PERMIT, PERMIT_AREA, PERMIT_SPEC)
+b1_re = cbind(PERMIT)#cbind(P_HOLDER, PERMIT, PERMIT_AREA, PERMIT_SPEC)
 b1_re_levels = apply(b1_re,2,max)
 b1_re_n = dim(b1_re)[2]
 
-sigma0_re = cbind(P_HOLDER, PERMIT, PERMIT_AREA, PERMIT_SPEC)
-sigma0_re_levels = apply(b0_re,2,max)
+sigma0_re = cbind(PERMIT)
+sigma0_re_levels = apply(sigma0_re,2,max)
 sigma0_re_n = dim(sigma0_re)[2]
 
-sigma1_re = cbind(PERMIT, PERMIT_AREA, PERMIT_SPEC)
+sigma1_re = cbind(PERMIT)
 sigma1_re_levels = apply(sigma1_re,2,max)
 sigma1_re_n = dim(sigma1_re)[2]
 
@@ -108,20 +108,20 @@ K_sig_re = dim(sigma1_cov_re)[2]
 y = log(testData$revenue)
 
 ### Center all of the covariate matrices
-b1_cov = scale(b1_cov, scale=FALSE)
-sigma1_cov = scale(sigma1_cov, scale=FALSE)
-b1_cov_re = scale(b1_cov_re, scale=FALSE)
-sigma1_cov_re = scale(sigma1_cov_re, scale=FALSE)
+#b1_cov = scale(b1_cov, scale=FALSE)
+#sigma1_cov = scale(sigma1_cov, scale=FALSE)
+#b1_cov_re = scale(b1_cov_re, scale=FALSE)
+#sigma1_cov_re = scale(sigma1_cov_re, scale=FALSE)
 ```
 
 ```{r}
 # Named list of data
 list_data = list("N"=N, "K_mean"=K_mean, "b1_cov"=b1_cov, "sigma1_cov"=sigma1_cov,
   "K_mean_re"=K_mean_re, "K_sig_re"=K_sig_re,"b1_cov_re"=b1_cov_re, "sigma1_cov_re"=sigma1_cov_re,
-  "b0_re"=b0_re, "b0_re_levels"=b0_re_levels, "b0_re_n"=b0_re_n,
-  "b1_re"=b1_re, "b1_re_levels"=b1_re_levels, "b1_re_n"=b1_re_n,
-  "sigma0_re"=sigma0_re, "sigma0_re_levels"=sigma0_re_levels, "sigma0_re_n"=sigma0_re_n,
-  "sigma1_re"=sigma1_re, "sigma1_re_levels"=sigma1_re_levels, "sigma1_re_n"=sigma1_re_n, "K_sig"=K_sig, "y"=y)
+  "b0_re"=b0_re, "b0_re_levels"=c(b0_re_levels,0), "b0_re_n"=b0_re_n,
+  "b1_re"=b1_re, "b1_re_levels"=c(b1_re_levels,0), "b1_re_n"=b1_re_n,
+  "sigma0_re"=sigma0_re, "sigma0_re_levels"=c(sigma0_re_levels,0), "sigma0_re_n"=sigma0_re_n,
+  "sigma1_re"=sigma1_re, "sigma1_re_levels"=c(sigma1_re_levels,0), "sigma1_re_n"=sigma1_re_n, "K_sig"=K_sig, "y"=y)
 # parameters to monitor
 list_pars = c("b0_mu","b0_dev","b0_tau", "b1_mu","b1_dev","b1_tau", "sigma0_mu","sigma0_dev","sigma0_tau", "sigma1_mu","sigma1_dev","sigma1_tau")
 
@@ -130,7 +130,7 @@ rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
 stanMod = stan(file = 'portfolio_mixedModel.stan',data = list_data, 
-  verbose = TRUE, chains = 4, thin = 1, warmup = 500, iter = 1000, 
+  verbose = TRUE, chains = 1, thin = 1, warmup = 20, iter = 50, 
   pars = list_pars)
 p = extract(stanMod, list_pars, permuted=TRUE)
 ```
