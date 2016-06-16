@@ -23,7 +23,6 @@ library(nlme)
 m_gls1 <- gls(u ~ s, weights = varExp(form = ~s))
 
 library(TMB)
-setwd("analysis")
 compile("revenue1.cpp")
 dyn.load(dynlib("revenue1"))
 
@@ -188,7 +187,165 @@ abline(a = 0, b = 1)
 plot(b0_eta, filter(r, parameter == "b0_k")$Estimate)
 abline(a = 0, b = 1)
 ##################################################
+compile("revenue6.cpp")
+dyn.load(dynlib("revenue6"))
 
+mm <- model.matrix(~ s)
+obj <- MakeADFun(
+  data = list(x_ij = mm, y_i = u, k_i = k_i, n_k = n_k, 
+    b1_cov_re_i = s, sigma1_cov_re_i = s),
+  parameters = list(b_j = c(0, 0), sigma_j = c(0, 0), log_b0_sigma = -1, b0_k = rep(0, n_k),
+    b1_k = rep(0, n_k), log_b1_sigma = -1, sigma0_k = rep(0, n_k), sigma1_k = rep(0, n_k),
+    log_sigma0_sigma = -1, log_sigma1_sigma = -1),
+  random = c("b0_k", "b_j", "b1_k", "sigma0_k", "sigma1_k"),
+  DLL = "revenue6")
+
+opt <- nlminb( start=obj$par, objective=obj$fn, gradient=obj$gr, control=list("trace"=1) )
+obj$gr(opt$par)
+sd_report <- sdreport(obj)
+# rep <- obj$report()
+
+(r <- summary(sd_report, "random"))
+(f <- summary(sd_report, "fixed"))
+parameters <- row.names(r)
+r <- as.data.frame(r)
+r$parameter <- parameters
+
+ggplot(r, aes(Estimate, parameter)) + geom_point()
+
+par(mfrow = c(2, 2))
+plot(sigma1_eta, filter(r, parameter == "sigma1_k")$Estimate)
+abline(a = 0, b = 1)
+plot(sigma0_eta, filter(r, parameter == "sigma0_k")$Estimate)
+abline(a = 0, b = 1)
+
+plot(b1_eta, filter(r, parameter == "b1_k")$Estimate)
+abline(a = 0, b = 1)
+plot(b0_eta, filter(r, parameter == "b0_k")$Estimate)
+abline(a = 0, b = 1)
+##################################################
+##################################################
+
+# Try with real data 
+library(TMB)
+library(dplyr)
+compile("revenue6.cpp")
+dyn.load(dynlib("revenue6"))
+d <- readRDS("../data-generated/nonsalmon_linearModeling_complete.rds")
+d <- readRDS("../data-generated/salmon_linearModeling_complete.rds")
+d <- as.data.frame(d)
+keep <- group_by(d, permit)  %>% summarize(n = n())  %>% 
+  filter(n>50)
+d <- d[d$permit %in% keep$permit, ]
+d$permit_id <- as.numeric(as.factor(d$permit))
+d$pholder_id <- as.numeric(as.factor(d$p_holder))
+library(lme4)
+x <- log(d$specDiv)
+hist(x)
+x <- scale(x)
+mm <- model.matrix(~ x)
+n_k = max(d$permit_id)
+n_k = n_k
+obj <- MakeADFun(
+  data = list(x_ij = mm, 
+    y_i = log(d$revenue), 
+    k_i = d$permit_id - 1,
+    n_k = n_k,
+    n_j = ncol(mm) -1,
+    b1_cov_re_i = x, 
+    sigma1_cov_re_i = x),
+  parameters = list(b_j = c(0, 0), sigma_j = c(0, 0), log_b0_sigma = -1, b0_k = rep(0, n_k),
+    b1_k = rep(0, n_k), log_b1_sigma = -1, sigma0_k = rep(0, n_k), sigma1_k = rep(0, n_k),
+    log_sigma0_sigma = -1, log_sigma1_sigma = -1),
+  random = c("b0_k1","b0_k2", "b_j", "b1_k", "sigma0_k", "sigma1_k"),
+  DLL = "revenue6")
+
+opt <- nlminb( start=obj$par, objective=obj$fn, gradient=obj$gr, control=list(trace=1) )
+obj$gr(opt$par)
+sd_report <- sdreport(obj)
+rep <- obj$report()
+
+(r <- summary(sd_report, "random"))
+(f <- summary(sd_report))
+
+parameters <- row.names(r)
+r <- as.data.frame(r)
+r$parameter <- parameters
+r <- rename(r, estimate = Estimate, se = `Std. Error`) %>% 
+  mutate(l = estimate-2*se, u = estimate+2*se)
+
+parameters <- row.names(f)
+f <- as.data.frame(f)
+f$parameter <- parameters
+f <- rename(f, estimate = Estimate, se = `Std. Error`) %>% 
+  mutate(l = estimate-2*se, u = estimate+2*se)
+
+plot_re <- function(dat = r, re_name) {
+  re <- dplyr::filter(dat, parameter == re_name)
+  re$permit_id <- 1:nrow(re)
+  re <- dplyr::left_join(re, unique(dplyr::select(d, permit, permit_id)) )
+  library(ggplot2)
+  p <- ggplot(re, aes(permit, estimate)) + 
+    geom_pointrange(aes(ymin = l, ymax = u)) +
+      coord_flip()
+    print(p)
+}
+plot_re(re_name = "b1_k")
+plot_re(f, re_name = "b1_b1_k")
+plot_re(f, re_name = "sigma1_sigma1_k")
+plot_re(f, re_name = "sigma_j")
+plot_re(f, re_name = "b_j")
+plot_re(f, re_name = "sigma0_sigma")
+plot_re(f, re_name = "b0_sigma")
+hist(log(log(d$specDiv)))
+hist(sqrt(d$specDiv))
+
+head(f)
+filter(f, parameters == "sigma_j")
+ss <- filter(f, parameters == "sigma1_sigma1_k")
+ss$ids <- 1:nrow(ss)
+head(ss)
+  p <- ggplot(ss, aes(ids, estimate)) + 
+    geom_pointrange(aes(ymin = l, ymax = u)) +
+      coord_flip()
+    print(p)
+    library(plyr)
+
+filter(f, parameters == "b_j")
+d <- group_by(d, p_holder) %>% 
+  mutate(sd_ = sd(revenue))
+
+j <- d %>% filter(permit == "S03E")
+ggplot(j, aes(specDiv, revenue, color = log(length) )) + geom_point(alpha = 0.6)
+ggplot(j, aes(log(length), revenue, color = log(length) )) + geom_point(alpha = 0.6)
+ggplot(d, aes(days, revenue, color = log(length) )) + geom_point(alpha = 0.6) + facet_wrap(~permit, scales = "free")
+ggplot(j, aes(days, sd_, color = log(length) )) + geom_point(alpha = 0.6)
+ggplot(j, aes(length, sd_, color = log(length) )) + geom_point(alpha = 0.6)
+ggplot(j, aes(revenue.prev, sd_, color = log(length) )) + geom_point(alpha = 0.6)
+ggplot(j, aes(revenue.prev, revenue, color = log(length) )) + geom_point(alpha = 0.6)
+ggplot(j, aes(year, revenue, color = log(length) )) + geom_point(alpha = 0.6)
+ggplot(j, aes(year, revenue, color = log(length) )) + geom_point(alpha = 0.6)
+summary(d$pholder_id)
+length(unique(d$p_holder))
+names(d)
+
+  ggplot(d, aes(x = specDiv, y = revenue)) + geom_point(alpha = 0.1) + facet_wrap(~ permit, scales = "free")
+  ggsave("salmon-rev-facet.png")
+  ggplot(d, aes(x = specDiv, y = sd_)) + geom_point(alpha = 0.1) + facet_wrap(~ permit, scales = "free")
+  ggsave("salmon-sigma-facet.png")
+
+
+b1_k <- filter(r, parameter == "b1_k")
+b1_k$permit_id <- 1:nrow(b1_k)
+b1_k <- left_join(b1_k, unique(select(d, permit, permit_id)) )
+library(ggplot2)
+ggplot(b1_k, aes(permit, estimate)) + 
+  geom_pointrange(aes(ymin = l, ymax = u)) +
+  # geom_point() +
+    coord_flip()
+
+
+##################################################
 
 m_gls2 <- gls(log(10^m) ~ log(diversity_by_earnings), weights = varExp(form = ~log(diversity_by_earnings)), data = d)
 summary(m_gls1)
