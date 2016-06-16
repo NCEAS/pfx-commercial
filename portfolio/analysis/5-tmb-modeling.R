@@ -9,14 +9,18 @@ dyn.load(dynlib("revenue6"))
 dn <- readRDS("../data-generated/nonsalmon_linearModeling_complete.rds")
 ds <- readRDS("../data-generated/salmon_linearModeling_complete.rds")
 
-format_data <- function(x, formula = ~ log_spec_div, n_obs = 100) {
+format_data <- function(x, n_obs = 100) {
   keep <- group_by(x, permit)  %>% summarize(n = n())  %>% filter(n>=n_obs)
   x <- x[x$permit %in% keep$permit, ]
+  x <- x[!is.na(x$length), ]
   x$permit_id <- as.numeric(as.factor(x$permit))
-  x$log_spec_div <- log(x$specDiv) - mean(log(x$specDiv))
-  mm <- model.matrix(formula, data = x)
+  x$log_spec_div <- scale(log(x$specDiv))
+  x$log_length <- scale(log(x$length + 1))
+  x$log_days <- scale(log(x$days + 1))
+  mm <- model.matrix(~ log_spec_div + log_days + log_length, data = x)
   n_k <- max(x$permit_id)
-
+  n_fe <- ncol(mm)
+ 
   list(
     raw_data = x,
     data = list(x_ij = mm, 
@@ -26,7 +30,7 @@ format_data <- function(x, formula = ~ log_spec_div, n_obs = 100) {
       n_j = ncol(mm) -1,
       b1_cov_re_i = x$log_spec_div, 
       sigma1_cov_re_i = x$log_spec_div),
-    parameters = list(b_j = c(0, 0), sigma_j = c(0, 0), log_b0_sigma = -1, b0_k = rep(0, n_k),
+    parameters = list(b_j = rep(0, n_fe), sigma_j = rep(0, n_fe), log_b0_sigma = -1, b0_k = rep(0, n_k),
       b1_k = rep(0, n_k), log_b1_sigma = -1, sigma0_k = rep(0, n_k), sigma1_k = rep(0, n_k),
       log_sigma0_sigma = -1, log_sigma1_sigma = -1))
 }
