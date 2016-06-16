@@ -234,18 +234,19 @@ dyn.load(dynlib("revenue6"))
 d <- readRDS("../data-generated/nonsalmon_linearModeling_complete.rds")
 d <- readRDS("../data-generated/salmon_linearModeling_complete.rds")
 d <- as.data.frame(d)
-keep <- group_by(d, permit)  %>% summarize(n = n())  %>% 
-  filter(n>50)
-d <- d[d$permit %in% keep$permit, ]
+# keep <- group_by(d, permit)  %>% summarize(n = n())  %>% 
+  # filter(n>50)
+# d <- d[d$permit %in% keep$permit, ]
+d = d[d$permit%in%names(rev(sort(table(d$permit)))[1:20]),]
 d$permit_id <- as.numeric(as.factor(d$permit))
 d$pholder_id <- as.numeric(as.factor(d$p_holder))
 library(lme4)
 x <- log(d$specDiv)
 hist(x)
 x <- scale(x)
+x <- d$specDiv
 mm <- model.matrix(~ x)
 n_k = max(d$permit_id)
-n_k = n_k
 obj <- MakeADFun(
   data = list(x_ij = mm, 
     y_i = log(d$revenue), 
@@ -257,7 +258,7 @@ obj <- MakeADFun(
   parameters = list(b_j = c(0, 0), sigma_j = c(0, 0), log_b0_sigma = -1, b0_k = rep(0, n_k),
     b1_k = rep(0, n_k), log_b1_sigma = -1, sigma0_k = rep(0, n_k), sigma1_k = rep(0, n_k),
     log_sigma0_sigma = -1, log_sigma1_sigma = -1),
-  random = c("b0_k1","b0_k2", "b_j", "b1_k", "sigma0_k", "sigma1_k"),
+  random = c("b0_k", "b_j", "b1_k", "sigma0_k", "sigma1_k"),
   DLL = "revenue6")
 
 opt <- nlminb( start=obj$par, objective=obj$fn, gradient=obj$gr, control=list(trace=1) )
@@ -291,6 +292,7 @@ plot_re <- function(dat = r, re_name) {
     print(p)
 }
 plot_re(re_name = "b1_k")
+plot_re(re_name = "sigma1_k")
 plot_re(f, re_name = "b1_b1_k")
 plot_re(f, re_name = "sigma1_sigma1_k")
 plot_re(f, re_name = "sigma_j")
