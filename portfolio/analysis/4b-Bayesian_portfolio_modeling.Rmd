@@ -55,7 +55,7 @@ group_by(cfecAnnual.salmon[complete.cases(cfecAnnual.salmon),], p_holder) %>%
 ## Code for testing fitting the model using STAN. 
 
 ```{r}
-cfecAnnual.nonsalmon = readRDS(file="nonsalmon_linearModeling_complete.rds")
+cfecAnnual.nonsalmon = readRDS(file="../data-generated/nonsalmon_linearModeling_complete.rds")
 
 # Subset the data to include only p_holder - year combinations with > 100 records, basically the top 20 permits
 testData = cfecAnnual.nonsalmon[cfecAnnual.nonsalmon$permit%in%names(rev(sort(table(cfecAnnual.nonsalmon$permit)))[1:20]),]
