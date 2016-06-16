@@ -16,18 +16,20 @@ knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), 
 ```{r dataLoad, warning = FALSE, message=FALSE, results="hide", echo=FALSE}
 library(dplyr)
 library(knitr)
-library(mgcv)
+# library(mgcv)
 library(ggplot2)
-library(randomForest)
-library(MASS)
-library(zoo)
-library(MatchIt)
-library(metafolio)
-library(randomForest)
+# library(randomForest)
+# library(MASS)
+# library(zoo)
+# library(MatchIt)
+# library(metafolio)
+# library(randomForest)
 library(date)
 
+devtools::load_all("../../pfxr/")
+
 #load("cfecCleaned2.Rdata")
-cfec <- feather::read_feather("data/cfec.feather")
+cfec <- feather::read_feather("../data-generated/cfec.feather")
 
 # convert 6-dig p_fshy codes to 5 digits
 # removing blank space - now they're all length(5)
@@ -39,46 +41,16 @@ cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1),
 idx = which(substr(cfec$p_fshy, 2, 2) == " ")
 cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1), 
   substr(cfec$p_fshy[idx], 3, length(cfec$p_fshy[idx])), sep="")
-
-region<-read.csv("areas/regions.csv")
-region<-region[,c(1:2)] #don’t include “assigned by” column
-cfec<-left_join(cfec,region)
-#cfec$region <- replace(cfec$region, is.na(cfec$region), "Unassigned")
 ```
 
 We need to adjust the landed values and prices for inflation. To do this, we'll use the data Alan pulled together (adjusting to 2009 dollars). 
 
 https://docs.google.com/spreadsheets/d/1hRLYTX1nZBLKnYXwTCOtU7-XnDoMZf_1ufdTiNQFd4U/edit#gid=0
 
-```{r, echo=FALSE}
-deflationTable = data.frame(year = 1985:2014, defl = c(0.57236, 0.58393, 0.59879, 0.61974,  
-0.64388, 0.66774, 0.68993, 0.70564, 0.72244, 0.73781,  
-0.75321, 0.76695, 0.78009, 0.78855, 0.80061,  
-0.81883, 0.83753, 0.85038, 0.86729, 0.89114,  
-0.91981, 0.94812, 0.97334, 0.9925, 1,  
-1.01217, 1.03307, 1.05213, 1.06926, 1.08682))
-
-# Adjust price and g_earn for inflation
-cfec$year = as.numeric(cfec$year)
-cfec$day = substr(cfec$landdate, 6, 10)
-cfec$g_price = cfec$g_price/deflationTable$defl[cfec$year-1984]
-cfec$g_earn = cfec$g_earn/deflationTable$defl[cfec$year-1984]
-```
-
-### Function definiton  
+### Function definition  
 We need to define a few functions for calculating diversity. We'll use the Simpson's diversity index (HHI) to calculate the entropy-based inverse, which is a proxy for effective species diversity. Note the C++ version is commented out below,   
 
 ```{r, warning = FALSE, message=FALSE, echo=FALSE}
-
-simp.div = function(x) {
-  1/sum((x/sum(x))^2)
-}
-
-#library(Rcpp)
-#cppFunction('double simpCpp(NumericVector x) {
-#  double y = 1/sum((x/sum(x))^2);
-#  return y;
-#}')
 
 # Note that the first line of this function uses group_by_ because 
 # we need to pass in a string for 'variable'
@@ -181,16 +153,14 @@ Now we'll filter out individuals who only used 1 boat in a year, and boats with 
 ```{r}
 cfecnew = cfec
 cfec.1boat = group_by(cfecnew, p_holder, year) %>% 
-  summarize(nBoat = length(unique(cadfg))) %>%
-  filter(nBoat==1) %>% 
-  left_join(cfecnew)
+  mutate(nBoat = length(unique(cadfg))) %>%
+  filter(nBoat==1)
 
 # Deal with setnet fisheries, where lots of p_holder
 # share same codes
 cfec.1boat = group_by(cfec.1boat, cadfg, year) %>% 
-  summarize(nPerson = length(unique(p_holder))) %>%
-  filter((nPerson==1 & cadfg %in% c(27960,27961) == FALSE) | cadfg %in% c(27960,27961)) %>% 
-  left_join(cfec.1boat)
+  mutate(nPerson = length(unique(p_holder))) %>%
+  filter((nPerson==1 & cadfg %in% c(27960,27961) == FALSE) | cadfg %in% c(27960,27961))
 
 cfecnew = cfec.1boat
 dim(cfecnew)[1]
@@ -203,16 +173,15 @@ Aggregate annual metrics by person,
 cfecnew$day = mdy.date(as.numeric(lapply(strsplit(cfecnew$day, "-"), getElement, 1)), as.numeric(lapply(strsplit(cfecnew$day, "-"), getElement, 2)), cfecnew$year) - mdy.date(1, 1, cfecnew$year)
 
 cfecAnnual = group_by(cfecnew, p_holder, year) %>%
-  summarize(permit = p_fshy[1], boat = cadfg2[1], 
+  summarize(permit = p_fshy[1], boat = cadfg[1], # TODO cadfg2?
     days = diff(range(day) + 1), 
     ngear = length(unique(gearn)),
     nspec = length(unique(specn)),
     npermit = length(unique(p_fshy)),
     revenue = sum(g_earn),
-    length = mean(VLength, na.rm=T)) 
+    length = mean(vlength, na.rm=T)) 
 
-cfecAnnual = group_by(cfecAnnual, p_holder, year) %>%
-  filter(npermit == 1)
+cfecAnnual = filter(cfecAnnual, npermit == 1)
 
 # also calculate weighted simpson diversity of gears and species
 cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, specn) %>% 
@@ -271,8 +240,8 @@ cfecAnnual.nonsalmon = cfecAnnual[cfecAnnual$salmon=="N",]
 cfecAnnual.salmon = cfecAnnual.salmon[is.na(cfecAnnual.salmon$specDiv.change)==F, ]
 cfecAnnual.nonsalmon = cfecAnnual.nonsalmon[is.na(cfecAnnual.nonsalmon$specDiv.change)==F, ]
 
-saveRDS(cfecAnnual.salmon, file="salmon_linearModeling_complete.rds")
-saveRDS(cfecAnnual.nonsalmon, file="nonsalmon_linearModeling_complete.rds")
+saveRDS(cfecAnnual.salmon, file="../data-generated/salmon_linearModeling_complete.rds")
+saveRDS(cfecAnnual.nonsalmon, file="../data-generated/nonsalmon_linearModeling_complete.rds")
 
 ```
 
