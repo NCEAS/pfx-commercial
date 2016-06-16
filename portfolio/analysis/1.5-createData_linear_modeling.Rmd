@@ -27,7 +27,7 @@ library(randomForest)
 library(date)
 
 #load("cfecCleaned2.Rdata")
-cfec <- feather::read_feather("data/cfec.feather")
+cfec <- feather::read_feather("../data-generated/cfec.feather")
 
 # convert 6-dig p_fshy codes to 5 digits
 # removing blank space - now they're all length(5)
