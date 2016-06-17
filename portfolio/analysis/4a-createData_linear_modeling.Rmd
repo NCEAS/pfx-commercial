@@ -245,7 +245,25 @@ saveRDS(cfecAnnual.nonsalmon, file="../data-generated/nonsalmon_linearModeling_c
 
 ```
 
+## Do some exploration by permit types + diversity
 
+For example, when someone is diversifying with a herring, halibut, or crab permit, what does that diversification look like?
+
+```{r, echo=FALSE}
+cfecnew$taxa = substr(cfecnew$p_fshy, 1, 1)
+specPermit = group_by(cfecnew, taxa, specn) %>% 
+  summarize(percent.revenue = sum(g_earn))
+specPermit.tot = group_by(specPermit, taxa) %>% 
+  summarize(tot = sum(percent.revenue))
+specPermit = left_join(specPermit, specPermit.tot)
+specPermit$percent.revenue = specPermit$percent.revenue/specPermit$tot
+specPermit.df = group_by(specPermit, taxa, specn) %>% 
+  filter(percent.revenue > 0.02) %>% 
+  arrange(taxa) %>% 
+  as.data.frame
+specPermit.df$spec = cfec$spec[match(specPermit.df$specn, cfec$specn)]
+kable(specPermit.df)
+```
 
 ## Code for looking at permit 
 We can look at whether there's clear combinations of permit types that are combinations -- most of these people either have a single local permit (PWS, Bristol Bay, etc) or have multiple statewide permits. 
@@ -288,4 +306,5 @@ cfecAnnual.multiplePermits = group_by(cfecnew, p_holder, year) %>%
   filter(npermit > 1)
 
 ```
+
 
