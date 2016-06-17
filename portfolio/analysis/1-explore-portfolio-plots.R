@@ -1,26 +1,45 @@
 library(dplyr)
 library(ggplot2)
 library(viridis)
-source("analysis/downside-risk.R")
-source("analysis/contours.R")
+devtools::load_all("../../pfxr/")
 
 if (!exists("cfec")) {
-  cfec <- feather::read_feather("data/cfec.feather")
+  cfec <- feather::read_feather("../data-generated/cfec.feather")
 }
+# convert 6-dig p_fshy codes to 5 digits
+# removing blank space - now they're all length(5)
+idx <- which(nchar(cfec$p_fshy)==6)
+cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1), 
+  substr(cfec$p_fshy[idx], 3, 6), sep="")
+nrow(cfec)
 
-simp.div <- function(x) {
-  1 / sum((x / sum(x)) ^ 2)
-}
+# filter out permit holders who use more than one boat 
+# in a given year 
+cfec_ <- group_by(cfec, p_holder, year) %>% 
+  filter(length(unique(cadfg)) == 1)
 
+# Deal with setnet fisheries, where lots of p_holder
+# share same codes
+cfec_ = group_by(cfec_, cadfg, year) %>% 
+  mutate(nPerson = length(unique(p_holder))) %>%
+  filter((nPerson==1 & cadfg %in% c(27960,27961) == FALSE) | cadfg %in% c(27960,27961))
+
+nrow(cfec_)
+glimpse(cfec_)
+cfec_$date <- lubridate::ymd(cfec_$landdate)
+
+# head(as.data.frame(cfec))
 effectiveDiversity_by_personYear <- function(dataFrame, variable) {
   group_by_(dataFrame, variable, "year", "p_holder") %>%
     summarize(
       totRev = sum(g_earn, na.rm = TRUE),
       totN = n(),
       totWeight = sum(g_pounds, na.rm = TRUE),
+      nBoat = length(unique(cadfg)),
       days = length(unique(day)),
       mean_vessel_length = mean(vlength),
       area = ifelse(length(unique(area)) == 1, area[1], NA_character_),
+      permit = ifelse(length(unique(p_fshy)) == 1, p_fshy[1], NA_character_),
       pollock = ifelse("PLCK" %in% spec, TRUE, FALSE),
       region = ifelse(length(unique(region)) == 1, region[1], NA_character_),
       taxa = ifelse(length(unique(taxa_broad)) == 1, taxa_broad[1], NA_character_),
@@ -32,32 +51,37 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
     as.data.frame() %>%
     group_by(p_holder, year) %>%
     summarize(
-      eff.freq = simp.div(totN),
+      nBoat = length(unique(nBoat)),
+      # eff.freq = simp.div(totN),
       eff.earn = simp.div(totRev),
-      eff.lbs = simp.div(totWeight),
+      # eff.lbs = simp.div(totWeight),
       totIndRev = sum(totRev),
-      nCalDays = sum(days),
+      days = sum(days), # Note that this is different from date range 
       mean_vessel_length = mean(mean_vessel_length),
       area = ifelse(length(unique(area)) == 1, area[1], NA_character_),
+      permit = ifelse(length(unique(permit)) == 1, permit[1], NA_character_),
       pollock = ifelse(TRUE %in% pollock, TRUE, FALSE),
       region = ifelse(length(unique(region)) == 1, region[1], NA_character_),
       taxa = ifelse(length(unique(taxa)) == 1, taxa[1], NA_character_),
       salmon = ifelse(length(unique(salmon)) == 1, salmon[1], as.logical(NA))
     ) %>%
-    filter(!is.na(eff.freq) &
-        !is.na(eff.earn) & !is.na(eff.lbs)) %>%
+    filter(
+        # !is.na(eff.freq) &
+        !is.na(eff.earn) # &
+        # !is.na(eff.lbs)
+        ) %>%
     as.data.frame()
 }
 
 if (!file.exists("generated-data/species_diversity_by_year.rds")) {
   species_diversity_by_year <-
-    effectiveDiversity_by_personYear(cfec, variable = "specn")
-  saveRDS(species_diversity_by_year, file = "generated-data/species_diversity_by_year.rds")
+    effectiveDiversity_by_personYear(cfec_, variable = "specn")
+  saveRDS(species_diversity_by_year, file = "../data-generated/species_diversity_by_year.rds")
 } else {
   species_diversity_by_year <- readRDS("generated-data/species_diversity_by_year.rds")
 }
 
-calculate_metrics <- function(x, breaks = c(1, 1.01, 1.5, 2, 2.5, 10) {
+calculate_metrics <- function(x, breaks = c(1, 1.01, 1.5, 2, 2.5, 10)) {
   x %>%
     group_by(p_holder) %>%
     mutate(returns = c(NA, diff(log(totIndRev)))) %>%
