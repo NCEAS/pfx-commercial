@@ -51,7 +51,7 @@ effectiveDiversity_by_personYear <- function(dataFrame, variable) {
     as.data.frame() %>%
     group_by(p_holder, year) %>%
     summarize(
-      nBoat = length(unique(nBoat)),
+      nBoat = sum(nBoat),
       # eff.freq = simp.div(totN),
       eff.earn = simp.div(totRev),
       # eff.lbs = simp.div(totWeight),
