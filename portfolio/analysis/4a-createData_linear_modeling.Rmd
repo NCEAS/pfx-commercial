@@ -91,9 +91,22 @@ cfecnew = group_by(cfecnew, p_holder) %>%
 
 ## Identify most popular strategies by person-year combination
 
+###For variability, any person in a year will need to have 10% or more of their revenue to come from each permit (otherwise doesn't count as a strategy)
+
 The top 120 permits cuts the rows down to 8.6 million. The top 50 gets it down to 7.8 million. 
   
 ```{r}
+permit_rev = group_by(cfecnew, p_holder, year, p_fshy) %>% 
+  summarize(permit.rev = sum(g_earn)) %>% 
+  as.data.frame() %>% 
+  group_by(p_holder, year) %>% 
+  mutate(tot.rev = sum(permit.rev))
+permit_rev$permit.rev = permit_rev$permit.rev/permit_rev$tot.rev # fraction of total
+permit_rev = permit_rev[permit_rev$permit.rev < 0.1,]
+
+# Delete these minimal earnings
+cfecnew = cfecnew[-which(paste(cfecnew$p_holder, cfecnew$year, cfecnew$p_fshy) %in% paste(permit_rev$p_holder, permit_rev$year, permit_rev$p_fshy))]
+
 topstrategies = group_by(cfecnew, p_holder, year) %>% 
   summarize(strategy = paste(sort(unique(p_fshy)), collapse = " ")) %>%
   as.data.frame()
@@ -116,7 +129,8 @@ cfecAnnual = group_by(cfecnew, p_holder, year) %>%
     nspec = length(unique(specn)),
     npermit = length(unique(p_fshy)),
     revenue = sum(g_earn),
-    length = mean(VLength, na.rm=T)) 
+    length = mean(VLength, na.rm=T),
+    strategy = strategy[1]) 
 
 cfecAnnual = group_by(cfecAnnual, p_holder, year) %>%
   filter(npermit == 1)
@@ -170,9 +184,11 @@ cfecAnnual$npermit.prev = cfecAnnual$npermit[idx]
 cfecAnnual$revenue.prev = cfecAnnual$revenue[idx]
 cfecAnnual$specdiv.prev = cfecAnnual$specDiv[idx]
 cfecAnnual$geardiv.prev = cfecAnnual$gearDiv[idx]
+cfecAnnual$strategy.prev = cfecAnnual$strategy[idx]
 #cfecAnnual$p2.prev = cfecAnnual$p2[idx]
 
 cfecAnnual$specDiv.change = cfecAnnual$specDiv - cfecAnnual$specdiv.prev
+# idx = which(cfecAnnual$strategy != cfecAnnual$strategy.prev)
 
 # Filter out salmon people
 cfecAnnual$salmon = ifelse(substr(cfecAnnual$permit,1,1)=="S", "Y", "N")
@@ -180,8 +196,8 @@ cfecAnnual$salmon = ifelse(substr(cfecAnnual$permit,1,1)=="S", "Y", "N")
 cfecAnnual.salmon = cfecAnnual[cfecAnnual$salmon=="Y",]
 cfecAnnual.nonsalmon = cfecAnnual[cfecAnnual$salmon=="N",]
 
-cfecAnnual.salmon = cfecAnnual.salmon[is.na(cfecAnnual.salmon$specDiv.change)==F, ]
-cfecAnnual.nonsalmon = cfecAnnual.nonsalmon[is.na(cfecAnnual.nonsalmon$specDiv.change)==F, ]
+#cfecAnnual.salmon = cfecAnnual.salmon[is.na(cfecAnnual.salmon$specDiv.change)==F, ]
+#cfecAnnual.nonsalmon = cfecAnnual.nonsalmon[is.na(cfecAnnual.nonsalmon$specDiv.change)==F, ]
 
 saveRDS(cfecAnnual.salmon, file="salmon_linearModeling_complete.rds")
 saveRDS(cfecAnnual.nonsalmon, file="nonsalmon_linearModeling_complete.rds")
