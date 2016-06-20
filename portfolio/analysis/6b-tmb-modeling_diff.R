@@ -35,7 +35,8 @@ format_data <- function(x, n_obs = 100) {
   x$log_spec = log(x$specdiv.prev)
   #x$log_length <- scale(log(x$length + 1))
   x$log_days <- log((x$days + 1) / (x$days.prev+1))
-  x$offset = log(x$weight / x$weight.prev)
+  x$log_weight <- log((x$weight) / (x$weight.prev))
+  x$offset = x$log_days#log(x$weight / x$weight.prev)
   
   mm <- model.matrix(~ log_spec_diff, data = x)
   n_k <- max(x$permit_id)
@@ -99,16 +100,58 @@ d$taxa[d$parameter=="sigma0_k"]=strategy.levels
 d$taxa[d$parameter=="sigma1_k"]=strategy.levels
 d$taxa[d$parameter=="sigma2_k"]=strategy.levels
 
-p <- filter(d, parameter %in% c("b1_k", "sigma0_k", "sigma1_k", "sigma2_k")) %>% 
+# The general interpretation here is sigma0_k is diversification across strategies,
+# sigma1_k is diversification within strategy
+
+# Look at anyone landing halibut/sablefish
+p <- filter(d[grep("B|C",d$taxa),], parameter %in% c("b1_k", "sigma0_k", "sigma1_k", "sigma2_k")) %>% 
   ggplot(aes(parameter_id, estimate, ymin = l, ymax = u, col=taxa)) + 
   geom_pointrange(position = position_dodge(width = 0.4)) +
   facet_wrap(~parameter) + 
   geom_hline(yintercept = 0, lty = 2) +
-  coord_flip()
+  coord_flip() + ggtitle("Diversification of halibut (B) / sablefish (C)")
 print(p)  
+ggsave("../figs/tmb-diff-halsab.pdf", width = 7, height = 5)
 
-pairs(cbind(d$estimate[d$parameter=="b1_k"], d$estimate[d$parameter=="sigma0_k"], 
-  d$estimate[d$parameter=="sigma1_k"]))
+# Look at anyone landing crabs
+p <- filter(d[grep("D|K|T",d$taxa),], parameter %in% c("b1_k", "sigma0_k", "sigma1_k", "sigma2_k")) %>% 
+  ggplot(aes(parameter_id, estimate, ymin = l, ymax = u, col=taxa)) + 
+  geom_pointrange(position = position_dodge(width = 0.4)) +
+  facet_wrap(~parameter) + 
+  geom_hline(yintercept = 0, lty = 2) +
+  coord_flip() + ggtitle("Diversification of crab fishermen (D,K,T)")
+print(p)  
+ggsave("../figs/tmb-diff-crab.pdf", width = 7, height = 5)
+
+# Look at anyone landing herring
+p <- filter(d[grep("G",d$taxa),], parameter %in% c("b1_k", "sigma0_k", "sigma1_k", "sigma2_k")) %>% 
+  ggplot(aes(parameter_id, estimate, ymin = l, ymax = u, col=taxa)) + 
+  geom_pointrange(position = position_dodge(width = 0.4)) +
+  facet_wrap(~parameter) + 
+  geom_hline(yintercept = 0, lty = 2) +
+  coord_flip() + ggtitle("Diversification of herring fishermen (G)")
+print(p)  
+ggsave("../figs/tmb-diff-herr.pdf", width = 7, height = 5)
+
+# Look at anyone landing salmon
+p <- filter(d[grep("S",d$taxa),], parameter %in% c("b1_k", "sigma0_k", "sigma1_k", "sigma2_k")) %>% 
+  ggplot(aes(parameter_id, estimate, ymin = l, ymax = u, col=taxa)) + 
+  geom_pointrange(position = position_dodge(width = 0.4)) +
+  facet_wrap(~parameter) + 
+  geom_hline(yintercept = 0, lty = 2) +
+  coord_flip() + ggtitle("Diversification of salmon fishermen (S)")
+print(p)  
+ggsave("../figs/tmb-diff-salm.pdf", width = 7, height = 5)
+
+# Look at anyone landing groundfish
+p <- filter(d[grep("M",d$taxa),], parameter %in% c("b1_k", "sigma0_k", "sigma1_k", "sigma2_k")) %>% 
+  ggplot(aes(parameter_id, estimate, ymin = l, ymax = u, col=taxa)) + 
+  geom_pointrange(position = position_dodge(width = 0.4)) +
+  facet_wrap(~parameter) + 
+  geom_hline(yintercept = 0, lty = 2) +
+  coord_flip() + ggtitle("Diversification of groundfish fishermen (G)")
+print(p)  
+ggsave("../figs/tmb-diff-gfish.pdf", width = 7, height = 5)
 
 ###### ERIC STOPPED HERE
 
