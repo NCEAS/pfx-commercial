@@ -4,6 +4,7 @@ rm(list = ls())
 library(TMB)
 library(dplyr)
 library(ggplot2)
+library(lme4)
 compile("revenue_diff.cpp")
 dyn.load(dynlib("revenue_diff"))
 
@@ -15,6 +16,13 @@ top.strategies = names(rev(sort(table(cfecAnnual.diff$strategy)))[1:100])
 cfecAnnual.diff = cfecAnnual.diff[cfecAnnual.diff$strategy%in%top.strategies, ]
 # restrict analysis to people who don't change strategies (keeps ~ 90%)
 testData = cfecAnnual.diff[which(cfecAnnual.diff$strategy == cfecAnnual.diff$strategy.prev), ]
+
+# FIT SOME QUICK MODEL WITH LMER
+lm1 = lmer(log(revenue/revenue.prev) ~ (1|strategy) + specDiv + offset(log((days+1)/(days.prev+1))), 
+  data = testData) # random intercept, fixed slope
+lm2 = lmer(log(revenue/revenue.prev) ~ (-1+specDiv|strategy) + offset(log((days+1)/(days.prev+1))), 
+  data = testData) # random slope, fixed intercept
+lm3 = lmer(abs(log(revenue/revenue.prev) - fitted.values(lm2)) ~ (1+specDiv|strategy), data=testData) # ad hoc 2-stage analysis of the variance
 
 format_data <- function(x, n_obs = 100) {
   keep <- group_by(x, strategy)  %>% summarize(n = n())  %>% filter(n>=n_obs)
