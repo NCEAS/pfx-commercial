@@ -16,16 +16,6 @@ cfecAnnual.diff = cfecAnnual.diff[cfecAnnual.diff$strategy%in%top.strategies, ]
 # restrict analysis to people who don't change strategies (keeps ~ 90%)
 testData = cfecAnnual.diff[which(cfecAnnual.diff$strategy == cfecAnnual.diff$strategy.prev), ]
 
-#P_HOLDER = as.numeric(as.factor(testData$p_holder))
-#STRATEGY = as.numeric(as.factor(testData$strategy))
-#RESPONSE = log(testData$revenue / testData$revenue.prev)
-#PREV_REV = log(testData$revenue.prev)
-#SPECDIV = log(testData$specdiv.prev)
-#SPEC_DIFF = log(testData$specDiv / testData$specdiv.prev)
-#WEIGHT_DIFF = log(testData$weight / testData$weight.prev)
-#DAYS_DIFF = log((testData$days + 1) / (testData$days.prev+1))
-#OFFSET = WEIGHT_DIFF
-
 format_data <- function(x, n_obs = 100) {
   keep <- group_by(x, strategy)  %>% summarize(n = n())  %>% filter(n>=n_obs)
   x <- x[x$strategy %in% keep$strategy, ]
@@ -88,8 +78,9 @@ fit_diff <- fit_model(testData, n_obs = 100)
 names(fit_diff$summary)
 unique(fit_diff$summary$parameter)
 
-d <- group_by(fit_diff$summary, parameter) %>% 
-  mutate(parameter_id = 1:n()) %>% 
+d <- fit_diff$summary %>%
+  group_by(parameter) %>%
+  mutate(parameter_id = 1:n()) %>%
   as_data_frame()
 
 strategy.levels = lapply(lapply(strsplit(levels(as.factor(fit_diff$data$strategy)), " "), substr, 1, 1), paste, collapse=" ")
@@ -153,6 +144,48 @@ p <- filter(d[grep("M",d$taxa),], parameter %in% c("b1_k", "sigma0_k", "sigma1_k
 print(p)  
 ggsave("../figs/tmb-diff-gfish.pdf", width = 7, height = 5)
 
+# Plot slope in mean versus slope in coefficient of variability
+names(d)
+strategy <- unique(dplyr::select(as.data.frame(fit_diff$data), strategy, permit_id))
+
+strategy_diversity <- group_by(fit_diff$data, strategy) %>% 
+  summarize(mean_diversity = mean(specDiv),
+    mean_rev = mean(revenue),
+    sd_rev = sd(revenue))
+strategy <- left_join(strategy, strategy_diversity)
+# summarize strategies by taxa / 1st letter
+strategy$taxa = unlist(lapply(lapply(strsplit(strategy$strategy, " "),
+  substr, 1, 1), paste, collapse=":"))
+
+b0_sigma = dplyr::select(fit_diff$summary, parameter, estimate) %>% 
+  filter(parameter=="sigma0_k") %>% 
+  mutate(permit_id = 1:n(), b0_sigma_est=estimate) %>% 
+  dplyr::select(permit_id, b0_sigma_est)
+strategy <- left_join(strategy, b0_sigma)
+
+b1_mu = dplyr::select(fit_diff$summary, parameter, estimate) %>% 
+  filter(parameter=="b1_k") %>% 
+  mutate(permit_id = 1:n(), b1_mu_est=estimate) %>% 
+  dplyr::select(permit_id, b1_mu_est)
+strategy <- left_join(strategy, b1_mu)
+
+strategy_grouped = rbind(cbind(strategy[grep("M",strategy$taxa),], group="Groundfish"),
+  cbind(strategy[grep("S",strategy$taxa),], group="Salmon"),
+  cbind(strategy[grep("B|C",strategy$taxa),], group="Halibut-Sablefish"),
+  cbind(strategy[grep("K|T|D",strategy$taxa),], group="Crab"),
+  cbind(strategy[grep("G",strategy$taxa),], group="Herring"))
+
+p <- group_by(strategy_grouped) %>%
+ggplot(aes(x = b1_mu_est, y = b0_sigma_est, col = mean_diversity)) + 
+  geom_text(aes(label=taxa), size=3) + 
+  facet_wrap(~group, scales = "free") + 
+  ggtitle("Random intercept in variance vs random slope in mean") + 
+  ylab("Variabiliy in revenue across strategy") + 
+  xlab("Benefit of diversity within strategies")
+print(p)  
+ggsave("../figs/sigmaB0_vs_muB1.pdf", width = 7, height = 5)
+
+
 ###### ERIC STOPPED HERE
 
 fe_lo <- data.frame(parameter_id = 1:2, par = c("intercept", "species_diversity"))
@@ -166,15 +199,6 @@ p <- filter(d, parameter %in% c("b_j", "sigma_j"), parameter_id > 1, parameter_i
     coord_flip()
 print(p)  
 ggsave("../figs/tmb-fe.pdf", width = 7, height = 5)
-
-names(d)
-permits <- unique(select(as.data.frame(fit_diff$data), strategy, permit_id))  %>% 
-  mutate(taxa = "all")
-
-permit_diversity <- bind_rows(d) %>% 
-  group_by(strategy) %>% 
-    summarize(mean_diversity = mean(specDiv))
-permits <- left_join(permits, permit_diversity)
 
 p <- filter(d, parameter %in% c("b0_k", "sigma0_k", "b1_b1_k", "sigma1_sigma1_k")) %>% 
   group_by(parameter) %>% 
