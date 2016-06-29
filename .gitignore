@@ -24,3 +24,13 @@ vignettes/*.pdf
 *.rda
 Session.vim
 portfolio/data-generated/strategies.csv
+
+*.aux
+
+*.fdb_latexmk
+
+*.fls
+
+*.log
+
+*.gz
