@@ -10,7 +10,10 @@
 
 \section{Log-difference model}
 
-The log-difference model has several pros and cons over the undifferenced model. Negatives are that it uses a smaller subset of the data; positives are that it doesn't require estimating people-specific random effects (n = 3000+) and removes possible time effects. The basic regression model is 
+The log-difference model has several pros and cons over the undifferenced
+model. Negatives are that it uses a smaller subset of the data; positives are
+that it doesn't require estimating people-specific random effects (n = 3000+)
+and removes possible time effects. The basic regression model is 
 
 \begin{equation}
   { Y }_{ i,t } \sim \mathrm{N}(\hat { { Y }}_{ i,t } ,\sigma^2 )
@@ -18,29 +21,57 @@ The log-difference model has several pros and cons over the undifferenced model.
 
 \subsection{Model for the mean}
 
-The model's expectation is written as a hierarchical random effects linear model with random effects in the intercept and slope. 
+The model's expectation is written as a hierarchical random effects linear
+model with random effects in the intercept and slope. 
 
 \begin{equation}
 { \hat { Y }  }_{ t,i }={ B }_{ 0,j }+{ B }_{ 1,j }\cdot { s }_{ t,i }+{o}_{ t,i}
 \end{equation}
 
-where ${ B }_{ 0,j }$ is a normally distributed random effect intercept in the mean (j subscripting different strategies). The interpretation of ${B}_{ 0,j}$ is that each after log-differencing, each strategy has different effects on changes in revenue (some tend to be winners, others tend to be losers). Initial versions of this model included estimating ${ B }_{ 0,j }$, which were largely centered on 0 (as expected), so these random effects were set to 0.  
-\newline  
+\noindent
+where ${ B }_{ 0,j }$ is a normally distributed random effect intercept in the
+mean (j subscripting different strategies). The interpretation of ${B}_{ 0,j}$
+is that each after log-differencing, each strategy has different effects on
+changes in revenue (some tend to be winners, others tend to be losers). Initial
+versions of this model included estimating ${ B }_{ 0,j }$, which were largely
+centered on 0 (as expected), so these random effects were set to 0.  \newline  
   
-The covariate ${ s }_{ t,i }$ is input as data, and represents the percent change in species diversity over the same time period that the percent change in revenue is being modeled, $log\left( \frac { { div }_{ t+1,i } }{ { div }_{ t,i } }  \right)$ where ${ div }_{ t,i }$ is the effective diversity of individual *i* at time *t*. The coefficient ${ B }_{ 1,j }$ is a random effect on the slope, by strategy, representing how much an X% change in species diversity within a strategy translates to a Y% change in revenue. 
+The covariate ${ s }_{ t,i }$ is input as data, and represents the percent
+change in species diversity over the same time period that the percent change
+in revenue is being modeled, $\log\left( \frac { { div }_{ t+1,i } }{ { div }_{
+t,i } }  \right)$ where ${ div }_{ t,i }$ is the effective diversity of
+individual $i$ at time $t$. The coefficient ${ B }_{ 1,j }$ is a random effect
+on the slope, by strategy, representing how much an X\% change in species
+diversity within a strategy translates to a Y\% change in revenue. 
 
 \subsection{Offset}
 
-To account for variable effort over time (changes in revenue could be attributed to diversification, but also to more fishing) we included an offset term ${o}_{t,i}$, representing the percent change in landing dates between years. We experminted with different versions of the offset and when included in the model as a predictor, the coefficient is estimated to be ~ 1, so this is a reasonable assumption. The offset is calculated as $log\left( \frac { { day }_{ t+1,i } }{ { day }_{ t,i } }  \right)$. 
-\newline
+To account for variable effort over time (changes in revenue could be
+attributed to diversification, but also to more fishing) we included an offset
+term ${o}_{t,i}$, representing the percent change in landing dates between
+years. We experimented with different versions of the offset and when included
+in the model as a predictor, the coefficient is estimated to be ~ 1, so this is
+a reasonable assumption. The offset is calculated as $\log\left( \frac { { day
+}_{ t+1,i } }{ { day }_{ t,i } }  \right)$. \newline
 
 \subsection{Equation for the variance}
 
-Finally, the residual error term is also modeled as a linear function of covariates, 
+Finally, the scale of the residual error term is also modeled as a linear
+function of covariates, 
 
-${ \sigma  }_{ t,i }=\sqrt { \left( \gamma _{ 0,j }+{ \gamma  }_{ 1,j }\cdot { s }_{ t,i } \right)  }$
+\begin{equation}
+{ \sigma  }_{ t,i }=
+\sqrt { \exp \left( \gamma _{ 0,j }+
+{ \gamma  }_{ 1,j }\cdot { s }_{ t,i } \right)  }
+\end{equation}
 
-where the $gamma _{ 0,j }$ and $gamma _{ 1,j }$ represent random intercepts and slopes in the strategies. I had been interpreting the intercepts as the between-group variability in strategies (some strategies will have more variable % change in revenue than others, similar to some stocks having higher variability in returns). I was interpreting the random slope $gamma _{ 1,j }$ as the effect of within - strategy diversification; in other words, the effect of increases in species diversification varied among different strategies. 
-
+\noindent
+where the $\gamma_{ 0,j }$ and $\gamma_{ 1,j }$ represent random intercepts and
+slopes in the strategies. I had been interpreting the intercepts as the
+between-group variability in strategies (some strategies will have more
+variable \% change in revenue than others, similar to some stocks having higher
+variability in returns). I was interpreting the random slope $\gamma_{ 1,j }$
+as the effect of within-strategy diversification; in other words, the effect
+of increases in species diversification varied among different strategies. 
 
 \end{document}
