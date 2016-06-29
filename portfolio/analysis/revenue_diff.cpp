@@ -69,7 +69,7 @@ Type sigma1_sigma = exp(log_sigma1_sigma);
 vector<Type> b1_b1_k(n_k);
 vector<Type> sigma1_sigma1_k(n_k);
 for(int k = 0; k < n_k; k++){
-  // these are intercept + random effects
+  // these are fixed-effect slopes + random-effect slopes
   b1_b1_k(k) = b_j(n_j) + b1_k(k);
   sigma1_sigma1_k(k) = sigma_j(n_j) + sigma1_k(k);
 }
