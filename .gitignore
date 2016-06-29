@@ -8,17 +8,19 @@
 # RStudio files
 .Rproj.user/
 
-# produced vignettes
+# Produced vignettes
 vignettes/*.html
 vignettes/*.pdf
 .Rproj.user
 
+# Other
 *.feather
 *.Rdata.gz
-
 *.so
 *.o
-
 *.pdf
-
+*.png
+*.rds
+*.rda
 Session.vim
+portfolio/data-generated/strategies.csv
