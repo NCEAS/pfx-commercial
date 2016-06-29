@@ -1,25 +1,26 @@
 ---
-title: "createData_linear_modeling"
-author: ""
-date: "June 05, 2016"
+title: "Create data sets for modeling"
 output:
   pdf_document:
     fig_caption: yes
   html_document: default
 ---
 
+## Differenced vs. undifferenced datasets:
+
+1. Excluding observations that we don't have consecutive years for
+
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
 ```
 
 ## Load cleaned data
+
 ```{r dataLoad, warning = FALSE, message=FALSE, results="hide", echo=FALSE}
 library(dplyr)
 library(knitr)
 library(ggplot2)
 library(date)
-
-#load("cfecCleaned2.Rdata")
 
 if (Sys.info()[["user"]] == "seananderson") {
   cfec <- feather::read_feather("../data-generated/cfec.feather")
@@ -42,17 +43,18 @@ if (Sys.info()[["user"]] != "seananderson") {
   region<-read.csv("areas/regions.csv")
   region<-region[,c(1:2)] #don’t include “assigned by” column
   cfec<-left_join(cfec,region)
-#cfec$region <- replace(cfec$region, is.na(cfec$region), "Unassigned")
 }
 ```
 
-We need to adjust the landed values and prices for inflation. To do this, we'll use the data Alan pulled together (adjusting to 2009 dollars).
+We need to adjust the landed values and prices for inflation. To do this,
+we'll use the data Alan pulled together (adjusting to 2009 dollars).
 
-https://docs.google.com/spreadsheets/d/1hRLYTX1nZBLKnYXwTCOtU7-XnDoMZf_1ufdTiNQFd4U/edit#gid=0
+<https://docs.google.com/spreadsheets/d/1hRLYTX1nZBLKnYXwTCOtU7-XnDoMZf_1ufdTiNQFd4U/edit#gid=0>
 
 ```{r, echo=FALSE}
 if (Sys.info()[["user"]] != "seananderson") {
-deflationTable = data.frame(year = 1985:2014, defl = c(0.57236, 0.58393, 0.59879, 0.61974,
+deflationTable = data.frame(year = 1985:2014, 
+  defl = c(0.57236, 0.58393, 0.59879, 0.61974,
 0.64388, 0.66774, 0.68993, 0.70564, 0.72244, 0.73781,
 0.75321, 0.76695, 0.78009, 0.78855, 0.80061,
 0.81883, 0.83753, 0.85038, 0.86729, 0.89114,
@@ -67,8 +69,11 @@ cfec$g_earn = cfec$g_earn/deflationTable$defl[cfec$year-1984]
 }
 ```
 
-### Function definiton
-We need to define a few functions for calculating diversity. We'll use the Simpson's diversity index (HHI) to calculate the entropy-based inverse, which is a proxy for effective species diversity.
+## Function definition
+
+We need to define a few functions for calculating diversity. We'll use the
+Simpson's diversity index (HHI) to calculate the entropy-based inverse, which
+is a proxy for effective species diversity.
 
 ```{r, warning = FALSE, message=FALSE, echo=FALSE}
 simp.div = function(x) {
@@ -78,7 +83,8 @@ simp.div = function(x) {
 
 ## Filtering out unique vessel - person combinations. Drops rows from 17 to 13 million.
 
-Now we'll filter out individuals who only used 1 boat in a year, and boats with only one permit holder fishing in a year.
+Now we'll filter out (i.e. keep) individuals who only used 1 boat in a year, and boats with
+only one permit holder fishing in a year.
 
 ```{r}
 cfecnew = cfec
@@ -91,12 +97,7 @@ cfecnew = cfec.1boat
 dim(cfecnew)[1]
 ```
 
-## Filtering out people with 10+ years of fishing. Drops rows from 13.7 to 10 million.
-```{r}
-cfecnew = group_by(cfecnew, p_holder) %>%
-  mutate(nyr = length(unique(year))) %>%
-  filter(nyr >= 10)
-```
+## Combine some strategies 
 
 ```{r}
 cfecnew$p_fshy[cfecnew$p_fshy=="B61B"] = "B06B"
@@ -123,9 +124,11 @@ cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")] = paste("M06", substr(c
 
 ## Identify most popular strategies by person-year combination
 
-###For variability, any person in a year will need to have 10% or more of their revenue to come from each permit (otherwise doesn't count as a strategy)
+Any person in a year will need to have 10% or more of their revenue to come
+from each permit (otherwise doesn't count as a strategy).
 
-The top 120 permits cuts the rows down to 8.6 million. The top 50 gets it down to 7.8 million.
+The top 120 permits cuts the rows down to 8.6 million. The top 50 gets it down
+to 7.8 million.
 
 ```{r}
 permit_rev = group_by(cfecnew, p_holder, year, p_fshy) %>%
@@ -144,9 +147,7 @@ topstrategies = group_by(cfecnew, p_holder, year) %>%
   as.data.frame()
 cfecnew = left_join(cfecnew, topstrategies) # adds strategy column
 
-CUTOFF = 50
 write.csv(rev(sort(table(topstrategies$strategy))), file = "../data-generated/strategies.csv")
-# cfecnew = cfecnew[cfecnew$strategy%in%names(rev(sort(table(topstrategies$strategy)))[1:CUTOFF]), ]
 ```
 
 Aggregate annual metrics by person,
@@ -171,48 +172,17 @@ cfecAnnual = group_by(cfecnew, p_holder, year) %>%
     length = mean(vlength, na.rm=TRUE),
     strategy = strategy[1])
 
-# fixme I assume we no longer want to do this? -SA
-#cfecAnnual = group_by(cfecAnnual, p_holder, year) %>%
-#  filter(npermit == 1)
-
 # also calculate weighted simpson diversity of gears and species
 cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, specn) %>%
   summarize(totRev.spec = sum(g_earn)) %>%
   group_by(p_holder, year) %>%
   summarize(specDiv = simp.div(totRev.spec)))
 
-# random slope by p_holder
-# Random intercepts in people, random intercepts in strategies, random slopes in strategies
-# Group level predictors on intercepts
-# Indicator variable for EVOS years. Or whether
-
 # also calculate weighted simpson diversity of gears and species
 cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, gearn) %>%
   summarize(totRev.gear = sum(g_earn)) %>%
   group_by(p_holder, year) %>%
   summarize(gearDiv = simp.div(totRev.gear)))
-
-#temp = group_by(cfecnew, p_holder, year, specn) %>%
-#  summarize(totRev.spec = sum(g_earn),
-#    permit = p_fshy[1])
-#temp = left_join(temp, group_by(cfecnew, p_holder, year) %>%
-#    summarize(totRev = sum(g_earn)))
-#temp$totRev.spec = temp$totRev.spec / temp$totRev
-
-#mkt = group_by(cfecnew, p_fshy, year, specn) %>%
-#  summarize(totRev.mkt.spec = sum(g_earn))
-#mkt = left_join(mkt, group_by(mkt, p_fshy, year) %>%
-#  summarize(totRev.mkt = sum(totRev.mkt.spec)))
-#mkt$totRev.mkt.spec = mkt$totRev.mkt.spec / mkt$totRev.mkt
-#names(mkt)[1] = "permit"
-
-# combine individual and market datasets
-#temp = left_join(temp, mkt)
-
-# Calculate squared proportions
-#temp$p2 = (temp$totRev.spec - temp$totRev.mkt.spec)^2
-
-#cfecAnnual = left_join(cfecAnnual, dplyr::select(temp, p_holder, year, p2))
 
 # Also merge in previous revenue. Idx stores index of people last year
 idx = match(paste(cfecAnnual$p_holder,cfecAnnual$year-1), paste(cfecAnnual$p_holder,cfecAnnual$year))
@@ -225,26 +195,62 @@ cfecAnnual$revenue.prev = cfecAnnual$revenue[idx]
 cfecAnnual$specdiv.prev = cfecAnnual$specDiv[idx]
 cfecAnnual$geardiv.prev = cfecAnnual$gearDiv[idx]
 cfecAnnual$strategy.prev = cfecAnnual$strategy[idx]
-#cfecAnnual$p2.prev = cfecAnnual$p2[idx]
+cfecAnnual$weight.prev = cfecAnnual$weight[idx]
+cfecAnnual$days.prev = cfecAnnual$days[idx]
+
+# idx = which(cfecAnnual$strategy != cfecAnnual$strategy.prev)
+```
+
+Add some identifying columns:
+
+```{r}
+cfecAnnual$area = substr(cfecAnnual$p_fshy,4,4)
+cfecAnnual$area[cfecAnnual$area %in% c("A","C")] = "Southeast"
+cfecAnnual$area[cfecAnnual$area == "B"] = "Statewide"
+cfecAnnual$area[cfecAnnual$area == "D"] = "Yakutat"
+cfecAnnual$area[cfecAnnual$area == "E"] = "PWS"
+cfecAnnual$area[cfecAnnual$area == "H"] = "CookInlet"
+cfecAnnual$area[cfecAnnual$area == "J"] = "Westward"
+cfecAnnual$area[cfecAnnual$area == "K"] = "Kodiak"
+cfecAnnual$area[cfecAnnual$area == "L"] = "Chignik"
+cfecAnnual$area[cfecAnnual$area == "M"] = "AlaskaPeninsula"
+cfecAnnual$area[cfecAnnual$area == "N"] = "Nelson"
+cfecAnnual$area[cfecAnnual$area == "Q"] = "BeringSea"
+cfecAnnual$area[cfecAnnual$area == "T"] = "BristolBay"
+cfecAnnual$area[cfecAnnual$area == "X"] = "Kotzebue"
+cfecAnnual$area[cfecAnnual$area == "Z"] = "NortonSound"
+
+cfecAnnual$spec = substr(cfecAnnual$p_fshy,1,1)
+cfecAnnual$spec[cfecAnnual$spec == "B"] = "Halibut"
+cfecAnnual$spec[cfecAnnual$spec == "C"] = "Sablefish"
+cfecAnnual$spec[cfecAnnual$spec %in% c("D","E","K","T")] = "Crab"
+cfecAnnual$spec[cfecAnnual$spec %in% c("F")] = "Freshwater"
+cfecAnnual$spec[cfecAnnual$spec %in% c("G","H","L")] = "Herring"
+cfecAnnual$spec[cfecAnnual$spec %in% c("I")] = "Lingcod"
+cfecAnnual$spec[cfecAnnual$spec %in% c("A","J","N","R","W")] = "Shellfish"
+cfecAnnual$spec[cfecAnnual$spec %in% c("O","P","Q","U","Z")] = "Invert"
+cfecAnnual$spec[cfecAnnual$spec %in% c("M")] = "Misc"
+cfecAnnual$spec[cfecAnnual$spec %in% c("S")] = "Salmon"
+cfecAnnual$area_spec = paste(cfecAnnual$area, cfecAnnual$spec, sep="_")
+```
+
+Save the data for modeling:
+
+```{r}
+# make sure the data are tidy:
+cfecAnnual <- as_data_frame(cfecAnnual)
+
+## Filtering out people with 10+ years of fishing. Drops rows from 13.7 to 10 million.
+## (now doing this at the beginning of the modeling scripts)
+# cfecAnnual = group_by(cfecAnnual, p_holder) %>%
+#   mutate(nyr = length(unique(year))) %>%
+#   filter(nyr >= 10)
+
+saveRDS(cfecAnnual, file="../data-generated/cfec-annual-for-modeling.rds")
 
 cfecAnnual$specDiv.change = cfecAnnual$specDiv - cfecAnnual$specdiv.prev
-# idx = which(cfecAnnual$strategy != cfecAnnual$strategy.prev)
-
-# Filter out salmon people
-cfecAnnual$salmon = ifelse(substr(cfecAnnual$permit,1,1)=="S", TRUE, FALSE)
-
-# cfecAnnual.salmon = cfecAnnual[cfecAnnual$salmon=="Y",]
-# cfecAnnual.nonsalmon = cfecAnnual[cfecAnnual$salmon=="N",]
-
-#cfecAnnual.salmon = cfecAnnual.salmon[is.na(cfecAnnual.salmon$specDiv.change)==F, ]
-#cfecAnnual.nonsalmon = cfecAnnual.nonsalmon[is.na(cfecAnnual.nonsalmon$specDiv.change)==F, ]
-
-# saveRDS(cfecAnnual.salmon, file="salmon_linearModeling_complete.rds")
-# saveRDS(cfecAnnual.nonsalmon, file="nonsalmon_linearModeling_complete.rds")
-cfecAnnual <- as_data_frame(cfecAnnual)
-nrow(cfecAnnual)
-saveRDS(cfecAnnual, file="../data-generated/cfec-for-modeling.rds")
-
+cfecAnnual.diff = cfecAnnual[is.na(cfecAnnual$specDiv.change)==FALSE, ]
+saveRDS(cfecAnnual.diff, file="../data-generated/cfec-diff-for-modeling.rds")
 ```
 
 ## Do some exploration by permit types + diversity
