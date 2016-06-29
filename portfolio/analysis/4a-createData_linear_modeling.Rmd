@@ -154,16 +154,17 @@ Aggregate annual metrics by person,
 
 ```{r}
 
-# fixme: lubridate?
-cfecnew$day = mdy.date(as.numeric(lapply(strsplit(cfecnew$day, "-"), getElement, 1)), as.numeric(lapply(strsplit(cfecnew$day, "-"), getElement, 2)), cfecnew$year) - mdy.date(1, 1, cfecnew$year)
-
+cfecnew$yday <- paste(cfecnew$year, cfecnew$day, sep = "-") %>%
+  lubridate::ymd() %>%
+  lubridate::yday() - 1
+  
 # fixme What is cadfg2?
 if ("VLength" %in% names(cfecnew)) {
   cfecnew <- rename(cfecnew, vlength = VLength)
 }
 cfecAnnual = group_by(cfecnew, p_holder, year) %>%
   summarize(permit = p_fshy[1], boat = cadfg[1], # fixme this was cadfg2
-    days = diff(range(day) + 1),
+    days = diff(range(yday) + 1),
     ngear = length(unique(gearn)),
     nspec = length(unique(specn)),
     npermit = length(unique(p_fshy)),
