@@ -202,39 +202,6 @@ cfecAnnual$days.prev = cfecAnnual$days[idx]
 # idx = which(cfecAnnual$strategy != cfecAnnual$strategy.prev)
 ```
 
-Add some identifying columns:
-
-```{r}
-cfecAnnual$area = substr(cfecAnnual$p_fshy,4,4)
-cfecAnnual$area[cfecAnnual$area %in% c("A","C")] = "Southeast"
-cfecAnnual$area[cfecAnnual$area == "B"] = "Statewide"
-cfecAnnual$area[cfecAnnual$area == "D"] = "Yakutat"
-cfecAnnual$area[cfecAnnual$area == "E"] = "PWS"
-cfecAnnual$area[cfecAnnual$area == "H"] = "CookInlet"
-cfecAnnual$area[cfecAnnual$area == "J"] = "Westward"
-cfecAnnual$area[cfecAnnual$area == "K"] = "Kodiak"
-cfecAnnual$area[cfecAnnual$area == "L"] = "Chignik"
-cfecAnnual$area[cfecAnnual$area == "M"] = "AlaskaPeninsula"
-cfecAnnual$area[cfecAnnual$area == "N"] = "Nelson"
-cfecAnnual$area[cfecAnnual$area == "Q"] = "BeringSea"
-cfecAnnual$area[cfecAnnual$area == "T"] = "BristolBay"
-cfecAnnual$area[cfecAnnual$area == "X"] = "Kotzebue"
-cfecAnnual$area[cfecAnnual$area == "Z"] = "NortonSound"
-
-cfecAnnual$spec = substr(cfecAnnual$p_fshy,1,1)
-cfecAnnual$spec[cfecAnnual$spec == "B"] = "Halibut"
-cfecAnnual$spec[cfecAnnual$spec == "C"] = "Sablefish"
-cfecAnnual$spec[cfecAnnual$spec %in% c("D","E","K","T")] = "Crab"
-cfecAnnual$spec[cfecAnnual$spec %in% c("F")] = "Freshwater"
-cfecAnnual$spec[cfecAnnual$spec %in% c("G","H","L")] = "Herring"
-cfecAnnual$spec[cfecAnnual$spec %in% c("I")] = "Lingcod"
-cfecAnnual$spec[cfecAnnual$spec %in% c("A","J","N","R","W")] = "Shellfish"
-cfecAnnual$spec[cfecAnnual$spec %in% c("O","P","Q","U","Z")] = "Invert"
-cfecAnnual$spec[cfecAnnual$spec %in% c("M")] = "Misc"
-cfecAnnual$spec[cfecAnnual$spec %in% c("S")] = "Salmon"
-cfecAnnual$area_spec = paste(cfecAnnual$area, cfecAnnual$spec, sep="_")
-```
-
 Save the data for modeling:
 
 ```{r}
