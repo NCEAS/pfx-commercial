@@ -45,8 +45,8 @@ format_data <- function(x) {
   x$log_weight <- scale(log(x$weight + 1))
   x$log_days <- scale(log(x$days + 1))
   mm <- model.matrix(~ log_spec_div + log_days + log_length, data = x)
-  n_pholder_k <- max(x$pholder_id)
-  n_strategy_k <- max(x$strategy_id)
+  n_pholder <- max(x$pholder_id)
+  n_strategy <- max(x$strategy_id)
   n_fe <- ncol(mm)
   # re_estimate = unique(x[,c("strategy","strategy_diverse")])$strategy_diverse
 
@@ -55,13 +55,13 @@ format_data <- function(x) {
 
     data = list(x_ij = mm,
       y_i = log(x$revenue),
-      pholder_k_i = x$pholder_id - 1,
-      strategy_k_i = x$strategy_id - 1,
-      n_pholder_k = n_pholder_k,
-      n_strategy_k = n_strategy_k,
-      n_j = 1, # spec_div column
+      pholder_i = x$pholder_id - 1,
+      strategy_i = x$strategy_id - 1,
+      n_pholder = n_pholder,
+      n_strategy = n_strategy,
+      diversity_column = 1, # spec_div column
       b1_cov_re_i = x$log_spec_div,
-      sigma1_cov_re_i = x$log_spec_div),
+      g1_cov_re_i = x$log_spec_div),
 
     parameters = list(
       b_j = rep(0, n_fe),
@@ -71,29 +71,29 @@ format_data <- function(x) {
       log_b0_strategy_tau = -1,
       log_b1_tau = -1,
 
-      b0_pholder_k = rep(0, n_pholder_k),
-      b0_strategy_k = rep(0, n_strategy_k),
-      b1_k = rep(0, n_strategy_k),
+      b0_pholder = rep(0, n_pholder),
+      b0_strategy = rep(0, n_strategy),
+      b1_strategy = rep(0, n_strategy),
 
-      log_sigma0_pholder_tau = -1,
-      log_sigma0_strategy_tau = -1,
-      log_sigma1_tau = -1,
+      log_g0_pholder_tau = -1,
+      log_g0_strategy_tau = -1,
+      log_g1_tau = -1,
 
-      sigma0_pholder_k = rep(0, n_pholder_k),
-      sigma0_strategy_k = rep(0, n_strategy_k),
-      sigma1_k = rep(0, n_strategy_k))
+      g0_pholder = rep(0, n_pholder),
+      g0_strategy = rep(0, n_strategy),
+      g1_strategy = rep(0, n_strategy))
 
     # map = list(
-    #   b1_k = re_estimate,
-    #   sigma1_k = re_estimate
+    #   b1_strategy = re_estimate,
+    #   g1_strategy = re_estimate
     #   )
 
     )
 }
 
 fit_model <- function(data) {
-  random <- c("b0_pholder_k", "b0_strategy_k", "b_j",
-    "sigma_j", "b1_k", "sigma0_pholder_k", "sigma0_strategy_k", "sigma1_k")
+  random <- c("b0_pholder", "b0_strategy", "b_j",
+    "sigma_j", "b1_strategy", "g0_pholder", "g0_strategy", "g1_strategy")
   d_tmb <- format_data(data)
   obj <- MakeADFun(
     data = d_tmb$data,
@@ -144,13 +144,13 @@ strategy_diversity <- bind_rows(dm) %>%
 ids <- left_join(ids, strategy_diversity)
 
 p <- filter(d, parameter %in%
-  c("b0_strategy_k", "sigma0_strategy_k", "b1_b1_k", "sigma1_sigma1_k")) %>%
-# p <- filter(d, parameter %in% c("b1_b1_k", "sigma1_sigma1_k")) %>%
+  c("b0_strategy", "g0_strategy", "combined_b1_strategy", "combined_g1_strategy")) %>%
+# p <- filter(d, parameter %in% c("combined_b1_strategy", "combined_g1_strategy")) %>%
   group_by(parameter) %>%
     mutate(strategy_id = 1:n()) %>%
       left_join(ids)
 
-junk <- p %>% as_data_frame %>% filter(parameter == "sigma1_sigma1_k") %>%
+junk <- p %>% as_data_frame %>% filter(parameter == "combined_g1_strategy") %>%
   mutate(strategy_ordered = reorder(strategy, -estimate)) %>%
   select(strategy, strategy_ordered)
 p <- inner_join(p, junk)
@@ -163,7 +163,7 @@ p1 <- ggplot(p, aes(strategy_ordered, estimate, ymin = l, ymax = u, colour = log
 print(p1)
 ggsave("../figs/tmb-re.pdf", width = 16, height = 13)
 
-j <- filter(d, parameter %in% c("b0_strategy_k", "sigma0_strategy_k")) %>%
+j <- filter(d, parameter %in% c("b0_strategy", "g0_strategy")) %>%
   group_by(parameter) %>%
     mutate(strategy_id = 1:n()) %>%
       left_join(ids) %>%
@@ -175,19 +175,19 @@ ggplot(j, aes(log(mean_diversity), estimate, label = strategy, ymin = l, ymax = 
 ggsave("../figs/tmb-re-int-vs-diversity.pdf", width = 13, height = 10)
 
 p <- reshape2::dcast(j,  strategy ~ parameter, value.var = "estimate") %>%
-  ggplot(aes(sigma0_strategy_k, b0_strategy_k, label = strategy)) + geom_point() +
+  ggplot(aes(g0_strategy, b0_strategy, label = strategy)) + geom_point() +
     geom_text()
 p
 ggsave("../figs/tmb-re-int-vs.pdf", width = 10, height = 9)
 
-j1 <- filter(d, parameter %in% c("b1_b1_k", "sigma1_sigma1_k")) %>%
+j1 <- filter(d, parameter %in% c("combined_b1_strategy", "combined_g1_strategy")) %>%
   group_by(parameter) %>%
     mutate(strategy_id = 1:n()) %>%
       left_join(ids) %>%
         as_data_frame() %>%
           na.omit()
 reshape2::dcast(j1, strategy  ~ parameter, value.var = "estimate") %>%
-  ggplot(aes(sigma1_sigma1_k, b1_b1_k, label = strategy)) + geom_point() +
+  ggplot(aes(combined_g1_strategy, combined_b1_strategy, label = strategy)) + geom_point() +
     geom_text()
 ggsave("../figs/tmb-re-slope-vs.pdf", width = 10, height = 10)
 
@@ -207,14 +207,14 @@ pholder_diversity <- bind_rows(dm) %>%
 ids <- left_join(ids, pholder_diversity)
 
 p <- filter(d, parameter %in%
-  c("sigma0_pholder_k")) %>%
-# p <- filter(d, parameter %in% c("b1_b1_k", "sigma1_sigma1_k")) %>%
+  c("g0_pholder")) %>%
+# p <- filter(d, parameter %in% c("combined_b1_strategy", "combined_g1_strategy")) %>%
   group_by(parameter) %>%
     mutate(pholder_id = 1:n()) %>%
       left_join(ids)
 
 ggplot(p, aes(mean_diversity, estimate)) + geom_point(alpha = 0.1)
-ggsave("../figs/tmb-re-pholder-sigma0-vs-diversity.pdf", width = 7, height = 7)
+ggsave("../figs/tmb-re-pholder-g0-vs-diversity.pdf", width = 7, height = 7)
 
 group_by(dm, p_holder) %>%
   summarise(sp = mean(specDiv), cv=sd(log(revenue))) %>%
