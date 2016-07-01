@@ -34,3 +34,5 @@ portfolio/data-generated/strategies.csv
 *.log
 
 *.gz
+
+*.html
