@@ -1,16 +1,34 @@
 # Variability
 
-Within permit holders - NA (we can't test this)
-Across permit holders - increased diversity = lower variability (quadratic relationship)
-Across strategies - increased diversity in some instances = higher variability
-Across strategies - increase diversity in some instances = ?? in terms of benefit of diversifying
+1. For a given permit holder: NA (each permit holder has one CV value)
 
-Note that this might be garbage because the quadratic term was centered first !!!!!
+2. Across permit holders: 
+
+- increased diversity = lower variability (somewhat quadratically for those including salmon in their strategy)
+- longer fishing seasons = lower variability
+- benefit of diversifying is much greater for those with longer fishing seasons 
+
+3. Across strategies: 
+
+- strategies with higher mean diversity may have very slightly higher CV (but this isn't as clear across most strategy groupings)
+- strategies with higher mean diversity have more benefit to diversifying if salmon is included in the strategy 
 
 # Revenue
 
-Within permit holders - increased diversity = lower revenue
-Across permit holders - increased diversity = slightly higher revenue
-Across permit holders - increased diversity = not much change in the benefit of diversifying
-Across strategies - increased diversity = increased revenue
-Across strategies - increased diversity = not much change in the benefit of diversify
+1. For a given permit holder: 
+
+- increased diversity = lower revenue
+- longer boats make more money (obviously)s
+- longer seasons = more money (obviously)
+- no major interaction effects for these 3 predictors
+
+2. Across permit holders:
+
+- permit holders with higher mean diversity on average make slightly more money
+- the variability around this relationship becomes tighter at higher levels of mean diversity
+- not much change in the cost of diversifying across permit holders with different mean diversity levels
+
+3. Across strategies:
+
+- strategies with higher mean diversity on average make more money, especially if salmon are amongst the strategy 
+- for some groupings, strategies with higher mean diversity have less of a diversifying cost (especially for salmon only, salmon plus crab, and salmon plus herring)
