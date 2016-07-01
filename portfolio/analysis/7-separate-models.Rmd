@@ -1,0 +1,141 @@
+---
+title: "Dive into separate models"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Let's take a look at the simpler model that uses the CV of revenue for each permit holder as a response. If our more complicated models with structure in the error term are doing what we think then we should be able to replicate similar conclusions.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(lme4)
+rm(list = ls())
+dm <- readRDS("../data-generated/cfec-annual-for-modeling.rds")
+nrow(dm)
+```
+
+We'll filter the data to keep permit holders that fished for at least ten years. We'll also have to filter out any permit holders that have no variability in the diversity fished.
+
+```{r}
+dm <- group_by(dm, p_holder) %>%
+  mutate(nyr = length(unique(year))) %>%
+  mutate(range_div = diff(range(specDiv))) %>%
+  as_data_frame() %>%
+  filter(nyr >= 10) %>%
+  filter(range_div > 0)
+nrow(dm)
+
+# # we don't need to crop the strategies at this point
+# top.strategies = names(rev(sort(table(dm$strategy)))[1:100])
+# dm = dm[dm$strategy%in%top.strategies, ]
+# nrow(dm)
+
+dm$log_spec_div <- scale(log(dm$specDiv))
+dm$log_length <- scale(log(dm$length + 1))
+dm$log_weight <- scale(log(dm$weight + 1))
+dm$log_days <- scale(log(dm$days + 1))
+```
+
+We'll consider strategies taxonomic groups here and keep all strategies that have at least 5 permit holders.
+
+```{r}
+dmv <- dm %>% group_by(p_holder) %>%
+  summarise(cv = sd(revenue)/mean(revenue), log_specDiv = mean(log(specDiv)),
+    # summarise(cv = mean(revenue), log_specDiv = mean(log(specDiv)),
+    length = mean(length, na.rm = TRUE), days = mean(days, na.rm = TRUE),
+    strategy = paste(sort(unique(substr(strategy, 1, 1))), collapse = " ")) %>%
+  as_data_frame() %>%
+  group_by(strategy) %>%
+  mutate(n_strategy = n()) %>%
+  filter(n_strategy > 5) %>%
+  mutate(mean_log_spec = mean(log_specDiv)) %>%
+  as_data_frame() %>%
+  mutate(scaled_log_days = scale(log(days + 1)), scaled_log_spec = scale(log_specDiv))
+dmv$strategy <- as.factor(dmv$strategy)
+```
+
+This is how much the last step filtered out.
+
+```{r}
+length(unique(dm$p_holder))
+nrow(dmv)
+```
+
+We'll fit a model with `lmer()`. Random intercepts and random slopes for diversity group by strategy. I've also now added a quadratic term for species diversity.
+
+```{r}
+m4 <- lmer(log(cv) ~ scaled_log_spec + scaled_log_days + I(scaled_log_spec^2) +
+    (1 + scaled_log_spec+I(scaled_log_spec^2)|strategy), data = dmv)
+co <- coef(m4)$strategy
+co$strategy <- row.names(co)
+names(co) <- c("intercept", "log_diversity", "log_days", "log_diversity_squared", "strategy")
+arm::display(m4)
+```
+
+Because number of days fished is related to species diversity CV decreases both with increases in species diversity and with increases in number of days fished. Therefore for the purposes of visualization I will predict at a few levels of mean species diversity.
+
+```{r}
+newdata <- data.frame(select(dmv, -scaled_log_days), scaled_log_days = 0)
+newdata <- dmv %>%
+  mutate(diversity_cut = cut(log_specDiv, breaks = c(-1, 0.25, 0.5, 0.75, 1e6))) %>%
+  group_by(strategy, diversity_cut) %>%
+  mutate(scaled_log_days = mean(scaled_log_days))
+```
+
+```{r, fig.width=10, fig.height=9}
+dmv$prediction <- predict(m4, newdata = newdata)
+dmv %>%
+  arrange(strategy, log_specDiv) %>%
+  ggplot(aes(scaled_log_spec, log(cv), color = scaled_log_days)) + facet_wrap(~strategy) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "grey50") +
+  geom_line(aes(y = prediction), color = "orange", lwd = 1)
+```
+
+```{r}
+dmv %>%
+  arrange(strategy, log_specDiv) %>%
+  ggplot(aes(scaled_log_spec, log(cv), color = scaled_log_days, group = strategy)) +
+  geom_point(alpha = 0.7) +
+  geom_line(aes(y = prediction), color = "orange", lwd = 1)
+```
+
+Let's get an idea of what a group level predictors would look like. In other words what the effect is like across strategies.
+
+```{r}
+co <- co %>%
+  mutate(n_strategy = nchar(gsub(" ", "", strategy))) %>%
+  inner_join(select(dmv, strategy, mean_log_spec) %>% unique())
+ggplot(co, aes(mean_log_spec, log_diversity, label = strategy)) + geom_text() +
+  ylab("diversity slope random effect") +
+  geom_smooth()
+ggplot(co, aes(mean_log_spec, intercept, label = strategy)) + geom_text() +
+  ylab("intercept random effect") +
+  geom_smooth()
+ggplot(co, aes(mean_log_spec, log_diversity_squared, label = strategy)) + geom_text() +
+  ylab("log_diversity_squared random effect") +
+  geom_smooth()
+```
+
+```{r, fig.width=10, fig.height=6}
+strategy_grouped = rbind(cbind(co[grep("M",co$strategy),], group="Groundfish"),
+  cbind(co[grep("S",co$strategy),], group="Salmon"),
+  cbind(co[grep("B|C",co$strategy),], group="Halibut-Sablefish"),
+  cbind(co[grep("K|T|D",co$strategy),], group="Crab"),
+  cbind(co[grep("G",co$strategy),], group="Herring"))
+ggplot(strategy_grouped, aes(mean_log_spec, intercept, label = strategy)) +
+  geom_text() + geom_smooth(se = FALSE) +
+  facet_wrap(~group, scales = "free_y")
+ggplot(strategy_grouped, aes(mean_log_spec, log_diversity, label = strategy)) +
+  geom_text() + geom_smooth(se = FALSE) +
+   ylab("diversity slope random effect") +
+  facet_wrap(~group, scales = "free_y")
+ggplot(strategy_grouped, aes(mean_log_spec, log_diversity_squared, label = strategy)) +
+  geom_text() + geom_smooth(se = FALSE) +
+   ylab("log_diversity_squared random effect") +
+  facet_wrap(~group, scales = "free_y")
+```

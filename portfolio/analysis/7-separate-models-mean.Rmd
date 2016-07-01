@@ -1,0 +1,93 @@
+---
+title: "Dive into separate models"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+
+Let's take a look at the simpler model that uses the CV of revenue for each permit holder as a response. If our more complicated models with structure in the error term are doing what we think then we should be able to replicate similar conclusions.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(lme4)
+rm(list = ls())
+dm <- readRDS("../data-generated/cfec-annual-for-modeling.rds")
+nrow(dm)
+```
+
+We'll filter the data to keep permit holders that fished for at least ten years. We'll also have to filter out any permit holders that have no variability in the diversity fished.
+
+```{r}
+dm <- group_by(dm, p_holder) %>%
+  mutate(nyr = length(unique(year))) %>%
+  mutate(range_div = diff(range(specDiv))) %>%
+  as_data_frame() %>%
+  filter(nyr >= 10) %>%
+  filter(range_div > 0.5)
+nrow(dm)
+
+top.strategies = names(rev(sort(table(dm$strategy)))[1:100])
+dm = dm[dm$strategy%in%top.strategies, ]
+nrow(dm)
+
+dm_holder <- group_by(dm, p_holder) %>%
+  summarize(mean_diversity = mean(log(specDiv)))%>%
+  mutate(p_holder = as.character(p_holder))
+
+dm_strategy <- group_by(dm, strategy) %>%
+  summarize(mean_diversity = mean(log(specDiv)))
+
+dm$log_spec_div <- scale(log(dm$specDiv))
+dm$log_length <- scale(log(dm$length + 1))
+dm$log_weight <- scale(log(dm$weight + 1))
+dm$log_days <- scale(log(dm$days + 1))
+```
+
+We'll fit a model with `lmer()`.
+
+```{r}
+m5 <- lmer(log(revenue) ~ log_spec_div * log_days * log_length +
+    (1 + log_spec_div|strategy) + (1 + log_spec_div|p_holder), data = dm)
+co_strategy <- coef(m5)$strategy
+co_strategy$strategy <- row.names(co_strategy)
+names(co_strategy)[1:2] <- c("intercept", "log_diversity_re")
+
+co_holder <- coef(m5)$p_holder
+co_holder$p_holder <- row.names(co_holder)
+names(co_holder)[1:2] <- c("intercept", "log_diversity_re")
+
+arm::display(m5)
+```
+
+```{r}
+co_holder <- co_holder %>%
+  inner_join(dm_holder %>% unique())
+ggplot(co_holder, aes(mean_diversity, intercept)) + geom_point() + geom_smooth()
+ggplot(co_holder, aes(mean_diversity, log_diversity_re)) + geom_point() + geom_smooth()
+```
+
+```{r}
+co_strategy <- co_strategy %>%
+  inner_join(dm_strategy %>% unique())
+ggplot(co_strategy, aes(mean_diversity, intercept, label = strategy)) + geom_text() + geom_smooth()
+ggplot(co_strategy, aes(mean_diversity, log_diversity_re, label = strategy)) + geom_text() + geom_smooth()
+```
+
+
+```{r, fig.width=10, fig.height=6}
+strategy_grouped = rbind(cbind(co_strategy[grep("M",co_strategy$strategy),], group="Groundfish"),
+  cbind(co_strategy[grep("S",co_strategy$strategy),], group="Salmon"),
+  cbind(co_strategy[grep("B|C",co_strategy$strategy),], group="Halibut-Sablefish"),
+  cbind(co_strategy[grep("K|T|D",co_strategy$strategy),], group="Crab"),
+  cbind(co_strategy[grep("G",co_strategy$strategy),], group="Herring"))
+
+ggplot(strategy_grouped, aes(mean_diversity, intercept, label = strategy)) +
+  geom_text() + geom_smooth(se = FALSE, method = "lm") +
+  facet_wrap(~group, scales = "free_y")
+ggplot(strategy_grouped, aes(mean_diversity, log_diversity_re, label = strategy)) +
+  geom_text() + geom_smooth(se = FALSE, method = "lm") +
+  facet_wrap(~group, scales = "free_y")
+```
