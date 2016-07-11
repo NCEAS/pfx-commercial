@@ -1,7 +1,7 @@
 # Read in, cleanup, and write out a version of the data
 
 library(dplyr)
-load("../../data/cfecCleaned_new")
+load("../../data/cfec_070616")
 names(cfec) <- tolower(names(cfec))
 cfec <- as_data_frame(cfec)
 names(cfec) <- gsub("\\.", "_", names(cfec))

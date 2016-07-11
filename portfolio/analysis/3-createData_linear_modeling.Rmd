@@ -40,7 +40,7 @@ cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1),
   substr(cfec$p_fshy[idx], 3, length(cfec$p_fshy[idx])), sep="")
 
 if (Sys.info()[["user"]] != "seananderson") {
-  region<-read.csv("areas/regions.csv")
+  region<-read.csv("data/regions.csv")
   region<-region[,c(1:2)] #don’t include “assigned by” column
   cfec<-left_join(cfec,region)
 }
@@ -81,19 +81,18 @@ simp.div = function(x) {
 }
 ```
 
-## Filtering out unique vessel - person combinations. Drops rows from 17 to 13 million.
-
-Now we'll filter out (i.e. keep) individuals who only used 1 boat in a year, and boats with
-only one permit holder fishing in a year.
+## Previously, we excluded people using 2 boats in a year, but now we'll include them. 
 
 ```{r}
+# Now we'll filter out (i.e. keep) individuals who only used 1 boat in a year, and boats with
+# only one permit holder fishing in a year.
 cfecnew = cfec
-cfec.1boat = group_by(cfecnew, p_holder, year) %>%
-  summarize(nBoat = length(unique(cadfg))) %>%
-  filter(nBoat==1) %>%
-  left_join(cfecnew)
+#cfec.1boat = group_by(cfecnew, p_holder, year) %>%
+#  summarize(nBoat = length(unique(cadfg))) %>%
+#  filter(nBoat==1) %>%
+#  left_join(cfecnew)
+#cfecnew = cfec.1boat
 
-cfecnew = cfec.1boat
 dim(cfecnew)[1]
 ```
 
@@ -158,12 +157,11 @@ cfecnew$yday <- paste(cfecnew$year, cfecnew$day, sep = "-") %>%
   lubridate::ymd() %>%
   lubridate::yday() - 1
   
-# fixme What is cadfg2?
 if ("VLength" %in% names(cfecnew)) {
   cfecnew <- rename(cfecnew, vlength = VLength)
 }
 cfecAnnual = group_by(cfecnew, p_holder, year) %>%
-  summarize(permit = p_fshy[1], boat = cadfg[1], # fixme this was cadfg2
+  summarize(permit = p_fshy[1], boat = cadfg[1],
     days = diff(range(yday) + 1),
     ngear = length(unique(gearn)),
     nspec = length(unique(specn)),
@@ -198,8 +196,6 @@ cfecAnnual$geardiv.prev = cfecAnnual$gearDiv[idx]
 cfecAnnual$strategy.prev = cfecAnnual$strategy[idx]
 cfecAnnual$weight.prev = cfecAnnual$weight[idx]
 cfecAnnual$days.prev = cfecAnnual$days[idx]
-
-# idx = which(cfecAnnual$strategy != cfecAnnual$strategy.prev)
 ```
 
 Save the data for modeling:
