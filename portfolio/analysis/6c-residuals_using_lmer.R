@@ -51,6 +51,8 @@ r.squaredGLMM(lm2)
 
 testData$residuals <- residuals(lm2)
 
+dir.create("residuals", showWarnings = FALSE)
+
 # plot fitted vs observed -- non salmon specialists
 non.sal= which(substr(testData$strategy,1,1)!="S")
 ggplot(testData[non.sal,], aes(x=fitted.values(lm2)[non.sal], y=rev.pctChange, color = strategy)) +
