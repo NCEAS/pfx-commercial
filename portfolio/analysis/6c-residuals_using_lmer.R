@@ -37,7 +37,7 @@ cfecAnnual.diff = cfecAnnual.diff[cfecAnnual.diff$strategy%in%top.strategies, ]
 testData = cfecAnnual.diff
 
 # Convert skewed data to something more like normal
-fit.t = fitdistr(testData$rev.pctChange, "t")
+fit.t = MASS::fitdistr(testData$rev.pctChange, "t")
 testData$rev.pctChange.raw = testData$rev.pctChange
 testData$rev.pctChange = qnorm(pt(testData$rev.pctChange, df = fit.t$estimate[3]), 0, 1)
 
