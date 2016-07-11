@@ -24,7 +24,7 @@ dm <- group_by(dm, p_holder) %>%
   mutate(nyr = length(unique(year))) %>%
   mutate(range_div = diff(range(specDiv))) %>%
   as_data_frame() %>%
-  filter(nyr >= 5) %>%
+  filter(nyr >= 10) %>%
   filter(range_div > 0)
 nrow(dm)
 
@@ -43,11 +43,14 @@ We'll consider strategies taxonomic groups here and keep all strategies that hav
 
 ```{r condense-data-by-permit-holder}
 dmv <- dm %>% group_by(p_holder) %>%
-  summarise(cv = sd(revenue)/mean(revenue), log_specDiv = mean(log(specDiv)),
+    summarise(cv = sd(revenue)/mean(revenue), log_specDiv = mean(log(specDiv)),
+    # summarise(cv = sd(log(revenue)-log(revenue.prev), na.rm = T),
+      log_specDiv = mean(log(specDiv)),
     # summarise(cv = mean(revenue), log_specDiv = mean(log(specDiv)),
     length = mean(log(length+1), na.rm = TRUE), days = mean(days, na.rm = TRUE),
     strategy = paste(sort(unique(substr(strategy, 1, 1))), collapse = " ")) %>%
   as_data_frame() %>%
+  filter(!is.na(cv)) %>%
   group_by(strategy) %>%
   mutate(n_strategy = n()) %>%
   filter(n_strategy > 4) %>%
@@ -85,6 +88,14 @@ We'll fit a model with `lmer()`.
 
 m4 <- lmer(log(cv) ~ (scaled_log_spec+scaled_log_days)^2 + 
     (1 + (scaled_log_spec+scaled_log_days)^2|strategy), data = dmv)
+```
+
+```{r}
+library(mgcv)
+dmv <- dmv %>% group_by(strategy) %>% mutate(cv_centered = log(cv) - mean(log(cv)))
+m1 <- gam(cv_centered ~ s(scaled_log_spec) + s(scaled_log_days), data = dmv)
+par(mfrow = c(1,2))
+plot(m1)
 ```
 
 ```{r extract-coefficients}
@@ -182,3 +193,29 @@ ggplot(strategy_grouped, aes(mean_log_spec, estimate, label = strategy)) +
 
 ```
 
+With differenced data
+
+```{r}
+df = readRDS(file="../data-generated/cfec-diff-for-modeling.rds")
+dmv <- df %>% group_by(p_holder) %>%
+    summarise(sd_ = sd(log(revenue/revenue.prev)), log_specDiv = mean(log(specDiv)),
+    length = mean(log(length+1), na.rm = TRUE), days = mean(log(days+1), na.rm = TRUE),
+    strategy = paste(sort(unique(substr(strategy, 1, 1))), collapse = " ")) %>%
+  as_data_frame() %>%
+  filter(!is.na(sd_)) %>%
+  group_by(strategy) %>%
+  mutate(n_strategy = n()) %>%
+  filter(n_strategy > 6) %>%
+  mutate(mean_log_spec = mean(log_specDiv)) %>%
+  as_data_frame() %>%
+  mutate(scaled_log_days = scale(days), scaled_log_spec = scale(log_specDiv),
+    scaled_log_length = scale(length))
+dmv$strategy <- as.factor(dmv$strategy)
+
+library(mgcv)
+dmv <- dmv %>% group_by(strategy) %>% mutate(log_sd = log(sd_) - mean(log(sd_)))
+m1 <- gam(log_sd ~ s(scaled_log_spec) + s(scaled_log_days), data = dmv)
+par(mfrow = c(1,2))
+plot(m1)
+
+```
