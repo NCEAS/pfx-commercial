@@ -18,7 +18,11 @@ library(MuMIn)
 
 # LOAD DATA
 #cfecAnnual.diff = readRDS(file="diff_linearModeling_complete.rds")
-cfecAnnual.diff = readRDS(file="diff_linearModeling_complete_all.rds")
+if (file.exists("diff_linearModeling_complete_all.rds")) {
+  cfecAnnual.diff = readRDS(file="diff_linearModeling_complete_all.rds")
+} else {
+  cfecAnnual.diff = readRDS(file="../data-generated/cfec-diff-for-modeling.rds")
+}
 
 # Calculate some differenced/derived variables
 cfecAnnual.diff$specDiv.pctChange = log(cfecAnnual.diff$specDiv / cfecAnnual.diff$specdiv.prev)
