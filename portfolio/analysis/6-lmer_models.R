@@ -35,7 +35,7 @@ dat$log_weight <- scale(log(dat$weight + 1))
 dat$log_days <- scale(log(dat$days + 1))
 
 # Filters: remove people making < 5000 / year, and 
-dat = dat[which(dat$revenue >= 5000), ]
+dat = dat[which(dat$revenue >= 1000), ]
 
 # 4200 different strategies, need to model only most common, 
 top.strategies = names(rev(sort(table(dat$strategy)))[1:100])
@@ -47,6 +47,19 @@ nrow(dat)
 mod <- lmer(log(revenue) ~ log_spec_div + log_days + as.factor(npermit) + 
     (1 + log_spec_div + log_days|strategy), data = dat)
 r.squaredGLMM(mod)
+
+dat$residuals = residuals(mod)
+
+# 2. model the residuals / variance model 
+dat$absResid = log(abs(dat$residuals))
+mod.cv <- lmer(absResid ~ log_spec_div + log_days + 
+    (1 + log_spec_div + log_days|strategy), data = dat)
+r.squaredGLMM(mod.cv)
+
+# 3. model downside risk / 
+# we can't get situations where people lost money from this
+# maybe this is where log-diff model could help too?
+
 
 # This model includes linear + quadratic random effects
 broom::tidy(mod, conf.int = TRUE) %>%
@@ -66,6 +79,8 @@ strategy.summary = group_by(dat, strategy) %>%
     specDiv = mean(specDiv))
 strategy.summary$randomInt = ranef(mod)$strategy[,1]
 strategy.summary$randomSpec = ranef(mod)$strategy[,2]
+strategy.summary$cv_randomInt = ranef(mod.cv)$strategy[,1]
+strategy.summary$cv_randomSpec = ranef(mod.cv)$strategy[,2]
 
 # more diverse strategies = slightly higher benefit of diversifying
 ggplot(strategy.summary, aes(x = log(specDiv), y = randomSpec)) + geom_point()
@@ -76,8 +91,6 @@ ggplot(strategy.summary, aes(x = log(specDiv), y = randomInt)) + geom_point()
 # strong correlation (as expected) between mean rev and random intercept
 # some of this noise will go away when random slopes are fixed
 ggplot(strategy.summary, aes(x = meanrev, y = randomInt)) + geom_point()
-
-dat$residuals = residuals(mod)
 
 # plot fitted vs observed
 ggplot(dat, aes(x=fitted.values(mod), y=log(revenue), col = log(revenue))) + 
