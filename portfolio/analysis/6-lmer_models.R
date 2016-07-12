@@ -20,7 +20,7 @@ library(MuMIn)
 # UNTRANSFORMED DATA. With threshold of 5 yrs / person, about the same size as
 # differenced dataset. Most pasted from Sean's "7-Separate-models.Rmd" files
 #####################################################################################
-dat = readRDS(file="data/cfec-annual-for-modeling.rds")
+dat = readRDS(file="../data-generated/cfec-annual-for-modeling.rds")
 dat <- group_by(dat, p_holder) %>%
   mutate(nyr = length(unique(year))) %>%
   mutate(range_div = diff(range(specDiv))) %>%
