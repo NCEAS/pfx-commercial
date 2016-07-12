@@ -121,18 +121,55 @@ cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M91")] = paste("M09", substr(c
 cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")] = paste("M06", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")])), sep="")
 ```
 
+```{r}
+codes <- readr::read_csv("../../data/cfec-codes.csv")
+# convert 6-dig p_fshy codes to 5 digits
+# removing blank space - now they're all length(5)
+idx = which(nchar(codes$p_fshy)==6)
+codes$p_fshy[idx] = paste(substr(codes$p_fshy[idx], 1, 1),
+  substr(codes$p_fshy[idx], 3, 6), sep="")
+
+# remove white space in 2nd position
+idx = which(substr(codes$p_fshy, 2, 2) == " ")
+codes$p_fshy[idx] = paste(substr(codes$p_fshy[idx], 1, 1),
+  substr(codes$p_fshy[idx], 3, length(codes$p_fshy[idx])), sep="")
+
+codes$description <- gsub(", VESSEL OVER 80", " VESSEL OVER 80", codes$description)
+codes$description <- gsub(";97m", "", codes$description)
+codes$description <- gsub(", VESSEL PERMIT OVER 80", " VESSEL PERMIT OVER 80", codes$description)
+codes$description <- gsub(", VESSEL PERMIT TO 80", " VESSEL PERMIT TO 80", codes$description)
+reg <- "([A-Za-z0-9/&(). -]+),([A-Za-z0-9()%/&.' -]+),([A-Za-z0-9/&.' ,()-]+)"
+codes$pfshy_species <- tolower(gsub(reg, "\\1", codes$description))
+codes$pfshy_gear <- tolower(gsub(reg, "\\2", codes$description))
+codes$pfshy_area <- tolower(gsub(reg, "\\3", codes$description))
+codes$pfshy_species <- sub(" +$", "", codes$pfshy_species)
+readr::write_csv(codes, path = "../data-generated/cfec-codes.csv")
+# as.data.frame(codes)
+```
 ## Identify most popular strategies by person-year combination
 
 Any person in a year will need to have 10% or more of their revenue to come
-from each permit (otherwise doesn't count as a strategy).
-
-The top 120 permits cuts the rows down to 8.6 million. The top 50 gets it down
-to 7.8 million.
+from each strategy (otherwise doesn't count as a strategy).
 
 ```{r}
-permit_rev = group_by(cfecnew, p_holder, year, p_fshy) %>%
+cfecnew$p_spec = substr(cfecnew$p_fshy,1,1)
+cfecnew$p_spec[cfecnew$p_spec == "B"] = "Halibut"
+cfecnew$p_spec[cfecnew$p_spec == "C"] = "Sablefish"
+cfecnew$p_spec[cfecnew$p_spec %in% c("D","E","K","T")] = "Crab"
+cfecnew$p_spec[cfecnew$p_spec %in% c("F")] = "Freshwater"
+cfecnew$p_spec[cfecnew$p_spec %in% c("G","H","L")] = "Herring"
+cfecnew$p_spec[cfecnew$p_spec %in% c("I")] = "Lingcod"
+cfecnew$p_spec[cfecnew$p_spec %in% c("A","J","N","R","W")] = "Shellfish"
+cfecnew$p_spec[cfecnew$p_spec %in% c("O","P","Q","U","Z")] = "Invert"
+cfecnew$p_spec[cfecnew$p_spec %in% c("M")] = "Misc"
+cfecnew$p_spec[cfecnew$p_spec %in% c("S")] = "Salmon"
+cfecnew$p_spec[cfecnew$p_spec %in% c("Y")] = "Rockfish"
+cfecnew <- filter(cfecnew, p_spec != "Freshwater") # only 1400 rows
+rev(sort(table(cfecnew$p_spec)))
+
+permit_rev = group_by(cfecnew, p_holder, year, p_spec) %>%
   summarize(permit.rev = sum(g_earn)) %>%
-  as.data.frame() %>%
+  as_data_frame() %>%
   group_by(p_holder, year) %>%
   mutate(tot.rev = sum(permit.rev))
 permit_rev$permit.rev = permit_rev$permit.rev/permit_rev$tot.rev # fraction of total
@@ -142,8 +179,9 @@ permit_rev = permit_rev[permit_rev$permit.rev < 0.1,]
 cfecnew = cfecnew[-which(paste(cfecnew$p_holder, cfecnew$year, cfecnew$p_fshy) %in% paste(permit_rev$p_holder, permit_rev$year, permit_rev$p_fshy)), ]
 
 topstrategies = group_by(cfecnew, p_holder, year) %>%
-  summarize(strategy = paste(sort(unique(p_fshy)), collapse = " ")) %>%
-  as.data.frame()
+  summarize(strategy = paste(sort(unique(p_spec)), collapse = ", ")) %>%
+  as_data_frame()
+rev(sort(table(topstrategies$strategy)))[1:50]
 cfecnew = left_join(cfecnew, topstrategies) # adds strategy column
 
 write.csv(rev(sort(table(topstrategies$strategy))), file = "../data-generated/strategies.csv")
