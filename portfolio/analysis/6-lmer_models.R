@@ -1,5 +1,5 @@
 # Experiment with models 
-# by fitting them quickly with TMB
+# by fitting them quickly with lme4
 
 # 2 separate but more complicated models. More interactions:
 # - lmer() model to full dataset: interactions allowed to vary?
@@ -21,6 +21,7 @@ library(MuMIn)
 # differenced dataset. Most pasted from Sean's "7-Separate-models.Rmd" files
 #####################################################################################
 dat = readRDS(file="../data-generated/cfec-annual-for-modeling.rds")
+nrow(dat)
 dat <- group_by(dat, p_holder) %>%
   mutate(nyr = length(unique(year))) %>%
   mutate(range_div = diff(range(specDiv))) %>%
@@ -172,7 +173,7 @@ ggplot(dat, aes(x=fitted.values(mod), y=log(revenue), col = log(revenue))) +
 ggsave("residuals_rev/fitted_v_observed.pdf", width = 40, height = 40, units = "cm")
 
 # plot fitted vs residuals
-ggplot(dm, aes(x=fitted.values(mod), y=residuals, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
+ggplot(dat, aes(x=fitted.values(mod), y=residuals, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
   geom_point(alpha = 0.7) + geom_hline(yintercept=0)
 ggsave("residuals_rev/fitted_v_residuals.pdf", width = 40, height = 40, units = "cm")
 
