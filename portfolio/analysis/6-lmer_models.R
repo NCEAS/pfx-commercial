@@ -25,8 +25,8 @@ dat <- group_by(dat, p_holder) %>%
   mutate(nyr = length(unique(year))) %>%
   mutate(range_div = diff(range(specDiv))) %>%
   as_data_frame() %>%
-  filter(nyr >= 5) %>%
-  filter(range_div > 0)
+  filter(nyr >= 10) #%>%
+  # filter(range_div > 0)
 nrow(dat)
 
 dat$log_spec_div <- scale(log(dat$specDiv))
