@@ -33,6 +33,8 @@ dat$log_spec_div <- scale(log(dat$specDiv))
 dat$log_length <- scale(log(dat$length + 1))
 dat$log_weight <- scale(log(dat$weight + 1))
 dat$log_days <- scale(log(dat$days + 1))
+dat$log_npermit <- scale(log(dat$npermit))
+
 # Filters: remove people-year combinations making < $5000
 dat = dat[which(dat$revenue >= 5000), ]
 
@@ -50,17 +52,26 @@ nrow(dat)
 
 # LMER models here -- conditional R^2 ~ 0.8
 # I also played with including length, but some of that is already in strategy intercepts
-mod <- lmer(log(revenue) ~ log_spec_div + log_days + as.factor(npermit) + 
-    (1 + log_spec_div + log_days|strategy), data = dat)
-r.squaredGLMM(mod)
+# mod <- lmer(log(revenue) ~ log_spec_div * log_days + log_npermit + 
+#     (1 + log_spec_div + log_days|strategy) +
+#     (1|p_holder),
+#     data = dat)
+
+library(glmmTMB)
+mod <- glmmTMB(log(revenue) ~ log_spec_div * log_days + log_npermit + 
+    (1 + log_spec_div + log_days|strategy) +
+    (1|p_holder),
+    data = dat)
+# r.squaredGLMM(mod)
 
 dat$residuals = residuals(mod)
 
 # 2. model the residuals / variance model 
 dat$absResid = log(abs(dat$residuals))
-mod.cv <- lmer(absResid ~ log_spec_div + log_days + 
-    (1 + log_spec_div + log_days|strategy), data = dat)
-r.squaredGLMM(mod.cv)
+mod.cv <- glmmTMB(absResid ~ log_spec_div * log_days + log_npermit +
+    (1 + log_spec_div + log_days|strategy)+
+    (1|p_holder) , data = dat)
+# r.squaredGLMM(mod.cv)
 
 # 3. model downside risk / 
 # we can't get situations where people lost money from this
