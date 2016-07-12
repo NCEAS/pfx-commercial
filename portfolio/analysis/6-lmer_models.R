@@ -33,9 +33,9 @@ dat$log_spec_div <- scale(log(dat$specDiv))
 dat$log_length <- scale(log(dat$length + 1))
 dat$log_weight <- scale(log(dat$weight + 1))
 dat$log_days <- scale(log(dat$days + 1))
+# Filters: remove people-year combinations making < $5000
+dat = dat[which(dat$revenue >= 5000), ]
 
-# Filters: remove people making < 5000 / year, and 
-dat = dat[which(dat$revenue >= 1000), ]
 
 # many different strategies, need to model only most common, 
 top.strategies = names(rev(sort(table(dat$strategy)))[1:60])
