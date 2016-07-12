@@ -78,36 +78,91 @@ mod.cv <- glmmTMB(absResid ~ log_spec_div * log_days + log_npermit +
 # maybe this is where log-diff model could help too?
 
 
-# This model includes linear + quadratic random effects
-broom::tidy(mod, conf.int = TRUE) %>%
-  filter(term != "(Intercept)") %>%
-  filter(!grepl("cor_", term)) %>%
-  mutate(conf.low = ifelse(is.na(std.error), estimate, conf.low)) %>%
-  mutate(conf.high = ifelse(is.na(std.error), estimate, conf.high)) %>%
-  ggplot(aes(y = estimate, ymax = conf.low, ymin = conf.high, x = term)) +
-  geom_pointrange() +
-  coord_flip() +
-  geom_hline(yintercept = 0, lty = 2)
-
 # plot random effect intercept vs 
 strategy.summary = group_by(dat, strategy) %>% 
   summarize(sdlogrev = sd(log(revenue)), 
-    meanrev = log(mean(revenue)),
-    specDiv = mean(specDiv))
-strategy.summary$randomInt = ranef(mod)$strategy[,1]
-strategy.summary$randomSpec = ranef(mod)$strategy[,2]
-strategy.summary$cv_randomInt = ranef(mod.cv)$strategy[,1]
-strategy.summary$cv_randomSpec = ranef(mod.cv)$strategy[,2]
+    meanrev = mean(log(revenue)),
+    specDiv = mean(log(specDiv)))
 
-# more diverse strategies = slightly higher benefit of diversifying
-ggplot(strategy.summary, aes(x = log(specDiv), y = randomSpec)) + geom_point()
+# plot random effect intercept vs 
+person.summary = group_by(dat, p_holder) %>% 
+  summarize(sdlogrev = sd(log(revenue)), 
+    meanrev = mean(log(revenue)),
+    specDiv = mean(log(specDiv)))
 
-# not much of an effect of mean revenue vs diversity
-ggplot(strategy.summary, aes(x = log(specDiv), y = randomInt)) + geom_point()
 
-# strong correlation (as expected) between mean rev and random intercept
-# some of this noise will go away when random slopes are fixed
-ggplot(strategy.summary, aes(x = meanrev, y = randomInt)) + geom_point()
+strategy.summary$randomInt = ranef(mod)[[1]]$strategy$`(Intercept)` + fixef(mod)[[1]][["(Intercept)"]]
+strategy.summary$randomSpec = ranef(mod)[[1]]$strategy$`log_spec_div` + fixef(mod)[[1]][["log_spec_div"]]
+strategy.summary$cv_randomInt = ranef(mod.cv)[[1]]$strategy$`(Intercept)` + fixef(mod.cv)[[1]][["(Intercept)"]]
+strategy.summary$cv_randomSpec = ranef(mod.cv)[[1]]$strategy$`log_spec_div` + fixef(mod.cv)[[1]][["log_spec_div"]]
+
+person.summary$randomInt = ranef(mod)[[1]]$p_holder$`(Intercept)` + fixef(mod)[[1]][["(Intercept)"]]     
+person.summary$cv_randomInt = ranef(mod.cv)[[1]]$p_holder$`(Intercept)` + fixef(mod.cv)[[1]][["(Intercept)"]]     
+
+# strategy.summary$randomInt = coef(mod)$strategy$`(Intercept)`
+# strategy.summary$randomSpec = coef(mod)$strategy$`log_spec_div`
+# strategy.summary$randomSpecDay = coef(mod)$strategy$`log_spec_div:log_days`
+# strategy.summary$cv_randomInt = coef(mod.cv)$strategy$`(Intercept)`
+# strategy.summary$cv_randomSpec = coef(mod.cv)$strategy$`log_spec_div`
+# strategy.summary$cv_randomSpecDay = coef(mod.cv)$strategy$`log_spec_div:log_days`
+# 
+# person.summary$randomInt = coef(mod)$p_holder$`(Intercept)`
+# person.summary$cv_randomInt = coef(mod.cv)$p_holder$`(Intercept)`
+
+###################
+pdf("../figs/tmb-separate-exploration.pdf", width = 10, height = 8)
+# plot_coefficients_lmer <- function(model) {
+#   broom::tidy(model, conf.int = TRUE) %>%
+#   filter(term != "(Intercept)") %>%
+#   filter(!grepl("cor_", term)) %>%
+#   # filter(!grepl("npermit", term)) %>%
+#   mutate(conf.low = ifelse(is.na(std.error), estimate, conf.low)) %>%
+#   mutate(conf.high = ifelse(is.na(std.error), estimate, conf.high)) %>%
+#   ggplot(aes(y = estimate, ymax = conf.low, ymin = conf.high, x = term)) +
+#   geom_pointrange() +
+#   coord_flip() +
+#   geom_hline(yintercept = 0, lty = 2)
+# }
+# plot_coefficients_lmer(mod) %>% print
+# plot_coefficients_lmer(mod.cv) %>% print
+
+plot_coefficients_tmb <- function(model) {
+  ci <- confint(model)
+  term <- row.names(ci)
+  ci <- as_data_frame(ci)  %>% mutate(term = term)
+  ci$estimate <- fixef(model)[[1]]
+  ci <- filter(ci, !grepl("Intercept", term))
+  ggplot(ci, aes(y = estimate, ymax = `2.5 %`, ymin = `97.5 %`, x = term)) +
+    geom_pointrange() + coord_flip() + geom_hline(yintercept = 0, lty = 2)
+}
+plot_coefficients_tmb(mod) %>% print
+plot_coefficients_tmb(mod.cv) %>% print
+
+p <- tidyr::gather(strategy.summary, model, intercept, randomInt:cv_randomSpec) %>% 
+  ggplot(aes(specDiv, intercept, color = meanrev)) + geom_point() +
+    facet_wrap(~model, scales = "free_y") +
+    geom_smooth(se = FALSE, color = "red", method = "lm")
+print(p)
+
+p <- tidyr::gather(strategy.summary, model, intercept, randomInt:cv_randomSpec) %>% 
+  ggplot(aes(meanrev, intercept, color = specDiv)) + geom_point() +
+    facet_wrap(~model, scales = "free_y") +
+    geom_smooth(se = FALSE, color = "red", method = "lm")
+print(p)
+
+p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>% 
+  ggplot(aes(specDiv, intercept, color = meanrev)) + geom_point(alpha = 0.2) +
+    facet_wrap(~model, scales = "free_y") +
+    geom_smooth(se = FALSE, color = "red")
+print(p)
+
+p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>% 
+  ggplot(aes(meanrev, intercept, color = specDiv)) + geom_point(alpha = 0.2) +
+    facet_wrap(~model, scales = "free_y") +
+    geom_smooth(se = FALSE, color = "red")
+print(p)
+dev.off()
+
 
 # plot fitted vs observed
 ggplot(dat, aes(x=fitted.values(mod), y=log(revenue), col = log(revenue))) + 
