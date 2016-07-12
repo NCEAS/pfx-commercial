@@ -36,6 +36,12 @@ dat$log_days <- scale(log(dat$days + 1))
 # Filters: remove people-year combinations making < $5000
 dat = dat[which(dat$revenue >= 5000), ]
 
+# Downsample for speed of testing 
+unique_holders <- unique(dat$p_holder)
+n_sample <- round(length(unique_holders)/2)
+set.seed(1)
+dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
+nrow(dat)
 
 # many different strategies, need to model only most common, 
 top.strategies = names(rev(sort(table(dat$strategy)))[1:60])
