@@ -37,8 +37,8 @@ dat$log_days <- scale(log(dat$days + 1))
 # Filters: remove people making < 5000 / year, and 
 dat = dat[which(dat$revenue >= 1000), ]
 
-# 4200 different strategies, need to model only most common, 
-top.strategies = names(rev(sort(table(dat$strategy)))[1:100])
+# many different strategies, need to model only most common, 
+top.strategies = names(rev(sort(table(dat$strategy)))[1:60])
 dat = dat[dat$strategy%in%top.strategies, ]
 nrow(dat)
 
