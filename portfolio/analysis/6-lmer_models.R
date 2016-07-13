@@ -166,22 +166,62 @@ dev.off()
 
 
 # plot fitted vs observed
-ggplot(dat, aes(x=fitted.values(mod), y=log(revenue), col = log(revenue))) + 
-  facet_wrap(~ strategy, scale="free") +
-  geom_point(alpha = 0.7) + 
-  geom_abline(slope=1, intercept=0, color = "grey50")
-ggsave("residuals_rev/fitted_v_observed.pdf", width = 40, height = 40, units = "cm")
+fitted_mod <- fitted.values(mod)
+fitted_mod_cv <- fitted.values(mod.cv)
+residuals_cv <- residuals(mod.cv)
+
+# ggplot(dat, aes(x=fitted_mod, y=log(revenue), col = log(revenue))) + 
+#   facet_wrap(~ strategy, scale="free") +
+#   geom_point(alpha = 0.3) + 
+#   geom_abline(slope=1, intercept=0, color = "grey50")
+# ggsave("residuals_rev/fitted_v_observed.pdf", width = 40, height = 40, units = "cm")
 
 # plot fitted vs residuals
-ggplot(dat, aes(x=fitted.values(mod), y=residuals, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
-  geom_point(alpha = 0.7) + geom_hline(yintercept=0)
+ggplot(dat, aes(x=fitted_mod, y=residuals, col = log(revenue))) + facet_wrap(~strategy) +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
 ggsave("residuals_rev/fitted_v_residuals.pdf", width = 40, height = 40, units = "cm")
+
+ggplot(dat, aes(x=fitted_mod_cv, y=residuals_cv, col = log(revenue))) + facet_wrap(~strategy) +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+ggsave("residuals_rev/fitted_v_residuals_cv.pdf", width = 40, height = 40, units = "cm")
 
 # plot specDiv vs residuals
 ggplot(dat, aes(x=specDiv, y=residuals, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
-  geom_point(alpha = 0.7) + geom_hline(yintercept=0)
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
 ggsave("residuals_rev/specdiv_v_residuals.pdf", width = 40, height = 40, units = "cm")
 
+ggplot(dat, aes(x=specDiv, y=residuals_cv, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+ggsave("residuals_rev/specdiv_v_residuals_cv.pdf", width = 40, height = 40, units = "cm")
+
+# plot vessel length vs residuals
+# everything looks okay here except for miscellaneous groundfish which curve
+# up
+ggplot(dat, aes(x=log_length, y=residuals, col = log(revenue))) + 
+  facet_wrap(~strategy, scale="free_x") +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+ggsave("residuals_rev/length_v_residuals.pdf", width = 40, height = 40, units = "cm")
+
+ggplot(dat, aes(x=log_length, y=residuals_cv, col = log(revenue))) + 
+  facet_wrap(~strategy, scale="free_x") +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+ggsave("residuals_rev/length_v_residuals_cv.pdf", width = 40, height = 40, units = "cm")
+
+# plot days vs residuals
+ggplot(dat, aes(x=log_days, y=residuals, col = log(revenue))) + 
+  facet_wrap(~strategy) +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+ggsave("residuals_rev/days_v_residuals.pdf", width = 40, height = 40, units = "cm")
+
+ggplot(dat, aes(x=log_days, y=residuals_cv, col = log(revenue))) + 
+  facet_wrap(~strategy) +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+ggsave("residuals_rev/days_v_residuals_cv.pdf", width = 40, height = 40, units = "cm")
+
+
+
+
+##################################### Sean ended here 
 # plot days.pctChange vs residuals
 ggplot(dat, aes(x=days, y=residuals, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
   geom_point(alpha = 0.7) + geom_hline(yintercept=0)
