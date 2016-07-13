@@ -176,7 +176,10 @@ permit_rev$permit.rev = permit_rev$permit.rev/permit_rev$tot.rev # fraction of t
 permit_rev = permit_rev[permit_rev$permit.rev < 0.1,]
 
 # Delete these minimal earnings
-cfecnew = cfecnew[-which(paste(cfecnew$p_holder, cfecnew$year, cfecnew$p_fshy) %in% paste(permit_rev$p_holder, permit_rev$year, permit_rev$p_fshy)), ]
+nrow(cfecnew)
+cfecnew = cfecnew[-which(paste(cfecnew$p_holder, cfecnew$year, cfecnew$p_spec) %in% 
+  paste(permit_rev$p_holder, permit_rev$year, permit_rev$p_spec)), ]
+nrow(cfecnew)
 
 topstrategies = group_by(cfecnew, p_holder, year) %>%
   summarize(strategy = paste(sort(unique(p_spec)), collapse = ", ")) %>%
