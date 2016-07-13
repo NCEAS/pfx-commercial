@@ -133,6 +133,16 @@ plot_coefficients_tmb <- function(model) {
   ci <- as_data_frame(ci)  %>% mutate(term = term)
   ci$estimate <- fixef(model)[[1]]
   ci <- filter(ci, !grepl("Intercept", term))
+
+  re_s <- attr(summary(model)$varcor$cond$strategy, "stddev")
+  re_p <- attr(summary(model)$varcor$cond$p_holder, "stddev")
+  re <- data.frame(term = c(paste0("re.sd.strategy.", names(re_s)), 
+      paste0("re.sd.p_holder.", names(re_p))))
+  re$estimate <- c(re_s, re_p)
+  re$`2.5 %` <- re$estimate
+  re$`97.5 %` <- re$estimate
+
+  ci <- bind_rows(ci, re)
   ggplot(ci, aes(y = estimate, ymax = `2.5 %`, ymin = `97.5 %`, x = term)) +
     geom_pointrange() + coord_flip() + geom_hline(yintercept = 0, lty = 2)
 }
