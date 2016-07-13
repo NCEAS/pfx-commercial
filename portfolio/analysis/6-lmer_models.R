@@ -189,20 +189,20 @@ residuals_cv <- residuals(mod.cv)
 # plot fitted vs residuals
 ggplot(dat, aes(x=fitted_mod, y=residuals, col = log(revenue))) + facet_wrap(~strategy) +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/fitted_v_residuals.pdf", width = 40, height = 40, units = "cm")
+ggsave("residuals_rev/fitted_v_residuals.png", width = 40, height = 40, units = "cm")
 
 ggplot(dat, aes(x=fitted_mod_cv, y=residuals_cv, col = log(revenue))) + facet_wrap(~strategy) +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/fitted_v_residuals_cv.pdf", width = 40, height = 40, units = "cm")
+ggsave("residuals_rev/fitted_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
 # plot specDiv vs residuals
 ggplot(dat, aes(x=specDiv, y=residuals, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/specdiv_v_residuals.pdf", width = 40, height = 40, units = "cm")
+ggsave("residuals_rev/specdiv_v_residuals.png", width = 40, height = 40, units = "cm")
 
 ggplot(dat, aes(x=specDiv, y=residuals_cv, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/specdiv_v_residuals_cv.pdf", width = 40, height = 40, units = "cm")
+ggsave("residuals_rev/specdiv_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
 # plot vessel length vs residuals
 # everything looks okay here except for miscellaneous groundfish which curve
@@ -210,23 +210,23 @@ ggsave("residuals_rev/specdiv_v_residuals_cv.pdf", width = 40, height = 40, unit
 ggplot(dat, aes(x=log_length, y=residuals, col = log(revenue))) + 
   facet_wrap(~strategy, scale="free_x") +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/length_v_residuals.pdf", width = 40, height = 40, units = "cm")
+ggsave("residuals_rev/length_v_residuals.png", width = 40, height = 40, units = "cm")
 
 ggplot(dat, aes(x=log_length, y=residuals_cv, col = log(revenue))) + 
   facet_wrap(~strategy, scale="free_x") +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/length_v_residuals_cv.pdf", width = 40, height = 40, units = "cm")
+ggsave("residuals_rev/length_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
 # plot days vs residuals
 ggplot(dat, aes(x=log_days, y=residuals, col = log(revenue))) + 
   facet_wrap(~strategy) +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/days_v_residuals.pdf", width = 40, height = 40, units = "cm")
+ggsave("residuals_rev/days_v_residuals.png", width = 40, height = 40, units = "cm")
 
 ggplot(dat, aes(x=log_days, y=residuals_cv, col = log(revenue))) + 
   facet_wrap(~strategy) +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/days_v_residuals_cv.pdf", width = 40, height = 40, units = "cm")
+ggsave("residuals_rev/days_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
 
 
