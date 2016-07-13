@@ -47,7 +47,7 @@ dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 
 # many different strategies, need to model only most common, 
-top.strategies = names(rev(sort(table(dat$strategy)))[1:60])
+top.strategies = names(rev(sort(table(dat$strategy)))[1:30])
 dat = dat[dat$strategy%in%top.strategies, ]
 nrow(dat)
 
