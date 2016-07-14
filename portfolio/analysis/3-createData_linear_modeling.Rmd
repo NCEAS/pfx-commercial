@@ -209,8 +209,21 @@ gears %>% readr::write_csv(path = "../data-generated/gear-strategies.csv")
 
 # hand edited with groups:
 gears <- readr::read_csv("../../data/gear-strategies.csv")
-# adds gear strategy column:
+gears <- mutate(gears, p_gear = 
+  ifelse(nchar(p_gear) == 1, paste0("0", p_gear), p_gear))
+# adds gear group column:
+cfecnew$gear_group <- NULL
 cfecnew <- left_join(cfecnew, select(gears, p_gear, gear_group))
+
+topstrategies_gear <- group_by(cfecnew, p_holder, year) %>%
+  summarize(strategy_gear = paste(sort(unique(gear_group)), collapse = ", ")) %>%
+  as_data_frame()
+rev(sort(table(topstrategies_gear$strategy_gear)))[1:50]
+
+cfecnew <- left_join(cfecnew, topstrategies_gear) # adds gear strategy column
+
+# xx <- filter(topstrategies_gear, strategy_gear == "")
+# filter(cfecnew, p_holder == 138, year == 1990) %>% as.data.frame()
 ```
 
 Aggregate annual metrics by person,
