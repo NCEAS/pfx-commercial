@@ -190,7 +190,7 @@ cfecnew = left_join(cfecnew, topstrategies) # adds strategy column
 write.csv(rev(sort(table(topstrategies$strategy))), file = "../data-generated/strategies.csv")
 ```
 
-Calculate gear based strategies c:
+Calculate gear based strategies:
 
 ```{r}
 codes <- mutate(codes, p_gear = substr(codes$p_fshy, 2, 3))
