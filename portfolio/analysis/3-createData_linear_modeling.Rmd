@@ -167,7 +167,7 @@ cfecnew$p_spec[cfecnew$p_spec %in% c("Y")] = "Rockfish"
 cfecnew <- filter(cfecnew, p_spec != "Freshwater") # only 1400 rows
 rev(sort(table(cfecnew$p_spec)))
 
-permit_rev = group_by(cfecnew, p_holder, year, p_spec) %>%
+permit_rev = group_by(cfecnew, p_holder, year, p_fshy) %>%
   summarize(permit.rev = sum(g_earn)) %>%
   as_data_frame() %>%
   group_by(p_holder, year) %>%
@@ -177,8 +177,8 @@ permit_rev = permit_rev[permit_rev$permit.rev < 0.1,]
 
 # Delete these minimal earnings
 nrow(cfecnew)
-cfecnew = cfecnew[-which(paste(cfecnew$p_holder, cfecnew$year, cfecnew$p_spec) %in% 
-  paste(permit_rev$p_holder, permit_rev$year, permit_rev$p_spec)), ]
+cfecnew = cfecnew[-which(paste(cfecnew$p_holder, cfecnew$year, cfecnew$p_fshy) %in% 
+  paste(permit_rev$p_holder, permit_rev$year, permit_rev$p_fshy)), ]
 nrow(cfecnew)
 
 topstrategies = group_by(cfecnew, p_holder, year) %>%
