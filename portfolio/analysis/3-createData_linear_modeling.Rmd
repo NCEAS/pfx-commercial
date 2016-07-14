@@ -209,9 +209,10 @@ gears <- group_by(gears, p_gear) %>%
 gears %>% readr::write_csv(path = "../data-generated/gear-strategies.csv")
 
 # hand edited with groups:
-gears <- readr::read_csv("../../data/gear-strategies.csv")
+gears <- readr::read_csv("../../data/gear-strategies-edited.csv")
 gears <- mutate(gears, p_gear = 
   ifelse(nchar(p_gear) == 1, paste0("0", p_gear), p_gear))
+
 # adds gear group column:
 cfecnew$gear_group <- NULL
 cfecnew <- left_join(cfecnew, select(gears, p_gear, gear_group))
@@ -262,7 +263,7 @@ cfecAnnual = group_by(cfecnew, p_holder, year) %>%
     weight = sum(g_pounds),
     length = mean(vlength, na.rm=TRUE),
     strategy = strategy[1],
-    strategy = strategy_gear[1])
+    strategy_gear = strategy_gear[1])
 
 # also calculate weighted simpson diversity of gears and species
 cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, specn) %>%
