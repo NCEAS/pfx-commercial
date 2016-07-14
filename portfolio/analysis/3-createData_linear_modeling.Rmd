@@ -216,6 +216,19 @@ gears <- mutate(gears, p_gear =
 cfecnew$gear_group <- NULL
 cfecnew <- left_join(cfecnew, select(gears, p_gear, gear_group))
 
+cfecnew$gear_group[cfecnew$p_spec == "Salmon" & 
+  cfecnew$gear_group == "drift gillnet"] <- "drift gillnet salmon"
+cfecnew$gear_group[cfecnew$p_spec == "Salmon" & 
+  cfecnew$gear_group == "purse seine"] <- "purse seine salmon"
+cfecnew$gear_group[(cfecnew$p_spec == "Sablefish" | cfecnew$p_spec == "Halibut") & 
+  cfecnew$gear_group == "pot gear"] <- "pot gear sablefish/halibut"
+cfecnew$gear_group[(cfecnew$p_spec == "Sablefish" | cfecnew$p_spec == "Halibut") & 
+  cfecnew$gear_group == "longline under 60"] <- "longline under 60 sablefish/halibut"
+cfecnew$gear_group[(cfecnew$p_spec == "Sablefish" | cfecnew$p_spec == "Halibut") & 
+  cfecnew$gear_group == "longline over 60"] <- "longline over 60 sablefish/halibut"
+cfecnew$gear_group[(cfecnew$p_spec == "Sablefish" | cfecnew$p_spec == "Halibut") & 
+  cfecnew$gear_group == "longline over 90"] <- "longline over 90 sablefish/halibut"
+
 topstrategies_gear <- group_by(cfecnew, p_holder, year) %>%
   summarize(strategy_gear = paste(sort(unique(gear_group)), collapse = ", ")) %>%
   as_data_frame()
