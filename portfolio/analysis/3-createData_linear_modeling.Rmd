@@ -99,26 +99,26 @@ dim(cfecnew)[1]
 ## Combine some strategies 
 
 ```{r}
-cfecnew$p_fshy[cfecnew$p_fshy=="B61B"] = "B06B"
-cfecnew$p_fshy[cfecnew$p_fshy=="C61B"] = "C06B"
-cfecnew$p_fshy[cfecnew$p_fshy=="C91B"] = "C09B"
-cfecnew$p_fshy[cfecnew$p_fshy=="M61B"] = "M06B"
-cfecnew$p_fshy[cfecnew$p_fshy=="E09B"] = "E91B"
-cfecnew$p_fshy[cfecnew$p_fshy=="I06B"] = "I61B"
-cfecnew$p_fshy[cfecnew$p_fshy=="Y06A"] = "Y61A"
-cfecnew$p_fshy[cfecnew$p_fshy=="O06B"] = "O61B"
-cfecnew$p_fshy[cfecnew$p_fshy=="O09B"] = "O91B"
-
-cfecnew$p_fshy[cfecnew$p_fshy%in%c("M7FB","M7GB", "M7HB","M7IB")] = "M7IB"
-cfecnew$p_fshy[cfecnew$p_fshy%in%c("M7FG","M7GG", "M7HG","M7IG")] = "M7IG"
-
-# crab and shrimp vessels
-cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="D91")] = paste("D09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="D91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="D91")])), sep="")
-cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="T91")] = paste("T09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="T91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="T91")])), sep="")
-cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="P91")] = paste("P09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="P91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="P91")])), sep="")
-
-cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M91")] = paste("M09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M91")])), sep="")
-cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")] = paste("M06", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")])), sep="")
+# cfecnew$p_fshy[cfecnew$p_fshy=="B61B"] = "B06B"
+# cfecnew$p_fshy[cfecnew$p_fshy=="C61B"] = "C06B"
+# cfecnew$p_fshy[cfecnew$p_fshy=="C91B"] = "C09B"
+# cfecnew$p_fshy[cfecnew$p_fshy=="M61B"] = "M06B"
+# cfecnew$p_fshy[cfecnew$p_fshy=="E09B"] = "E91B"
+# cfecnew$p_fshy[cfecnew$p_fshy=="I06B"] = "I61B"
+# cfecnew$p_fshy[cfecnew$p_fshy=="Y06A"] = "Y61A"
+# cfecnew$p_fshy[cfecnew$p_fshy=="O06B"] = "O61B"
+# cfecnew$p_fshy[cfecnew$p_fshy=="O09B"] = "O91B"
+# 
+# cfecnew$p_fshy[cfecnew$p_fshy%in%c("M7FB","M7GB", "M7HB","M7IB")] = "M7IB"
+# cfecnew$p_fshy[cfecnew$p_fshy%in%c("M7FG","M7GG", "M7HG","M7IG")] = "M7IG"
+# 
+# # crab and shrimp vessels
+# cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="D91")] = paste("D09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="D91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="D91")])), sep="")
+# cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="T91")] = paste("T09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="T91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="T91")])), sep="")
+# cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="P91")] = paste("P09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="P91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="P91")])), sep="")
+# 
+# cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M91")] = paste("M09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M91")])), sep="")
+# cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")] = paste("M06", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")])), sep="")
 ```
 
 ```{r}
