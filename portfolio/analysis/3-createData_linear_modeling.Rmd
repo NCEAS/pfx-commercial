@@ -146,6 +146,7 @@ codes$pfshy_species <- sub(" +$", "", codes$pfshy_species)
 readr::write_csv(codes, path = "../data-generated/cfec-codes.csv")
 # as.data.frame(codes)
 ```
+
 ## Identify most popular strategies by person-year combination
 
 Any person in a year will need to have 10% or more of their revenue to come
