@@ -1,0 +1,327 @@
+p_fshy,description,pfshy_species,pfshy_gear,pfshy_area
+A11A,"ABALONE , DIVING GEAR, SOUTHEAST",abalone, diving gear, southeast
+B05B,"HALIBUT , HAND TROLL, STATEWIDE",halibut, hand troll, statewide
+B06B,"HALIBUT , LONGLINE VESSEL UNDER 60', STATEWIDE",halibut, longline vessel under 60', statewide
+B25B,"HALIBUT , DINGLEBAR TROLL, STATEWIDE",halibut, dinglebar troll, statewide
+B26B,"HALIBUT , MECHANICAL JIG, STATEWIDE",halibut, mechanical jig, statewide
+B61B,"HALIBUT , LONGLINE VESSEL 60' OR OVER, STATEWIDE",halibut, longline vessel 60' or over, statewide
+C06B,"SABLEFISH , LONGLINE VESSEL UNDER 60', STATEWIDE",sablefish, longline vessel under 60', statewide
+C07B,"SABLEFISH , OTTER TRAWL, STATEWIDE",sablefish, otter trawl, statewide
+C09B,"SABLEFISH , POT GEAR VESSEL UNDER 60', STATEWIDE",sablefish, pot gear vessel under 60', statewide
+C25B,"SABLEFISH , DINGLEBAR TROLL, STATEWIDE",sablefish, dinglebar troll, statewide
+C26B,"SABLEFISH , MECHANICAL JIG, STATEWIDE",sablefish, mechanical jig, statewide
+C4CE,"SABLEFISH , NET GEAR MAXIMUM VESSEL LENGTH 50', PRINCE WILLIAM SOUND",sablefish, net gear maximum vessel length 50', prince william sound
+C5AE,"SABLEFISH , FIXED GEAR MAXIMUM VESSEL LENGTH 90', PRINCE WILLIAM SOUND",sablefish, fixed gear maximum vessel length 90', prince william sound
+C5BE,"SABLEFISH , FIXED GEAR MAXIMUM VESSEL LENGTH 60', PRINCE WILLIAM SOUND",sablefish, fixed gear maximum vessel length 60', prince william sound
+C5CE,"SABLEFISH , FIXED GEAR MAXIMUM VESSEL LENGTH 50', PRINCE WILLIAM SOUND",sablefish, fixed gear maximum vessel length 50', prince william sound
+C5DE,"SABLEFISH , FIXED GEAR MAXIMUM VESSEL LENGTH 35', PRINCE WILLIAM SOUND",sablefish, fixed gear maximum vessel length 35', prince william sound
+C61A,"SABLEFISH , LONGLINE, NORTHERN SOUTHEAST",sablefish, longline, northern southeast
+C61B,"SABLEFISH , LONGLINE VESSEL 60' OR OVER, STATEWIDE",sablefish, longline vessel 60' or over, statewide
+C61C,"SABLEFISH , LONGLINE, SOUTHERN SOUTHEAST",sablefish, longline, southern southeast
+C91A,"SABLEFISH , POT GEAR, NORTHERN SE-TEST ADF&G ONLY",sablefish, pot gear, northern se-test adf&g only
+C91B,"SABLEFISH , POT GEAR VESSEL 60' OR OVER, STATEWIDE",sablefish, pot gear vessel 60' or over, statewide
+C91C,"SABLEFISH , POT GEAR, SOUTHERN SOUTHEAST",sablefish, pot gear, southern southeast
+C9CE,"SABLEFISH , POT GEAR MAXIMUM VESSEL LENGTH 50', PRINCE WILLIAM SOUND",sablefish, pot gear maximum vessel length 50', prince william sound
+D09D,"DUNGENESS CRAB , POT GEAR VESSEL UNDER 60', YAKUTAT",dungeness crab, pot gear vessel under 60', yakutat
+D09E,"DUNGENESS CRAB , POT GEAR VESSEL UNDER 60', PRINCE WILLIAM SOUND",dungeness crab, pot gear vessel under 60', prince william sound
+D09J,"DUNGENESS CRAB , POT GEAR VESSEL UNDER 60', WESTWARD",dungeness crab, pot gear vessel under 60', westward
+D09L,"DUNGENESS CRAB , POT GEAR VESSEL UNDER 60', CHIGNIK",dungeness crab, pot gear vessel under 60', chignik
+D09M,"DUNGENESS CRAB , POT GEAR VESSEL UNDER 60', ALASKA PENINSULA",dungeness crab, pot gear vessel under 60', alaska peninsula
+D10A,"DUNGENESS CRAB , RING NET, SOUTHEAST",dungeness crab, ring net, southeast
+D10D,"DUNGENESS CRAB , RING NET, YAKUTAT",dungeness crab, ring net, yakutat
+D10H,"DUNGENESS CRAB , RING NET, COOK INLET",dungeness crab, ring net, cook inlet
+D11A,"DUNGENESS CRAB , DIVING GEAR, SOUTHEAST",dungeness crab, diving gear, southeast
+D91D,"DUNGENESS CRAB , POT GEAR VESSEL 60' OR OVER, YAKUTAT",dungeness crab, pot gear vessel 60' or over, yakutat
+D91E,"DUNGENESS CRAB , POT GEAR VESSEL 60' OR OVER, PRINCE WILLIAM SOUND",dungeness crab, pot gear vessel 60' or over, prince william sound
+D91H,"DUNGENESS CRAB , POT GEAR, COOK INLET",dungeness crab, pot gear, cook inlet
+D91J,"DUNGENESS CRAB , POT GEAR VESSEL 60' OR OVER, WESTWARD",dungeness crab, pot gear vessel 60' or over, westward
+D91L,"DUNGENESS CRAB , POT GEAR VESSEL 60' OR OVER, CHIGNIK",dungeness crab, pot gear vessel 60' or over, chignik
+D91M,"DUNGENESS CRAB , POT GEAR VESSEL 60' OR OVER, ALASKA PENINSULA",dungeness crab, pot gear vessel 60' or over, alaska peninsula
+D9AA,"DUNGENESS CRAB , 300 POTS/OR 100% OF MAX, SOUTHEAST",dungeness crab, 300 pots/or 100% of max, southeast
+D9BA,"DUNGENESS CRAB , 225 POTS/OR 75% OF MAX, SOUTHEAST",dungeness crab, 225 pots/or 75% of max, southeast
+D9CA,"DUNGENESS CRAB , 150 POTS/OR 50% OF MAX, SOUTHEAST",dungeness crab, 150 pots/or 50% of max, southeast
+D9DA,"DUNGENESS CRAB , 75 POTS/OR 25% OF MAX, SOUTHEAST",dungeness crab, 75 pots/or 25% of max, southeast
+E09B,"HAIR CRAB , POT GEAR VESSEL UNDER 60', STATEWIDE",hair crab, pot gear vessel under 60', statewide
+E09Q,"HAIR CRAB , POT GEAR VESSEL UNDER 60', BERING SEA",hair crab, pot gear vessel under 60', bering sea
+E91B,"HAIR CRAB , POT GEAR VESSEL 60' OR OVER, STATEWIDE",hair crab, pot gear vessel 60' or over, statewide
+E91Q,"HAIR CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA",hair crab, pot gear vessel 60' or over, bering sea
+E91QV,"HAIR CRAB , POT GEAR, BERING SEA (VESSEL PERMIT)",hair crab, pot gear, bering sea (vessel permit)
+F02B,"FRESH WATER FISH , BEACH SEINE, STATEWIDE",fresh water fish, beach seine, statewide
+F04B,"FRESH WATER FISH , SET GILLNET, STATEWIDE",fresh water fish, set gillnet, statewide
+F05B,"FRESH WATER FISH , HAND TROLL, STATEWIDE",fresh water fish, hand troll, statewide
+F06B,"FRESH WATER FISH , LONGLINE VESSEL UNDER 60', STATEWIDE",fresh water fish, longline vessel under 60', statewide
+F08B,"FRESH WATER FISH , FISH WHEEL, STATEWIDE",fresh water fish, fish wheel, statewide
+F09B,"FRESH WATER FISH , POT GEAR VESSEL UNDER 60', STATEWIDE",fresh water fish, pot gear vessel under 60', statewide
+F26B,"FRESH WATER FISH , MECHANICAL JIG, STATEWIDE",fresh water fish, mechanical jig, statewide
+F99B,"FRESH WATER FISH , OTHER GEAR, STATEWIDE",fresh water fish, other gear, statewide
+G01A,"HERRING ROE , PURSE SEINE, SOUTHEAST",herring roe, purse seine, southeast
+G01E,"HERRING ROE , PURSE SEINE, PRINCE WILLIAM SOUND",herring roe, purse seine, prince william sound
+G01H,"HERRING ROE & FOOD/BAIT , PURSE SEINE, COOK INLET",herring roe & food/bait, purse seine, cook inlet
+G01K,"HERRING ROE , PURSE SEINE, KODIAK",herring roe, purse seine, kodiak
+G01L,"HERRING ROE , PURSE SEINE, CHIGNIK",herring roe, purse seine, chignik
+G01M,"HERRING ROE , PURSE SEINE, ALASKA PENINSULA",herring roe, purse seine, alaska peninsula
+G01T,"HERRING ROE , PURSE SEINE, BRISTOL BAY",herring roe, purse seine, bristol bay
+G01U,"HERRING ROE , PURSE SEINE, NUNIVAK ISLAND",herring roe, purse seine, nunivak island
+G01X,"HERRING ROE , PURSE SEINE, KOTZEBUE",herring roe, purse seine, kotzebue
+G02X,"HERRING ROE , BEACH SEINE, KOTZEBUE",herring roe, beach seine, kotzebue
+G02Z,"HERRING ROE , BEACH SEINE, NORTON SOUND",herring roe, beach seine, norton sound
+G31K,"HERRING ROE , GILLNET & PURSE SEINE, KODIAK",herring roe, gillnet & purse seine, kodiak
+G34A,"HERRING ROE & FOOD/BAIT , GILLNET, SOUTHEAST",herring roe & food/bait, gillnet, southeast
+G34E,"HERRING ROE , GILLNET, PRINCE WILLIAM SOUND",herring roe, gillnet, prince william sound
+G34H,"HERRING ROE , GILLNET, COOK INLET",herring roe, gillnet, cook inlet
+G34K,"HERRING ROE , GILLNET, KODIAK",herring roe, gillnet, kodiak
+G34M,"HERRING ROE , GILLNET, ALASKA PENINSULA",herring roe, gillnet, alaska peninsula
+G34N,"HERRING ROE & FOOD/BAIT , GILLNET, NELSON ISLAND",herring roe & food/bait, gillnet, nelson island
+G34S,"HERRING ROE , GILLNET, SECURITY COVE",herring roe, gillnet, security cove
+G34T,"HERRING ROE , GILLNET, BRISTOL BAY",herring roe, gillnet, bristol bay
+G34U,"HERRING ROE & FOOD/BAIT , GILLNET, NUNIVAK ISLAND",herring roe & food/bait, gillnet, nunivak island
+G34V,"HERRING ROE , GILLNET, CAPE AVINOF",herring roe, gillnet, cape avinof
+G34W,"HERRING ROE & FOOD/BAIT , GILLNET, GOODNEWS BAY",herring roe & food/bait, gillnet, goodnews bay
+G34X,"HERRING ROE , GILLNET, KOTZEBUE",herring roe, gillnet, kotzebue
+G34Y,"HERRING ROE & FOOD/BAIT , GILLNET, CAPE ROMANZOF",herring roe & food/bait, gillnet, cape romanzof
+G34Z,"HERRING ROE & FOOD/BAIT , GILLNET, NORTON SOUND",herring roe & food/bait, gillnet, norton sound
+G77Z,"HERRING ROE , GILLNET, NORTON SOUND (EDUCATIONAL PERMIT)",herring roe, gillnet, norton sound (educational permit)
+H01A,"HERRING FOOD/BAIT , PURSE SEINE, SOUTHEAST",herring food/bait, purse seine, southeast
+H01E,"HERRING FOOD/BAIT , PURSE SEINE, PRINCE WILLIAM SOUND",herring food/bait, purse seine, prince william sound
+H01L,"HERRING FOOD/BAIT , PURSE SEINE, CHIGNIK",herring food/bait, purse seine, chignik
+H01M,"HERRING FOOD/BAIT , PURSE SEINE, ALASKA PENINSULA",herring food/bait, purse seine, alaska peninsula
+H02X,"HERRING FOOD/BAIT , BEACH SEINE, KOTZEBUE",herring food/bait, beach seine, kotzebue
+H1DK,"HERRING FOOD/BAIT , PURSE SEINE, FIXED VESSEL LENGTH TO 60', KODIAK",herring food/bait, purse seine," fixed vessel length to 60', kodiak"
+H21A,"HERRING FOOD/BAIT , POUND, SOUTHEAST",herring food/bait, pound, southeast
+H34E,"HERRING FOOD/BAIT , GILLNET, PRINCE WILLIAM SOUND",herring food/bait, gillnet, prince william sound
+H34H,"HERRING FOOD/BAIT , GILLNET, COOK INLET",herring food/bait, gillnet, cook inlet
+H34M,"HERRING FOOD/BAIT , GILLNET, ALASKA PENINSULA",herring food/bait, gillnet, alaska peninsula
+H34X,"HERRING FOOD/BAIT , GILLNET, KOTZEBUE",herring food/bait, gillnet, kotzebue
+H34Z,"HERRING FOOD/BAIT , GILLNET, NORTON SOUND",herring food/bait, gillnet, norton sound
+H7BK,"HERRING FOOD/BAIT , OTTER TRAWL, FIXED VESSEL LENGTH TO 75', KODIAK",herring food/bait, otter trawl," fixed vessel length to 75', kodiak"
+H7CK,"HERRING FOOD/BAIT , OTTER TRAWL, FIXED VESSEL LENGTH TO 70', KODIAK",herring food/bait, otter trawl," fixed vessel length to 70', kodiak"
+H7DK,"HERRING FOOD/BAIT , OTTER TRAWL, FIXED VESSEL LENGTH TO 60', KODIAK",herring food/bait, otter trawl," fixed vessel length to 60', kodiak"
+I05B,"LING COD , HAND TROLL, STATEWIDE",ling cod, hand troll, statewide
+I06B,"LING COD , LONGLINE VESSEL UNDER 60', STATEWIDE",ling cod, longline vessel under 60', statewide
+I09B,"LING COD , POT GEAR VESSEL UNDER 60', STATEWIDE",ling cod, pot gear vessel under 60', statewide
+I25B,"LING COD , DINGLEBAR TROLL, STATEWIDE",ling cod, dinglebar troll, statewide
+I26B,"LING COD , MECHANICAL JIG, STATEWIDE",ling cod, mechanical jig, statewide
+I61B,"LING COD , LONGLINE VESSEL 60' OR OVER, STATEWIDE",ling cod, longline vessel 60' or over, statewide
+I91B,"LING COD , POT GEAR VESSEL 60' OR OVER, STATEWIDE",ling cod, pot gear vessel 60' or over, statewide
+J11A,"GEODUCK CLAMS , DIVING GEAR, SOUTHEAST",geoduck clams, diving gear, southeast
+J97A,"GEODUCK AQUATIC FARMING , DIVING GEAR, SOUTHEAST",geoduck aquatic farming, diving gear, southeast
+K09D,"KING CRAB , POT GEAR VESSEL UNDER 60', YAKUTAT",king crab, pot gear vessel under 60', yakutat
+K09E,"KING CRAB , POT GEAR VESSEL UNDER 60', PRINCE WILLIAM SOUND",king crab, pot gear vessel under 60', prince william sound
+K09H,"KING CRAB , POT GEAR VESSEL UNDER 60', COOK INLET",king crab, pot gear vessel under 60', cook inlet
+K09K,"KING CRAB , POT GEAR VESSEL UNDER 60', KODIAK",king crab, pot gear vessel under 60', kodiak
+K09M,"KING CRAB , POT GEAR VESSEL UNDER 60', ALASKA PENINSULA",king crab, pot gear vessel under 60', alaska peninsula
+K09O,"KING CRAB , POT GEAR VESSEL UNDER 60', DUTCH HARBOR",king crab, pot gear vessel under 60', dutch harbor
+K09OA,"KING CRAB , POT GEAR VESSEL UNDER 60', ALEUTIAN ISLANDS CDQ, APICDA",king crab, pot gear vessel under 60'," aleutian islands cdq, apicda"
+K09OB,"KING CRAB , POT GEAR VESSEL UNDER 60', ALEUTIAN ISLANDS CDQ, BBEDC",king crab, pot gear vessel under 60'," aleutian islands cdq, bbedc"
+K09OC,"KING CRAB , POT GEAR VESSEL ONDER 60', ALEUTIAN ISLANDS CDQ, CBSFA",king crab, pot gear vessel onder 60'," aleutian islands cdq, cbsfa"
+K09OD,"KING CRAB , POT GEAR VESSEL UNDER 60', ALEUTIAN ISLANDS CDQ, CVRF",king crab, pot gear vessel under 60'," aleutian islands cdq, cvrf"
+K09OE,"KING CRAB , POT GEAR VESSEL UNDER 60', ALEUTIAN ISLANDS CDQ, NSEDC",king crab, pot gear vessel under 60'," aleutian islands cdq, nsedc"
+K09OF,"KING CRAB , POT GEAR VESSEL UNDER 60', ALEUTIAN ISLANDS CDQ, YDFDA",king crab, pot gear vessel under 60'," aleutian islands cdq, ydfda"
+K09OG,"KING CRAB , POT GEAR VESSEL UNDER 60', ALEUTIAN ISLANDS ACA, ACDC",king crab, pot gear vessel under 60'," aleutian islands aca, acdc"
+K09Q,"KING CRAB , POT GEAR VESSEL UNDER 60', BERING SEA",king crab, pot gear vessel under 60', bering sea
+K09QA,"KING CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, APICDA",king crab, pot gear vessel under 60'," bering sea cdq, apicda"
+K09QB,"KING CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, BBEDC",king crab, pot gear vessel under 60'," bering sea cdq, bbedc"
+K09QC,"KING CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, CBSFA",king crab, pot gear vessel under 60'," bering sea cdq, cbsfa"
+K09QD,"KING CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, CVRF",king crab, pot gear vessel under 60'," bering sea cdq, cvrf"
+K09QE,"KING CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, NSEDC",king crab, pot gear vessel under 60'," bering sea cdq, nsedc"
+K09QF,"KING CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, YDFDA",king crab, pot gear vessel under 60'," bering sea cdq, ydfda"
+K09T,"KING CRAB , POT GEAR VESSEL UNDER 60', BRISTOL BAY",king crab, pot gear vessel under 60', bristol bay
+K09TA,"KING CRAB , POT GEAR VESSEL UNDER 60', BRISTOL BAY CDQ, APICDA",king crab, pot gear vessel under 60'," bristol bay cdq, apicda"
+K09TB,"KING CRAB , POT GEAR VESSEL UNDER 60', BRISTOL BAY CDQ, BBEDC",king crab, pot gear vessel under 60'," bristol bay cdq, bbedc"
+K09TC,"KING CRAB , POT GEAR VESSEL UNDER 60', BRISTOL BAY CDQ, CBSFA",king crab, pot gear vessel under 60'," bristol bay cdq, cbsfa"
+K09TD,"KING CRAB , POT GEAR VESSEL UNDER 60', BRISTOL BAY CDQ, CVRF",king crab, pot gear vessel under 60'," bristol bay cdq, cvrf"
+K09TE,"KING CRAB , POT GEAR VESSEL UNDER 60', BRISTOL BAY CDQ, NSEDC",king crab, pot gear vessel under 60'," bristol bay cdq, nsedc"
+K09TF,"KING CRAB , POT GEAR VESSEL UNDER 60', BRISTOL BAY CDQ, YDFDA",king crab, pot gear vessel under 60'," bristol bay cdq, ydfda"
+K09X,"KING CRAB , POT GEAR VESSEL UNDER 60', KOTZEBUE",king crab, pot gear vessel under 60', kotzebue
+K09Z,"KING CRAB , POT GEAR VESSEL UNDER 60', NORTON SOUND",king crab, pot gear vessel under 60', norton sound
+K09ZE,"KING CRAB , POT GEAR VESSEL UNDER 60', NORTON SOUND CDQ, NSEDC",king crab, pot gear vessel under 60'," norton sound cdq, nsedc"
+K09ZF,"KING CRAB , POT GEAR VESSEL UNDER 60', NORTON SOUND CDQ, YDFDA",king crab, pot gear vessel under 60'," norton sound cdq, ydfda"
+K19A,"RED/BLUE KING CRAB , POT GEAR, SOUTHEAST",red/blue king crab, pot gear, southeast
+K29A,"RED/BLUE/BROWN KING CRAB , POT GEAR, SOUTHEAST",red/blue/brown king crab, pot gear, southeast
+K39A,"BROWN KING CRAB , POT GEAR, SOUTHEAST",brown king crab, pot gear, southeast
+K49A,"RED/BLUE KING/TANNER CRAB , POT GEAR, SOUTHEAST",red/blue king/tanner crab, pot gear, southeast
+K59A,"BROWN KING/TANNER CRAB , POT GEAR, SOUTHEAST",brown king/tanner crab, pot gear, southeast
+K69A,"RED/BLUE/BROWN KING/TANNER CRAB , POT GEAR, SOUTHEAST",red/blue/brown king/tanner crab, pot gear, southeast
+K91D,"KING CRAB , POT GEAR VESSEL 60' OR OVER, YAKUTAT",king crab, pot gear vessel 60' or over, yakutat
+K91E,"KING CRAB , POT GEAR VESSEL 60' OR OVER, PRINCE WILLIAM SOUND",king crab, pot gear vessel 60' or over, prince william sound
+K91H,"KING CRAB , POT GEAR VESSEL 60' OR OVER, COOK INLET",king crab, pot gear vessel 60' or over, cook inlet
+K91K,"KING CRAB , POT GEAR VESSEL 60' OR OVER, KODIAK",king crab, pot gear vessel 60' or over, kodiak
+K91M,"KING CRAB , POT GEAR VESSEL 60' OR OVER, ALASKA PENINSULA",king crab, pot gear vessel 60' or over, alaska peninsula
+K91O,"KING CRAB , POT GEAR VESSEL 60' OR OVER, DUTCH HARBOR",king crab, pot gear vessel 60' or over, dutch harbor
+K91OA,"KING CRAB , POT GEAR VESSEL 60' OR OVER, ALEUTIAN CDQ, APICDA",king crab, pot gear vessel 60' or over," aleutian cdq, apicda"
+K91OB,"KING CRAB , POT GEAR VESSEL 60' OR OVER, ALEUTIAN CDQ, BBEDC",king crab, pot gear vessel 60' or over," aleutian cdq, bbedc"
+K91OC,"KING CRAB , POT GEAR VESSEL 60' OR OVER, ALEUTIAN CDQ, CBSFA",king crab, pot gear vessel 60' or over," aleutian cdq, cbsfa"
+K91OD,"KING CRAB , POT GEAR VESSEL 60' OR OVER, ALEUTIAN CDQ, CVRF",king crab, pot gear vessel 60' or over," aleutian cdq, cvrf"
+K91OE,"KING CRAB , POT GEAR VESSEL 60' OR OVER, ALEUTIAN CDQ, NSEDC",king crab, pot gear vessel 60' or over," aleutian cdq, nsedc"
+K91OF,"KING CRAB , POT GEAR VESSEL 60' OR OVER, ALEUTIAN CDQ, YDFDA",king crab, pot gear vessel 60' or over," aleutian cdq, ydfda"
+K91OG,"KING CRAB , POT GEAR VESSEL 60' OR OVER, ALEUTIAN ISLANDS ACA, ACDC",king crab, pot gear vessel 60' or over," aleutian islands aca, acdc"
+K91Q,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA",king crab, pot gear vessel 60' or over, bering sea
+K91QA,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, APICDA",king crab, pot gear vessel 60' or over," bering sea cdq, apicda"
+K91QB,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, BBEDC",king crab, pot gear vessel 60' or over," bering sea cdq, bbedc"
+K91QC,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, CBSFA",king crab, pot gear vessel 60' or over," bering sea cdq, cbsfa"
+K91QD,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, CVRF",king crab, pot gear vessel 60' or over," bering sea cdq, cvrf"
+K91QE,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, NSEDC",king crab, pot gear vessel 60' or over," bering sea cdq, nsedc"
+K91QF,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, YDFDA",king crab, pot gear vessel 60' or over," bering sea cdq, ydfda"
+K91T,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BRISTOL BAY",king crab, pot gear vessel 60' or over, bristol bay
+K91TA,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BRISTOL BAY CDQ, APICDA",king crab, pot gear vessel 60' or over," bristol bay cdq, apicda"
+K91TB,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BRISTOL BAY CDQ, BBEDC",king crab, pot gear vessel 60' or over," bristol bay cdq, bbedc"
+K91TC,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BRISTOL BAY CDQ, CBSFA",king crab, pot gear vessel 60' or over," bristol bay cdq, cbsfa"
+K91TD,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BRISTOL BAY CDQ, CVRF",king crab, pot gear vessel 60' or over," bristol bay cdq, cvrf"
+K91TE,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BRISTOL BAY CDQ, NSEDC",king crab, pot gear vessel 60' or over," bristol bay cdq, nsedc"
+K91TF,"KING CRAB , POT GEAR VESSEL 60' OR OVER, BRISTOL BAY CDQ, YDFDA",king crab, pot gear vessel 60' or over," bristol bay cdq, ydfda"
+K91X,"KING CRAB , POT GEAR VESSEL 60' OR OVER, KOTZEBUE",king crab, pot gear vessel 60' or over, kotzebue
+K91Z,"KING CRAB , POT GEAR VESSEL 60' OR OVER, NORTON SOUND",king crab, pot gear vessel 60' or over, norton sound
+L12E,"HERRING SPAWN ON KELP , DIVE/HAND PICK, PRINCE WILLIAM SOUND",herring spawn on kelp, dive/hand pick, prince william sound
+L12T,"HERRING SPAWN ON KELP , HAND PICK, BRISTOL BAY",herring spawn on kelp, hand pick, bristol bay
+L21A,"HERRING SPAWN ON KELP , POUND, NORTHERN SOUTHEAST",herring spawn on kelp, pound, northern southeast
+L21C,"HERRING SPAWN ON KELP , POUND, SOUTHERN SOUTHEAST",herring spawn on kelp, pound, southern southeast
+L21E,"HERRING SPAWN ON KELP , POUND, PRINCE WILLIAM SOUND",herring spawn on kelp, pound, prince william sound
+M01B,"MISC. SALTWATER FINFISH , PURSE SEINE, STATEWIDE",misc. saltwater finfish, purse seine, statewide
+M01G,"MISC. SALTWATER FINFISH , PURSE SEINE, GOA",misc. saltwater finfish, purse seine, goa
+M02B,"MISC. SALTWATER FINFISH , BEACH SEINE, STATEWIDE",misc. saltwater finfish, beach seine, statewide
+M02G,"MISC. SALTWATER FINFISH , BEACH SEINE, GOA",misc. saltwater finfish, beach seine, goa
+M05B,"MISC. SALTWATER FINFISH , HAND TROLL, STATEWIDE",misc. saltwater finfish, hand troll, statewide
+M05G,"MISC. SALTWATER FINFISH , HAND TROLL, GOA",misc. saltwater finfish, hand troll, goa
+M06B,"MISC. SALTWATER FINFISH , LONGLINE VESSEL UNDER 60', STATEWIDE",misc. saltwater finfish, longline vessel under 60', statewide
+M06G,"MISC. SALTWATER FINFISH , LONGLINE VESSEL UNDER 60', GOA",misc. saltwater finfish, longline vessel under 60', goa
+M09B,"MISC. SALTWATER FINFISH , POT GEAR VESSEL UNDER 60', STATEWIDE",misc. saltwater finfish, pot gear vessel under 60', statewide
+M09G,"MISC. SALTWATER FINFISH , POT GEAR VESSEL UNDER 60', GOA",misc. saltwater finfish, pot gear vessel under 60', goa
+M17B,"MISC. SALTWATER FINFISH , BEAM TRAWL, STATEWIDE",misc. saltwater finfish, beam trawl, statewide
+M17G,"MISC. SALTWATER FINFISH , BEAM TRAWL, GOA",misc. saltwater finfish, beam trawl, goa
+M25B,"MISC. SALTWATER FINFISH , DINGLEBAR TROLL, STATEWIDE",misc. saltwater finfish, dinglebar troll, statewide
+M25G,"MISC. SALTWATER FINFISH , DINGLEBAR TROLL, GOA",misc. saltwater finfish, dinglebar troll, goa
+M26B,"MISC. SALTWATER FINFISH , MECHANICAL JIG, STATEWIDE",misc. saltwater finfish, mechanical jig, statewide
+M26G,"MISC. SALTWATER FINFISH , MECHANICAL JIG, GOA",misc. saltwater finfish, mechanical jig, goa
+M37B,"MISC. SALTWATER FINFISH , PAIR TRAWL, STATEWIDE",misc. saltwater finfish, pair trawl, statewide
+M37G,"MISC. SALTWATER FINFISH , PAIR TRAWL, GOA",misc. saltwater finfish, pair trawl, goa
+M6AB,"MISC. SALTWATER FINFISH , LONGLINE VESSEL 90' OR OVER, STATEWIDE",misc. saltwater finfish, longline vessel 90' or over, statewide
+M6AG,"MISC. SALTWATER FINFISH , LONGLINE VESSEL 90' OR OVER, GOA",misc. saltwater finfish, longline vessel 90' or over, goa
+M6BB,"MISC. SALTWATER FINFISH , LONGLINE VESSEL 60' TO UNDER 90', STATEWIDE",misc. saltwater finfish, longline vessel 60' to under 90', statewide
+M6BG,"MISC. SALTWATER FINFISH , LONGLINE VESSEL 60' TO UNDER 90', GOA",misc. saltwater finfish, longline vessel 60' to under 90', goa
+M7FB,"MISC. SALTWATER FINFISH , OTTER TRAWL VESSEL UNDER 60', STATEWIDE",misc. saltwater finfish, otter trawl vessel under 60', statewide
+M7FG,"MISC. SALTWATER FINFISH , OTTER TRAWL VESSEL UNDER 60', GOA",misc. saltwater finfish, otter trawl vessel under 60', goa
+M7GB,"MISC. SALTWATER FINFISH , OTTER TRAWL VESSEL 60' TO UNDER 90', STATEWIDE",misc. saltwater finfish, otter trawl vessel 60' to under 90', statewide
+M7GG,"MISC. SALTWATER FINFISH , OTTER TRAWL VESSEL 60' TO UNDER 90', GOA",misc. saltwater finfish, otter trawl vessel 60' to under 90', goa
+M7HB,"MISC. SALTWATER FINFISH , OTTER TRAWL VESSEL 90' TO 125', STATEWIDE",misc. saltwater finfish, otter trawl vessel 90' to 125', statewide
+M7HG,"MISC. SALTWATER FINFISH , OTTER TRAWL VESSEL 90' TO 125', GOA",misc. saltwater finfish, otter trawl vessel 90' to 125', goa
+M7IB,"MISC. SALTWATER FINFISH , OTTER TRAWL VESSEL OVER 125', STATEWIDE",misc. saltwater finfish, otter trawl vessel over 125', statewide
+M7IG,"MISC. SALTWATER FINFISH , OTTER TRAWL VESSEL OVER 125', GOA",misc. saltwater finfish, otter trawl vessel over 125', goa
+M91B,"MISC. SALTWATER FINFISH , POT GEAR VESSEL 60' OR OVER, STATEWIDE",misc. saltwater finfish, pot gear vessel 60' or over, statewide
+M91G,"MISC. SALTWATER FINFISH , POT GEAR VESSEL 60' OR OVER, GOA",misc. saltwater finfish, pot gear vessel 60' or over, goa
+M99B,"MISC. SALTWATER FINFISH , OTHER GEAR, STATEWIDE",misc. saltwater finfish, other gear, statewide
+N09B,"SNAILS , POT GEAR VESSEL UNDER 60', STATEWIDE",snails, pot gear vessel under 60', statewide
+N91B,"SNAILS , POT GEAR VESSEL 60' OR OVER, STATEWIDE",snails, pot gear vessel 60' or over, statewide
+N99B,"SNAILS , OTHER GEAR, STATEWIDE",snails, other gear, statewide
+O06B,"OCTOPI/SQUID , LONGLINE VESSEL UNDER 60', STATEWIDE",octopi/squid, longline vessel under 60', statewide
+O09B,"OCTOPI/SQUID , POT GEAR VESSEL UNDER 60', STATEWIDE",octopi/squid, pot gear vessel under 60', statewide
+O26B,"OCTOPI/SQUID , MECHANICAL JIG, STATEWIDE",octopi/squid, mechanical jig, statewide
+O61B,"OCTOPI/SQUID , LONGLINE VESSEL 60' OR OVER, STATEWIDE",octopi/squid, longline vessel 60' or over, statewide
+O91B,"OCTOPI/SQUID , POT GEAR VESSEL 60' OR OVER, STATEWIDE",octopi/squid, pot gear vessel 60' or over, statewide
+O99B,"OCTOPI/SQUID , OTHER GEAR, STATEWIDE",octopi/squid, other gear, statewide
+P07A,"SHRIMP , OTTER TRAWL, SOUTHEAST",shrimp, otter trawl, southeast
+P07D,"SHRIMP , OTTER TRAWL, YAKUTAT",shrimp, otter trawl, yakutat
+P07E,"SHRIMP , OTTER TRAWL, PRINCE WILLIAM SOUND",shrimp, otter trawl, prince william sound
+P07H,"SHRIMP , OTTER TRAWL, COOK INLET",shrimp, otter trawl, cook inlet
+P07J,"SHRIMP , OTTER TRAWL, WESTWARD",shrimp, otter trawl, westward
+P09D,"SHRIMP , POT GEAR VESSEL UNDER 60', YAKUTAT",shrimp, pot gear vessel under 60', yakutat
+P09E,"SHRIMP , POT GEAR VESSEL UNDER 60', PRINCE WILLIAM SOUND",shrimp, pot gear vessel under 60', prince william sound
+P09H,"SHRIMP , POT GEAR VESSEL UNDER 60', COOK INLET",shrimp, pot gear vessel under 60', cook inlet
+P09J,"SHRIMP , POT GEAR VESSEL UNDER 60', WESTWARD",shrimp, pot gear vessel under 60', westward
+P17A,"SHRIMP , BEAM TRAWL, SOUTHEAST",shrimp, beam trawl, southeast
+P17D,"SHRIMP , BEAM TRAWL, YAKUTAT",shrimp, beam trawl, yakutat
+P17E,"SHRIMP , BEAM TRAWL, PRINCE WILLIAM SOUND",shrimp, beam trawl, prince william sound
+P17H,"SHRIMP , BEAM TRAWL, COOK INLET",shrimp, beam trawl, cook inlet
+P17J,"SHRIMP , BEAM TRAWL, WESTWARD",shrimp, beam trawl, westward
+P91A,"SHRIMP , POT GEAR, SOUTHEAST",shrimp, pot gear, southeast
+P91D,"SHRIMP , POT GEAR VESSEL 60' OR OVER, YAKUTAT",shrimp, pot gear vessel 60' or over, yakutat
+P91E,"SHRIMP , POT GEAR VESSEL 60' OR OVER, PRINCE WILLIAM SOUND",shrimp, pot gear vessel 60' or over, prince william sound
+P91H,"SHRIMP , POT GEAR VESSEL 60' OR OVER, COOK INLET",shrimp, pot gear vessel 60' or over, cook inlet
+P91J,"SHRIMP , POT GEAR VESSEL 60' OR OVER, WESTWARD",shrimp, pot gear vessel 60' or over, westward
+Q11A,"SEA CUCUMBER , DIVING GEAR, SOUTHEAST",sea cucumber, diving gear, southeast
+Q11B,"SEA CUCUMBER , DIVING GEAR, STATEWIDE",sea cucumber, diving gear, statewide
+Q11K,"SEA CUCUMBER , DIVING GEAR, KODIAK",sea cucumber, diving gear, kodiak
+R18B,"CLAMS , SHOVEL, STATEWIDE",clams, shovel, statewide
+R23B,"CLAMS , MECHANICAL DIGGER, STATEWIDE",clams, mechanical digger, statewide
+S01A,"SALMON , PURSE SEINE, SOUTHEAST",salmon, purse seine, southeast
+S01E,"SALMON , PURSE SEINE, PRINCE WILLIAM SOUND",salmon, purse seine, prince william sound
+S01H,"SALMON , PURSE SEINE, COOK INLET",salmon, purse seine, cook inlet
+S01K,"SALMON , PURSE SEINE, KODIAK",salmon, purse seine, kodiak
+S01L,"SALMON , PURSE SEINE, CHIGNIK",salmon, purse seine, chignik
+S01M,"SALMON , PURSE SEINE, ALASKA PENINSULA",salmon, purse seine, alaska peninsula
+S02K,"SALMON , BEACH SEINE, KODIAK",salmon, beach seine, kodiak
+S03A,"SALMON , DRIFT GILLNET, SOUTHEAST",salmon, drift gillnet, southeast
+S03E,"SALMON , DRIFT GILLNET, PRINCE WILLIAM SOUND",salmon, drift gillnet, prince william sound
+S03H,"SALMON , DRIFT GILLNET, COOK INLET",salmon, drift gillnet, cook inlet
+S03M,"SALMON , DRIFT GILLNET, ALASKA PENINSULA",salmon, drift gillnet, alaska peninsula
+S03T,"SALMON , DRIFT GILLNET, BRISTOL BAY",salmon, drift gillnet, bristol bay
+S04D,"SALMON , SET GILLNET, YAKUTAT",salmon, set gillnet, yakutat
+S04E,"SALMON , SET GILLNET, PRINCE WILLIAM SOUND",salmon, set gillnet, prince william sound
+S04F,"SALMON , SET GILLNET, ATKA/AMLIA ISLANDS",salmon, set gillnet, atka/amlia islands
+S04H,"SALMON , SET GILLNET, COOK INLET",salmon, set gillnet, cook inlet
+S04K,"SALMON , SET GILLNET, KODIAK",salmon, set gillnet, kodiak
+S04M,"SALMON , SET GILLNET, ALASKA PENINSULA",salmon, set gillnet, alaska peninsula
+S04P,"SALMON , GILLNET, UPPER YUKON",salmon, gillnet, upper yukon
+S04T,"SALMON , SET GILLNET, BRISTOL BAY",salmon, set gillnet, bristol bay
+S04W,"SALMON , GILLNET, KUSKOKWIM",salmon, gillnet, kuskokwim
+S04X,"SALMON , GILLNET, KOTZEBUE",salmon, gillnet, kotzebue
+S04Y,"SALMON , GILLNET, LOWER YUKON",salmon, gillnet, lower yukon
+S04Z,"SALMON , GILLNET, NORTON SOUND",salmon, gillnet, norton sound
+S05B,"SALMON , HAND TROLL, STATEWIDE",salmon, hand troll, statewide
+S08P,"SALMON , FISH WHEEL, UPPER YUKON",salmon, fish wheel, upper yukon
+S15B,"SALMON , POWER TROLL, STATEWIDE",salmon, power troll, statewide
+S77A,"SALMON , SPECIAL HARVEST AREA , SOUTHEAST",salmon, special harvest area , southeast
+S77E,"SALMON , SPECIAL HARVEST AREA , PRINCE WILLIAM SOUND",salmon, special harvest area , prince william sound
+S77H,"SALMON , SPECIAL HARVEST AREA , COOK INLET",salmon, special harvest area , cook inlet
+S77K,"SALMON , SPECIAL HARVEST AREA , KODIAK",salmon, special harvest area , kodiak
+S77T,"SALMON , SPECIAL HARVEST AREA , BRISTOL BAY",salmon, special harvest area , bristol bay
+S77W,"SALMON , SPECIAL HARVEST AREA , KUSKOKWIM",salmon, special harvest area , kuskokwim
+S77Y,"SALMON , SPECIAL HARVEST AREA , LOWER YUKON",salmon, special harvest area , lower yukon
+T09D,"TANNER CRAB , POT GEAR VESSEL UNDER 60', YAKUTAT",tanner crab, pot gear vessel under 60', yakutat
+T09E,"TANNER CRAB , POT GEAR VESSEL UNDER 60', PRINCE WILLIAM SOUND",tanner crab, pot gear vessel under 60', prince william sound
+T09H,"TANNER CRAB , POT GEAR VESSEL UNDER 60', COOK INLET",tanner crab, pot gear vessel under 60', cook inlet
+T09K,"TANNER CRAB , POT GEAR VESSEL UNDER 60', KODIAK",tanner crab, pot gear vessel under 60', kodiak
+T09L,"TANNER CRAB , POT GEAR VESSEL UNDER 60', CHIGNIK",tanner crab, pot gear vessel under 60', chignik
+T09M,"TANNER CRAB , POT GEAR VESSEL UNDER 60', ALASKA PENINSULA",tanner crab, pot gear vessel under 60', alaska peninsula
+T09O,"TANNER CRAB , POT GEAR VESSEL UNDER 60', DUTCH HARBOR",tanner crab, pot gear vessel under 60', dutch harbor
+T09Q,"TANNER CRAB , POT GEAR VESSEL UNDER 60', BERING SEA",tanner crab, pot gear vessel under 60', bering sea
+T09QA,"TANNER CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, APICDA",tanner crab, pot gear vessel under 60'," bering sea cdq, apicda"
+T09QB,"TANNER CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, BBEDC",tanner crab, pot gear vessel under 60'," bering sea cdq, bbedc"
+T09QC,"TANNER CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, CBSFA",tanner crab, pot gear vessel under 60'," bering sea cdq, cbsfa"
+T09QD,"TANNER CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, CVRF",tanner crab, pot gear vessel under 60'," bering sea cdq, cvrf"
+T09QE,"TANNER CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, NSEDC",tanner crab, pot gear vessel under 60'," bering sea cdq, nsedc"
+T09QF,"TANNER CRAB , POT GEAR VESSEL UNDER 60', BERING SEA CDQ, YDFDA",tanner crab, pot gear vessel under 60'," bering sea cdq, ydfda"
+T10A,"TANNER CRAB , RING NET, SOUTHEAST",tanner crab, ring net, southeast
+T10D,"TANNER CRAB , RING NET, YAKUTAT",tanner crab, ring net, yakutat
+T19A,"TANNER CRAB , POT GEAR, SOUTHEAST",tanner crab, pot gear, southeast
+T91D,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, YAKUTAT",tanner crab, pot gear vessel 60' or over, yakutat
+T91E,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, PRINCE WILLIAM SOUND",tanner crab, pot gear vessel 60' or over, prince william sound
+T91H,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, COOK INLET",tanner crab, pot gear vessel 60' or over, cook inlet
+T91K,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, KODIAK",tanner crab, pot gear vessel 60' or over, kodiak
+T91M,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, ALASKA PENINSULA",tanner crab, pot gear vessel 60' or over, alaska peninsula
+T91O,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, DUTCH HARBOR",tanner crab, pot gear vessel 60' or over, dutch harbor
+T91Q,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA",tanner crab, pot gear vessel 60' or over, bering sea
+T91QA,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, APICDA",tanner crab, pot gear vessel 60' or over," bering sea cdq, apicda"
+T91QB,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, BBEDC",tanner crab, pot gear vessel 60' or over," bering sea cdq, bbedc"
+T91QC,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, CBSFA",tanner crab, pot gear vessel 60' or over," bering sea cdq, cbsfa"
+T91QD,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, CVRF",tanner crab, pot gear vessel 60' or over," bering sea cdq, cvrf"
+T91QE,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, NSEDC",tanner crab, pot gear vessel 60' or over," bering sea cdq, nsedc"
+T91QF,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA CDQ, YDFDA",tanner crab, pot gear vessel 60' or over," bering sea cdq, ydfda"
+T91R,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, ADAK",tanner crab, pot gear vessel 60' or over, adak
+TB9AK,"TANNER BAIRDI CRAB , POT GEAR VESSEL TO 120', KODIAK",tanner bairdi crab, pot gear vessel to 120', kodiak
+TB9BK,"TANNER BAIRDI CRAB , POT GEAR VESSEL UNDER 60', KODIAK",tanner bairdi crab, pot gear vessel under 60', kodiak
+U11A,"SEA URCHIN , DIVING GEAR, SOUTHEAST",sea urchin, diving gear, southeast
+U11B,"SEA URCHIN , DIVING GEAR, STATEWIDE",sea urchin, diving gear, statewide
+U11K,"SEA URCHIN , DIVING GEAR, KODIAK",sea urchin, diving gear, kodiak
+W2AB,"SCALLOPS , DREDGE VESSEL OVER 80', STATEWIDE",scallops, dredge vessel over 80', statewide
+W2ABV,"WEATHERVANE SCALLOPS , DREDGE VESSEL PERMIT OVER 80', STATEWIDE",weathervane scallops, dredge vessel permit over 80', statewide
+W2BB,"SCALLOPS DREDGE , VESSEL TO 80', STATEWIDE",scallops dredge, vessel to 80', statewide
+W2BBV,"WEATHERVANE SCALLOPS , DREDGE VESSEL PERMIT TO 80', STATEWIDE",weathervane scallops, dredge vessel permit to 80', statewide
+Y05A,"DEMERSAL SHELF ROCKFISH , HAND TROLL, SOUTHEAST",demersal shelf rockfish, hand troll, southeast
+Y06A,"DEMERSAL SHELF ROCKFISH , LONGLINE VESSEL UNDER 60', SOUTHEAST",demersal shelf rockfish, longline vessel under 60', southeast
+Y25A,"DEMERSAL SHELF ROCKFISH , DINGLEBAR TROLL, SOUTHEAST",demersal shelf rockfish, dinglebar troll, southeast
+Y26A,"DEMERSAL SHELF ROCKFISH , MECHANICAL JIG, SOUTHEAST",demersal shelf rockfish, mechanical jig, southeast
+Y61A,"DEMERSAL SHELF ROCKFISH , LONGLINE VESSEL 60' OR OVER, SOUTHEAST",demersal shelf rockfish, longline vessel 60' or over, southeast
+Y99A,"DEMERSAL SHELF ROCKFISH , OTHER GEAR, SOUTHEAST",demersal shelf rockfish, other gear, southeast
+Z09B,"MISC. MARINE INVERTEBRATES , POT VESSEL UNDER 60', STATEWIDE",misc. marine invertebrates, pot vessel under 60', statewide
+Z12B,"MISC. MARINE INVERTEBRATES , HAND PICK, STATEWIDE",misc. marine invertebrates, hand pick, statewide
+Z99B,"MISC. MARINE INVERTEBRATES , OTHER GEAR, STATEWIDE",misc. marine invertebrates, other gear, statewide

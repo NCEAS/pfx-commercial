@@ -190,6 +190,29 @@ cfecnew = left_join(cfecnew, topstrategies) # adds strategy column
 write.csv(rev(sort(table(topstrategies$strategy))), file = "../data-generated/strategies.csv")
 ```
 
+Calculate gear based strategies c:
+
+```{r}
+codes <- mutate(codes, p_gear = substr(codes$p_fshy, 2, 3))
+gears <- select(codes, p_gear, pfshy_gear) %>% distinct()
+cfecnew$p_gear = substr(cfecnew$p_fshy,2,3)
+gear_freq <- sort(table(cfecnew$p_gear)) %>% as_data_frame()  %>% 
+  rename(p_gear = Var1)
+gears <- left_join(gear_freq, gears)
+trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+gears <- mutate(gears, pfshy_gear = trim(pfshy_gear))
+gears <- group_by(gears, p_gear) %>% 
+  summarize(n = n[1], pfshy_gear = paste(pfshy_gear, collapse = "-")) %>% 
+    as_data_frame() %>% 
+      arrange(-n)
+gears %>% readr::write_csv(path = "../data-generated/gear-strategies.csv")
+
+# hand edited with groups:
+gears <- readr::read_csv("../../data/gear-strategies.csv")
+# adds gear strategy column:
+cfecnew <- left_join(cfecnew, select(gears, p_gear, gear_group))
+```
+
 Aggregate annual metrics by person,
 
 ```{r}
