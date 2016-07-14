@@ -21,6 +21,8 @@ library(MuMIn)
 # differenced dataset. Most pasted from Sean's "7-Separate-models.Rmd" files
 #####################################################################################
 dat = readRDS(file="../data-generated/cfec-annual-for-modeling.rds")
+dat$strategy <- NULL
+dat$strategy <- dat$strategy_gear
 nrow(dat)
 dat <- group_by(dat, p_holder) %>%
   mutate(nyr = length(unique(year))) %>%
