@@ -67,6 +67,41 @@ mod <- glmmTMB(log(revenue) ~ log_spec_div * log_days + log_npermit +
     data = dat)
 # r.squaredGLMM(mod)
 
+## library("brms")
+## options(mc.cores = parallel::detectCores())
+## mod.brms2 <- brm(log(revenue) ~ log_spec_div * log_days + log_npermit + 
+##   (1|strategy) + (1|p_holder),
+##   data = dat, iter = 400,
+##   prior = 
+##     c(
+##       set_prior("student_t(3,0,3)", class = "sd", group = "strategy"),
+##       set_prior("student_t(3,0,3)", class = "sd", group = "p_holder"),
+##       set_prior("student_t(3,0,3)", class = "sigma"),
+##       set_prior("normal(0,1)", class = "b"),
+##       set_prior("normal(10.5,3)", class = "Intercept")
+##       )
+##   )
+## mod.brms2$model
+## 
+## mod <- glmmTMB(log(revenue) ~ log_spec_div * log_days + log_npermit + 
+##     (1 |strategy) +
+##     (1|p_holder),
+##     data = dat)
+## 
+## # mean(log(dat$revenue/10000))
+## mod.brms3 <- brm(log(revenue/10000) ~ log_spec_div * log_days + log_npermit + 
+##   (1+log_spec_div|strategy) + (1|p_holder),
+##   data = dat, algorithm = "meanfield", # iter = 300, 
+##   prior = 
+##     c(
+##       set_prior("student_t(3,0,3)", class = "sd", group = "strategy"),
+##       set_prior("student_t(3,0,3)", class = "sd", group = "p_holder"),
+##       set_prior("student_t(3,0,3)", class = "sigma"),
+##       set_prior("normal(0,1)", class = "b"),
+##       set_prior("normal(0,20)", class = "Intercept")
+##       )
+##   )
+## 
 dat$residuals = residuals(mod)
 
 # 2. model the residuals / variance model 
