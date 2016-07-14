@@ -227,6 +227,7 @@ if ("VLength" %in% names(cfecnew)) {
 cfecAnnual = group_by(cfecnew, p_holder, year) %>%
   summarize(permit = p_fshy[1], boat = cadfg[1],
     days = diff(range(yday) + 1),
+    days_n = sum(unique(yday)),
     ngear = length(unique(gearn)),
     nspec = length(unique(specn)),
     npermit = length(unique(p_fshy)),
