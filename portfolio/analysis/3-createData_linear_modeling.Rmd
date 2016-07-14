@@ -240,14 +240,15 @@ if ("VLength" %in% names(cfecnew)) {
 cfecAnnual = group_by(cfecnew, p_holder, year) %>%
   summarize(permit = p_fshy[1], boat = cadfg[1],
     days = diff(range(yday) + 1),
-    days_n = sum(unique(yday)),
+    days_n = length(unique(yday)),
     ngear = length(unique(gearn)),
     nspec = length(unique(specn)),
     npermit = length(unique(p_fshy)),
     revenue = sum(g_earn),
     weight = sum(g_pounds),
     length = mean(vlength, na.rm=TRUE),
-    strategy = strategy[1])
+    strategy = strategy[1],
+    strategy = strategy_gear[1])
 
 # also calculate weighted simpson diversity of gears and species
 cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, specn) %>%
