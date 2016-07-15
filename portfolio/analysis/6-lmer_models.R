@@ -59,7 +59,7 @@ nrow(dat)
 library(glmmTMB)
 mod <- glmmTMB(log(revenue) ~ scaled_spec_div * log_days + 
   I(scaled_spec_div^2) + I(log_days^2) +
-    (1 + scaled_spec_div + log_days|strategy) +
+    (1 + I(scaled_spec_div^2) + I(log_days^2) + scaled_spec_div + log_days|strategy) +
     (1|p_holder),
     data = dat)
 summary(mod)
@@ -70,7 +70,8 @@ dat$residuals = residuals(mod)
 # 2. model the residuals / variance model 
 dat$absResid = log(abs(dat$residuals))
 mod.cv <- glmmTMB(absResid ~ scaled_spec_div * log_days + 
-  I(scaled_spec_div^2) + I(log_days^2) +
+  # I(scaled_spec_div^2) + I(log_days^2) +
+   I(log_days^2) +
     (1 + scaled_spec_div + log_days|strategy), 
     # (1 + log_spec_div + log_days|strategy) +
     # (1|p_holder),
@@ -220,8 +221,14 @@ p <- ggplot(dat, aes(x=scaled_spec_div, y=residuals, col = log(revenue))) +
   geom_smooth(se = FALSE, color = "red")
 ggsave("residuals_rev/specdiv_v_residuals.pdf", width = 28, height = 22, units = "cm")
 
+p <- ggplot(dat, aes(x=scaled_spec_div, y=residuals)) +
+  geom_point(alpha = 0.1) + geom_hline(yintercept=0) +
+  ylim(-2,2) +
+  geom_smooth(se = FALSE, color = "red")
+
 p <- ggplot(dat, aes(x=specDiv, y=residuals_cv, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
-  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+  geom_point(alpha = 0.1) + geom_hline(yintercept=0) +
+  geom_smooth(se = FALSE, color = "red")
 ggsave("residuals_rev/specdiv_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
 # plot vessel length vs residuals
