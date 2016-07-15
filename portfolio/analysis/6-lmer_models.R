@@ -16,10 +16,6 @@ library(ggplot2)
 library(lme4)
 library(MuMIn)
 
-#####################################################################################
-# UNTRANSFORMED DATA. With threshold of 5 yrs / person, about the same size as
-# differenced dataset. Most pasted from Sean's "7-Separate-models.Rmd" files
-#####################################################################################
 dat = readRDS(file="../data-generated/cfec-annual-for-modeling.rds")
 dat$strategy <- NULL
 dat$strategy <- dat$strategy_gear
@@ -39,6 +35,7 @@ dat <- group_by(dat, strategy) %>%
 nrow(dat)
 
 dat$log_spec_div <- scale(log(dat$specDiv))
+dat$scaled_spec_div <- scale(dat$specDiv)
 dat$log_length <- scale(log(dat$length + 1))
 dat$log_weight <- scale(log(dat$weight + 1))
 dat$log_days <- scale(log(dat$days + 1))
@@ -49,7 +46,7 @@ dat = dat[which(dat$revenue >= 5000), ]
 
 # Downsample for speed of testing 
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.66)
+n_sample <- round(length(unique_holders)*0.5)
 set.seed(1)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
@@ -59,63 +56,27 @@ top.strategies = names(rev(sort(table(dat$strategy)))[1:30])
 dat = dat[dat$strategy%in%top.strategies, ]
 nrow(dat)
 
-# LMER models here -- conditional R^2 ~ 0.8
-# I also played with including length, but some of that is already in strategy intercepts
-# mod <- lmer(log(revenue) ~ log_spec_div * log_days + log_npermit + 
-#     (1 + log_spec_div + log_days|strategy) +
-#     (1|p_holder),
-#     data = dat)
-
 library(glmmTMB)
-mod <- glmmTMB(log(revenue) ~ log_spec_div * log_days + log_npermit + 
-    (1 + log_spec_div + log_days|strategy) +
+mod <- glmmTMB(log(revenue) ~ scaled_spec_div * log_days + 
+  I(scaled_spec_div^2) + I(log_days^2) +
+    (1 + scaled_spec_div + log_days|strategy) +
     (1|p_holder),
     data = dat)
-# r.squaredGLMM(mod)
+summary(mod)
+AIC(mod)
 
-## library("brms")
-## options(mc.cores = parallel::detectCores())
-## mod.brms2 <- brm(log(revenue) ~ log_spec_div * log_days + log_npermit + 
-##   (1|strategy) + (1|p_holder),
-##   data = dat, iter = 400,
-##   prior = 
-##     c(
-##       set_prior("student_t(3,0,3)", class = "sd", group = "strategy"),
-##       set_prior("student_t(3,0,3)", class = "sd", group = "p_holder"),
-##       set_prior("student_t(3,0,3)", class = "sigma"),
-##       set_prior("normal(0,1)", class = "b"),
-##       set_prior("normal(10.5,3)", class = "Intercept")
-##       )
-##   )
-## mod.brms2$model
-## 
-## mod <- glmmTMB(log(revenue) ~ log_spec_div * log_days + log_npermit + 
-##     (1 |strategy) +
-##     (1|p_holder),
-##     data = dat)
-## 
-## # mean(log(dat$revenue/10000))
-## mod.brms3 <- brm(log(revenue/10000) ~ log_spec_div * log_days + log_npermit + 
-##   (1+log_spec_div|strategy) + (1|p_holder),
-##   data = dat, algorithm = "meanfield", # iter = 300, 
-##   prior = 
-##     c(
-##       set_prior("student_t(3,0,3)", class = "sd", group = "strategy"),
-##       set_prior("student_t(3,0,3)", class = "sd", group = "p_holder"),
-##       set_prior("student_t(3,0,3)", class = "sigma"),
-##       set_prior("normal(0,1)", class = "b"),
-##       set_prior("normal(0,20)", class = "Intercept")
-##       )
-##   )
-## 
 dat$residuals = residuals(mod)
 
 # 2. model the residuals / variance model 
 dat$absResid = log(abs(dat$residuals))
-mod.cv <- glmmTMB(absResid ~ log_spec_div * log_days + log_npermit +
-    (1 + log_spec_div + log_days|strategy)+
-    (1|p_holder) , data = dat)
-# r.squaredGLMM(mod.cv)
+mod.cv <- glmmTMB(absResid ~ scaled_spec_div * log_days + 
+  I(scaled_spec_div^2) + I(log_days^2) +
+    (1 + scaled_spec_div + log_days|strategy), 
+    # (1 + log_spec_div + log_days|strategy) +
+    # (1|p_holder),
+  data = dat)
+summary(mod.cv)
+AIC(mod.cv)
 
 # 3. model downside risk / 
 # we can't get situations where people lost money from this
@@ -134,43 +95,21 @@ person.summary = group_by(dat, p_holder) %>%
     meanrev = mean(log(revenue)),
     specDiv = mean(log(specDiv)))
 
-
 strategy.summary$randomInt = ranef(mod)[[1]]$strategy$`(Intercept)` + fixef(mod)[[1]][["(Intercept)"]]
-strategy.summary$randomSpec = ranef(mod)[[1]]$strategy$`log_spec_div` + fixef(mod)[[1]][["log_spec_div"]]
+strategy.summary$randomSpec = ranef(mod)[[1]]$strategy$`scaled_spec_div` + fixef(mod)[[1]][["scaled_spec_div"]]
 strategy.summary$cv_randomInt = ranef(mod.cv)[[1]]$strategy$`(Intercept)` + fixef(mod.cv)[[1]][["(Intercept)"]]
-strategy.summary$cv_randomSpec = ranef(mod.cv)[[1]]$strategy$`log_spec_div` + fixef(mod.cv)[[1]][["log_spec_div"]]
+strategy.summary$cv_randomSpec = ranef(mod.cv)[[1]]$strategy$`scaled_spec_div` + fixef(mod.cv)[[1]][["scaled_spec_div"]]
+
+# strategy.summary$randomSpecSq = ranef(mod)[[1]]$strategy$`I(scaled_spec_div^2)` + fixef(mod)[[1]][["I(scaled_spec_div^2)"]]
+# strategy.summary$cv_randomSpecSq = ranef(mod)[[1]]$strategy$`I(scaled_spec_div^2)` + fixef(mod)[[1]][["I(scaled_spec_div^2)"]]
 
 person.summary$randomInt = ranef(mod)[[1]]$p_holder$`(Intercept)` + fixef(mod)[[1]][["(Intercept)"]]     
-person.summary$cv_randomInt = ranef(mod.cv)[[1]]$p_holder$`(Intercept)` + fixef(mod.cv)[[1]][["(Intercept)"]]     
-
-# strategy.summary$randomInt = coef(mod)$strategy$`(Intercept)`
-# strategy.summary$randomSpec = coef(mod)$strategy$`log_spec_div`
-# strategy.summary$randomSpecDay = coef(mod)$strategy$`log_spec_div:log_days`
-# strategy.summary$cv_randomInt = coef(mod.cv)$strategy$`(Intercept)`
-# strategy.summary$cv_randomSpec = coef(mod.cv)$strategy$`log_spec_div`
-# strategy.summary$cv_randomSpecDay = coef(mod.cv)$strategy$`log_spec_div:log_days`
-# 
-# person.summary$randomInt = coef(mod)$p_holder$`(Intercept)`
-# person.summary$cv_randomInt = coef(mod.cv)$p_holder$`(Intercept)`
+# person.summary$cv_randomInt = ranef(mod.cv)[[1]]$p_holder$`(Intercept)` + fixef(mod.cv)[[1]][["(Intercept)"]]     
 
 ###################
-pdf("../figs/tmb-separate-exploration.pdf", width = 10, height = 8)
-# plot_coefficients_lmer <- function(model) {
-#   broom::tidy(model, conf.int = TRUE) %>%
-#   filter(term != "(Intercept)") %>%
-#   filter(!grepl("cor_", term)) %>%
-#   # filter(!grepl("npermit", term)) %>%
-#   mutate(conf.low = ifelse(is.na(std.error), estimate, conf.low)) %>%
-#   mutate(conf.high = ifelse(is.na(std.error), estimate, conf.high)) %>%
-#   ggplot(aes(y = estimate, ymax = conf.low, ymin = conf.high, x = term)) +
-#   geom_pointrange() +
-#   coord_flip() +
-#   geom_hline(yintercept = 0, lty = 2)
-# }
-# plot_coefficients_lmer(mod) %>% print
-# plot_coefficients_lmer(mod.cv) %>% print
+pdf("../figs/tmb-separate-exploration-nopholder-re.pdf", width = 10, height = 8)
 
-plot_coefficients_tmb <- function(model) {
+plot_coefficients_tmb <- function(model, pholder_re = TRUE) {
   ci <- confint(model)
   term <- row.names(ci)
   ci <- as_data_frame(ci)  %>% mutate(term = term)
@@ -178,10 +117,16 @@ plot_coefficients_tmb <- function(model) {
   ci <- filter(ci, !grepl("Intercept", term))
 
   re_s <- attr(summary(model)$varcor$cond$strategy, "stddev")
-  re_p <- attr(summary(model)$varcor$cond$p_holder, "stddev")
-  re <- data.frame(term = c(paste0("re.sd.strategy.", names(re_s)), 
-      paste0("re.sd.p_holder.", names(re_p))))
-  re$estimate <- c(re_s, re_p)
+  if (pholder_re)
+    re_p <- attr(summary(model)$varcor$cond$p_holder, "stddev")
+  if (pholder_re) {
+    re <- data.frame(term = c(paste0("re.sd.strategy.", names(re_s)), 
+        paste0("re.sd.p_holder.", names(re_p))))
+    re$estimate <- c(re_s, re_p)
+  } else {
+    re <- data.frame(term = c(paste0("re.sd.strategy.", names(re_s))))
+    re$estimate <- c(re_s)
+  }
   re$`2.5 %` <- re$estimate
   re$`97.5 %` <- re$estimate
 
@@ -190,27 +135,27 @@ plot_coefficients_tmb <- function(model) {
     geom_pointrange() + coord_flip() + geom_hline(yintercept = 0, lty = 2)
 }
 plot_coefficients_tmb(mod) %>% print
-plot_coefficients_tmb(mod.cv) %>% print
+plot_coefficients_tmb(mod.cv, FALSE) %>% print
 
-p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>% 
-  ggplot(aes(specDiv, intercept, color = meanrev)) + geom_point(alpha = 0.2) +
-    facet_wrap(~model, scales = "free_y") +
-    geom_smooth(se = FALSE, color = "red")
-print(p)
+# p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>% 
+#   ggplot(aes(specDiv, intercept, color = meanrev)) + geom_point(alpha = 0.2) +
+#     facet_wrap(~model, scales = "free_y") +
+#     geom_smooth(se = FALSE, color = "red")
+# print(p)
+# 
+# p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>% 
+#   ggplot(aes(meanrev, intercept, color = specDiv)) + geom_point(alpha = 0.2) +
+#     facet_wrap(~model, scales = "free_y") +
+#     geom_smooth(se = FALSE, color = "red")
+# print(p)
 
-p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>% 
-  ggplot(aes(meanrev, intercept, color = specDiv)) + geom_point(alpha = 0.2) +
-    facet_wrap(~model, scales = "free_y") +
-    geom_smooth(se = FALSE, color = "red")
-print(p)
-
-p <- tidyr::gather(strategy.summary, model, intercept, randomInt:cv_randomSpec) %>% 
+p <- tidyr::gather(strategy.summary, model, intercept, contains("random")) %>% 
   ggplot(aes(specDiv, intercept, color = meanrev)) + geom_point() +
     facet_wrap(~model, scales = "free_y") +
     geom_smooth(se = FALSE, color = "red", method = "lm")
 print(p)
 
-p <- tidyr::gather(strategy.summary, model, intercept, randomInt:cv_randomSpec) %>% 
+p <- tidyr::gather(strategy.summary, model, intercept, contains("random")) %>% 
   ggplot(aes(meanrev, intercept, color = specDiv)) + geom_point() +
     facet_wrap(~model, scales = "free_y") +
     geom_smooth(se = FALSE, color = "red", method = "lm")
@@ -218,13 +163,21 @@ print(p)
 
 dev.off()
 
-
 # Look at the strategy identity of the random effects:
 strategy.summary <- arrange(strategy.summary, cv_randomSpec) %>% 
   mutate(order = 1:n()) %>% 
   mutate(strategy_ordered = reorder(strategy, order))
 
-p <- tidyr::gather(strategy.summary, model, intercept, randomInt:cv_randomSpec) %>%
+# p <- person.summary %>% 
+#   left_join(select(dat, p_holder, strategy) %>% distinct()) %>%
+#   left_join(select(strategy.summary, strategy, strategy_ordered)) %>%
+#   ggplot(aes(specDiv, cv_randomInt, color = meanrev)) + geom_point(alpha = 0.2) +
+#     facet_wrap(~strategy_ordered) +
+#     theme(strip.text.x = element_text(size = 4)) +
+#     geom_smooth(se = FALSE, color = "red")
+# ggsave("../figs/pholder-re-strategies.pdf", width = 26, height = 20, units = "cm")
+
+p <- tidyr::gather(strategy.summary, model, intercept, contains("random")) %>%
   ggplot(aes(intercept, strategy_ordered, color = meanrev)) + geom_point() +
     facet_wrap(~model, scales = "free_x", ncol = 2)
 ggsave("../figs/re-strategies.pdf", width = 10, height = 10)
@@ -233,7 +186,7 @@ p <- tidyr::gather(strategy.summary, model, intercept, randomSpec, cv_randomSpec
   ggplot(aes(intercept, strategy_ordered, color = meanrev)) + geom_point() +
     facet_wrap(~model, scales = "free_x", ncol = 1) + 
     geom_vline(xintercept = 0, lty = 2)
-ggsave("../figs/re-strategies-slim.pdf", width = 7, height = 10)
+ggsave("../figs/re-strategies-slim-nopholder-re.pdf", width = 8, height = 10)
 
 
 # plot fitted vs observed
@@ -257,12 +210,15 @@ ggplot(dat, aes(x=fitted_mod_cv, y=residuals_cv, col = log(revenue))) + facet_wr
 ggsave("residuals_rev/fitted_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
 # plot specDiv vs residuals
+dat$strategy_ordered <- NULL
 dat <- left_join(dat, select(strategy.summary, strategy, strategy_ordered))
-p <- ggplot(dat, aes(x=specDiv, y=residuals, col = log(revenue))) +
+p <- ggplot(dat, aes(x=scaled_spec_div, y=residuals, col = log(revenue))) +
   facet_wrap(~strategy_ordered) +
-  geom_point(alpha = 0.2) + geom_hline(yintercept=0) +
-  ylim(-2,2)
-ggsave("residuals_rev/specdiv_v_residuals.pdf", width = 55, height = 40, units = "cm")
+  geom_point(alpha = 0.1) + geom_hline(yintercept=0) +
+  ylim(-2,2) +
+  theme(strip.text.x = element_text(size = 4)) +
+  geom_smooth(se = FALSE, color = "red")
+ggsave("residuals_rev/specdiv_v_residuals.pdf", width = 28, height = 22, units = "cm")
 
 p <- ggplot(dat, aes(x=specDiv, y=residuals_cv, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
@@ -292,179 +248,6 @@ ggplot(dat, aes(x=log_days, y=residuals_cv, col = log(revenue))) +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
 ggsave("residuals_rev/days_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
-
-
-
-## ##################################### Sean ended here 
-## # plot days.pctChange vs residuals
-## ggplot(dat, aes(x=days, y=residuals, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_hline(yintercept=0)
-## ggsave("residuals_rev/days_v_residuals.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot previous year vs residuals
-## ggplot(dat, aes(x=year, y=residuals, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_hline(yintercept=0)
-## ggsave("residuals_rev/year_v_residuals.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot fitted vs log abs residuals
-## ggplot(dat, aes(x=fitted.values(mod), y=sqrt(abs(residuals), col = log(revenue)))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_smooth(se = FALSE, color = "grey50")
-## ggsave("residuals_rev/fitted_v_sqrtabsresid.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot specDiv vs residuals
-## ggplot(dm, aes(x=specDiv, y=sqrt(abs(residuals)), col = log(revenue))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_smooth(se = FALSE, color = "grey50")
-## ggsave("residuals_rev/specdiv_v_sqrtabsresid.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot days.pctChange vs residuals
-## ggplot(dat, aes(x=days, y=sqrt(abs(residuals)), col = log(revenue))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_smooth(se = FALSE, color = "grey50")
-## ggsave("residuals_rev/days_v_sqrtabsresid.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot previous year vs residuals
-## ggplot(dat, aes(x=year, y=sqrt(abs(residuals)), col = log(revenue))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_smooth(se = FALSE, color = "grey50")
-## ggsave("residuals_rev/year_v_sqrtabsresid.pdf", width = 40, height = 40, units = "cm")
-## 
-## 
-## 
-## 
-## ###############################################################################################
-## # DIFFERENCED DATA
-## ###############################################################################################
-## # LOAD DATA
-## #cfecAnnual.diff = readRDS(file="diff_linearModeling_complete.rds")
-## cfecAnnual.diff = readRDS(file="diff_linearModeling_complete_all.rds")
-## 
-## # Calculate some differenced/derived variables
-## cfecAnnual.diff$specDiv.pctChange = log(cfecAnnual.diff$specDiv / cfecAnnual.diff$specdiv.prev)
-## cfecAnnual.diff$days.pctChange = log((cfecAnnual.diff$days+1) / (cfecAnnual.diff$days.prev+1))
-## cfecAnnual.diff$rev.pctChange = log(cfecAnnual.diff$revenue / cfecAnnual.diff$revenue.prev)
-## 
-## #ggplot(cfecAnnual.diff, aes(x=log(revenue.prev), y = rev.pctChange)) + geom_point()
-## # restrict analysis to people who don't change strategies (keeps ~ 90%)
-## cfecAnnual.diff = cfecAnnual.diff[which(cfecAnnual.diff$strategy == cfecAnnual.diff$strategy.prev), ]
-## 
-## # also filter out people making < 1000 / year
-## cfecAnnual.diff = cfecAnnual.diff[which(cfecAnnual.diff$revenue >= 5000), ]
-## 
-## # 4200 different strategies, need to model only most common, 
-## top.strategies = names(rev(sort(table(cfecAnnual.diff$strategy)))[1:100])
-## cfecAnnual.diff = cfecAnnual.diff[cfecAnnual.diff$strategy%in%top.strategies, ]
-## testData = cfecAnnual.diff
-## 
-## # calcualte variance versus mean across strategies 
-## strategy.levels = lapply(lapply(strsplit(as.character(testData$strategy), " "), substr, 1, 1), paste, collapse=" ")
-## testData$strategy.levels = unlist(strategy.levels)
-## 
-## # crab = D/K/T
-## group_by(testData[grep("S",testData$strategy.levels),], strategy) %>% 
-##   summarize(mean = mean(revenue+revenue.prev)/2, days = mean(days+days.prev)/2,
-##     sd = sd(rev.pctChange), div = mean(specDiv + specdiv.prev)/2, 
-##     permits = mean(npermit)) %>% 
-##   ggplot(aes(x = permits, y = log(mean), col = permits)) + geom_point()
-## 
-## 
-## # Convert skewed data to something more like normal
-## fit.t = MASS::fitdistr(testData$rev.pctChange, "t")
-## testData$rev.pctChange.raw = testData$rev.pctChange
-## testData$rev.pctChange = qnorm(pt(testData$rev.pctChange, df = fit.t$estimate[3]), 0, 1)
-## 
-## # FIT SOME QUICK MODELS WITH LMER
-## # random slope, fixed intercept at 0 because log-diff data has mean 0
-## # boxplot(testData$rev.pctChange ~ testData$strategy, outline=F)
-## #lm1 = lm(rev.pctChange ~ -1 + specDiv.pctChange + (specDiv.pctChange:strategy+days.pctChange:strategy), data = testData)
-## lm2 = lmer(rev.pctChange ~ -1 + (-1+specDiv.pctChange+days.pctChange|strategy) + 
-##     specDiv.pctChange + days.pctChange, data = testData) 
-## r.squaredGLMM(lm2)
-## 
-## testData$residuals <- residuals(lm2)
-## 
-## # plot fitted vs observed -- non salmon specialists
-## non.sal= which(substr(testData$strategy,1,1)!="S")
-## ggplot(testData[non.sal,], aes(x=fitted.values(lm2)[non.sal], y=rev.pctChange, color = strategy)) + 
-##   geom_point(alpha = 0.7) + 
-##   theme(aspect.ratio=1) + 
-##   geom_abline(slope=1, intercept=0,color = "grey50")
-## ggsave("residuals/fitted_v_observed_nonSalmon.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot fitted vs observed
-## ggplot(testData, aes(x=fitted.values(lm2), y=rev.pctChange, color = log(revenue.prev))) + 
-##   facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + 
-##   geom_abline(slope=1, intercept=0, color = "grey50")
-## ggsave("residuals/fitted_v_observed.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot fitted vs residuals
-## ggplot(testData, aes(x=fitted.values(lm2), y=residuals, color = log(revenue.prev))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_hline(yintercept=0)
-## ggsave("residuals/fitted_v_residuals.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot specDiv vs residuals
-## ggplot(testData, aes(x=specDiv.pctChange, y=residuals, color = log(revenue.prev))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_hline(yintercept=0)
-## ggsave("residuals/specdiv_v_residuals.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot days.pctChange vs residuals
-## ggplot(testData, aes(x=days.pctChange, y=residuals, color = log(revenue.prev))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_hline(yintercept=0)
-## ggsave("residuals/changeDays_v_residuals.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot previous revenue vs residuals
-## ggplot(testData, aes(x=log(revenue.prev), y=residuals, color = log(revenue.prev))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_hline(yintercept=0)
-## ggsave("residuals/prevRev_v_residuals.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot previous year vs residuals
-## ggplot(testData, aes(x=year, y=residuals, color = log(revenue.prev))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_hline(yintercept=0)
-## ggsave("residuals/year_v_residuals.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot fitted vs log abs residuals
-## ggplot(testData, aes(x=fitted.values(lm2), y=log(abs(residuals)), color = log(revenue.prev))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_smooth(se = FALSE, color = "grey50")
-## ggsave("residuals/fitted_v_sqrtabsresid.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot specDiv vs residuals
-## ggplot(testData, aes(x=specDiv.pctChange, y=sqrt(abs(residuals)), color = log(revenue.prev))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_smooth(se = FALSE, color = "grey50")
-## ggsave("residuals/specdiv_v_sqrtabsresid.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot days.pctChange vs residuals
-## ggplot(testData, aes(x=days.pctChange, y=sqrt(abs(residuals)), color = log(revenue.prev))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_smooth(se = FALSE, color = "grey50")
-## ggsave("residuals/changeDays_v_sqrtabsresid.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot previous revenue vs residuals
-## ggplot(testData, aes(x=log(revenue.prev), y=sqrt(abs(residuals)), color = log(revenue.prev))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_smooth(se = FALSE, color = "grey50")
-## ggsave("residuals/prevRev_v_sqrtabsresid.pdf", width = 40, height = 40, units = "cm")
-## 
-## # plot previous year vs residuals
-## ggplot(testData, aes(x=year, y=sqrt(abs(residuals)), color = log(revenue.prev))) + facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + geom_smooth(se = FALSE, color = "grey50")
-## ggsave("residuals/year_v_sqrtabsresid.pdf", width = 40, height = 40, units = "cm")
-## 
-## # Another model validation = prediction
-## # We can also do some diagnostics and hold out ~ 3 people per strategy, then predict their response
-## # 
-## testData$row = seq(1, dim(testData)[1]) # id 
-## #testData.test = group_by(testData, strategy) %>% 
-## #  sample_n(3)
-## test_set = sample(seq(1, dim(testData)[1]), size=20000, replace=F)
-## testData.test = testData[test_set,]
-## testData.train = testData[-test_set,] # training set
-## lm.train = lmer(rev.pctChange ~ -1 + (-1+specDiv.pctChange+days.pctChange|strategy) + 
-##     specDiv.pctChange + days.pctChange, data = testData.train) 
-## testData.test$pred = predict(lm.train, testData.test)
-## 
-## ggplot(testData.test, aes(x=pred, y=rev.pctChange, color = log(revenue.prev))) + 
-##   facet_wrap(~strategy, scale="free") +
-##   geom_point(alpha = 0.7) + 
-##   geom_abline(slope=1, intercept=0, color = "grey50")
-## ggsave("residuals/fitted_v_observed_holdout.pdf", width = 40, height = 40, units = "cm")
-## 
-## 
 ## ## THINGS I'M SEEING HERE
 ## # 1. Many of the strategies have no variance w/respect to the predictors. Specifically, permits that are
 ## #   targeting 1 spp (herring, halibut, sablefish) are essentially ~ 0. We can't do a good job of estimating
