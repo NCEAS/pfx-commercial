@@ -49,13 +49,13 @@ dat = dat[which(dat$revenue >= 5000), ]
 
 # Downsample for speed of testing 
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)/2)
+n_sample <- round(length(unique_holders)*0.66)
 set.seed(1)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 
 # many different strategies, need to model only most common, 
-top.strategies = names(rev(sort(table(dat$strategy)))[1:40])
+top.strategies = names(rev(sort(table(dat$strategy)))[1:30])
 dat = dat[dat$strategy%in%top.strategies, ]
 nrow(dat)
 
@@ -489,3 +489,4 @@ ggsave("residuals_rev/days_v_residuals_cv.png", width = 40, height = 40, units =
 ## fit.t = fitdistr(testData$rev.pctChange, "t")
 ## testData$rev.pctChange.transform = qnorm(pt(testData$rev.pctChange, df = fit.t$estimate[3]), 0, 1)
 ## lm.norm2 = lm(rev.pctChange.transform ~ as.factor(year) + specDiv.pctChange+days.pctChange + log(revenue.prev), 
+##   data = testData[which(testData$strategy=="S15B"),]) 
