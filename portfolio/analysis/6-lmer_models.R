@@ -32,6 +32,12 @@ dat <- group_by(dat, p_holder) %>%
   # filter(range_div > 0)
 nrow(dat)
 
+dat <- group_by(dat, strategy) %>%
+  mutate(range_div = diff(range(specDiv))) %>%
+  as_data_frame() %>%
+  filter(range_div > 0) # eliminates "pound"
+nrow(dat)
+
 dat$log_spec_div <- scale(log(dat$specDiv))
 dat$log_length <- scale(log(dat$length + 1))
 dat$log_weight <- scale(log(dat$weight + 1))
