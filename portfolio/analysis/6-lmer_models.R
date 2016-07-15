@@ -186,6 +186,18 @@ plot_coefficients_tmb <- function(model) {
 plot_coefficients_tmb(mod) %>% print
 plot_coefficients_tmb(mod.cv) %>% print
 
+p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>% 
+  ggplot(aes(specDiv, intercept, color = meanrev)) + geom_point(alpha = 0.2) +
+    facet_wrap(~model, scales = "free_y") +
+    geom_smooth(se = FALSE, color = "red")
+print(p)
+
+p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>% 
+  ggplot(aes(meanrev, intercept, color = specDiv)) + geom_point(alpha = 0.2) +
+    facet_wrap(~model, scales = "free_y") +
+    geom_smooth(se = FALSE, color = "red")
+print(p)
+
 p <- tidyr::gather(strategy.summary, model, intercept, randomInt:cv_randomSpec) %>% 
   ggplot(aes(specDiv, intercept, color = meanrev)) + geom_point() +
     facet_wrap(~model, scales = "free_y") +
@@ -198,18 +210,24 @@ p <- tidyr::gather(strategy.summary, model, intercept, randomInt:cv_randomSpec) 
     geom_smooth(se = FALSE, color = "red", method = "lm")
 print(p)
 
-p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>% 
-  ggplot(aes(specDiv, intercept, color = meanrev)) + geom_point(alpha = 0.2) +
-    facet_wrap(~model, scales = "free_y") +
-    geom_smooth(se = FALSE, color = "red")
-print(p)
-
-p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>% 
-  ggplot(aes(meanrev, intercept, color = specDiv)) + geom_point(alpha = 0.2) +
-    facet_wrap(~model, scales = "free_y") +
-    geom_smooth(se = FALSE, color = "red")
-print(p)
 dev.off()
+
+
+# Look at the strategy identity of the random effects:
+strategy.summary <- arrange(strategy.summary, cv_randomSpec) %>% 
+  mutate(order = 1:n()) %>% 
+  mutate(strategy_ordered = reorder(strategy, order))
+
+p <- tidyr::gather(strategy.summary, model, intercept, randomInt:cv_randomSpec) %>%
+  ggplot(aes(intercept, strategy_ordered, color = meanrev)) + geom_point() +
+    facet_wrap(~model, scales = "free_x", ncol = 2)
+ggsave("../figs/re-strategies.pdf", width = 10, height = 10)
+
+p <- tidyr::gather(strategy.summary, model, intercept, randomSpec, cv_randomSpec) %>%
+  ggplot(aes(intercept, strategy_ordered, color = meanrev)) + geom_point() +
+    facet_wrap(~model, scales = "free_x", ncol = 1) + 
+    geom_vline(xintercept = 0, lty = 2)
+ggsave("../figs/re-strategies-slim.pdf", width = 7, height = 10)
 
 
 # plot fitted vs observed
@@ -233,11 +251,14 @@ ggplot(dat, aes(x=fitted_mod_cv, y=residuals_cv, col = log(revenue))) + facet_wr
 ggsave("residuals_rev/fitted_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
 # plot specDiv vs residuals
-ggplot(dat, aes(x=specDiv, y=residuals, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
-  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/specdiv_v_residuals.png", width = 40, height = 40, units = "cm")
+dat <- left_join(dat, select(strategy.summary, strategy, strategy_ordered))
+p <- ggplot(dat, aes(x=specDiv, y=residuals, col = log(revenue))) +
+  facet_wrap(~strategy_ordered) +
+  geom_point(alpha = 0.2) + geom_hline(yintercept=0) +
+  ylim(-2,2)
+ggsave("residuals_rev/specdiv_v_residuals.pdf", width = 55, height = 40, units = "cm")
 
-ggplot(dat, aes(x=specDiv, y=residuals_cv, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
+p <- ggplot(dat, aes(x=specDiv, y=residuals_cv, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
 ggsave("residuals_rev/specdiv_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
