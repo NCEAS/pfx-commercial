@@ -1,53 +1,1 @@
-p_gear,n,pfshy_gear,gear_group
-3,6181108,drift gillnet,drift gillnet
-4,4493838,set gillnet-gillnet,set gillnet
-1,2316687,purse seine,purse seine
-15,884189,power troll,power troll
-7,733899,otter trawl,otter trawl
-61,583387,longline vessel 60' or over-longline,longline over 60
-6,499468,longline vessel under 60',longline under 60
-5,340477,hand troll,hand troll
-7H,298751,otter trawl vessel 90' to 125',otter trawl 90-125
-7I,218220,otter trawl vessel over 125',otter trawl over 125
-91,213213,pot gear-pot gear vessel 60' or over,pot gear
-9,160132,pot gear vessel under 60'-pot gear vessel onder 60'-pot vessel under 60',pot gear
-7G,91111,otter trawl vessel 60' to under 90',otter trawl 60-90
-34,85912,gillnet,set gillnet
-11,53919,diving gear,diving gear
-18,51152,shovel,shovel
-6A,50159,longline vessel 90' or over,longline over 90
-26,45639,mechanical jig,mechanical jig
-7F,37546,otter trawl vessel under 60',otter trawl under 60
-9A,25254,300 pots/or 100% of max,pot gear 300
-9C,24472,pot gear maximum vessel length 50'-150 pots/or 50% of max,pot gear 150
-17,19724,beam trawl,beam trawl
-9B,19023,225 pots/or 75% of max,pot gear 225
-9D,14165,75 pots/or 25% of max,pot gear 75
-12,12957,dive/hand pick-hand pick,diving gear
-69,12038,pot gear,pot gear
-2,6812,beach seine,beach seine
-21,5403,pound,pound
-49,4118,pot gear,pot gear
-22,3434,NA,NA
-5C,2986,fixed gear maximum vessel length 50',fixed gear 
-25,2803,dinglebar troll,dinglebar troll
-6B,2132,longline vessel 60' to under 90',longline over 60
-19,1888,pot gear,pot gear
-29,1508,pot gear,pot gear
-59,1334,pot gear,pot gear
-23,1199,mechanical digger,mechanical digger
-B9,1065,pot gear vessel to 120'-pot gear vessel under 60',pot gear
-2A,1050,dredge vessel over 80'-dredge vessel permit over 80',dredge
-39,1012,pot gear,pot gear
-10,915,ring net,ring net
-99,537,other gear,other
-5D,491,fixed gear maximum vessel length 35',fixed gear 
-5B,443,fixed gear maximum vessel length 60',fixed gear 
-8,230,fish wheel,NA
-97,145,diving gear,diving gear 
-2B,141,vessel to 80'-dredge vessel permit to 80',dredge
-5A,120,fixed gear maximum vessel length 90',fixed gear 
-1D,55,purse seine,purse seine
-4C,54,net gear maximum vessel length 50',NA
-31,23,gillnet & purse seine,purse seine
-37,8,pair trawl,NA
+p_gear,n,pfshy_gear,gear_group,size_cat_max3,6181108,drift gillnet,drift gillnet,604,4493838,set gillnet-gillnet,set gillnet,301,2316687,purse seine,purse seine,6015,884189,power troll,power troll,607,733899,otter trawl,otter trawl,61,583387,longline vessel 60' or over-longline,longline over 60,606,499468,longline vessel under 60',longline under 60,905,340477,hand troll,hand troll,607H,298751,otter trawl vessel 90' to 125',otter trawl 90-125,1257I,218220,otter trawl vessel over 125',otter trawl over 125,20091,213213,pot gear-pot gear vessel 60' or over,pot gear,909,160132,pot gear vessel under 60'-pot gear vessel onder 60'-pot vessel under 60',pot gear,607G,91111,otter trawl vessel 60' to under 90',otter trawl 60-90,9034,85912,gillnet,set gillnet,3011,53919,diving gear,diving gear,3018,51152,shovel,shovel,306A,50159,longline vessel 90' or over,longline over 90,12526,45639,mechanical jig,mechanical jig,607F,37546,otter trawl vessel under 60',otter trawl under 60,609A,25254,300 pots/or 100% of max,pot gear 300,1209C,24472,pot gear maximum vessel length 50'-150 pots/or 50% of max,pot gear 150,6017,19724,beam trawl,beam trawl,609B,19023,225 pots/or 75% of max,pot gear 225,9D,14165,75 pots/or 25% of max,pot gear 75,12,12957,dive/hand pick-hand pick,diving gear,3069,12038,pot gear,pot gear,2,6812,beach seine,beach seine,21,5403,pound,pound,3049,4118,pot gear,pot gear,22,3434,NA,NA,5C,2986,fixed gear maximum vessel length 50',fixed gear ,25,2803,dinglebar troll,dinglebar troll,6B,2132,longline vessel 60' to under 90',longline over 60,19,1888,pot gear,pot gear,29,1508,pot gear,pot gear,59,1334,pot gear,pot gear,23,1199,mechanical digger,mechanical digger,B9,1065,pot gear vessel to 120'-pot gear vessel under 60',pot gear,2A,1050,dredge vessel over 80'-dredge vessel permit over 80',dredge,39,1012,pot gear,pot gear,10,915,ring net,ring net,99,537,other gear,other,5D,491,fixed gear maximum vessel length 35',fixed gear ,5B,443,fixed gear maximum vessel length 60',fixed gear ,8,230,fish wheel,NA,97,145,diving gear,diving gear ,2B,141,vessel to 80'-dredge vessel permit to 80',dredge,5A,120,fixed gear maximum vessel length 90',fixed gear ,1D,55,purse seine,purse seine,4C,54,net gear maximum vessel length 50',NA,31,23,gillnet & purse seine,purse seine,37,8,pair trawl,NA,
