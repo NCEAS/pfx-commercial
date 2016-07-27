@@ -1,0 +1,85 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\geometry{letterpaper}
+\usepackage{graphicx}
+
+\author{Sean Anderson}
+\title{Risk returns plots broken out by dimension}
+% \date{}
+
+
+\begin{document}
+\maketitle
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in]{portfolio-gross-earnings-cv.pdf}
+\caption{The original plot from  before.}
+\label{portfolio-gross-earnings-cv.pdf}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in]{portfolio-gross-earnings-semideviation.pdf}
+\caption{This version shows downside semideviation.}
+\label{portfolio-semideviation-gross-earnings.pdf}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in]{portfolio-gross-earnings-semideviation-upside.pdf}
+\caption{This version shows only upside semideviation.}
+\label{portfolio-gross-earnings-semideviation-upside.pdf}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6.5in]{portfolio-gross-earnings-cv-vessel-length.pdf}
+\caption{These are broken out by mean vessel length as shown in the header of
+each box. The panel NA represents permit holders that are associated with
+multiple vessel lengths.}
+\label{portfolio-gross-earnings-cv-vessel-length.pdf}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in]{portfolio-gross-earnings-cv-pollock.pdf}
+\caption{The panel
+marked TRUE should be permit holders that ever finished pollock.}
+\label{port}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6.5in]{portfolio-gross-earnings-cv-taxa.pdf}
+\caption{Split up in broad taxonomic categories. NA represents permit holders
+that don't fall into just one of these categories.}
+\label{portfolio-gross-earnings-cv-taxa.pdf}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6.5in]{portfolio-gross-earnings-cv-time-window.pdf}
+\caption{The original plot broken out into a ten year
+moving window. The year indicated in each panel represents the starting year.}
+\label{portfolio-gross-earnings-cv-time-window.pdf}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=6in]{portfolio-gross-earnings-cv-salmon.pdf}
+\caption{The right panel shows salmon permit holders and the left panel shows
+everything else.}
+\label{portfolio-gross-earnings-cv-salmon.pdf}
+\end{center}
+\end{figure}
+
+\end{document}
