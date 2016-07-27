@@ -323,6 +323,7 @@ cfecAnnual$strategy_gear.prev = cfecAnnual$strategy_gear[idx]
 cfecAnnual$strategy_permit.prev = cfecAnnual$strategy_permit[idx]
 cfecAnnual$weight.prev = cfecAnnual$weight[idx]
 cfecAnnual$days.prev = cfecAnnual$days[idx]
+cfecAnnual$days_permit.prev = cfecAnnual$days_permit[idx]
 ```
 
 Save the data for modeling:
