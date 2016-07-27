@@ -105,12 +105,20 @@ dat$log_length <- scale(log(dat$length + 1))
 dat$log_weight <- scale(log(dat$weight + 1))
 dat$log_days <- scale(log(dat$days + 1))
 dat$log_npermit <- scale(log(dat$npermit))
+dat$log_days_permit <- scale(log(dat$days_permit+1))
 
 group_by(dat, strategy) %>%
   summarize(meanD = mean(log(days_permit + 1)), meanDiv = mean(specDiv), meanEarn = mean(revenue)) %>%
   as.data.frame %>%
   ggplot(aes(meanD, meanDiv, label = strategy)) +
   geom_text(size=3, aes(colour=meanEarn)) + xlab("Mean log_days") + ylab("Mean effective diversity")
+
+# Pull in species compositions by strategy to help w/interpretation
+specComp = read.csv("portfolio/data-generated/species_by_strategy.csv")
+specComp = specComp[specComp$strategy.permit %in% top_strategies$strategy,-1]
+# missing a few intentionally -- urchin/gduck/etc
+specComp$new_strategy = top_strategies$new.strategy[match(specComp$strategy.permit , top_strategies$strategy)]
+specComp[is.na(specComp)]=0
 
 ###############
 
@@ -146,37 +154,53 @@ nrow(dat)
 
 library(glmmTMB)
 
-mod <- glmmTMB(log(revenue) ~ scaled_spec_div*log_days +
-  I(log_days^2) * I(scaled_spec_div^2) + (1 + scaled_spec_div + log_days|strategy),
-    data = dat)
+# try to fit a model with people-strategy random effects, in addition to strategy ones.
+# we can also compare how the calculation of days affects fit. calculating effort as
+# the sum of individual permit seasons improves fit by ~ 2000 (2nd model here)
+dat$people_strategy = as.factor(paste(dat$strategy,dat$p_holder,sep=":"))
+mod <- glmmTMB(log(revenue) ~ scaled_spec_div*log_days + npermit +
+    I(log_days^2) + I(scaled_spec_div^2) +
+    (1 + scaled_spec_div + log_days|strategy) + (1|people_strategy),
+  data = dat)
+mod <- glmmTMB(log(revenue) ~ scaled_spec_div*log_days_permit +
+    I(log_days_permit^2) + I(scaled_spec_div^2) +
+    (1 + scaled_spec_div + log_days_permit|strategy) + (1|people_strategy),
+  data = dat)
 summary(mod)
 AIC(mod)
 
-# might be able to switch back to lmer() for diagonstics too
-library(lme4)
-# 485299.5
-mod <- lmer(log(revenue) ~ specDiv*permit_days +
-    I(log_days^2) + I(specDiv^2) + (1 + specDiv + permit_days|strategy),
-  data = dat)
-
-dat$residuals = residuals(mod)
-
 # 2. model the residuals / variance model
+dat$residuals = residuals(mod)
 dat$absResid = log(abs(dat$residuals))
-mod.cv <- glmmTMB(absResid ~ scaled_spec_div * log_days +
-  # I(scaled_spec_div^2) + I(log_days^2) +
-   I(log_days^2) +
-    (1 + scaled_spec_div + log_days|strategy),
+mod.cv <- glmmTMB(absResid ~ scaled_spec_div * log_days_permit +
+  # I(scaled_spec_div^2) + I(log_days^2) + I(log_days^2) +
+    (1 + scaled_spec_div + log_days_permit|strategy) + (1|people_strategy),
     # (1 + log_spec_div + log_days|strategy) +
     # (1|p_holder),
   data = dat)
 summary(mod.cv)
 AIC(mod.cv)
 
+# create data frame to help interpret output
+df_output = data.frame(strategy.permit = unique(dat$strategy),
+  "Return_int" = ranef(mod)$cond$strategy$'(Intercept)',
+  "Return_slope" = ranef(mod)$cond$strategy$scaled_spec_div,
+  "Risk_int" = ranef(mod.cv)$cond$strategy$'(Intercept)',
+  "Risk_slope" = ranef(mod.cv)$cond$strategy$scaled_spec_div,
+  specComp[match(df_output$strategy.permit, specComp$new_strategy),])
+df_output = df_output[,-which(names(df_output)%in%c("new_strategy","strategy.permit.1"))]
+write.table(df_output, "portfolio/data-generated/df_output.csv", sep=",",col.names=T, row.names=F)
+
+ggplot(df_output, aes(Return_int, Risk_int, label = strategy.permit)) +
+  geom_text(size=3) + xlab("Return (revenue)") + ylab("Risk (CV)")
+
+ggplot(df_output, aes(Return_slope, Risk_slope, label = strategy.permit)) +
+  geom_text(size=3) + xlab("Effect of diversification on return (revenue)") +
+  ylab("Effect of diversification on risk (CV)")
+
 # 3. model downside risk /
 # we can't get situations where people lost money from this
 # maybe this is where log-diff model could help too?
-
 
 # plot random effect intercept vs
 strategy.summary = group_by(dat, strategy) %>%
