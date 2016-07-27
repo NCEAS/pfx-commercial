@@ -187,13 +187,29 @@ topstrategies = group_by(cfecnew, p_holder, year) %>%
   as_data_frame()
 rev(sort(table(topstrategies$strategy)))[1:50]
 cfecnew = left_join(cfecnew, topstrategies) # adds strategy column
+write.csv(rev(sort(table(topstrategies$strategy))), file = "../data-generated/strategies.csv")
 
 topstrategies.bypermit = group_by(cfecnew, p_holder, year) %>%
   summarize(strategy.permit = paste(sort(unique(p_fshy)), collapse = " ")) %>%
   as_data_frame()
 cfecnew = left_join(cfecnew, topstrategies.bypermit) # adds strategy.permit column
 
-write.csv(rev(sort(table(topstrategies$strategy))), file = "../data-generated/strategies.csv")
+# Summarize key species landings by strategy.permit -- this is for interpretation later
+key.spec = c("SOCK","COHO","CHUM","PINK","CHNK","PCOD","PHLB","SABL","TCRB","KCRB","DCRB","PLCK","SAC","POUND")
+species_by_strategy = group_by(cfecnew, strategy.permit, spec) %>%
+  summarize(earn.bySpec = sum(g_earn)) %>% 
+  data.frame %>% 
+  group_by(strategy.permit) %>% 
+  mutate(totEarn = sum(earn.bySpec)) %>% 
+  filter(spec %in% key.spec)
+species_by_strategy$earn.bySpec = species_by_strategy$earn.bySpec/species_by_strategy$totEarn
+species_by_strategy = filter(species_by_strategy, earn.bySpec > 0.1) %>% select(-totEarn)
+# convert to wide format
+library(reshape2)
+melted_sbs <- melt(species_by_strategy, id.vars = c("strategy.permit", "spec"))
+species_by_strategy <- dcast(melted_sbs, strategy.permit ~ spec + variable)
+write.csv(species_by_strategy, file = "../data-generated/species_by_strategy.csv")
+
 ```
 
 Calculate gear based strategies:

@@ -147,9 +147,8 @@ nrow(dat)
 library(glmmTMB)
 
 mod <- glmmTMB(log(revenue) ~ scaled_spec_div*log_days +
-  I(log_days^2) + I(scaled_spec_div^2) + (1 + scaled_spec_div + log_days + I(scaled_spec_div^2)|strategy),
+  I(log_days^2) * I(scaled_spec_div^2) + (1 + scaled_spec_div + log_days|strategy),
     data = dat)
-
 summary(mod)
 AIC(mod)
 
