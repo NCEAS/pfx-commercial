@@ -252,6 +252,13 @@ cfecnew$yday <- paste(cfecnew$year, cfecnew$day, sep = "-") %>%
 if ("VLength" %in% names(cfecnew)) {
   cfecnew <- rename(cfecnew, vlength = VLength)
 }
+
+# calculate 
+permit_days = group_by(cfecnew, p_holder, year, p_fshy) %>%
+  summarize(permitDays = diff(range(yday)+1)) %>%
+  group_by(p_holder, year) %>% 
+  summarize(tot.permitDays = sum(permitDays))
+  
 cfecAnnual = group_by(cfecnew, p_holder, year) %>%
   summarize(permit = p_fshy[1], boat = cadfg[1],
     days = diff(range(yday) + 1),
@@ -265,13 +272,14 @@ cfecAnnual = group_by(cfecnew, p_holder, year) %>%
     strategy = strategy[1],
     strategy_gear = strategy_gear[1])
 
-# also calculate weighted simpson diversity of gears and species
+cfecAnnual = left_join(cfecAnnual, permit_days)
+# also calculate weighted simpson diversity of species
 cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, specn) %>%
   summarize(totRev.spec = sum(g_earn)) %>%
   group_by(p_holder, year) %>%
   summarize(specDiv = simp.div(totRev.spec)))
 
-# also calculate weighted simpson diversity of gears and species
+# also calculate weighted simpson diversity of gears
 cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, gearn) %>%
   summarize(totRev.gear = sum(g_earn)) %>%
   group_by(p_holder, year) %>%
