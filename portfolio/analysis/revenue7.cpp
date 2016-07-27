@@ -12,19 +12,25 @@ DATA_INTEGER(n_pholder); // number of IDs for pholder
 DATA_INTEGER(n_strategy); // number of IDs for strategy
 DATA_INTEGER(diversity_column); // fixed effect column position of diversity
 DATA_VECTOR(b1_cov_re_i); // predictor data for random slope
+DATA_VECTOR(b2_cov_re_i); // predictor data for random slope
+DATA_VECTOR(b3_cov_re_i); // predictor data for random slope
 DATA_VECTOR(g1_cov_re_i); // predictor data for random slope
 
 // parameters:
 PARAMETER_VECTOR(b_j);
 PARAMETER_VECTOR(sigma_j);
-PARAMETER(log_b0_pholder_tau);
+/* PARAMETER(log_b0_pholder_tau); */
 // PARAMETER(log_b1_pholder_tau);
 PARAMETER(log_b0_strategy_tau);
 PARAMETER(log_b1_strategy_tau);
-PARAMETER_VECTOR(b0_pholder);
+PARAMETER(log_b2_strategy_tau);
+PARAMETER(log_b3_strategy_tau);
+/* PARAMETER_VECTOR(b0_pholder); */
 // PARAMETER_VECTOR(b1_pholder);
 PARAMETER_VECTOR(b0_strategy);
 PARAMETER_VECTOR(b1_strategy);
+PARAMETER_VECTOR(b2_strategy);
+PARAMETER_VECTOR(b3_strategy);
 
 // PARAMETER(log_g0_pholder_tau);
 PARAMETER(log_g0_strategy_tau);
@@ -47,10 +53,12 @@ for(int i = 0; i < n_data; i++){
   nll -= dnorm(
       y_i(i),
 
-      b0_pholder(pholder_i(i)) +
+      // b0_pholder(pholder_i(i)) +
       // b1_pholder(pholder_i(i)) * b1_cov_re_i(i) +
       b0_strategy(strategy_i(i)) +
       b1_strategy(strategy_i(i)) * b1_cov_re_i(i) +
+      b2_strategy(strategy_i(i)) * b2_cov_re_i(i) +
+      b3_strategy(strategy_i(i)) * b3_cov_re_i(i) +
       linear_predictor_i(i),
 
       sqrt(exp(
@@ -61,13 +69,15 @@ for(int i = 0; i < n_data; i++){
 
       true);
 }
-for(int k = 0; k < n_pholder; k++){
-  nll -= dnorm(b0_pholder(k), Type(0.0), exp(log_b0_pholder_tau), true);
-  // nll -= dnorm(g0_pholder(k), Type(0.0), exp(log_g0_pholder_tau), true);
-  // nll -= dnorm(b1_pholder(k), Type(0.0), exp(log_b1_pholder_tau), true);
-}
+// for(int k = 0; k < n_pholder; k++){
+//   nll -= dnorm(b0_pholder(k), Type(0.0), exp(log_b0_pholder_tau), true);
+//   // nll -= dnorm(g0_pholder(k), Type(0.0), exp(log_g0_pholder_tau), true);
+//   // nll -= dnorm(b1_pholder(k), Type(0.0), exp(log_b1_pholder_tau), true);
+// }
 for(int k = 0; k < n_strategy; k++){
   nll -= dnorm(b1_strategy(k), Type(0.0), exp(log_b1_strategy_tau), true);
+  nll -= dnorm(b2_strategy(k), Type(0.0), exp(log_b2_strategy_tau), true);
+  nll -= dnorm(b3_strategy(k), Type(0.0), exp(log_b3_strategy_tau), true);
   nll -= dnorm(g1_strategy(k), Type(0.0), exp(log_g1_strategy_tau), true);
   nll -= dnorm(b0_strategy(k), Type(0.0), exp(log_b0_strategy_tau), true);
   nll -= dnorm(g0_strategy(k), Type(0.0), exp(log_g0_strategy_tau), true);
