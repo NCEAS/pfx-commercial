@@ -29,6 +29,8 @@ dat <- group_by(dat, p_holder) %>%
 # Filters: remove people-year combinations making < $5000
 dat = dat[which(dat$revenue >= 5000), ]
 
+# note: grouping here is based on strategies defined by permits
+dat$strategy = dat$strategy_permit
 dat <- group_by(dat, strategy) %>%
   mutate(npeople = length(unique(p_holder)))
 
@@ -63,7 +65,12 @@ top_permits$new[which(substr(top_permits$new,1,3)=="T09")] = "T09" # tanner crab
 # remaining, and only 2 can be combined: M26B/G (mechanical jig, GOA/statewide)
 top_permits$new[which(substr(top_permits$new,1,3)=="M26")] = "M26" # mechanical jig
 
-# 6. Combining salmon permits is a little more difficult, because the species composition
+# 6. Combine some of the longline categories based on vessel size.
+top_permits$new[top_permits$new=="C06B"] = "C61B"
+top_permits$new[top_permits$new=="B06B"] = "B61B"
+top_permits$new[top_permits$new=="S05B"] = "S15B"
+
+# 7. Combining salmon permits is a little more difficult, because the species composition
 # varies widely based on geography. For the drift gillnet (S03) permits, we
 # combined S03 permits from Cook Inlet, Bristol Bay, and Alaska Peninsula because sockeye
 # represents > 92% of species revenue
@@ -79,7 +86,7 @@ top_permits$new[which(top_permits$new%in%c("S04E","S04H","S04K","S04M","S04T"))]
 top_permits$new[which(top_permits$new%in%c("S04W","S04Z"))] = "S04b"
 # There's a few remaining permits (S04D, S04X, S04P, S04Y) - but they're so different they can't
 # be grouped
-#7. combine the new permit groupings into new strategies
+#8. combine the new permit groupings into new strategies
 top_permits$orig = as.character(top_permits$orig)
 top_strategies$new.strategy = NA
 for(i in 1:nrow(top_strategies)) {
@@ -91,8 +98,16 @@ dat = left_join(dat, top_strategies) %>% select(-c(n, earn))
 dat$strategy=dat$new.strategy
 dat = dat[is.na(dat$strategy)==FALSE,]
 
+# Derived variables
+dat$log_spec_div <- scale(log(dat$specDiv))
+dat$scaled_spec_div <- scale(dat$specDiv)
+dat$log_length <- scale(log(dat$length + 1))
+dat$log_weight <- scale(log(dat$weight + 1))
+dat$log_days <- scale(log(dat$days + 1))
+dat$log_npermit <- scale(log(dat$npermit))
+
 group_by(dat, strategy) %>%
-  summarize(meanD = mean(log_days), meanDiv = mean(specDiv), meanEarn = mean(revenue)) %>%
+  summarize(meanD = mean(log(days_permit + 1)), meanDiv = mean(specDiv), meanEarn = mean(revenue)) %>%
   as.data.frame %>%
   ggplot(aes(meanD, meanDiv, label = strategy)) +
   geom_text(size=3, aes(colour=meanEarn)) + xlab("Mean log_days") + ylab("Mean effective diversity")
@@ -116,13 +131,6 @@ group_by(dat, strategy) %>%
 #  filter(range_div > 0) # eliminates "pound"
 #nrow(dat)
 
-# Derived variables
-dat$log_spec_div <- scale(log(dat$specDiv))
-dat$scaled_spec_div <- scale(dat$specDiv)
-dat$log_length <- scale(log(dat$length + 1))
-dat$log_weight <- scale(log(dat$weight + 1))
-dat$log_days <- scale(log(dat$days + 1))
-dat$log_npermit <- scale(log(dat$npermit))
 
 # Downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
@@ -137,16 +145,19 @@ nrow(dat)
 #nrow(dat)
 
 library(glmmTMB)
-mod <- glmmTMB(log(revenue) ~ scaled_spec_div*log_days + npermit +
-  I(log_days^2)*(scaled_spec_div^2) + (1 + scaled_spec_div + log_days|strategy),
+
+mod <- glmmTMB(log(revenue) ~ scaled_spec_div*log_days +
+  I(log_days^2) + I(scaled_spec_div^2) + (1 + scaled_spec_div + log_days + I(scaled_spec_div^2)|strategy),
     data = dat)
+
 summary(mod)
 AIC(mod)
 
 # might be able to switch back to lmer() for diagonstics too
 library(lme4)
-mod <- lmer(log(revenue) ~ specDiv*log_days +
-    I(log_days^2)*(specDiv^2) + (1 + specDiv + log_days|strategy),
+# 485299.5
+mod <- lmer(log(revenue) ~ specDiv*permit_days +
+    I(log_days^2) + I(specDiv^2) + (1 + specDiv + permit_days|strategy),
   data = dat)
 
 dat$residuals = residuals(mod)

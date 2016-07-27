@@ -188,6 +188,11 @@ topstrategies = group_by(cfecnew, p_holder, year) %>%
 rev(sort(table(topstrategies$strategy)))[1:50]
 cfecnew = left_join(cfecnew, topstrategies) # adds strategy column
 
+topstrategies.bypermit = group_by(cfecnew, p_holder, year) %>%
+  summarize(strategy.permit = paste(sort(unique(p_fshy)), collapse = " ")) %>%
+  as_data_frame()
+cfecnew = left_join(cfecnew, topstrategies.bypermit) # adds strategy.permit column
+
 write.csv(rev(sort(table(topstrategies$strategy))), file = "../data-generated/strategies.csv")
 ```
 
@@ -244,7 +249,6 @@ cfecnew <- left_join(cfecnew, topstrategies_gear) # adds gear strategy column
 Aggregate annual metrics by person,
 
 ```{r}
-
 cfecnew$yday <- paste(cfecnew$year, cfecnew$day, sep = "-") %>%
   lubridate::ymd() %>%
   lubridate::yday() - 1
@@ -258,11 +262,13 @@ permit_days = group_by(cfecnew, p_holder, year, p_fshy) %>%
   summarize(permitDays = diff(range(yday)+1)) %>%
   group_by(p_holder, year) %>% 
   summarize(tot.permitDays = sum(permitDays))
-  
+cfecnew = left_join(cfecnew, permit_days)  
+
 cfecAnnual = group_by(cfecnew, p_holder, year) %>%
   summarize(permit = p_fshy[1], boat = cadfg[1],
     days = diff(range(yday) + 1),
     days_n = length(unique(yday)),
+    days_permit = tot.permitDays[1], 
     ngear = length(unique(gearn)),
     nspec = length(unique(specn)),
     npermit = length(unique(p_fshy)),
@@ -270,7 +276,8 @@ cfecAnnual = group_by(cfecnew, p_holder, year) %>%
     weight = sum(g_pounds),
     length = mean(vlength, na.rm=TRUE),
     strategy = strategy[1],
-    strategy_gear = strategy_gear[1])
+    strategy_gear = strategy_gear[1],
+    strategy_permit = strategy.permit[1])
 
 cfecAnnual = left_join(cfecAnnual, permit_days)
 # also calculate weighted simpson diversity of species
@@ -296,6 +303,8 @@ cfecAnnual$revenue.prev = cfecAnnual$revenue[idx]
 cfecAnnual$specdiv.prev = cfecAnnual$specDiv[idx]
 cfecAnnual$geardiv.prev = cfecAnnual$gearDiv[idx]
 cfecAnnual$strategy.prev = cfecAnnual$strategy[idx]
+cfecAnnual$strategy_gear.prev = cfecAnnual$strategy_gear[idx]
+cfecAnnual$strategy_permit.prev = cfecAnnual$strategy_permit[idx]
 cfecAnnual$weight.prev = cfecAnnual$weight[idx]
 cfecAnnual$days.prev = cfecAnnual$days[idx]
 ```
