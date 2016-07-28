@@ -24,6 +24,9 @@ top_strategies = group_by(dat, strategy) %>%
     earn=sum(revenue)) %>%
   filter(n>=100) # note -- the code should work fine with this >= 100 too
 
+# A few of these can be deleted (small in river fisheries, experimental, etc)
+top_strategies = top_strategies[-which(top_strategies$strategy %in% c("S04X","S04Y","Z12B","R18B")),]
+
 #3. We then tabulated the permits that make up these strategies, and there are only
 # 56.
 top_permits = data.frame("orig"=names(table(unlist(lapply(top_strategies$strategy, strsplit, " ")))))
@@ -64,10 +67,9 @@ top_permits$new[which(top_permits$new%in%c("S01H","S01K"))] = "S01" # purse sein
 # For the set gillnet, S04 permits, there's some variety but also clear sockeye specialists. We
 # grouped permits that had > 80% sockeye
 top_permits$new[which(top_permits$new%in%c("S04E","S04H","S04K","S04M","S04T"))] = "S04a" # purse seine
-# Finally, we grouped permits from norton sound and kuskokwim because of similar species %
+# We grouped permits from norton sound and kuskokwim because of similar species %
 top_permits$new[which(top_permits$new%in%c("S04W","S04Z"))] = "S04b"
-# There's a few remaining permits (S04D, S04X, S04P, S04Y) - but they're so different they can't
-# be grouped
+# There's a few remaining permits (S04D, S04X, S04P, S04Y) - but they're so different they can't be grouped
 
 #8. combine the new permit groupings into new strategies
 top_permits$orig = as.character(top_permits$orig)
