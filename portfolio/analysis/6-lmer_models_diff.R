@@ -20,11 +20,11 @@ dat = readRDS(file="portfolio/data-generated/cfec-diff-for-modeling.rds")
 
 ### Eric's culling:
 #1. We restricted our analysis to p_holders who fished for 5 or more years
-dat <- group_by(dat, p_holder) %>%
-  mutate(nyr = length(unique(year))) %>%
-  mutate(range_div = diff(range(specDiv))) %>%
-  as_data_frame() %>%
-  filter(nyr >= 5)
+#dat <- group_by(dat, p_holder) %>%
+#  mutate(nyr = length(unique(year))) %>%
+#  mutate(range_div = diff(range(specDiv))) %>%
+#  as_data_frame() %>%
+#  filter(nyr >= 5)
 
 # Filters: remove people-year combinations making < $5000
 dat = dat[which(dat$revenue >= 5000), ]
@@ -157,11 +157,41 @@ library(glmmTMB)
 # try to fit a model with people-strategy random effects, in addition to strategy ones.
 # we can also compare how the calculation of days affects fit. calculating effort as
 # the sum of individual permit seasons improves fit by ~ 2000 (2nd model here)
-dat$people_strategy = as.factor(paste(dat$strategy,dat$p_holder,sep=":"))
-mod <- glmmTMB(log(revenue) ~ scaled_spec_div*log_days + npermit +
-    I(log_days^2) + I(scaled_spec_div^2) +
-    (1 + scaled_spec_div + log_days|strategy) + (1|people_strategy),
-  data = dat)
+dat$logdiff = log(dat$revenue/dat$revenue.prev)
+dat$days.change = log((dat$days_permit+1)/(dat$days_permit.prev + 1))
+mod <- glmmTMB(logdiff ~ specDiv.change * days.change +
+    (-1+specDiv.change + days.change + log(revenue.prev)|strategy) + log(revenue.prev), data = dat) # 426526.1
+
+# diagnostics of mean model
+strategy.summary = group_by(dat, strategy) %>%
+  summarize(sdlogrev = sd(log(revenue)),
+    meanrev = mean(log(revenue)),
+    specDiv = mean(log(specDiv)))
+strategy.summary$randomInt = ranef(mod)[[1]]$strategy$`(Intercept)` + fixef(mod)[[1]][["(Intercept)"]]
+strategy.summary$randomSpec = ranef(mod)[[1]]$strategy$`specDiv.change` + fixef(mod)[[1]][["specDiv.change"]]
+strategy.summary$randomDays = ranef(mod)[[1]]$strategy$`days.change` + fixef(mod)[[1]][["days.change"]]
+strategy.summary$randomRevenue = ranef(mod)[[1]]$strategy$`log(revenue.prev)` + fixef(mod)[[1]][["log(revenue.prev)"]]
+
+p <- tidyr::gather(strategy.summary, model, intercept, contains("random")) %>%
+  ggplot(aes(specDiv, intercept, color = meanrev)) + geom_point() +
+  facet_wrap(~model, scales = "free_y") +
+  geom_smooth(se = FALSE, color = "red", method = "lm")
+print(p)
+
+# plot residuals v fitted
+pdf("portfolio/figs/residuals_diff_model.pdf")
+dat$fitted_mod = fitted.values(mod)
+dat$residuals = residuals(mod)
+ggplot(dat, aes(x=fitted_mod, y=residuals, col = log(revenue))) + facet_wrap(~strategy) +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+ggplot(dat, aes(x=specDiv.change, y=residuals, col = log(revenue))) + facet_wrap(~strategy) +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+ggplot(dat, aes(x=days.change, y=residuals, col = log(revenue))) + facet_wrap(~strategy) +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+ggplot(dat, aes(x=log(revenue.prev), y=residuals, col = log(revenue))) + facet_wrap(~strategy) +
+  geom_point(alpha = 0.3) + geom_hline(yintercept=0)
+dev.off()
+
 mod <- glmmTMB(log(revenue) ~ scaled_spec_div*log_days_permit +
     I(log_days_permit^2) + I(scaled_spec_div^2) +
     (1 + scaled_spec_div + log_days_permit|strategy) + (1|people_strategy),
@@ -218,6 +248,12 @@ strategy.summary$randomInt = ranef(mod)[[1]]$strategy$`(Intercept)` + fixef(mod)
 strategy.summary$randomSpec = ranef(mod)[[1]]$strategy$`scaled_spec_div` + fixef(mod)[[1]][["scaled_spec_div"]]
 strategy.summary$cv_randomInt = ranef(mod.cv)[[1]]$strategy$`(Intercept)` + fixef(mod.cv)[[1]][["(Intercept)"]]
 strategy.summary$cv_randomSpec = ranef(mod.cv)[[1]]$strategy$`scaled_spec_div` + fixef(mod.cv)[[1]][["scaled_spec_div"]]
+
+p <- tidyr::gather(strategy.summary, model, intercept, contains("random")) %>%
+  ggplot(aes(specDiv, intercept, color = meanrev)) + geom_point() +
+  facet_wrap(~model, scales = "free_y") +
+  geom_smooth(se = FALSE, color = "red", method = "lm")
+print(p)
 
 # strategy.summary$randomSpecSq = ranef(mod)[[1]]$strategy$`I(scaled_spec_div^2)` + fixef(mod)[[1]][["I(scaled_spec_div^2)"]]
 # strategy.summary$cv_randomSpecSq = ranef(mod)[[1]]$strategy$`I(scaled_spec_div^2)` + fixef(mod)[[1]][["I(scaled_spec_div^2)"]]
