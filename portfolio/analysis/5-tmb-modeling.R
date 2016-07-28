@@ -9,16 +9,16 @@ dyn.load(dynlib("portfolio/analysis/revenue7"))
 
 source("portfolio/analysis/cull-dat.R")
 
-# nrow(dat)
-ggplot(dat, aes(specDiv, log(revenue), colour = log(days_permit+1))) +
-  geom_point(alpha=0.1) +
-  facet_wrap(~strategy)
-ggplot(filter(dat, is.na(length)), aes(log(days_permit+1), log(revenue), colour = specDiv)) +
-  geom_point(alpha=0.1) +
-  facet_wrap(~strategy)
-ggplot(dat, aes(specDiv, log(revenue), colour = length)) +
-  geom_point(alpha=0.1) +
-  facet_wrap(~strategy)
+## # nrow(dat)
+## ggplot(dat, aes(specDiv, log(revenue), colour = log(days_permit+1))) +
+##   geom_point(alpha=0.1) +
+##   facet_wrap(~strategy)
+## ggplot(filter(dat, is.na(length)), aes(log(days_permit+1), log(revenue), colour = specDiv)) +
+##   geom_point(alpha=0.1) +
+##   facet_wrap(~strategy)
+## ggplot(dat, aes(specDiv, log(revenue), colour = length)) +
+##   geom_point(alpha=0.1) +
+##   facet_wrap(~strategy)
 
 dat <- group_by(dat, strategy) %>%
   # mutate(range_div = diff(range(specDiv))) %>%
@@ -29,17 +29,18 @@ dat <- group_by(dat, strategy) %>%
 # Downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
 n_sample <- round(length(unique_holders)*0.4)
-set.seed(2)
+set.seed(293)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 
 table(dat$strategy) %>% length
 # many different strategies, need to model only most common,
-top.strategies = names(rev(sort(table(dat$strategy)))[1:25])
-dat = dat[dat$strategy%in%top.strategies, ]
-nrow(dat)
+# top.strategies = names(rev(sort(table(dat$strategy)))[1:25])
+# dat = dat[dat$strategy%in%top.strategies, ]
+# nrow(dat)
+
 sum(!is.na(dat$length))
-dat<-dat[!is.na(dat$length), ]
+# dat<-dat[!is.na(dat$length), ]
 nrow(dat)
 
 dat$people_strategy = paste(dat$strategy,dat$p_holder,sep=":")
@@ -58,19 +59,19 @@ dat$people_strategy = paste(dat$strategy,dat$p_holder,sep=":")
 # dm <- dm[dm$iqr_spec_div >= 0.10, ]
 # nrow(dm)
 
-# # dm <- group_by(dm, strategy) %>% mutate(n = n()) %>% subset(n>=50) %>%
-# #   as_data_frame()
-# # nrow(dm)
-# dm <- dm[!is.na(dm$length), ]
+# dm <- group_by(dm, strategy) %>% mutate(n = n()) %>% subset(n>=50) %>%
+#   as_data_frame()
 # nrow(dm)
+dm <- dm[!is.na(dm$length), ]
+nrow(dm)
 
 # assign some strategy IDs for the purpose of identifying random effects
 dat$strategy_id <- NULL
 dat$pholder_id <- NULL
 strategy_ids  <- select(dat, strategy)  %>%
   unique %>% mutate(strategy_id = 1:n())
-# pholder_ids <- select(dat, people_strategy) %>%
-pholder_ids <- select(dat, pholder) %>%
+pholder_ids <- select(dat, people_strategy) %>%
+# pholder_ids <- select(dat, pholder) %>%
   unique %>% mutate(pholder_id = 1:n())
 dat <- inner_join(dat, strategy_ids)  %>% inner_join(pholder_ids)
 nrow(dat)
@@ -84,7 +85,7 @@ format_data <- function(x) {
   x$scaled_npermit <- scale(x$npermit)
   mm <- model.matrix(~ (spec_div + log_days_permit + log_length)^2 +
     I(spec_div^2) + I(log_days^2), data = x)
-  mm_sigma <- model.matrix(~ (spec_div + log_days_permit)^2, data = x)
+  mm_sigma <- model.matrix(~ (spec_div + log_days_permit + log_length)^2, data = x)
   n_pholder <- max(x$pholder_id)
   n_strategy <- max(x$strategy_id)
   n_fe <- ncol(mm)
