@@ -2,14 +2,14 @@ dat = readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
 
 ### Eric's culling:
 #1. We restricted our analysis to p_holders who fished for 5 or more years
-dat <- group_by(dat, p_holder) %>%
-  mutate(nyr = length(unique(year))) %>%
-  mutate(range_div = diff(range(specDiv))) %>%
-  as_data_frame() %>%
-  filter(nyr >= 10)
+#dat <- group_by(dat, p_holder) %>%
+#  mutate(nyr = length(unique(year))) %>%
+#  mutate(range_div = diff(range(specDiv))) %>%
+#  as_data_frame() %>%
+#  filter(nyr >= 5)
 
 # Filters: remove people-year combinations making < $5000
-dat = dat[which(dat$revenue >= 5000), ]
+dat = dat[which(dat$revenue >= 10000), ]
 
 # note: grouping here is based on strategies defined by permits
 dat$strategy = dat$strategy_permit
@@ -33,7 +33,7 @@ top_permits = data.frame("orig"=names(table(unlist(lapply(top_strategies$strateg
 # in kodiak (G34K) and alaska peninsula (G34M) have a herring roe strategy. This combining
 # reduces permits to 59
 top_permits$new = as.character(top_permits$orig)
-top_permits$new[which(substr(top_permits$new,1,3)=="D09")] = "D09" # dungeness, not limited by pot#
+top_permits$new[which(substr(top_permits$new,1,3)%in%c("D09","D9C","D9D"))] = "D09" # dungeness
 top_permits$new[which(substr(top_permits$new,1,3)=="G01")] = "G01" # herring roe, purse seine
 top_permits$new[which(substr(top_permits$new,1,3)=="G34")] = "G34" # herring roe, gillnet
 top_permits$new[which(substr(top_permits$new,1,3)=="K91")] = "K91" # king crab
@@ -68,6 +68,7 @@ top_permits$new[which(top_permits$new%in%c("S04E","S04H","S04K","S04M","S04T"))]
 top_permits$new[which(top_permits$new%in%c("S04W","S04Z"))] = "S04b"
 # There's a few remaining permits (S04D, S04X, S04P, S04Y) - but they're so different they can't
 # be grouped
+
 #8. combine the new permit groupings into new strategies
 top_permits$orig = as.character(top_permits$orig)
 top_strategies$new.strategy = NA
@@ -80,6 +81,11 @@ dat = left_join(dat, top_strategies) %>% select(-c(n, earn))
 dat$strategy=dat$new.strategy
 dat = dat[is.na(dat$strategy)==FALSE,]
 
+# 9. Remove data points where people only did a strategy in one year. Below
+# we try to include people-strategy random effects
+dat = group_by(dat, strategy, p_holder) %>%
+  mutate(nsp = n()) %>% filter(nsp > 1) %>% select(-nsp)
+
 # Derived variables
 dat$log_spec_div <- scale(log(dat$specDiv))
 dat$scaled_spec_div <- scale(dat$specDiv)
@@ -88,4 +94,3 @@ dat$log_weight <- scale(log(dat$weight + 1))
 dat$log_days <- scale(log(dat$days + 1))
 dat$log_npermit <- scale(log(dat$npermit))
 dat$log_days_permit <- scale(log(dat$days_permit+1))
-
