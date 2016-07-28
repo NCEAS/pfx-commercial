@@ -9,27 +9,33 @@ dyn.load(dynlib("portfolio/analysis/revenue7"))
 
 source("portfolio/analysis/cull-dat.R")
 
-## # nrow(dat)
-## ggplot(dat, aes(specDiv, log(revenue), colour = log(days_permit+1))) +
-##   geom_point(alpha=0.1) +
-##   facet_wrap(~strategy)
-## ggplot(filter(dat, is.na(length)), aes(log(days_permit+1), log(revenue), colour = specDiv)) +
-##   geom_point(alpha=0.1) +
-##   facet_wrap(~strategy)
-## ggplot(dat, aes(specDiv, log(revenue), colour = length)) +
-##   geom_point(alpha=0.1) +
-##   facet_wrap(~strategy)
+# # nrow(dat)
+# ggplot(dat, aes(specDiv, log(revenue), colour = log(days_permit+1))) +
+#   geom_point(alpha=0.1) +
+#   facet_wrap(~strategy)
+# ggplot(filter(dat, is.na(length)), aes(log(days_permit+1), log(revenue), colour = specDiv)) +
+#   geom_point(alpha=0.1) +
+#   facet_wrap(~strategy)
+# ggplot(dat, aes(specDiv, log(revenue), colour = length)) +
+#   geom_point(alpha=0.1) +
+#   facet_wrap(~strategy)
 
+# identify strategies where there is less than x%
+# of strategies with more than a species diversity of 1:
 dat <- group_by(dat, strategy) %>%
-  # mutate(range_div = diff(range(specDiv))) %>%
-  mutate(ng1 = sum(specDiv>1)) %>%
+  mutate(ntotal = n(), ngreater1 = sum(specDiv>1.1), nratio = ngreater1/ntotal) %>%
   as_data_frame() %>%
-  filter(ng1 > 10)
+  mutate(spec_div_all_1 = ifelse(nratio < 0.1, 1L, 0L)) %>%
+  select(-ntotal, -ngreater1)
+
+# ggplot(dat, aes(specDiv, log(revenue), colour = spec_div_all_1)) +
+#   geom_point(alpha=0.1) + facet_wrap(~strategy)
+# distinct(dat[,c("nratio", "strategy", "spec_div_all_1")])%>%arrange(nratio) %>% as.data.frame
 
 # Downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.4)
-set.seed(293)
+n_sample <- round(length(unique_holders)*0.33)
+set.seed(2)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 
@@ -40,7 +46,7 @@ table(dat$strategy) %>% length
 # nrow(dat)
 
 sum(!is.na(dat$length))
-# dat<-dat[!is.na(dat$length), ]
+dat<-dat[!is.na(dat$length), ]
 nrow(dat)
 
 dat$people_strategy = paste(dat$strategy,dat$p_holder,sep=":")
@@ -59,11 +65,11 @@ dat$people_strategy = paste(dat$strategy,dat$p_holder,sep=":")
 # dm <- dm[dm$iqr_spec_div >= 0.10, ]
 # nrow(dm)
 
-# dm <- group_by(dm, strategy) %>% mutate(n = n()) %>% subset(n>=50) %>%
-#   as_data_frame()
+# # dm <- group_by(dm, strategy) %>% mutate(n = n()) %>% subset(n>=50) %>%
+# #   as_data_frame()
+# # nrow(dm)
+# dm <- dm[!is.na(dm$length), ]
 # nrow(dm)
-dm <- dm[!is.na(dm$length), ]
-nrow(dm)
 
 # assign some strategy IDs for the purpose of identifying random effects
 dat$strategy_id <- NULL
@@ -109,7 +115,8 @@ format_data <- function(x) {
       b1_cov_re_i = x$spec_div,
       b2_cov_re_i = x$log_days,
       # b3_cov_re_i = x$scaled_npermit,
-      g1_cov_re_i = x$spec_div),
+      g1_cov_re_i = x$spec_div,
+      spec_div_all_1 = x$spec_div_all_1),
 
     parameters = list(
       b_j = rep(0, n_fe),
@@ -244,7 +251,10 @@ p1 <- ggplot(p, aes(strategy_ordered, estimate, ymin = l, ymax = u, colour = log
 print(p1)
 ggsave("../figs/tmb-re.pdf", width = 16, height = 13)
 
-j <- filter(d, parameter %in% c("b0_strategy", "g0_strategy", "b1_strategy", "g1_strategy")) %>%
+j <- filter(d, parameter %in% c(
+  "b0_strategy", "g0_strategy"
+  # "b1_strategy", "g1_strategy"
+)) %>%
   group_by(parameter) %>%
     mutate(strategy_id = 1:n()) %>%
       left_join(ids) %>%
