@@ -10,9 +10,14 @@ dyn.load(dynlib("portfolio/analysis/revenue7"))
 source("portfolio/analysis/cull-dat.R")
 
 # nrow(dat)
-ggplot(dat, aes(specDiv, log(revenue))) + geom_point() +
+ggplot(dat, aes(specDiv, log(revenue), colour = log(days_permit+1))) +
+  geom_point(alpha=0.1) +
   facet_wrap(~strategy)
-ggplot(dat, aes(log_npermit, log(revenue))) + geom_point() +
+ggplot(filter(dat, is.na(length)), aes(log(days_permit+1), log(revenue), colour = specDiv)) +
+  geom_point(alpha=0.1) +
+  facet_wrap(~strategy)
+ggplot(dat, aes(specDiv, log(revenue), colour = length)) +
+  geom_point(alpha=0.1) +
   facet_wrap(~strategy)
 
 dat <- group_by(dat, strategy) %>%
@@ -23,7 +28,7 @@ dat <- group_by(dat, strategy) %>%
 
 # Downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.5)
+n_sample <- round(length(unique_holders)*0.4)
 set.seed(2)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
@@ -37,6 +42,7 @@ sum(!is.na(dat$length))
 dat<-dat[!is.na(dat$length), ]
 nrow(dat)
 
+dat$people_strategy = paste(dat$strategy,dat$p_holder,sep=":")
 # strategies <- readr::read_csv("../data-generated/strategies.csv")
 # strategies <- strategies[1:100, ] %>% rename(strategy = Var1)
 # dm <- left_join(strategies,dm)
@@ -59,9 +65,12 @@ nrow(dat)
 # nrow(dm)
 
 # assign some strategy IDs for the purpose of identifying random effects
+dat$strategy_id <- NULL
+dat$pholder_id <- NULL
 strategy_ids  <- select(dat, strategy)  %>%
   unique %>% mutate(strategy_id = 1:n())
-pholder_ids <- select(dat, p_holder) %>%
+# pholder_ids <- select(dat, people_strategy) %>%
+pholder_ids <- select(dat, pholder) %>%
   unique %>% mutate(pholder_id = 1:n())
 dat <- inner_join(dat, strategy_ids)  %>% inner_join(pholder_ids)
 nrow(dat)
@@ -71,10 +80,11 @@ format_data <- function(x) {
   x$log_length <- scale(log(x$length + 1))
   x$log_weight <- scale(log(x$weight + 1))
   x$log_days <- scale(log(x$days + 1))
+  x$log_days_permit <- scale(log(x$days_permit+1))
   x$scaled_npermit <- scale(x$npermit)
-  mm <- model.matrix(~ (spec_div + log_days + log_length)^2 +
+  mm <- model.matrix(~ (spec_div + log_days_permit + log_length)^2 +
     I(spec_div^2) + I(log_days^2), data = x)
-  mm_sigma <- model.matrix(~ (spec_div + log_days)^2, data = x)
+  mm_sigma <- model.matrix(~ (spec_div + log_days_permit)^2, data = x)
   n_pholder <- max(x$pholder_id)
   n_strategy <- max(x$strategy_id)
   n_fe <- ncol(mm)
@@ -203,7 +213,7 @@ ggsave("../figs/tmb-fe.pdf", width = 7, height = 5)
 
 # ids <- unique(select(as.data.frame(m$data), strategy, strategy_id, p_holder, pholder_id))
 ids <- unique(select(as.data.frame(m$data), strategy, strategy_id))
-strategy_diversity <- bind_rows(dm) %>%
+strategy_diversity <- dat %>%
   group_by(strategy) %>%
     summarize(mean_diversity = mean(specDiv, na.rm = TRUE))
 ids <- left_join(ids, strategy_diversity)
@@ -227,28 +237,30 @@ p <- inner_join(p, junk)
 
 p1 <- ggplot(p, aes(strategy_ordered, estimate, ymin = l, ymax = u, colour = log(mean_diversity))) +
     geom_pointrange(position = position_dodge(width = 0.4)) +
-    facet_wrap(~parameter, ncol = 4) +
+    facet_wrap(~parameter) +
     geom_hline(yintercept = 0, lty = 2) +
     coord_flip()
 print(p1)
 ggsave("../figs/tmb-re.pdf", width = 16, height = 13)
 
-j <- filter(d, parameter %in% c("b0_strategy", "g0_strategy")) %>%
+j <- filter(d, parameter %in% c("b0_strategy", "g0_strategy", "b1_strategy", "g1_strategy")) %>%
   group_by(parameter) %>%
     mutate(strategy_id = 1:n()) %>%
       left_join(ids) %>%
         as_data_frame() %>%
           na.omit()
 ggplot(j, aes(log(mean_diversity), estimate, label = strategy, ymin = l, ymax = u)) + geom_pointrange(alpha=.4) +
-  facet_grid(~parameter, scales = "free")
-  # geom_text(aes(label = strategy) )
+  facet_wrap(~parameter, scales = "free") +
+  geom_text(aes(label = strategy) ) +
+  # stat_smooth()
+  stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1)
 ggsave("../figs/tmb-re-int-vs-diversity.pdf", width = 13, height = 10)
 
-p <- reshape2::dcast(j,  strategy ~ parameter, value.var = "estimate") %>%
-  ggplot(aes(g0_strategy, b0_strategy, label = strategy)) + geom_point() +
-    geom_text()
-p
-ggsave("../figs/tmb-re-int-vs.pdf", width = 10, height = 9)
+# p <- reshape2::dcast(j,  strategy ~ parameter, value.var = "estimate") %>%
+#   ggplot(aes(g0_strategy, b0_strategy, label = strategy)) + geom_point() +
+#     geom_text()
+# p
+# ggsave("../figs/tmb-re-int-vs.pdf", width = 10, height = 9)
 
 j1 <- filter(d, parameter %in% c("combined_b1_strategy", "combined_g1_strategy")) %>%
   group_by(parameter) %>%
@@ -261,32 +273,32 @@ reshape2::dcast(j1, strategy  ~ parameter, value.var = "estimate") %>%
     geom_text()
 ggsave("../figs/tmb-re-slope-vs.pdf", width = 10, height = 10)
 
-ggplot(j1, aes(mean_diversity, estimate)) +
-  geom_point(alpha = 0.3) +
-  facet_wrap(~parameter) +
-geom_text(aes(label = strategy), size = 2, alpha = 0.5) +
-  geom_hline(yintercept = 0, lty = 2)
-ggsave("../figs/tmb-re-slope-vs-diversity.pdf", width = 15, height = 9)
+# ggplot(j1, aes(mean_diversity, estimate)) +
+#   geom_point(alpha = 0.3) +
+#   facet_wrap(~parameter) +
+# geom_text(aes(label = strategy), size = 2, alpha = 0.5) +
+#   geom_hline(yintercept = 0, lty = 2)
+# ggsave("../figs/tmb-re-slope-vs-diversity.pdf", width = 15, height = 9)
 
 ##### p_holders
 
 ids <- unique(select(as.data.frame(m$data), strategy, strategy_id, p_holder, pholder_id))
-pholder_diversity <- bind_rows(dm) %>%
+pholder_diversity <- dat %>%
   group_by(pholder_id) %>%
     summarize(mean_diversity = mean(specDiv, na.rm = TRUE))
 ids <- left_join(ids, pholder_diversity)
 
 p <- filter(d, parameter %in%
-  c("g0_pholder")) %>%
+  c("b0_pholder")) %>%
 # p <- filter(d, parameter %in% c("combined_b1_strategy", "combined_g1_strategy")) %>%
   group_by(parameter) %>%
     mutate(pholder_id = 1:n()) %>%
       left_join(ids)
 
-ggplot(p, aes(mean_diversity, estimate)) + geom_point(alpha = 0.1)
-ggsave("../figs/tmb-re-pholder-g0-vs-diversity.pdf", width = 7, height = 7)
+# ggplot(p, aes(mean_diversity, estimate)) + geom_point(alpha = 0.1) + stat_smooth()
+# ggsave("../figs/tmb-re-pholder-g0-vs-diversity.pdf", width = 7, height = 7)
 
-group_by(dm, p_holder) %>%
+group_by(dat, p_holder) %>%
   summarise(sp = mean(specDiv), cv=sd(log(revenue))) %>%
-ggplot(aes(sp, log(cv))) + geom_point(alpha=0.2)
+ggplot(aes(sp, log(cv))) + geom_point(alpha=0.2) + stat_smooth()
 ggsave("../figs/raw-specdiv-vs-diversity.pdf", width = 7, height = 7)
