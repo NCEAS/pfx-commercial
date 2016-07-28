@@ -4,44 +4,38 @@ rm(list = ls())
 library(TMB)
 library(dplyr)
 library(ggplot2)
-compile("revenue7.cpp")
-dyn.load(dynlib("revenue7"))
+compile("portfolio/analysis/revenue7.cpp")
+dyn.load(dynlib("portfolio/analysis/revenue7"))
 
-dm <- readRDS("../data-generated/cfec-for-modeling.rds")
-dat = readRDS(file="../data-generated/cfec-annual-for-modeling.rds")
-dat$strategy_taxa <- dat$strategy
-dat$strategy <- dat$strategy_gear
-nrow(dat)
-dat = dat[which(dat$revenue >= 5000), ]
-nrow(dat)
+source("portfolio/analysis/cull-dat.R")
 
-dat <- group_by(dat, p_holder) %>%
-  mutate(nyr = length(unique(year))) %>%
-  mutate(range_div = diff(range(specDiv))) %>%
-  as_data_frame() %>%
-  filter(nyr >= 10) #%>%
-  # filter(range_div > 0)
-nrow(dat)
+# nrow(dat)
+ggplot(dat, aes(specDiv, log(revenue))) + geom_point() +
+  facet_wrap(~strategy)
+ggplot(dat, aes(log_npermit, log(revenue))) + geom_point() +
+  facet_wrap(~strategy)
 
 dat <- group_by(dat, strategy) %>%
-  mutate(range_div = diff(range(specDiv))) %>%
+  # mutate(range_div = diff(range(specDiv))) %>%
+  mutate(ng1 = sum(specDiv>1)) %>%
   as_data_frame() %>%
-  filter(range_div > 0) # eliminates "pound"
-nrow(dat)
-
+  filter(ng1 > 10)
 
 # Downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.3)
-set.seed(1234)
+n_sample <- round(length(unique_holders)*0.5)
+set.seed(2)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 
+table(dat$strategy) %>% length
 # many different strategies, need to model only most common,
 top.strategies = names(rev(sort(table(dat$strategy)))[1:25])
 dat = dat[dat$strategy%in%top.strategies, ]
 nrow(dat)
 sum(!is.na(dat$length))
+dat<-dat[!is.na(dat$length), ]
+nrow(dat)
 
 # strategies <- readr::read_csv("../data-generated/strategies.csv")
 # strategies <- strategies[1:100, ] %>% rename(strategy = Var1)
@@ -78,9 +72,9 @@ format_data <- function(x) {
   x$log_weight <- scale(log(x$weight + 1))
   x$log_days <- scale(log(x$days + 1))
   x$scaled_npermit <- scale(x$npermit)
-  mm <- model.matrix(~ (spec_div + log_days + scaled_npermit)^2 +
-    I(spec_div^2) + I(log_days^2) + I(scaled_npermit^2), data = x)
-  mm_sigma <- model.matrix(~ (spec_div + log_days + scaled_npermit)^2, data = x)
+  mm <- model.matrix(~ (spec_div + log_days + log_length)^2 +
+    I(spec_div^2) + I(log_days^2), data = x)
+  mm_sigma <- model.matrix(~ (spec_div + log_days)^2, data = x)
   n_pholder <- max(x$pholder_id)
   n_strategy <- max(x$strategy_id)
   n_fe <- ncol(mm)
@@ -103,28 +97,28 @@ format_data <- function(x) {
       diversity_column = 1, # spec_div column
       b1_cov_re_i = x$spec_div,
       b2_cov_re_i = x$log_days,
-      b3_cov_re_i = x$scaled_npermit,
+      # b3_cov_re_i = x$scaled_npermit,
       g1_cov_re_i = x$spec_div),
 
     parameters = list(
       b_j = rep(0, n_fe),
       sigma_j = rep(0, n_fe_sigma),
 
-      # log_b0_pholder_tau = -1,
+      log_b0_pholder_tau = -1,
       log_b0_strategy_tau = -1,
       log_b1_strategy_tau = -1,
       log_b2_strategy_tau = -1,
-      log_b3_strategy_tau = -1,
+      # log_b3_strategy_tau = -1,
 
       # log_g0_pholder_tau = -1,
       log_g0_strategy_tau = -1,
       log_g1_strategy_tau = -1,
 
-      # b0_pholder = rep(0, n_pholder),
+      b0_pholder = rep(0, n_pholder),
       b0_strategy = rep(0, n_strategy),
       b1_strategy = rep(0, n_strategy),
       b2_strategy = rep(0, n_strategy),
-      b3_strategy = rep(0, n_strategy),
+      # b3_strategy = rep(0, n_strategy),
 
       # g0_pholder = rep(0, n_pholder),
       g0_strategy = rep(0, n_strategy),
@@ -140,14 +134,16 @@ format_data <- function(x) {
 
 fit_model <- function(data) {
   random <- c(
-  # "b0_pholder",
-  "b0_strategy", "b_j",
+    "b0_pholder",
+    "b0_strategy", 
+    "b_j",
     "sigma_j",
     "b1_strategy",
     "b2_strategy",
-    "b3_strategy",
+    # "b3_strategy",
     # "g0_pholder",
-    "g0_strategy", "g1_strategy")
+    "g0_strategy", 
+    "g1_strategy")
   d_tmb <- format_data(data)
   obj <- MakeADFun(
     data = d_tmb$data,
@@ -191,7 +187,7 @@ print(p)
 
 fe_lo_sigma <- data.frame(parameter_id = 1:ncol(m$mm_sigma),
   par = colnames(m$mm_sigma))
-
+        
 p <- filter(d, parameter %in% c("sigma_j"), parameter_id > 1) %>%
   inner_join(fe_lo_sigma) %>%
   ggplot(aes(par, estimate, ymin = l, ymax = u)) +
@@ -200,6 +196,7 @@ p <- filter(d, parameter %in% c("sigma_j"), parameter_id > 1) %>%
     geom_hline(yintercept = 0, lty = 2) +
     coord_flip()
 print(p)
+
 ggsave("../figs/tmb-fe.pdf", width = 7, height = 5)
 
 # plot_re(ns_m$summary, name = "b_j", raw_data = ns_m$data, add_permits = F, ind = 2:4)
@@ -212,11 +209,16 @@ strategy_diversity <- bind_rows(dm) %>%
 ids <- left_join(ids, strategy_diversity)
 
 p <- filter(d, parameter %in%
-  c("b0_strategy", "g0_strategy", "combined_b1_strategy", "combined_g1_strategy")) %>%
+  c("b0_strategy", "g0_strategy", "combined_b1_strategy", "combined_g1_strategy", "b2_strategy", "b3_strategy")) %>%
 # p <- filter(d, parameter %in% c("combined_b1_strategy", "combined_g1_strategy")) %>%
   group_by(parameter) %>%
     mutate(strategy_id = 1:n()) %>%
       left_join(ids)
+ggplot(p, aes(strategy, estimate, ymin = l, ymax = u)) +
+  geom_pointrange() +
+  facet_wrap(~parameter) +
+  geom_hline(yintercept = 0, lty = 2) +
+    coord_flip()
 
 junk <- p %>% as_data_frame %>% filter(parameter == "combined_g1_strategy") %>%
   mutate(strategy_ordered = reorder(strategy, -estimate)) %>%
