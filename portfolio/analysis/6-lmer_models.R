@@ -20,14 +20,14 @@ dat = readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
 
 ### Eric's culling:
 #1. We restricted our analysis to p_holders who fished for 5 or more years
-dat <- group_by(dat, p_holder) %>%
-  mutate(nyr = length(unique(year))) %>%
-  mutate(range_div = diff(range(specDiv))) %>%
-  as_data_frame() %>%
-  filter(nyr >= 5)
+#dat <- group_by(dat, p_holder) %>%
+#  mutate(nyr = length(unique(year))) %>%
+#  mutate(range_div = diff(range(specDiv))) %>%
+#  as_data_frame() %>%
+#  filter(nyr >= 5)
 
 # Filters: remove people-year combinations making < $5000
-dat = dat[which(dat$revenue >= 5000), ]
+dat = dat[which(dat$revenue >= 10000), ]
 
 # note: grouping here is based on strategies defined by permits
 dat$strategy = dat$strategy_permit
@@ -51,7 +51,7 @@ top_permits = data.frame("orig"=names(table(unlist(lapply(top_strategies$strateg
 # in kodiak (G34K) and alaska peninsula (G34M) have a herring roe strategy. This combining
 # reduces permits to 59
 top_permits$new = as.character(top_permits$orig)
-top_permits$new[which(substr(top_permits$new,1,3)=="D09")] = "D09" # dungeness, not limited by pot#
+top_permits$new[which(substr(top_permits$new,1,3)%in%c("D09","D9C","D9D"))] = "D09" # dungeness
 top_permits$new[which(substr(top_permits$new,1,3)=="G01")] = "G01" # herring roe, purse seine
 top_permits$new[which(substr(top_permits$new,1,3)=="G34")] = "G34" # herring roe, gillnet
 top_permits$new[which(substr(top_permits$new,1,3)=="K91")] = "K91" # king crab
@@ -86,6 +86,7 @@ top_permits$new[which(top_permits$new%in%c("S04E","S04H","S04K","S04M","S04T"))]
 top_permits$new[which(top_permits$new%in%c("S04W","S04Z"))] = "S04b"
 # There's a few remaining permits (S04D, S04X, S04P, S04Y) - but they're so different they can't
 # be grouped
+
 #8. combine the new permit groupings into new strategies
 top_permits$orig = as.character(top_permits$orig)
 top_strategies$new.strategy = NA
@@ -97,6 +98,11 @@ for(i in 1:nrow(top_strategies)) {
 dat = left_join(dat, top_strategies) %>% select(-c(n, earn))
 dat$strategy=dat$new.strategy
 dat = dat[is.na(dat$strategy)==FALSE,]
+
+# 9. Remove data points where people only did a strategy in one year. Below
+# we try to include people-strategy random effects
+dat = group_by(dat, strategy, p_holder) %>%
+  mutate(nsp = n()) %>% filter(nsp > 1) %>% select(-nsp)
 
 # Derived variables
 dat$log_spec_div <- scale(log(dat$specDiv))
@@ -139,7 +145,6 @@ specComp[is.na(specComp)]=0
 #  filter(range_div > 0) # eliminates "pound"
 #nrow(dat)
 
-
 # Downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
 n_sample <- round(length(unique_holders)*0.5)
@@ -158,14 +163,11 @@ library(glmmTMB)
 # we can also compare how the calculation of days affects fit. calculating effort as
 # the sum of individual permit seasons improves fit by ~ 2000 (2nd model here)
 dat$people_strategy = as.factor(paste(dat$strategy,dat$p_holder,sep=":"))
-mod <- glmmTMB(log(revenue) ~ scaled_spec_div*log_days + npermit +
-    I(log_days^2) + I(scaled_spec_div^2) +
-    (1 + scaled_spec_div + log_days|strategy) + (1|people_strategy),
-  data = dat)
+
 mod <- glmmTMB(log(revenue) ~ scaled_spec_div*log_days_permit +
     I(log_days_permit^2) + I(scaled_spec_div^2) +
-    (1 + scaled_spec_div + log_days_permit|strategy) + (1|people_strategy),
-  data = dat)
+    (1 + scaled_spec_div + log_days_permit +
+        (scaled_spec_div^2)|strategy) + (1|people_strategy), data = dat)
 summary(mod)
 AIC(mod)
 
@@ -173,10 +175,7 @@ AIC(mod)
 dat$residuals = residuals(mod)
 dat$absResid = log(abs(dat$residuals))
 mod.cv <- glmmTMB(absResid ~ scaled_spec_div * log_days_permit +
-  # I(scaled_spec_div^2) + I(log_days^2) + I(log_days^2) +
     (1 + scaled_spec_div + log_days_permit|strategy) + (1|people_strategy),
-    # (1 + log_spec_div + log_days|strategy) +
-    # (1|p_holder),
   data = dat)
 summary(mod.cv)
 AIC(mod.cv)
@@ -187,12 +186,12 @@ df_output = data.frame(strategy.permit = unique(dat$strategy),
   "Return_slope" = ranef(mod)$cond$strategy$scaled_spec_div,
   "Risk_int" = ranef(mod.cv)$cond$strategy$'(Intercept)',
   "Risk_slope" = ranef(mod.cv)$cond$strategy$scaled_spec_div,
-  specComp[match(df_output$strategy.permit, specComp$new_strategy),])
+  specComp[match(unique(dat$strategy), specComp$new_strategy),])
 df_output = df_output[,-which(names(df_output)%in%c("new_strategy","strategy.permit.1"))]
 write.table(df_output, "portfolio/data-generated/df_output.csv", sep=",",col.names=T, row.names=F)
 
 ggplot(df_output, aes(Return_int, Risk_int, label = strategy.permit)) +
-  geom_text(size=3) + xlab("Return (revenue)") + ylab("Risk (CV)")
+  geom_text(size=2.5) + xlab("Return (revenue)") + ylab("Risk (CV)")
 
 ggplot(df_output, aes(Return_slope, Risk_slope, label = strategy.permit)) +
   geom_text(size=3) + xlab("Effect of diversification on return (revenue)") +
@@ -226,7 +225,7 @@ person.summary$randomInt = ranef(mod)[[1]]$p_holder$`(Intercept)` + fixef(mod)[[
 # person.summary$cv_randomInt = ranef(mod.cv)[[1]]$p_holder$`(Intercept)` + fixef(mod.cv)[[1]][["(Intercept)"]]
 
 ###################
-pdf("../figs/tmb-separate-exploration-nopholder-re.pdf", width = 10, height = 8)
+pdf("portfolio/figs/tmb-separate-exploration-nopholder-re.pdf", width = 10, height = 8)
 
 plot_coefficients_tmb <- function(model, pholder_re = TRUE) {
   ci <- confint(model)
@@ -253,7 +252,8 @@ plot_coefficients_tmb <- function(model, pholder_re = TRUE) {
   ggplot(ci, aes(y = estimate, ymax = `2.5 %`, ymin = `97.5 %`, x = term)) +
     geom_pointrange() + coord_flip() + geom_hline(yintercept = 0, lty = 2)
 }
-plot_coefficients_tmb(mod) %>% print
+
+plot_coefficients_tmb(mod, FALSE) %>% print
 plot_coefficients_tmb(mod.cv, FALSE) %>% print
 
 # p <- tidyr::gather(person.summary, model, intercept, randomInt, cv_randomInt) %>%
@@ -299,19 +299,19 @@ strategy.summary <- arrange(strategy.summary, cv_randomSpec) %>%
 p <- tidyr::gather(strategy.summary, model, intercept, contains("random")) %>%
   ggplot(aes(intercept, strategy_ordered, color = meanrev)) + geom_point() +
     facet_wrap(~model, scales = "free_x", ncol = 2)
-ggsave("../figs/re-strategies.pdf", width = 10, height = 10)
+ggsave("portfolio/figs/re-strategies.png", width = 10, height = 10)
 
 p <- tidyr::gather(strategy.summary, model, intercept, randomSpec, cv_randomSpec) %>%
   ggplot(aes(intercept, strategy_ordered, color = meanrev)) + geom_point() +
     facet_wrap(~model, scales = "free_x", ncol = 1) +
     geom_vline(xintercept = 0, lty = 2)
-ggsave("../figs/re-strategies-slim-nopholder-re.pdf", width = 8, height = 10)
-
+ggsave("portfolio/figs/re-strategies-slim-nopholder-re.png", width = 8, height = 10)
 
 # plot fitted vs observed
-fitted_mod <- fitted.values(mod)
-fitted_mod_cv <- fitted.values(mod.cv)
-residuals_cv <- residuals(mod.cv)
+dat$residuals = residuals(mod)
+dat$fitted_mod <- fitted.values(mod)
+dat$fitted_mod_cv <- fitted.values(mod.cv)
+dat$residuals_cv <- residuals(mod.cv)
 
 # ggplot(dat, aes(x=fitted_mod, y=log(revenue), col = log(revenue))) +
 #   facet_wrap(~ strategy, scale="free") +
@@ -322,11 +322,11 @@ residuals_cv <- residuals(mod.cv)
 # plot fitted vs residuals
 ggplot(dat, aes(x=fitted_mod, y=residuals, col = log(revenue))) + facet_wrap(~strategy) +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/fitted_v_residuals.png", width = 40, height = 40, units = "cm")
+ggsave("portfolio/figs/fitted_v_residuals.png", width = 40, height = 40, units = "cm")
 
 ggplot(dat, aes(x=fitted_mod_cv, y=residuals_cv, col = log(revenue))) + facet_wrap(~strategy) +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/fitted_v_residuals_cv.png", width = 40, height = 40, units = "cm")
+ggsave("portfolio/figs/fitted_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
 # plot specDiv vs residuals
 dat$strategy_ordered <- NULL
@@ -337,14 +337,16 @@ p <- ggplot(dat, aes(x=scaled_spec_div, y=residuals, col = log(revenue))) +
   ylim(-2,2) +
   theme(strip.text.x = element_text(size = 4)) +
   geom_smooth(se = FALSE, color = "red")
-ggsave("residuals_rev/specdiv_v_residuals.pdf", width = 28, height = 22, units = "cm")
+ggsave("portfolio/figs/specdiv_v_residuals.png", width = 28, height = 22, units = "cm")
 
 p <- ggplot(dat, aes(x=scaled_spec_div, y=residuals)) +
   geom_point(alpha = 0.1) + geom_hline(yintercept=0) +
   ylim(-2,2) +
   geom_smooth(se = FALSE, color = "red")
+ggsave("portfolio/figs/specdiv_v_allResiduals.png", width = 28, height = 22, units = "cm")
 
-p <- ggplot(dat, aes(x=specDiv, y=residuals_cv, col = log(revenue))) + facet_wrap(~strategy, scale="free") +
+p <- ggplot(dat, aes(x=specDiv, y=residuals_cv, col = log(revenue))) +
+  facet_wrap(~strategy, scale="free") +
   geom_point(alpha = 0.1) + geom_hline(yintercept=0) +
   geom_smooth(se = FALSE, color = "red")
 ggsave("residuals_rev/specdiv_v_residuals_cv.png", width = 40, height = 40, units = "cm")
@@ -355,7 +357,7 @@ ggsave("residuals_rev/specdiv_v_residuals_cv.png", width = 40, height = 40, unit
 ggplot(dat, aes(x=log_length, y=residuals, col = log(revenue))) +
   facet_wrap(~strategy, scale="free_x") +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/length_v_residuals.png", width = 40, height = 40, units = "cm")
+ggsave("portfolio/figs/length_v_residuals.png", width = 40, height = 40, units = "cm")
 
 ggplot(dat, aes(x=log_length, y=residuals_cv, col = log(revenue))) +
   facet_wrap(~strategy, scale="free_x") +
@@ -366,12 +368,12 @@ ggsave("residuals_rev/length_v_residuals_cv.png", width = 40, height = 40, units
 ggplot(dat, aes(x=log_days, y=residuals, col = log(revenue))) +
   facet_wrap(~strategy) +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/days_v_residuals.png", width = 40, height = 40, units = "cm")
+ggsave("portfolio/figs/days_v_residuals.png", width = 40, height = 40, units = "cm")
 
 ggplot(dat, aes(x=log_days, y=residuals_cv, col = log(revenue))) +
   facet_wrap(~strategy) +
   geom_point(alpha = 0.3) + geom_hline(yintercept=0)
-ggsave("residuals_rev/days_v_residuals_cv.png", width = 40, height = 40, units = "cm")
+ggsave("portfolio/figs/days_v_residuals_cv.png", width = 40, height = 40, units = "cm")
 
 ## ## THINGS I'M SEEING HERE
 ## # 1. Many of the strategies have no variance w/respect to the predictors. Specifically, permits that are
