@@ -15,6 +15,7 @@ DATA_VECTOR(b1_cov_re_i); // predictor data for random slope
 DATA_VECTOR(b2_cov_re_i); // predictor data for random slope
 /* DATA_VECTOR(b3_cov_re_i); // predictor data for random slope */
 DATA_VECTOR(g1_cov_re_i); // predictor data for random slope
+DATA_IVECTOR(spec_div_all_1); // indicator for if there is variability in diversity
 
 // parameters:
 PARAMETER_VECTOR(b_j);
@@ -47,6 +48,14 @@ vector<Type> linear_predictor_sigma_i(n_data);
 linear_predictor_i = x_ij*b_j;
 linear_predictor_sigma_i = x_sigma_ij*sigma_j;
 
+// set slope deviations that we can't estimate to 0:
+for(int i = 0; i < n_data; i++){
+  if(spec_div_all_1(strategy_i(i)) == 1) {
+    b1_strategy(strategy_i(i)) = 0;
+    g1_strategy(strategy_i(i)) = 0;
+  }
+}
+
 Type nll = 0.0; // initialize negative log likelihood
 
 for(int i = 0; i < n_data; i++){
@@ -75,12 +84,19 @@ for(int k = 0; k < n_pholder; k++){
   // nll -= dnorm(b1_pholder(k), Type(0.0), exp(log_b1_pholder_tau), true);
 }
 for(int k = 0; k < n_strategy; k++){
-  nll -= dnorm(b1_strategy(k), Type(0.0), exp(log_b1_strategy_tau), true);
-  nll -= dnorm(b2_strategy(k), Type(0.0), exp(log_b2_strategy_tau), true);
-  /* nll -= dnorm(b3_strategy(k), Type(0.0), exp(log_b3_strategy_tau), true); */
-  nll -= dnorm(g1_strategy(k), Type(0.0), exp(log_g1_strategy_tau), true);
   nll -= dnorm(b0_strategy(k), Type(0.0), exp(log_b0_strategy_tau), true);
   nll -= dnorm(g0_strategy(k), Type(0.0), exp(log_g0_strategy_tau), true);
+
+  // only include these species diversity slope deviations
+  // if there was sufficient variation in species diversity
+  // to estimate them:
+  if(spec_div_all_1(k) == 0) {
+    nll -= dnorm(b1_strategy(k), Type(0.0), exp(log_b1_strategy_tau), true);
+    nll -= dnorm(g1_strategy(k), Type(0.0), exp(log_g1_strategy_tau), true);
+  }
+
+  nll -= dnorm(b2_strategy(k), Type(0.0), exp(log_b2_strategy_tau), true);
+  /* nll -= dnorm(b3_strategy(k), Type(0.0), exp(log_b3_strategy_tau), true); */
 }
 
 // Reporting
