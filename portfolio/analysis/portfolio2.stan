@@ -68,7 +68,7 @@ transformed parameters {
 //                     z2_sig_i[i]*b2_sig_dev[strategy_i[i]] +
  //                    z3_sig_i[i]*b3_sig_dev[strategy_i[i]];
 
-    sigma[i] = sqrt(exp(sigma[i]));
+    sigma[i] = exp(sigma[i]);
   }
 }
 model {
