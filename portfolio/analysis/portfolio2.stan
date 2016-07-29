@@ -72,25 +72,25 @@ transformed parameters {
   }
 }
 model {
-  b0 ~ normal(2, 5);
+  b0 ~ normal(0, 10);
   b0_dev_str ~ normal(0, b0_tau_str);
-  b0_tau_str ~ student_t(3, 0, 3);
+  b0_tau_str ~ student_t(3, 0, 2);
   b0_dev_per ~ normal(0, b0_tau_per);
-  b0_tau_per ~ student_t(3, 0, 3);
+  b0_tau_per ~ student_t(3, 0, 2);
 
   b1 ~ normal(0, 1);
   b1_dev ~ normal(0, b1_tau);
-  b1_tau ~ student_t(3, 0, 3);
+  b1_tau ~ student_t(3, 0, 2);
 //  b2_tau ~ student_t(3, 0, 3);
 //  b3_tau ~ student_t(3, 0, 3);
 
-  sigma0 ~ normal(0, 1);
+  sigma0 ~ normal(0, 5);
   sigma0_dev ~ normal(0, sigma0_tau);
-  sigma0_tau ~ student_t(3, 0, 3);
+  sigma0_tau ~ student_t(3, 0, 2);
 
   sigma1 ~ normal(0, 1);
   b1_sig_dev ~ normal(0, b1_sig_tau);
-  b1_sig_tau ~ student_t(3, 0, 3);
+  b1_sig_tau ~ student_t(3, 0, 2);
 
   y ~ normal(mu, sigma);
 }

@@ -34,6 +34,10 @@ ggplot(dat, aes(log_days_permit, log(revenue), colour = scaled_spec_div)) +
   geom_point(alpha=0.1) +
   facet_wrap(~strategy)
 
+ggplot(dat, aes(log_length, log(revenue), colour = scaled_spec_div)) +
+  geom_point(alpha=0.1) +
+  facet_wrap(~strategy)
+
 dat$p_holder <- paste(dat$p_holder, dat$strategy, sep = ":")
 
 mm <- model.matrix(revenue ~ I(scaled_spec_div^2) + I(log_days_permit^2) + I(log_length^2) + (scaled_spec_div + log_days_permit + log_length)^2, data = dat)[,-1]
@@ -84,7 +88,7 @@ init_fun <- function() {
 } 
 
 m <- stan("portfolio/analysis/portfolio2.stan", data = standat, iter = 100, chains = 3, 
-  pars = c("mu", "sigma"), include = FALSE, init = init_fun)
+  pars = c("mu", "sigma", "b0_dev_per"), include = FALSE, init = init_fun)
 
 m
 
@@ -96,14 +100,58 @@ traceplot(m, pars = c(
   # "b2_tau", 
   "sigma0_tau", 
   "b1_sig_tau"), inc_warmup = T)
-traceplot(m, pars = c("b0_dev_str"), inc_warmup = F)
+traceplot(m, pars = c("b0_dev_str"), inc_warmup = T)
 # traceplot(m, pars = c("b0_dev_per"), inc_warmup = F)
-traceplot(m, pars = c("b1_dev"), inc_warmup = F)
+traceplot(m, pars = c("b1_dev"), inc_warmup = T)
 # traceplot(m, pars = c("b2_dev"), inc_warmup = T)
-traceplot(m, pars = c("b1_sig_dev"), inc_warmup = F)
+traceplot(m, pars = c("b1_sig_dev"), inc_warmup = T)
 traceplot(m, pars = c("sigma0_dev"), inc_warmup = T)
 colnames(mm2)
 traceplot(m, pars = c("sigma0", "sigma1"), inc_warmup = T)
 colnames(mm)
 traceplot(m, pars = c("b0", "b1"), inc_warmup = T)
 dev.off()
+
+library(broom)
+b <- tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
+library(ggplot2)
+filter(b, !grepl("*_dev*", term)) %>%
+  ggplot(aes(term, estimate, ymin = conf.low, ymax = conf.high, colour = rhat)) + 
+  geom_pointrange() + 
+  coord_flip()
+
+dt_ls <- function(x, df, mu, a) 1/a * dt((x - mu)/a, df)
+x <- seq(0, 10, length.out = 100)
+tau_prior <- function() {
+  par(new = T)
+  dens <- dt_ls(x, 3, 0, 2)
+  plot(x, dens, type = "l", ylim = c(0, max(dens)), xlim = c(0, 6))
+}
+tau_samples <- function(p) {hist(extract(m)[[p]], xlim = c(0, 6), main = p);tau_prior()}
+par(mfrow = c(2, 3))
+ignore <- sapply(b$term[grep("tau", b$term)], tau_samples)
+
+x <- seq(-5, 5, length.out = 100)
+normal_prior <- function(mu = 0, sigma=1) {
+  par(new = T)
+  dens <- dnorm(x, mu, sigma)
+  plot(x, dens, type = "l", ylim = c(0, max(dens)), xlim = c(-5, 5))
+}
+
+beta_samples <- function(p, sigma=1) {
+  column <- as.numeric(gsub("[a-z0-9]*\\[([0-9])\\]", "\\1", p))
+  term <- gsub("\\[[0-9]\\]", "", p)
+  hist(extract(m)[[term]][,column], xlim = c(-5, 5), main = p)
+  normal_prior(sigma=sigma)
+}
+
+par(mfrow = c(4, 4))
+ignore <- b$term[c(grep("b1\\[", b$term), grep("sigma1\\[", b$term))] %>%
+  sapply(beta_samples)
+
+hist(extract(m)$b0, xlim = c(-5, 5))
+normal_prior(0, 10)
+
+hist(extract(m)$sigma0, xlim = c(-5, 5))
+normal_prior(0, 5)
+
