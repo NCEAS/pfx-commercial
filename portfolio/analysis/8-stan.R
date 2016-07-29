@@ -14,16 +14,16 @@ dat <- group_by(dat, strategy) %>%
   as_data_frame() %>%
   mutate(spec_div_all_1 = ifelse(nratio < 0.1, 1L, 0L)) %>%
   select(-ngreater1)
-dat <- dat %>% filter(spec_div_all_1 == 0L)
+# dat <- dat %>% filter(spec_div_all_1 == 0L)
 
 # Downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.03)
-set.seed(3)
+n_sample <- round(length(unique_holders)*0.05)
+set.seed(4)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 
-dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 70)
+dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 60)
 nrow(dat)
 
 ggplot(dat, aes(scaled_spec_div, log(revenue), colour = log_days_permit)) +
@@ -40,8 +40,11 @@ ggplot(dat, aes(log_length, log(revenue), colour = scaled_spec_div)) +
 
 dat$p_holder <- paste(dat$p_holder, dat$strategy, sep = ":")
 
-mm <- model.matrix(revenue ~ I(scaled_spec_div^2) + I(log_days_permit^2) + I(log_length^2) + (scaled_spec_div + log_days_permit + log_length)^2, data = dat)[,-1]
-mm2 <- model.matrix(revenue ~ (scaled_spec_div + log_days_permit + log_length)^2, data = dat)[,-1]
+mm <- model.matrix(revenue ~ 
+  I(scaled_spec_div^2) + I(log_days_permit^2) + I(log_length^2) +
+  (scaled_spec_div + log_days_permit + log_length)^2, data = dat)[,-1]
+mm2 <- model.matrix(revenue ~ (scaled_spec_div + log_days_permit + log_length)^2, 
+  data = dat)[,-1]
 
 standat <- list(N = nrow(dat),
   J = ncol(mm),
@@ -62,12 +65,14 @@ standat <- list(N = nrow(dat),
   z1_sig_i = dat$scaled_spec_div
   )
 
+# ----------------------------------------
+# custom tighter inits:
 beta_init <- function() runif(standat$J, -0.1, 0.1)
 sigma_init <- function() runif(standat$J_sig, -0.1, 0.1)
-dev_str_init <- function() runif(standat$n_strategy, -0.05, 0.05)
-dev_per_init <- function() runif(standat$n_person, -0.05, 0.05)
+# start at 0 in case no strategy-level variation:
+dev_str_init <- function() runif(standat$n_strategy, 0, 0)
+dev_per_init <- function() runif(standat$n_person, 0, 0)
 tau_init <- function() runif(1, 0.3, 0.6)
-
 init_fun <- function() { 
   list(
     b0 = rnorm(1, mean(standat$y), 0.2),
@@ -87,11 +92,17 @@ init_fun <- function() {
     b1_sig_tau = tau_init())
 } 
 
-m <- stan("portfolio/analysis/portfolio2.stan", data = standat, iter = 100, chains = 3, 
+# ----------------------------------------
+# fit model
+m <- stan("portfolio/analysis/portfolio2.stan", data = standat, iter = 100, chains = 4, 
   pars = c("mu", "sigma", "b0_dev_per"), include = FALSE, init = init_fun)
 
-m
+sink("portfolio/figs/stan-output.txt")
+print(m)
+sink()
 
+# ----------------------------------------
+# check mixing:
 pdf("portfolio/figs/stan-traces.pdf", width = 10, height = 8)
 traceplot(m, pars = c(
   "b0_tau_str", 
@@ -112,32 +123,40 @@ colnames(mm)
 traceplot(m, pars = c("b0", "b1"), inc_warmup = T)
 dev.off()
 
+# ----------------------------------------
+# plot coefs:
 library(broom)
 b <- tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
 library(ggplot2)
+pdf("portfolio/figs/stan-coefs.pdf", width = 7, height = 9)
 filter(b, !grepl("*_dev*", term)) %>%
   ggplot(aes(term, estimate, ymin = conf.low, ymax = conf.high, colour = rhat)) + 
-  geom_pointrange() + 
-  coord_flip()
+  geom_pointrange() + coord_flip()
 
-dt_ls <- function(x, df, mu, a) 1/a * dt((x - mu)/a, df)
-x <- seq(0, 10, length.out = 100)
-tau_prior <- function() {
+filter(b, grepl("*_dev*", term)) %>%
+  ggplot(aes(term, estimate, ymin = conf.low, ymax = conf.high, colour = rhat)) + 
+  geom_pointrange() + coord_flip()
+dev.off()
+
+# ----------------------------------------
+# check priors/posteriors:
+dt2 <- function(x, df, mu, a) 1/a * dt((x - mu)/a, df)
+t_prior <- function() {
+  x <- seq(0, 10, length.out = 100)
   par(new = T)
-  dens <- dt_ls(x, 3, 0, 2)
-  plot(x, dens, type = "l", ylim = c(0, max(dens)), xlim = c(0, 6))
+  dens <- dt2(x, 3, 0, 2)
+  plot(x, dens, type = "l", ylim = c(0, max(dens)), xlim = c(0, 5))
 }
-tau_samples <- function(p) {hist(extract(m)[[p]], xlim = c(0, 6), main = p);tau_prior()}
-par(mfrow = c(2, 3))
-ignore <- sapply(b$term[grep("tau", b$term)], tau_samples)
-
-x <- seq(-5, 5, length.out = 100)
+tau_samples <- function(p) {
+  hist(extract(m)[[p]], xlim = c(0, 5), main = p)
+  t_prior()
+}
 normal_prior <- function(mu = 0, sigma=1) {
+  x <- seq(-5, 5, length.out = 100)
   par(new = T)
   dens <- dnorm(x, mu, sigma)
   plot(x, dens, type = "l", ylim = c(0, max(dens)), xlim = c(-5, 5))
 }
-
 beta_samples <- function(p, sigma=1) {
   column <- as.numeric(gsub("[a-z0-9]*\\[([0-9])\\]", "\\1", p))
   term <- gsub("\\[[0-9]\\]", "", p)
@@ -145,7 +164,11 @@ beta_samples <- function(p, sigma=1) {
   normal_prior(sigma=sigma)
 }
 
-par(mfrow = c(4, 4))
+pdf("portfolio/figs/stan-priors-posteriors.pdf", width = 10, height = 9)
+par(mfrow = c(2, 3))
+ignore <- sapply(b$term[grep("tau", b$term)], tau_samples)
+
+par(mfrow = c(5, 4))
 ignore <- b$term[c(grep("b1\\[", b$term), grep("sigma1\\[", b$term))] %>%
   sapply(beta_samples)
 
@@ -154,4 +177,4 @@ normal_prior(0, 10)
 
 hist(extract(m)$sigma0, xlim = c(-5, 5))
 normal_prior(0, 5)
-
+dev.off()
