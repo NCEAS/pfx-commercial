@@ -45,44 +45,46 @@ int n_data = y_i.size();
 // Linear predictor
 vector<Type> linear_predictor_i(n_data);
 vector<Type> linear_predictor_sigma_i(n_data);
+vector<Type> eta(n_data);
+vector<Type> eta_sigma(n_data);
 linear_predictor_i = x_ij*b_j;
 linear_predictor_sigma_i = x_sigma_ij*sigma_j;
 
-// set slope deviations that we can't estimate to 0:
-for(int i = 0; i < n_data; i++){
-  if(spec_div_all_1(strategy_i(i)) == 1) {
-    b1_strategy(strategy_i(i)) = 0;
-    g1_strategy(strategy_i(i)) = 0;
-  }
-}
+/* // set slope deviations that we can't estimate to 0: */
+/* for(int i = 0; i < n_data; i++){ */
+/*   if(spec_div_all_1(strategy_i(i)) == 1) { */
+/*     b1_strategy(strategy_i(i)) = 0; */
+/*     g1_strategy(strategy_i(i)) = 0; */
+/*   } */
+/* } */
 
 Type nll = 0.0; // initialize negative log likelihood
 
 for(int i = 0; i < n_data; i++){
-  nll -= dnorm(
-      y_i(i),
 
-      b0_pholder(pholder_i(i)) +
+  eta(i) = b0_pholder(pholder_i(i)) +
       // b1_pholder(pholder_i(i)) * b1_cov_re_i(i) +
       b0_strategy(strategy_i(i)) +
       b1_strategy(strategy_i(i)) * b1_cov_re_i(i) +
       b2_strategy(strategy_i(i)) * b2_cov_re_i(i) +
       /* b3_strategy(strategy_i(i)) * b3_cov_re_i(i) + */
-      linear_predictor_i(i),
+      linear_predictor_i(i);
 
-      sqrt(exp(
+  eta_sigma(i) = sqrt(exp(
           // g0_pholder(pholder_i(i)) +
           g0_strategy(strategy_i(i)) +
           g1_strategy(strategy_i(i)) * g1_cov_re_i(i) +
-          linear_predictor_sigma_i(i))),
+          linear_predictor_sigma_i(i)));
 
-      true);
+  nll -= dnorm(y_i(i), eta(i), eta_sigma(i), true);
 }
+
 for(int k = 0; k < n_pholder; k++){
   nll -= dnorm(b0_pholder(k), Type(0.0), exp(log_b0_pholder_tau), true);
   // nll -= dnorm(g0_pholder(k), Type(0.0), exp(log_g0_pholder_tau), true);
   // nll -= dnorm(b1_pholder(k), Type(0.0), exp(log_b1_pholder_tau), true);
 }
+
 for(int k = 0; k < n_strategy; k++){
   nll -= dnorm(b0_strategy(k), Type(0.0), exp(log_b0_strategy_tau), true);
   nll -= dnorm(g0_strategy(k), Type(0.0), exp(log_g0_strategy_tau), true);
@@ -117,6 +119,7 @@ for(int k = 0; k < n_strategy; k++){
 
 /* REPORT(b0_pholder); */
 REPORT(b0_strategy);
+REPORT(eta);
 REPORT(b1_strategy);
 REPORT(b_j);
 /* REPORT(g0_pholder); */
