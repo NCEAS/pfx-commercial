@@ -293,7 +293,12 @@ cfecAnnual = group_by(cfecnew, p_holder, year) %>%
     length = mean(vlength, na.rm=TRUE),
     strategy = strategy[1],
     strategy_gear = strategy_gear[1],
-    strategy_permit = strategy.permit[1])
+    strategy_permit = strategy.permit[1],
+    chnk = sum(g_earn[spec=="CHNK"]),
+    coho = sum(g_earn[spec=="COHO"]),
+    pink = sum(g_earn[spec=="PINK"]),
+    sock = sum(g_earn[spec=="SOCK"]),
+    chum = sum(g_earn[spec=="CHUM"]))
 
 cfecAnnual = left_join(cfecAnnual, permit_days)
 # also calculate weighted simpson diversity of species
@@ -324,6 +329,11 @@ cfecAnnual$strategy_permit.prev = cfecAnnual$strategy_permit[idx]
 cfecAnnual$weight.prev = cfecAnnual$weight[idx]
 cfecAnnual$days.prev = cfecAnnual$days[idx]
 cfecAnnual$days_permit.prev = cfecAnnual$days_permit[idx]
+cfecAnnual$chnk.prev = cfecAnnual$chnk[idx]
+cfecAnnual$coho.prev = cfecAnnual$coho[idx]
+cfecAnnual$chum.prev = cfecAnnual$chum[idx]
+cfecAnnual$pink.prev = cfecAnnual$pink[idx]
+cfecAnnual$sock.prev = cfecAnnual$sock[idx]
 ```
 
 Save the data for modeling:
