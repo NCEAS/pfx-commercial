@@ -20,22 +20,30 @@ source("portfolio/analysis/cull-dat.R")
 #   geom_point(alpha=0.1) +
 #   facet_wrap(~strategy)
 
+dat <- dat %>% group_by(strategy) %>% mutate(len_missing = sum(is.na(length)))
+ggplot(dat, aes(strategy, log10(length+1), colour = log10(len_missing+1))) +
+  geom_boxplot() + coord_flip()
+dat %>% filter(len_missing > 30) %>% group_by(strategy) %>% summarize(len_med = median(length, na.rm = T)) %>% as.data.frame
+
 # identify strategies where there is less than x%
 # of strategies with more than a species diversity of 1:
 dat <- group_by(dat, strategy) %>%
   mutate(ntotal = n(), ngreater1 = sum(specDiv>1.1), nratio = ngreater1/ntotal) %>%
   as_data_frame() %>%
   mutate(spec_div_all_1 = ifelse(nratio < 0.1, 1L, 0L)) %>%
-  select(-ntotal, -ngreater1)
+  select(-ngreater1)
+
+# dat <- filter(dat, spec_div_all_1 == 0)
 
 # ggplot(dat, aes(specDiv, log(revenue), colour = spec_div_all_1)) +
 #   geom_point(alpha=0.1) + facet_wrap(~strategy)
-# distinct(dat[,c("nratio", "strategy", "spec_div_all_1")])%>%arrange(nratio) %>% as.data.frame
+
+distinct(dat[,c("nratio", "strategy", "spec_div_all_1", "ntotal")])%>%arrange(nratio) %>% as.data.frame
 
 # Downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.33)
-set.seed(2)
+n_sample <- round(length(unique_holders)*0.4)
+set.seed(7)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 
@@ -45,9 +53,9 @@ table(dat$strategy) %>% length
 # dat = dat[dat$strategy%in%top.strategies, ]
 # nrow(dat)
 
-sum(!is.na(dat$length))
-dat<-dat[!is.na(dat$length), ]
-nrow(dat)
+# sum(!is.na(dat$length))
+# dat<-dat[!is.na(dat$length), ]
+# nrow(dat)
 
 dat$people_strategy = paste(dat$strategy,dat$p_holder,sep=":")
 # strategies <- readr::read_csv("../data-generated/strategies.csv")
@@ -72,6 +80,11 @@ dat$people_strategy = paste(dat$strategy,dat$p_holder,sep=":")
 # nrow(dm)
 
 # assign some strategy IDs for the purpose of identifying random effects
+
+# temporary filter to make sure we have enough data for each group:
+dat <- dat %>% dplyr::filter(ntotal>100)
+nrow(dat)
+
 dat$strategy_id <- NULL
 dat$pholder_id <- NULL
 strategy_ids  <- select(dat, strategy)  %>%
@@ -80,7 +93,7 @@ pholder_ids <- select(dat, people_strategy) %>%
 # pholder_ids <- select(dat, pholder) %>%
   unique %>% mutate(pholder_id = 1:n())
 dat <- inner_join(dat, strategy_ids)  %>% inner_join(pholder_ids)
-nrow(dat)
+
 
 format_data <- function(x) {
   x$spec_div <- scale(x$specDiv)
@@ -89,9 +102,9 @@ format_data <- function(x) {
   x$log_days <- scale(log(x$days + 1))
   x$log_days_permit <- scale(log(x$days_permit+1))
   x$scaled_npermit <- scale(x$npermit)
-  mm <- model.matrix(~ (spec_div + log_days_permit + log_length)^2 +
-    I(spec_div^2) + I(log_days^2), data = x)
-  mm_sigma <- model.matrix(~ (spec_div + log_days_permit + log_length)^2, data = x)
+  mm <- model.matrix(~ (spec_div + log_days_permit)^2 +
+    I(spec_div^2) + I(log_days_permit^2), data = x)
+  mm_sigma <- model.matrix(~ (spec_div + log_days_permit)^2, data = x)
   n_pholder <- max(x$pholder_id)
   n_strategy <- max(x$strategy_id)
   n_fe <- ncol(mm)
@@ -111,7 +124,7 @@ format_data <- function(x) {
       strategy_i = x$strategy_id - 1,
       n_pholder = n_pholder,
       n_strategy = n_strategy,
-      diversity_column = 1, # spec_div column
+      diversity_column = 1, # spec_div column (C++ indexing)
       b1_cov_re_i = x$spec_div,
       b2_cov_re_i = x$log_days,
       # b3_cov_re_i = x$scaled_npermit,
@@ -119,18 +132,19 @@ format_data <- function(x) {
       spec_div_all_1 = x$spec_div_all_1),
 
     parameters = list(
-      b_j = rep(0, n_fe),
+      b_j = c(2, rep(0, n_fe-1)),
       sigma_j = rep(0, n_fe_sigma),
 
-      log_b0_pholder_tau = -1,
-      log_b0_strategy_tau = -1,
-      log_b1_strategy_tau = -1,
-      log_b2_strategy_tau = -1,
+      # starting at ballpark values from previous runs while testing:
+      log_b0_pholder_tau = -0.7,
+      log_b0_strategy_tau = 0.1,
+      log_b1_strategy_tau = -1.5,
+      log_b2_strategy_tau = -1.5,
       # log_b3_strategy_tau = -1,
 
       # log_g0_pholder_tau = -1,
-      log_g0_strategy_tau = -1,
-      log_g1_strategy_tau = -1,
+      log_g0_strategy_tau = -0.8,
+      log_g1_strategy_tau = -1.5,
 
       b0_pholder = rep(0, n_pholder),
       b0_strategy = rep(0, n_strategy),
@@ -185,6 +199,7 @@ m$gradient
 m$sd_report
 m$summary %>% filter(parameter=="b_j")
 m$mm %>% head
+m$model$report() %>% head
 
 d <- m$summary %>%
   group_by(parameter) %>%
@@ -223,7 +238,10 @@ ggsave("../figs/tmb-fe.pdf", width = 7, height = 5)
 ids <- unique(select(as.data.frame(m$data), strategy, strategy_id))
 strategy_diversity <- dat %>%
   group_by(strategy) %>%
-    summarize(mean_diversity = mean(specDiv, na.rm = TRUE))
+    summarize(estimated_re = ifelse(spec_div_all_1[1]==0,T,F),
+    mean_diversity = mean(specDiv),
+    log_mean_diversity = mean(log(specDiv)),
+    median_diversity = median(specDiv))
 ids <- left_join(ids, strategy_diversity)
 
 p <- filter(d, parameter %in%
@@ -252,20 +270,64 @@ print(p1)
 ggsave("../figs/tmb-re.pdf", width = 16, height = 13)
 
 j <- filter(d, parameter %in% c(
-  "b0_strategy", "g0_strategy"
-  # "b1_strategy", "g1_strategy"
+  "b0_strategy", "g0_strategy",
+  "b1_strategy", "g1_strategy"
 )) %>%
   group_by(parameter) %>%
     mutate(strategy_id = 1:n()) %>%
       left_join(ids) %>%
         as_data_frame() %>%
           na.omit()
-ggplot(j, aes(log(mean_diversity), estimate, label = strategy, ymin = l, ymax = u)) + geom_pointrange(alpha=.4) +
+
+f <- m$summary %>% filter(parameter=="b_j")
+int <- f$estimate[1]
+slope <- f$estimate[2]
+
+fs <- m$summary %>% filter(parameter=="sigma_j")
+ints <- fs$estimate[1]
+slopes <- fs$estimate[2]
+
+check <- inner_join(select(filter(j, parameter == "g0_strategy"), strategy, estimate),
+  select(strategy.summary, strategy, cv_randomInt))
+p1 <- ggplot(check, aes(estimate + ints, cv_randomInt))+geom_point()
+
+check <- inner_join(select(filter(j, parameter == "b0_strategy"), strategy, estimate),
+  select(strategy.summary, strategy, randomInt))
+p2 <- ggplot(check, aes(estimate + int, randomInt))+geom_point()+geom_abline(intercept=0,slope=1)
+
+check <- inner_join(select(filter(j, parameter == "g1_strategy"), strategy, estimate),
+  select(strategy.summary, strategy, cv_randomSpec))
+p3 <- ggplot(check, aes(estimate+slopes, cv_randomSpec))+geom_point()
+
+check <- inner_join(select(filter(j, parameter == "b1_strategy"), strategy, estimate),
+  select(strategy.summary, strategy, randomSpec))
+p4 <- ggplot(check, aes(estimate + slope, randomSpec))+geom_point()+geom_abline(intercept=0,slope=1)
+
+gridExtra::grid.arrange(p1,p2,p3,p4)
+
+ggplot(j, aes(mean_diversity, estimate, label = strategy,
+    ymin = l, ymax = u, weight = 1/se)) +
+    # color = substr(strategy,1,1)=="S")) +
+  geom_pointrange(alpha=.4) +
   facet_wrap(~parameter, scales = "free") +
   geom_text(aes(label = strategy) ) +
-  # stat_smooth()
-  stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1)
+  stat_smooth(method = "lm", formula = y ~ poly(x, 2), size = 1, se = FALSE)
 ggsave("../figs/tmb-re-int-vs-diversity.pdf", width = 13, height = 10)
+
+summary(lm(estimate~poly(mean_diversity,2),
+  data = filter(j, parameter == "g0_strategy"), weights = 1/se))
+
+summary(lm(estimate~poly(mean_diversity,1),
+  data = filter(j, parameter == "g0_strategy"), weights = 1/se))
+
+j$sp <- grepl("S", j$strategy)
+# summary(lme4::lmer(estimate~poly(mean_diversity,2) + (1|sp),
+  # data = filter(j, parameter == "b0_strategy"), weights = 1/se))
+summary(lm(estimate~poly(mean_diversity,2) + as.factor(sp),
+  data = filter(j, parameter == "b0_strategy"), weights = 1/se))
+
+summary(lm(estimate~poly(mean_diversity,2),
+  data = filter(j, parameter == "b0_strategy"), weights = 1/se))
 
 # p <- reshape2::dcast(j,  strategy ~ parameter, value.var = "estimate") %>%
 #   ggplot(aes(g0_strategy, b0_strategy, label = strategy)) + geom_point() +
