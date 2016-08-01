@@ -89,10 +89,14 @@ dat = group_by(dat, strategy, p_holder) %>%
   mutate(nsp = n()) %>% filter(nsp > 1) %>% select(-nsp)
 
 # Derived variables
-dat$log_spec_div <- scale(log(dat$specDiv))
-dat$scaled_spec_div <- scale(dat$specDiv)
-dat$log_length <- scale(log(dat$length + 1))
-dat$log_weight <- scale(log(dat$weight + 1))
-dat$log_days <- scale(log(dat$days + 1))
-dat$log_npermit <- scale(log(dat$npermit))
-dat$log_days_permit <- scale(log(dat$days_permit+1))
+scale2 <- function(x) {
+  x <- x - mean(x, na.rm = TRUE)
+  x / (2 * sd(x, na.rm = TRUE))
+}
+dat$log_spec_div <- scale2(log(dat$specDiv))
+dat$scaled_spec_div <- scale2(dat$specDiv)
+dat$log_length <- scale2(log(dat$length + 1))
+dat$log_weight <- scale2(log(dat$weight + 1))
+dat$log_days <- scale2(log(dat$days + 1))
+dat$log_npermit <- scale2(log(dat$npermit))
+dat$log_days_permit <- scale2(log(dat$days_permit+1))
