@@ -16,6 +16,20 @@ dat$strategy = dat$strategy_permit
 dat <- group_by(dat, strategy) %>%
   mutate(npeople = length(unique(p_holder)))
 
+dat[dat$length<15 & !is.na(dat$length), ]$length <- NA
+
+dat <- dat %>% group_by(boat) %>%
+  mutate(median_length_boat = median(length, na.rm = T))
+# filter(dat, is.na(length) & !is.na(median_length_boat))$p_holder %>% unique
+
+dat <- dat %>% group_by(strategy) %>%
+  mutate(median_length_permit = median(length, na.rm = T))
+# filter(dat, is.na(length) & is.na(median_length))$p_holder %>% unique
+
+dat <- dat %>% mutate(length = ifelse(is.na(length), median_length_boat, length))
+dat <- dat %>% mutate(length = ifelse(is.na(length), median_length_permit, length))
+
+
 #2. For each person-year combination, we created 'strategies' by concatenating
 # all permits fished, and only retaining 'strategies' with >= 200 data points. Previously,
 # this was done by people-year, but Eric changed this to be including > 200 people / strategy
@@ -100,3 +114,5 @@ dat$log_weight <- scale2(log(dat$weight + 1))
 dat$log_days <- scale2(log(dat$days + 1))
 dat$log_npermit <- scale2(log(dat$npermit))
 dat$log_days_permit <- scale2(log(dat$days_permit+1))
+
+# ggplot(dat, aes(strategy, log10(length))) + geom_boxplot() + coord_flip()
