@@ -1,4 +1,5 @@
 library(dplyr)
+library(ggplot2)
 source("portfolio/analysis/cull-dat.R")
 
 library(rstan)
@@ -6,17 +7,16 @@ options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
 
 nrow(dat)
-sum(!is.na(dat$length))
-dat<-dat[!is.na(dat$length), ]
-dat<-dat[dat$length>0, ]
+sum(is.na(dat$length))
+# dat<-dat[!is.na(dat$length), ]
 nrow(dat)
 
-dat <- group_by(dat, strategy) %>%
-  mutate(ntotal = n(), ngreater1 = sum(specDiv>1.1), nratio = ngreater1/ntotal) %>%
-  as_data_frame() %>%
-  mutate(spec_div_all_1 = ifelse(nratio < 0.1, 1L, 0L)) %>%
-  select(-ngreater1)
-# dat <- dat %>% filter(spec_div_all_1 == 0L)
+# dat <- group_by(dat, strategy) %>%
+#   mutate(ntotal = n(), ngreater1 = sum(specDiv>1.1), nratio = ngreater1/ntotal) %>%
+#   as_data_frame() %>%
+#   mutate(spec_div_all_1 = ifelse(nratio < 0.1, 1L, 0L)) %>%
+#   select(-ngreater1)
+# # dat <- dat %>% filter(spec_div_all_1 == 0L)
 
 # Downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
@@ -25,22 +25,25 @@ set.seed(123)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 
-dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 30)
+dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 20)
 nrow(dat)
 
-ggplot(dat, aes(scaled_spec_div, log(revenue), colour = log_days_permit)) +
+g <- ggplot(dat, aes(scaled_spec_div, log(revenue), colour = log_days_permit)) +
   geom_point(alpha=0.1) +
   facet_wrap(~strategy)
+ggsave("portfolio/figs/stan-specdiv-vs-revenue.pdf", width = 9, height = 9)
 
-ggplot(dat, aes(log_days_permit, log(revenue), colour = scaled_spec_div)) +
-  geom_point(alpha=0.1) +
-  facet_wrap(~strategy)
+# ggplot(dat, aes(log_days_permit, log(revenue), colour = scaled_spec_div)) +
+#   geom_point(alpha=0.1) +
+#   facet_wrap(~strategy)
+# 
+# ggplot(dat, aes(log_length, log(revenue), colour = scaled_spec_div)) +
+#   geom_point(alpha=0.1) +
+#   facet_wrap(~strategy)
 
-ggplot(dat, aes(log_length, log(revenue), colour = scaled_spec_div)) +
-  geom_point(alpha=0.1) +
-  facet_wrap(~strategy)
-
-dat$p_holder <- paste(dat$p_holder, dat$strategy, sep = ":")
+dat$p_holder_strategy <- paste(dat$p_holder, dat$strategy, sep = ":")
+dat$strategy_id <- as.numeric(as.factor(as.character(dat$strategy)))
+dat$person_id <- as.numeric(as.factor(as.character(dat$p_holder_strategy)))
 
 dat$log_spec_div <- scale2(log(dat$specDiv))
 dat$scaled_spec_div <- scale2(dat$specDiv)
@@ -69,9 +72,9 @@ standat <- list(N = nrow(dat),
   y_i = log(dat$revenue/1e5),
 
   n_strategy = length(unique(dat$strategy)),
-  strategy_i = as.numeric(as.factor(as.character(dat$strategy))),
+  strategy_i = dat$strategy_id,
   n_person = length(unique(dat$p_holder)),
-  person_i = as.numeric(as.factor(as.character(dat$p_holder))),
+  person_i = dat$person_id,
 
   b1_cov_i = dat$scaled_spec_div,
   # b2_cov_i = dat$log_days_permit,
@@ -127,9 +130,6 @@ m <- stan("portfolio/analysis/portfolio2.stan",
   data = c(standat, b0_prior_mean=0,b0_prior_sd=10,b0_strategy_tau_prior_sd=2),
   iter = 200, chains = 4,
   pars = c("mu", "sigma", "b0_pholder"), include = FALSE, init = init_fun)
-# m2 <- stan("portfolio/analysis/portfolio2-matt.stan", data = standat, iter = 70, chains = 1,
-#   pars = c("mu", "sigma", "b0_dev_per", "e_b0_dev_per", "e_b0_dev_str"),
-#  include = FALSE, init = init_fun)
 # mod <- brms::make_stancode(log(revenue) ~ scaled_spec_div*log_days_permit +
 #     I(log_days_permit^2) + I(scaled_spec_div^2) +
 #     (1 |strategy), data = dat)
@@ -138,6 +138,7 @@ sink("portfolio/figs/stan-output.txt")
 print(m)
 sink()
 saveRDS(m, file = "portfolio/data-generated/stan-july31.rds")
+m <- readRDS("portfolio/data-generated/stan-july31.rds")
 
 # ----------------------------------------
 # check mixing:
@@ -162,17 +163,20 @@ dev.off()
 
 # ----------------------------------------
 # plot coefs:
-library(broom)
-b <- tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
-library(ggplot2)
-pdf("portfolio/figs/stan-coefs.pdf", width = 7, height = 9)
+b <- broom::tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
+pdf("portfolio/figs/stan-coefs.pdf", width = 8, height = 11)
 filter(b, !grepl("_strategy\\[", term)) %>%
   ggplot(aes(term, estimate, ymin = conf.low, ymax = conf.high, colour = rhat)) + 
-  geom_pointrange() + coord_flip()
+  geom_pointrange() + coord_flip() + geom_hline(yintercept = 0, lty = 2)
 
 filter(b, grepl("_strategy\\[", term)) %>%
-  ggplot(aes(term, estimate, ymin = conf.low, ymax = conf.high, colour = rhat)) + 
-  geom_pointrange() + coord_flip()
+  mutate(
+    strategy_id = as.numeric(sub("[a-z_0-9]+\\[([0-9]+)\\]", "\\1", term)),
+    coef = sub("\\[[0-9]+\\]", "", term)) %>%
+  inner_join(unique(select(dat, strategy, strategy_id))) %>%
+  ggplot(aes(strategy, estimate, ymin = conf.low, ymax = conf.high, colour = rhat)) + 
+  geom_pointrange() + coord_flip()  + geom_hline(yintercept = 0, lty = 2) +
+  facet_wrap(~coef)
 dev.off()
 
 # ----------------------------------------
@@ -215,11 +219,6 @@ normal_prior(0, 10)
 hist(extract(m)$sigma0, xlim = c(-5, 5))
 normal_prior(0, 3)
 dev.off()
-
-s <- read.table("portfolio/figs/stan-strategy-ids.txt")
-#b <- readRDS("portfolio/analysis/b.rds")
-names(s) <- c("strategy_id", "strategy")
-dat <- inner_join(dat, s)
 
 group_model <- function(par = "g0_strategy", type = "diversity") {
   if (type == "diversity")
@@ -271,8 +270,8 @@ p4 <- group_model("b1_strategy", "days")
 gridExtra::grid.arrange(p1, p2, p3, p4)
 dev.off()
 
-filter(b, grepl("b_j\\[", term) | grepl("g_k", term)) %>%
-  mutate(par = c(paste("[mu]", colnames(mm)), paste("[sigma]", colnames(mm2)))) %>%
+filter(b, grepl("b_j\\[", term) | grepl("g_k\\[", term) | grepl("h1", term)) %>%
+  mutate(par = c(paste("[mu]", colnames(mm)), paste("[sigma]", colnames(mm2)), "[str. level] h1")) %>%
    ggplot(aes(par, estimate)) +
    geom_pointrange(aes(ymin = conf.low, ymax = conf.high), size = 0.35) +
    geom_hline(yintercept = 0, lty = 2) +
@@ -298,3 +297,21 @@ lines(x, exp(med), col = "red", lwd = 2)
 with(m_div, text(mean_group, exp(mean_group * median(h1) + median(g0) + apply(g0_strategy, 2, median)),
                  labels = strategy, col = "#00000060", cex = 0.8))
 dev.off()
+
+st_coefs <- filter(b, grepl("_strategy\\[", term)) %>%
+  mutate(strategy_id = as.numeric(sub("[a-z_0-9]+\\[([0-9]+)\\]", "\\1", term)),
+    coef = sub("\\[[0-9]+\\]", "", term)) %>%
+  inner_join(unique(select(dat, strategy, strategy_id))) %>% 
+  select(estimate, strategy, coef) %>% tidyr::spread(coef, estimate)
+st_coefs$b0_strategy <- st_coefs$b0_strategy + filter(b, term == "b0")$estimate
+which(colnames(mm) == "scaled_spec_div")
+st_coefs$b1_strategy <- st_coefs$b1_strategy + filter(b, term == "b_j[4]")$estimate
+which(colnames(mm2) == "scaled_spec_div")
+st_coefs$g1_strategy <- st_coefs$g1_strategy + filter(b, term == "g_k[1]")$estimate
+st_coefs$g0_strategy <- st_coefs$g0_strategy + filter(b, term == "g0")$estimate
+
+st <- readxl::read_excel("data/df_output.xlsx") %>% 
+  rename(strategy = strategy.permit) %>%
+    inner_join(st_coefs)
+
+openxlsx::write.xlsx(st, file = "portfolio/figs/strategies.xlsx")
