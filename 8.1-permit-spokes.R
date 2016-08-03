@@ -69,18 +69,20 @@ md2 <- filter(b, grepl("g0_strategy", term)) %>% mutate(strategy_id = 1:n()) %>%
 h1 <- filter(b, term == "h1")
 md2$estimate <- md2$estimate + md2$strategy_mean_div * h1$estimate
 
-md3 <- filter(b, grepl("b0_strategy", term)) %>% mutate(strategy_id = 1:n()) %>%
-  inner_join(md) %>% 
-  rename(estimate_b = estimate) %>% 
+md3 <- filter(b, grepl("b0_strategy", term)) %>% 
+  mutate(strategy_id = 1:n()) %>%
+  inner_join(md) %>% rename(b0 = estimate) %>% 
   select(-term, -std.error, -strategy_mean_div) %>%
   inner_join(md2) %>% select(-std.error, -term) %>%
-  rename(g0 = estimate, b0 = estimate_b)
+  rename(g0 = estimate)
 
 ggplot(md3, aes(g0, b0, label = strategy, colour = strategy_mean_div)) + 
   geom_text()
 
 permit_plot <- function(permit) {
-  d_permit <- filter(md3, grepl(permit, strategy))
+  gre1 <- paste0(permit, " ")
+  gre2 <- paste0(permit, "$")
+  d_permit <- filter(md3, grepl(gre1, strategy) | grepl(gre2, strategy))
   single <- filter(md3, strategy == permit) %>% 
     rename(b0_single = b0, g0_single = g0) %>% 
       select(-strategy_id, -strategy_mean_div, -strategy)
