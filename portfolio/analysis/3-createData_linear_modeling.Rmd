@@ -245,7 +245,9 @@ cfecAnnual = group_by(cfecnew, p_holder, year) %>%
     coho = sum(g_earn[spec=="COHO"]),
     pink = sum(g_earn[spec=="PINK"]),
     sock = sum(g_earn[spec=="SOCK"]),
-    chum = sum(g_earn[spec=="CHUM"]))
+    chum = sum(g_earn[spec=="CHUM"]),
+    region = region[1],
+    nregion = length(unique(region)))
 
 cfecAnnual = left_join(cfecAnnual, permit_days)
 # also calculate weighted simpson diversity of species
@@ -281,6 +283,9 @@ cfecAnnual$coho.prev = cfecAnnual$coho[idx]
 cfecAnnual$chum.prev = cfecAnnual$chum[idx]
 cfecAnnual$pink.prev = cfecAnnual$pink[idx]
 cfecAnnual$sock.prev = cfecAnnual$sock[idx]
+
+cfecAnnual$region.prev = cfecAnnual$region[idx]
+cfecAnnual$nregion.prev = cfecAnnual$nregion[idx]
 ```
 
 Save the data for modeling:
