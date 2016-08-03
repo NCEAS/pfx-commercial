@@ -28,9 +28,11 @@ cfec <- mutate(cfec, salmon = ifelse(spec %in%
 cfec <- mutate(cfec, pollock = ifelse(spec == "PLCK", TRUE, FALSE))
 
 region <- read.csv("data/regions.csv", stringsAsFactors = FALSE)
-region <- region[,c(1:2)] #don’t include “assigned by” column
+
+region <- region[,c("stat6","final")] #don’t include “assigned by” column
+names(region)[2] = "region"
 cfec$region <- NULL
 cfec <- left_join(cfec, region)
 
 # devtools::install_github("wesm/feather/R")
-feather::write_feather(cfec, "data-generated/cfec.feather")
+feather::write_feather(cfec, "portfolio/data-generated/cfec.feather")

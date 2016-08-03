@@ -22,11 +22,9 @@ library(knitr)
 library(ggplot2)
 library(date)
 
-if (Sys.info()[["user"]] == "seananderson") {
-  cfec <- feather::read_feather("../data-generated/cfec.feather")
-} else {
-  cfec <- feather::read_feather("data/cfec.feather")
-}
+
+cfec <- feather::read_feather("portfolio/data-generated/cfec.feather")
+
 
 # convert 6-dig p_fshy codes to 5 digits
 # removing blank space - now they're all length(5)
@@ -39,34 +37,6 @@ idx = which(substr(cfec$p_fshy, 2, 2) == " ")
 cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1),
   substr(cfec$p_fshy[idx], 3, length(cfec$p_fshy[idx])), sep="")
 
-if (Sys.info()[["user"]] != "seananderson") {
-  region<-read.csv("data/regions.csv")
-  region<-region[,c(1:2)] #don’t include “assigned by” column
-  cfec<-left_join(cfec,region)
-}
-```
-
-We need to adjust the landed values and prices for inflation. To do this,
-we'll use the data Alan pulled together (adjusting to 2009 dollars).
-
-<https://docs.google.com/spreadsheets/d/1hRLYTX1nZBLKnYXwTCOtU7-XnDoMZf_1ufdTiNQFd4U/edit#gid=0>
-
-```{r, echo=FALSE}
-if (Sys.info()[["user"]] != "seananderson") {
-deflationTable = data.frame(year = 1985:2014, 
-  defl = c(0.57236, 0.58393, 0.59879, 0.61974,
-0.64388, 0.66774, 0.68993, 0.70564, 0.72244, 0.73781,
-0.75321, 0.76695, 0.78009, 0.78855, 0.80061,
-0.81883, 0.83753, 0.85038, 0.86729, 0.89114,
-0.91981, 0.94812, 0.97334, 0.9925, 1,
-1.01217, 1.03307, 1.05213, 1.06926, 1.08682))
-
-# Adjust price and g_earn for inflation
-cfec$year = as.numeric(cfec$year)
-cfec$day = substr(cfec$landdate, 6, 10)
-cfec$g_price = cfec$g_price/deflationTable$defl[cfec$year-1984]
-cfec$g_earn = cfec$g_earn/deflationTable$defl[cfec$year-1984]
-}
 ```
 
 ## Function definition
@@ -99,30 +69,7 @@ dim(cfecnew)[1]
 ## Combine some strategies 
 
 ```{r}
-# cfecnew$p_fshy[cfecnew$p_fshy=="B61B"] = "B06B"
-# cfecnew$p_fshy[cfecnew$p_fshy=="C61B"] = "C06B"
-# cfecnew$p_fshy[cfecnew$p_fshy=="C91B"] = "C09B"
-# cfecnew$p_fshy[cfecnew$p_fshy=="M61B"] = "M06B"
-# cfecnew$p_fshy[cfecnew$p_fshy=="E09B"] = "E91B"
-# cfecnew$p_fshy[cfecnew$p_fshy=="I06B"] = "I61B"
-# cfecnew$p_fshy[cfecnew$p_fshy=="Y06A"] = "Y61A"
-# cfecnew$p_fshy[cfecnew$p_fshy=="O06B"] = "O61B"
-# cfecnew$p_fshy[cfecnew$p_fshy=="O09B"] = "O91B"
-# 
-# cfecnew$p_fshy[cfecnew$p_fshy%in%c("M7FB","M7GB", "M7HB","M7IB")] = "M7IB"
-# cfecnew$p_fshy[cfecnew$p_fshy%in%c("M7FG","M7GG", "M7HG","M7IG")] = "M7IG"
-# 
-# # crab and shrimp vessels
-# cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="D91")] = paste("D09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="D91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="D91")])), sep="")
-# cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="T91")] = paste("T09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="T91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="T91")])), sep="")
-# cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="P91")] = paste("P09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="P91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="P91")])), sep="")
-# 
-# cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M91")] = paste("M09", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M91")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M91")])), sep="")
-# cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")] = paste("M06", substr(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")],4,length(cfecnew$p_fshy[which(substr(cfecnew$p_fshy,1,3)=="M61")])), sep="")
-```
-
-```{r}
-codes <- readr::read_csv("../../data/cfec-codes.csv")
+codes <- readr::read_csv("data/cfec-codes.csv")
 # convert 6-dig p_fshy codes to 5 digits
 # removing blank space - now they're all length(5)
 idx = which(nchar(codes$p_fshy)==6)
@@ -143,7 +90,7 @@ codes$pfshy_species <- tolower(gsub(reg, "\\1", codes$description))
 codes$pfshy_gear <- tolower(gsub(reg, "\\2", codes$description))
 codes$pfshy_area <- tolower(gsub(reg, "\\3", codes$description))
 codes$pfshy_species <- sub(" +$", "", codes$pfshy_species)
-readr::write_csv(codes, path = "../data-generated/cfec-codes.csv")
+readr::write_csv(codes, path = "portfolio/data-generated/cfec-codes.csv")
 # as.data.frame(codes)
 ```
 
@@ -187,7 +134,7 @@ topstrategies = group_by(cfecnew, p_holder, year) %>%
   as_data_frame()
 rev(sort(table(topstrategies$strategy)))[1:50]
 cfecnew = left_join(cfecnew, topstrategies) # adds strategy column
-write.csv(rev(sort(table(topstrategies$strategy))), file = "../data-generated/strategies.csv")
+write.csv(rev(sort(table(topstrategies$strategy))), file = "portfolio/data-generated/strategies.csv")
 
 topstrategies.bypermit = group_by(cfecnew, p_holder, year) %>%
   summarize(strategy.permit = paste(sort(unique(p_fshy)), collapse = " ")) %>%
@@ -208,7 +155,7 @@ species_by_strategy = filter(species_by_strategy, earn.bySpec > 0.1) %>% select(
 library(reshape2)
 melted_sbs <- melt(species_by_strategy, id.vars = c("strategy.permit", "spec"))
 species_by_strategy <- dcast(melted_sbs, strategy.permit ~ spec + variable)
-write.csv(species_by_strategy, file = "../data-generated/species_by_strategy.csv")
+write.csv(species_by_strategy, file = "portfolio/data-generated/species_by_strategy.csv")
 
 ```
 
@@ -227,10 +174,10 @@ gears <- group_by(gears, p_gear) %>%
   summarize(n = n[1], pfshy_gear = paste(pfshy_gear, collapse = "-")) %>% 
     as_data_frame() %>% 
       arrange(-n)
-gears %>% readr::write_csv(path = "../data-generated/gear-strategies.csv")
+gears %>% readr::write_csv(path = "portfolio/data-generated/gear-strategies.csv")
 
 # hand edited with groups:
-gears <- readr::read_csv("../../data/gear-strategies-edited.csv")
+gears <- readr::read_csv("data/gear-strategies-edited.csv")
 gears <- mutate(gears, p_gear = 
   ifelse(nchar(p_gear) == 1, paste0("0", p_gear), p_gear))
 
@@ -348,73 +295,9 @@ cfecAnnual <- as_data_frame(cfecAnnual)
 #   mutate(nyr = length(unique(year))) %>%
 #   filter(nyr >= 10)
 
-saveRDS(cfecAnnual, file="../data-generated/cfec-annual-for-modeling.rds")
+saveRDS(cfecAnnual, file="portfolio/data-generated/cfec-annual-for-modeling.rds")
 
 cfecAnnual$specDiv.change = cfecAnnual$specDiv - cfecAnnual$specdiv.prev
 cfecAnnual.diff = cfecAnnual[is.na(cfecAnnual$specDiv.change)==FALSE, ]
-saveRDS(cfecAnnual.diff, file="../data-generated/cfec-diff-for-modeling.rds")
+saveRDS(cfecAnnual.diff, file="portfolio/data-generated/cfec-diff-for-modeling.rds")
 ```
-
-## Do some exploration by permit types + diversity
-
-For example, when someone is diversifying with a herring, halibut, or crab permit, what does that diversification look like?
-
-```{r, echo=FALSE}
-cfecnew$taxa = substr(cfecnew$p_fshy, 1, 1)
-specPermit = group_by(cfecnew, taxa, specn) %>%
-  summarize(percent.revenue = sum(g_earn))
-specPermit.tot = group_by(specPermit, taxa) %>%
-  summarize(tot = sum(percent.revenue))
-specPermit = left_join(specPermit, specPermit.tot)
-specPermit$percent.revenue = specPermit$percent.revenue/specPermit$tot
-specPermit.df = group_by(specPermit, taxa, specn) %>%
-  filter(percent.revenue > 0.02) %>%
-  arrange(taxa) %>%
-  as.data.frame
-specPermit.df$spec = cfec$spec[match(specPermit.df$specn, cfec$specn)]
-kable(specPermit.df)
-```
-
-## Code for looking at permit
-We can look at whether there's clear combinations of permit types that are combinations -- most of these people either have a single local permit (PWS, Bristol Bay, etc) or have multiple statewide permits.
-
-```{r}
-
-# cfecnew$area = substr(cfecnew$p_fshy,4,4)
-# cfecnew$area[cfecnew$area %in% c("A","C")] = "Southeast"
-# cfecnew$area[cfecnew$area == "B"] = "Statewide"
-# cfecnew$area[cfecnew$area == "D"] = "Yakutat"
-# cfecnew$area[cfecnew$area == "E"] = "PWS"
-# cfecnew$area[cfecnew$area == "H"] = "CookInlet"
-# cfecnew$area[cfecnew$area == "J"] = "Westward"
-# cfecnew$area[cfecnew$area == "K"] = "Kodiak"
-# cfecnew$area[cfecnew$area == "L"] = "Chignik"
-# cfecnew$area[cfecnew$area == "M"] = "AlaskaPeninsula"
-# cfecnew$area[cfecnew$area == "N"] = "Nelson"
-# cfecnew$area[cfecnew$area == "Q"] = "BeringSea"
-# cfecnew$area[cfecnew$area == "T"] = "BristolBay"
-# cfecnew$area[cfecnew$area == "X"] = "Kotzebue"
-# cfecnew$area[cfecnew$area == "Z"] = "NortonSound"
-#
-# cfecnew$spec = substr(cfecnew$p_fshy,1,1)
-# cfecnew$spec[cfecnew$spec == "B"] = "Halibut"
-# cfecnew$spec[cfecnew$spec == "C"] = "Sablefish"
-# cfecnew$spec[cfecnew$spec %in% c("D","E","K","T")] = "Crab"
-# cfecnew$spec[cfecnew$spec %in% c("F")] = "Freshwater"
-# cfecnew$spec[cfecnew$spec %in% c("G","H","L")] = "Herring"
-# cfecnew$spec[cfecnew$spec %in% c("I")] = "Lingcod"
-# cfecnew$spec[cfecnew$spec %in% c("A","J","N","R","W")] = "Shellfish"
-# cfecnew$spec[cfecnew$spec %in% c("O","P","Q","U","Z")] = "Invert"
-# cfecnew$spec[cfecnew$spec %in% c("M")] = "Misc"
-# cfecnew$spec[cfecnew$spec %in% c("S")] = "Salmon"
-# cfecnew$area.spec = paste(cfecnew$area, cfecnew$spec, sep="_")
-#
-# cfecAnnual.multiplePermits = group_by(cfecnew, p_holder, year) %>%
-#   summarize(npermit = length(unique(p_fshy)),
-#     allpermits = paste(sort(unique(p_fshy)), collapse = " "),
-#     areaspec = paste(sort(unique(area.spec)), collapse = " ")) %>%
-#   filter(npermit > 1)
-
-```
-
-
