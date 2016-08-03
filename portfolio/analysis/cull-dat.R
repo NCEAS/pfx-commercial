@@ -1,4 +1,7 @@
-dat = readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
+cullDat = function(diff = FALSE) {
+
+if(diff==FALSE) dat = readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
+if(diff==TRUE) dat = readRDS(file="portfolio/data-generated/cfec-diff-for-modeling.rds")
 
 ### Eric's culling:
 #1. We restricted our analysis to p_holders who fished for 5 or more years
@@ -115,4 +118,6 @@ dat$log_days <- scale2(log(dat$days + 1))
 dat$log_npermit <- scale2(log(dat$npermit))
 dat$log_days_permit <- scale2(log(dat$days_permit+1))
 
+return(dat)
 # ggplot(dat, aes(strategy, log10(length))) + geom_boxplot() + coord_flip()
+}
