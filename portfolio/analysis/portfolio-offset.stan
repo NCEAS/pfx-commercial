@@ -19,6 +19,7 @@ data {
   vector[N] g1_cov_i; // predictor data for random slope (sigma)
 
   vector[N] mean_div;
+  vector[N] mean_div_sq;
 }
 parameters {
   real b0;
@@ -43,8 +44,7 @@ parameters {
   vector[n_strategy] g1_strategy;
   real<lower=0> g1_strategy_tau;
 
-  real h1;
-  real h2;
+  vector[4] h;
 }
 transformed parameters {
   vector[N] mu;
@@ -60,8 +60,13 @@ transformed parameters {
             // b2_cov_i[i] * b2_strategy[strategy_i[i]];
 
     sigma[i] = sigma[i] +
-               g0_strategy[strategy_i[i]] + h1 * mean_div[i] +
-               g1_cov_i[i] * (g1_strategy[strategy_i[i]] + h2 * mean_div[i]);
+               g0_strategy[strategy_i[i]] +
+                 h[1] * mean_div[i] +
+                 h[2] * mean_div_sq[i] +
+               g1_cov_i[i] *
+                 (g1_strategy[strategy_i[i]] +
+                 h[3] * mean_div[i] +
+                 h[4] * mean_div_sq[i]);
   }
 
   sigma = exp(sigma);
@@ -82,8 +87,7 @@ model {
   g0_strategy ~ normal(0, g0_strategy_tau);
   g0_strategy_tau ~ student_t(3, 0, 2);
 
-  h1 ~ normal(0, 1);
-  h2 ~ normal(0, 1);
+  h ~ normal(0, 1);
 
   g_k ~ normal(0, 1);
   g1_strategy ~ normal(0, g1_strategy_tau);

@@ -48,7 +48,9 @@ standat <- list(
   # b2_cov_i = dat$log_days_permit,
   g1_cov_i = dat$scaled_spec_div,
 
-  mean_div = dat$strategy_mean_div)
+  mean_div = dat$strategy_mean_div,
+  mean_div_sq = dat$strategy_mean_div^2
+  )
 
 # custom tighter inits:
 beta_init <- function() runif(standat$J, -0.1, 0.1)
@@ -67,8 +69,7 @@ init_fun <- function(seed = sample(seq_len(1e4), 1)) {
     b0_strategy_tau = tau_init(),
     b0_str_yr_tau = tau_init(),
     b_j = beta_init(),
-    h1 = beta_init()[1],
-    h2 = beta_init()[1],
+    h = runif(4, -0.1, 0.1),
     b1_strategy = dev_str_init(),
     b1_strategy_tau = tau_init(),
     b2_strategy = dev_str_init(),
