@@ -20,18 +20,22 @@ nrow(dat)
 
 # Downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.2)
+n_sample <- round(length(unique_holders)*0.20)
 set.seed(123)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 
-dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 20)
+dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 30)
 nrow(dat)
 
-g <- ggplot(dat, aes(scaled_spec_div, log(revenue), colour = log_days_permit)) +
+g <- ggplot(dat, aes(scaled_spec_div, log(revenue/1e5), colour = log_days_permit)) +
   geom_point(alpha=0.1) +
   facet_wrap(~strategy)
 ggsave("portfolio/figs/stan-specdiv-vs-revenue.pdf", width = 9, height = 9)
+
+# median(log(dat$revenue/1e5))
+# median(p$b0[[1]])
+# median(p$b0[[1]]) + filter(b, grepl("b0_str", term))$estimate %>% exp
 
 # ggplot(dat, aes(log_days_permit, log(revenue), colour = scaled_spec_div)) +
 #   geom_point(alpha=0.1) +
@@ -71,9 +75,9 @@ standat <- list(N = nrow(dat),
 
   y_i = log(dat$revenue/1e5),
 
-  n_strategy = length(unique(dat$strategy)),
+  n_strategy = length(unique(dat$strategy_id)),
   strategy_i = dat$strategy_id,
-  n_person = length(unique(dat$p_holder)),
+  n_person = length(unique(dat$person_id)),
   person_i = dat$person_id,
 
   b1_cov_i = dat$scaled_spec_div,
@@ -128,11 +132,30 @@ init_fun <- function(seed = sample(seq_len(1e4), 1)) {
 mean(standat$y_i)
 m <- stan("portfolio/analysis/portfolio2.stan",
   data = c(standat, b0_prior_mean=0,b0_prior_sd=10,b0_strategy_tau_prior_sd=2),
-  iter = 200, chains = 4,
+  iter = 80, chains = 2,
   pars = c("mu", "sigma", "b0_pholder"), include = FALSE, init = init_fun)
 # mod <- brms::make_stancode(log(revenue) ~ scaled_spec_div*log_days_permit +
 #     I(log_days_permit^2) + I(scaled_spec_div^2) +
 #     (1 |strategy), data = dat)
+
+library(lme4)
+m2 <- lmer(log(revenue/1e5)~
+  I(scaled_spec_div^2) + I(log_days_permit^2) + I(log_length^2) +
+  (scaled_spec_div + log_days_permit + log_length)^2 + (1+scaled_spec_div|strategy_id) + (1|person_id), data = dat)
+qq <- broom::tidy(m) %>%
+  filter(grepl("b0_strategy\\[", term)) %>%
+  select(estimate)
+b0 <- broom::tidy(m) %>%
+  filter(grepl("b0$", term)) %>%
+  select(estimate)
+qq2 <- ranef(m2)$strategy_id[,1]
+plot(qq2, qq[[1]])
+exp(coef(m2)$strategy_id$`(Intercept)`)
+# exp(fixef(m2)[[1]] + ranef(m2)$strategy_id$`(Intercept)`)
+exp(b0$estimate + qq$estimate)
+qq4 <- group_by(dat, strategy_id) %>% summarise(m = median(log(revenue/1e5)))
+qq5 <- qq4$m %>% exp
+plot(qq5, exp(coef(m2)$strategy_id$`(Intercept)`))
 
 sink("portfolio/figs/stan-output.txt")
 print(m)
