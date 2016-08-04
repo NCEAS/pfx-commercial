@@ -19,22 +19,32 @@ cfec <- inner_join(cfec, deflationTable)
 cfec <- mutate(cfec, g_price = g_price / defl, g_earn = g_earn / defl)
 cfec$defl <- NULL
 
-# panel 0 is something like total revenue across fleet
-p0a = group_by(cfec, year) %>%
+# add indicator for single permit landings
+cfec = group_by(cfec, year, p_holder) %>%
+  mutate(n.permit = length(unique(p_fshy))) %>%
+  mutate(permits = ifelse(n.permit==1, "Single","Multiple")) %>%
+  select(-n.permit)
+
+p0a = group_by(cfec, year, permits) %>%
   summarize(totEarn = sum(g_earn)/1e9, salmEarn = sum(g_earn[substr(p_fshy,1,1) == "S"])/1e9,
     nonsalmEarn = sum(g_earn[substr(p_fshy,1,1) != "S"])/1e9) %>%
-  ggplot(aes(year, totEarn, colour = "total"), color = "black") + geom_line() +
-  geom_line(aes(year, salmEarn, colour = "salmon")) +
-  geom_line(aes(year, nonsalmEarn, colour = "non-salmon")) + ylab("Total revenue (billions)") + ggtitle("Total revenue (inflation adjusted)")
+  ggplot(aes(year, totEarn, group = permits, colour = permits)) + geom_line() +
+  ylab("Total revenue (billions)") + ggtitle("Total revenue (inflation adjusted)")
 
-p0b = group_by(cfec, year, p_holder) %>%
-  summarize(earn = sum(g_earn), salmearn = sum(gearn[substr(p_fshy,1,1) == "S"])) %>%
-  group_by(year) %>%
+# panel 0 is something like total revenue across fleet
+#p0a = group_by(cfec, year) %>%
+#  summarize(totEarn = sum(g_earn)/1e9, salmEarn = sum(g_earn[substr(p_fshy,1,1) == "S"])/1e9,
+#    nonsalmEarn = sum(g_earn[substr(p_fshy,1,1) != "S"])/1e9) %>%
+#  ggplot(aes(year, totEarn, colour = "total"), color = "black") + geom_line() +
+#  geom_line(aes(year, salmEarn, colour = "salmon")) +
+#  geom_line(aes(year, nonsalmEarn, colour = "non-salmon")) + ylab("Total revenue (billions)") + ggtitle("Total revenue (inflation adjusted)")
+
+p0b = group_by(cfec, year, p_holder, permits) %>%
+  summarize(earn = sum(g_earn), npermit = length(unique(p_fshy))) %>%
+  group_by(year, permits) %>%
   summarize(median = median(earn), low = quantile(earn, 0.25),
-    upper = quantile(earn, 0.75), tot = sum(earn),
-    people = length(unique(p_holder)), median.salm = median(salmearn)) %>%
-  ggplot(aes(year, log(median))) + geom_ribbon(aes(ymin = log(low), ymax = log(upper)), alpha=0.3, color ="grey") +
-  geom_line() + ylab("Ln median revenue (across people)") + xlab("Year") + ggtitle("Median revenue")
+    upper = quantile(earn, 0.75)) %>%
+  ggplot(aes(year, log(median), group=permits, color = permits)) + geom_line() + ylab("Ln median revenue (across people)") + xlab("Year") + ggtitle("Median revenue")
 
 # panel 1 = something like proportion of single permit holders, broken out by salmon
 # this calculates number of salmon and non-salmon permits held per person-year
@@ -79,6 +89,6 @@ p2 = group_by(effSpec, year) %>%
   geom_line(aes(x = year, y = mean.other, colour = "no salmon specialists")) + xlab("Year") +
   ylab("Effective species diversity ($ weighted)") + ggtitle("Species diversity")
 
-pdf("portfolio/figs/Fig1.pdf")
+pdf("portfolio/figs/Fig1b.pdf")
 gridExtra::grid.arrange(p0a, p0b, p1, p2, ncol=2)
 dev.off()
