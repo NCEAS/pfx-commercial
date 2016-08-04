@@ -13,7 +13,7 @@ nrow(dat)
 # dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 30)
 # nrow(dat)
 
-dat <- mutate(dat, 
+dat <- mutate(dat,
   revenue_change = log(revenue/revenue.prev),
   days_change = log((days_permit+1)/(days_permit.prev+1)),
   spec_change = log(specDiv/specdiv.prev))
@@ -26,9 +26,11 @@ m <- lmer(log(revenue)~
   # poly(days_change, 2) + poly(spec_change) +
   (1 + spec_change + days_change|strategy) + (1|strategy_year), 
   data = dat, offset = log(revenue.prev))
+
+ranef(m)
 summary(m)
 library(broom)
-broom::tidy(m, conf.int = T) %>% ggplot(aes(estimate, term)) + geom_point() + 
+broom::tidy(m, conf.int = T) %>% ggplot(aes(estimate, term)) + geom_point() +
   geom_segment(aes(x = conf.low, xend = conf.high, y = term, yend = term)) +
     geom_vline(xintercept=0,lty=2)
 ggsave("portfolio/figs/offset-mean-coefs.pdf", width = 8, height = 8)
@@ -62,7 +64,7 @@ confint(m2,method="Wald")
 #   data = filter(m.aug, .resid < 0))
 # m2 <- m3
 summary(m2)
-broom::tidy(m2, conf.int = T) %>% ggplot(aes(estimate, term)) + geom_point() + 
+broom::tidy(m2, conf.int = T) %>% ggplot(aes(estimate, term)) + geom_point() +
   geom_segment(aes(x = conf.low, xend = conf.high, y = term, yend = term)) +
     geom_vline(xintercept=0,lty=2)
 ggsave("portfolio/figs/offset-sigma-coefs.pdf", width = 8, height = 8)
@@ -107,4 +109,17 @@ res <- inner_join(re, select(re2_sigma, -mean_div))
 ggplot(res, aes(spec_change, sigma_spec_change)) + geom_text(aes(label = strategy)) +
   geom_vline(xintercept=0) + geom_hline(yintercept=0)
 ggsave("portfolio/figs/offset-bivariate-slopes.pdf", width = 6, height = 6)
+
+# Example of including strategy-year random effects
+m <- lmer(log(revenue)~ -1+days_change*spec_change +
+    I(days_change^2) + I(spec_change^2) +
+    (-1+spec_change + days_change|strategy) + (1|strategyYear),
+  data = dat, offset = log(revenue.prev))
+
+coef.names = rownames(ranef(m)$strategyYear)
+coef.year = substr( coef.names, nchar(coef.names) - 3, nchar(coef.names))
+coef.strat = substr( coef.names, 1, nchar(coef.names) - 5)
+df = data.frame("strategy"=coef.strat, "year" = coef.year, "est" =ranef(m)$strategyYear$'(Intercept)')
+
+ggplot(df, aes(year, est, group = strategy)) + geom_line() + facet_wrap(~ strategy)
 
