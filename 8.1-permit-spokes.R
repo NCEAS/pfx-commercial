@@ -46,18 +46,18 @@ names(p$b1_strategy) <- dd$strategy
 names(p$g1_strategy) <- dd$strategy
 names(p$g0_strategy) <- dd$strategy
 
-p1 <- tidyr::gather(exp(p$b0_strategy), term, posterior) %>%
+p1 <- tidyr::gather(p$b0_strategy, term, posterior) %>%
   ggplot(aes(term, posterior)) + geom_violin() +
-    coord_flip()
-p2 <- tidyr::gather(exp(p$g0_strategy), term, posterior) %>%
+    coord_flip() + ggtitle("b0")
+p2 <- tidyr::gather(p$g0_strategy, term, posterior) %>%
   ggplot(aes(term, posterior)) + geom_violin() +
-    coord_flip()
-p3 <- tidyr::gather(p$g1_strategy, term, posterior) %>%
+    coord_flip() + ggtitle("g0")
+p3 <- tidyr::gather(p$b1_strategy, term, posterior) %>%
   ggplot(aes(term, posterior)) + geom_violin() +
-    coord_flip() + geom_hline(yintercept = 0, lty = 2)
-p4 <- tidyr::gather(p$b1_strategy, term, posterior) %>%
+    coord_flip() + geom_hline(yintercept = 0, lty = 2) + ggtitle("b1")
+p4 <- tidyr::gather(p$g1_strategy, term, posterior) %>%
   ggplot(aes(term, posterior)) + geom_violin() +
-    coord_flip() + geom_hline(yintercept = 0, lty = 2)
+    coord_flip() + geom_hline(yintercept = 0, lty = 2) + ggtitle("g1")
 pdf("portfolio/figs/stan-violins-re.pdf", width = 12, height = 9)
 gridExtra::grid.arrange(p1, p2, p3, p4, ncol = 4)
 dev.off()
@@ -102,4 +102,65 @@ p5 <- permit_plot("B61B")
 p6 <- permit_plot("C61B")
 p7 <- permit_plot("S01")
 p8 <- permit_plot("S03")
+pdf("portfolio/figs/stan-gg-spoke.pdf", width = 12, height = 12)
 gridExtra::grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8)
+dev.off()
+
+# -----------------------------------------------
+#
+## b <- broom::tidy(m, conf.int = T, estimate.method = "median", conf.level = 0.95)
+## b2 <- broom::tidy(m, conf.int = T, estimate.method = "median", conf.level = 0.5) %>%
+##   rename(conf.low.50 = conf.low, con.high.50 = conf.high) %>%
+##   select(-estimate, -std.error)
+## b <- inner_join(b, b2) %>%
+##   filter(grepl("b1_strategy"))
+## ggplot(b, aes(est))
+b1 <- tidyr::gather(p$b1_strategy, strategy, posterior) %>%
+  group_by(strategy) %>%
+  summarise(
+    b1.l = quantile(posterior, probs = 0.025),
+    b1.l.5 = quantile(posterior, probs = 0.25),
+    b1.m = quantile(posterior, probs = 0.5),
+    b1.u.5 = quantile(posterior, probs = 0.75),
+    b1.u = quantile(posterior, probs = 0.975))
+
+g1 <- tidyr::gather(p$g1_strategy, strategy, posterior) %>%
+  group_by(strategy) %>%
+  summarise(
+    g1.l = quantile(posterior, probs = 0.025),
+    g1.l.5 = quantile(posterior, probs = 0.25),
+    g1.m = quantile(posterior, probs = 0.5),
+    g1.u.5 = quantile(posterior, probs = 0.75),
+    g1.u = quantile(posterior, probs = 0.975))
+
+b0 <- tidyr::gather(p$b0_strategy, strategy, posterior) %>%
+  group_by(strategy) %>%
+  summarise(b0.m = quantile(posterior, probs = 0.5))
+
+slopes <- inner_join(b1, g1) %>% inner_join(b0)
+slopes$highlight <- FALSE
+slopes$highlight[slopes$strategy == "S01A"] <- TRUE
+
+ggplot(slopes, aes(b1.m, g1.m)) +
+  geom_vline(xintercept = 0, lty = 2) +
+  geom_hline(yintercept = 0, lty = 2) +
+  # geom_segment(aes(x = b1.l, y = g1.m, xend = b1.u, yend = g1.m), alpha = 0.1) +
+  # geom_segment(aes(x = b1.m, y = g1.l, xend = b1.m, yend = g1.u), alpha = 0.1) +
+  geom_segment(aes(x = b1.l.5, y = g1.m, xend = b1.u.5, yend = g1.m), alpha = 0.2) +
+  geom_segment(aes(x = b1.m, y = g1.l.5, xend = b1.m, yend = g1.u.5), alpha = 0.2) +
+  geom_point(aes(size = b0.m, colour = highlight), alpha = 0.2) +
+  scale_colour_manual(values = c("black","red")) +
+  geom_text(aes(label = strategy), check_overlap = F) +
+  xlab("Within-strategy effect of diversity on revenue") +
+  ylab("Within-strategy effect of diversity on variability of revenue")
+
+unique(dat$strategy)
+# q <- filter(dat, strategy == "S01A") %>%
+q <- filter(dat, strategy == "M7IB") %>%
+  group_by(p_holder) %>%
+  summarise(m = mean(log(revenue)), v = sd(revenue)/mean(revenue),
+    m_div = mean(scaled_spec_div),
+    m_days = mean(log_days_permit))
+# ggplot(q, aes(m, v, colour = m_div)) + geom_point()
+ggplot(q, aes(m_div, v, colour = m_days)) + geom_point() + stat_smooth(method = "lm")
+# ggplot(q, aes(m_div, m, colour = v)) + geom_point()
