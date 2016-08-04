@@ -46,7 +46,7 @@ m.aug <- augment(m)
 
 ggplot(m.aug, aes(spec_change, log(abs(.resid)), colour = days_change)) + 
   geom_point(alpha = 0.1) +
-  facet_wrap(~strategy)
+  facet_wrap(~strategy) + stat_smooth(se=F)
 ggsave("portfolio/figs/offset-panel.pdf", width = 12, height = 12)
 
 m.aug$year <- dat$year
@@ -56,9 +56,9 @@ ggplot(m.aug, aes(year, .resid, colour = days_change)) +
 ggsave("portfolio/figs/offset-panel-time.pdf", width = 18, height = 18)
 
 m2 <- lmer(log(abs(.resid))~days_change*spec_change + 
+  # I(days_change^2) + I(spec_change^2) +
   (1 + spec_change + days_change|strategy), 
   data = m.aug)
-confint(m2,method="Wald")
 # m3 <- lmer(log(abs(.resid))~days_change*spec_change + 
 #   (1 + spec_change + days_change|strategy), 
 #   data = filter(m.aug, .resid < 0))
@@ -111,6 +111,7 @@ ggplot(res, aes(spec_change, sigma_spec_change)) + geom_text(aes(label = strateg
 ggsave("portfolio/figs/offset-bivariate-slopes.pdf", width = 6, height = 6)
 
 # Example of including strategy-year random effects
+dat$strategyYear <- paste(dat$strategy, dat$year, sep = ":")
 m <- lmer(log(revenue)~ -1+days_change*spec_change +
     I(days_change^2) + I(spec_change^2) +
     (-1+spec_change + days_change|strategy) + (1|strategyYear),
