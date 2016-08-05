@@ -7,17 +7,10 @@ library(knitr)
 library(ggplot2)
 library(date)
 
-
+# cfec.feather already inflation adjusted
 cfec <- feather::read_feather("portfolio/data-generated/cfec.feather")
 
-deflationTable <- read.csv("data/deflation.csv")
-
-# Adjust price and g_earn for inflation
 cfec$year <- as.numeric(cfec$year)
-cfec$day <- substr(cfec$landdate, 6, 10)
-cfec <- inner_join(cfec, deflationTable)
-cfec <- mutate(cfec, g_price = g_price / defl, g_earn = g_earn / defl)
-cfec$defl <- NULL
 
 # add indicator for single permit landings
 cfec = group_by(cfec, year, p_holder) %>%
