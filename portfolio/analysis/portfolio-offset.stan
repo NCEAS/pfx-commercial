@@ -15,11 +15,10 @@ data {
   int<lower=1,upper=n_str_yr> str_yr_i[N]; // vector of IDs for people
 
   vector[N] b1_cov_i; // predictor data for random slope
-//  vector[N] b2_cov_i; // predictor data for random slope
+  vector[N] b2_cov_i; // predictor data for random slope
   vector[N] g1_cov_i; // predictor data for random slope (sigma)
 
   vector[N] mean_div;
-  vector[N] mean_div_sq;
 }
 parameters {
   real b0;
@@ -32,9 +31,9 @@ parameters {
 
   vector[J] b_j;
   vector[n_strategy] b1_strategy;
-//  vector[n_strategy] b2_strategy;
+  vector[n_strategy] b2_strategy;
   real<lower=0> b1_strategy_tau;
-//  real<lower=0> b2_strategy_tau;
+  real<lower=0> b2_strategy_tau;
 
   real g0;
   vector[n_strategy] g0_strategy;
@@ -44,7 +43,7 @@ parameters {
   vector[n_strategy] g1_strategy;
   real<lower=0> g1_strategy_tau;
 
-  vector[4] h;
+  real h1;
 }
 transformed parameters {
   vector[N] mu;
@@ -56,38 +55,34 @@ transformed parameters {
   for (i in 1:N) {
     mu[i] = mu[i] + b0_strategy[strategy_i[i]] +
             b0_str_yr[str_yr_i[i]] +
-            b1_cov_i[i] * b1_strategy[strategy_i[i]];
-            // b2_cov_i[i] * b2_strategy[strategy_i[i]];
+            b1_cov_i[i] * b1_strategy[strategy_i[i]] +
+            b2_cov_i[i] * b2_strategy[strategy_i[i]];
 
     sigma[i] = sigma[i] +
-               g0_strategy[strategy_i[i]] +
-                 h[1] * mean_div[i] +
-                 h[2] * mean_div_sq[i] +
-               g1_cov_i[i] *
-                 (g1_strategy[strategy_i[i]] +
-                 h[3] * mean_div[i] +
-                 h[4] * mean_div_sq[i]);
+               g0_strategy[strategy_i[i]] + h1 * mean_div[i] +
+               g1_cov_i[i] * g1_strategy[strategy_i[i]];
   }
 
   sigma = exp(sigma);
 }
 model {
-  b0 ~ normal(0, 2);
-  b0_strategy ~ normal(0, b0_strategy_tau);
-  b0_strategy_tau ~ student_t(3, 0, 2);
+  b0 ~ normal(0, 1);
+  b0_strategy ~ normal(0, 1);
+  //b0_strategy_tau ~ student_t(3, 0, 2);
   b0_str_yr ~ normal(0, b0_str_yr_tau);
   b0_str_yr_tau ~ student_t(3, 0, 2);
 
   b_j ~ normal(0, 1);
   b1_strategy ~ normal(0, b1_strategy_tau);
+  b2_strategy ~ normal(0, b2_strategy_tau);
   b1_strategy_tau ~ student_t(3, 0, 2);
-//  b2_strategy_tau ~ student_t(3, 0, 2);
+  b2_strategy_tau ~ student_t(3, 0, 2);
 
   g0 ~ normal(0, 2);
   g0_strategy ~ normal(0, g0_strategy_tau);
   g0_strategy_tau ~ student_t(3, 0, 2);
 
-  h ~ normal(0, 1);
+  h1 ~ normal(0, 1);
 
   g_k ~ normal(0, 1);
   g1_strategy ~ normal(0, g1_strategy_tau);
