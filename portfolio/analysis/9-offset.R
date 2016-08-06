@@ -5,8 +5,8 @@ dat <- cullDat(diff = TRUE)
 
 # downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.25)
-set.seed(123)
+n_sample <- round(length(unique_holders)*0.35)
+set.seed(12)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 
@@ -18,16 +18,21 @@ dat <- mutate(dat,
   days_change = log((days_permit+1)/(days_permit.prev+1)),
   spec_change = log(specDiv/specdiv.prev))
 
+dat <- mutate(dat, inc = ifelse(spec_change > 0, "inc", ifelse(spec_change == 0, "zero", "dec")))
+p <- ggplot(dat, aes(spec_change, revenue_change, colour = inc, group = inc)) +
+  geom_point(alpha = 0.05) +
+  facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
+ggsave("portfolio/figs/offset-panel-mean.pdf", width = 12, height = 12)
+
 dat$strategy_year <- paste(dat$strategy, dat$year, sep = ":")
 library(lme4)
 m <- lmer(log(revenue)~
   days_change*spec_change +
   # I(days_change^2) + I(spec_change^2) +
   # poly(days_change, 2) + poly(spec_change) +
-  (1 + spec_change + days_change|strategy) + (1|strategy_year), 
+  (-1 + spec_change |strategy) + (1|strategy_year),
   data = dat, offset = log(revenue.prev))
 
-ranef(m)
 summary(m)
 library(broom)
 broom::tidy(m, conf.int = T) %>% ggplot(aes(estimate, term)) + geom_point() +
@@ -44,10 +49,41 @@ gather(re, term, estimate, -strategy) %>%
 ggsave("portfolio/figs/offset-mean-ranefs.pdf", width = 8, height = 10)
 m.aug <- augment(m)
 
-ggplot(m.aug, aes(spec_change, log(abs(.resid)), colour = days_change)) + 
-  geom_point(alpha = 0.1) +
-  facet_wrap(~strategy) + stat_smooth(se=F)
+m.aug <- mutate(m.aug, inc = ifelse(spec_change > 0, "inc", ifelse(spec_change == 0, "zero", "dec")))
+p <- ggplot(filter(m.aug, .resid < 0), aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) +
+  geom_point(alpha = 0.05) +
+  facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
+ggsave("portfolio/figs/offset-panel-down-only.pdf", width = 12, height = 12)
+p <- ggplot(m.aug, aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) +
+  geom_point(alpha = 0.05) +
+  facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
 ggsave("portfolio/figs/offset-panel.pdf", width = 12, height = 12)
+p <- ggplot(m.aug, aes(spec_change, .resid, colour = inc, group = inc)) +
+  geom_point(alpha = 0.05) +
+  facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
+ggsave("portfolio/figs/offset-panel-mean-resid.pdf", width = 12, height = 12)
+
+my_lm <- function(y, x) {
+ coef(lm(y~x))[[2]]
+}
+effs <- group_by(m.aug, strategy, inc) %>%
+  summarise(eff = my_lm(log(abs(.resid)), spec_change),
+    n = n())
+
+# x <- filter(m.aug, strategy == "B61B", inc == "inc")
+# filter(effs, strategy == "B61B")
+# plot(x$spec_change, x$.resid)
+
+filter(effs, inc != "zero", n > 30) %>% select(-n) %>%
+  tidyr::spread(inc, eff) %>%
+  mutate(x1 = 0, x2 = 1) %>%
+  ggplot(aes(x = x1, xend = x2, y = dec, yend = inc)) +
+  geom_segment(alpha = 0.5) +
+  geom_text(aes(label = strategy, x = x1, y = dec)) +
+  geom_text(aes(label = strategy, x = x2, y = inc)) +
+  geom_hline(yintercept = 0, lty = 2) +
+  xlim(-0.08, 1.08) + theme_light() + ylim(-4, 4)
+ggsave("portfolio/figs/offset-bump.pdf", height = 10, width = 6)
 
 m.aug$year <- dat$year
 ggplot(m.aug, aes(year, .resid, colour = days_change)) + 
@@ -124,3 +160,71 @@ df = data.frame("strategy"=coef.strat, "year" = coef.year, "est" =ranef(m)$strat
 
 ggplot(df, aes(year, est, group = strategy)) + geom_line() + facet_wrap(~ strategy)
 
+
+# -----------------------------------------------
+# breakpoint lmer()
+
+bp <- 0
+b1 <- function(x, bp) ifelse(x < bp, bp - x, 0)
+b2 <- function(x, bp) ifelse(x < bp, 0, x - bp)
+#Mixed effects model with break point = 4
+m <- lmer(log(revenue) ~ days_change +
+  b1(spec_change, bp):days_change +
+  b2(spec_change, bp):days_change +
+  (b1(spec_change, bp) + b2(spec_change, bp) | strategy) +
+  (1|strategy_year),
+  data = dat, offset = log(revenue.prev))
+summary(m)
+
+res <- data.frame(strategy = row.names(ranef(m)$strategy))
+res$dec <- ranef(m)$strategy[,2]
+res$inc <- ranef(m)$strategy[,3]
+res %>%
+  mutate(x1 = 0, x2 = 1) %>%
+  ggplot(aes(x = x1, xend = x2, y = -dec, yend = inc)) +
+  geom_segment(alpha = 0.5) +
+  geom_text(aes(label = strategy, x = x1, y = -dec)) +
+  geom_text(aes(label = strategy, x = x2, y = inc)) +
+  geom_hline(yintercept = 0, lty = 2, col = "red") +
+  xlim(-0.08, 1.08) + theme_light() +
+  scale_x_continuous(breaks = c(0, 1), labels = c("Decrease", "Increase"), limits = c(-0.25, 1.25)) +
+  xlab("Species diversity") + ylab("Slope")
+ggsave("portfolio/figs/offset-break-lmer-revenue-bump.pdf", width = 5, height = 10)
+m.aug <- augment(m)
+
+m.aug$spec_change <- dat$spec_change
+m.aug <- mutate(m.aug, inc = ifelse(spec_change > 0, "inc", ifelse(spec_change == 0, "zero", "dec")))
+p <- ggplot(filter(m.aug, .resid < 0), aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) +
+  geom_point(alpha = 0.05) +
+  facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
+ggsave("portfolio/figs/offset-panel-down-only.pdf", width = 12, height = 12)
+p <- ggplot(m.aug, aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) +
+  geom_point(alpha = 0.05) +
+  facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
+ggsave("portfolio/figs/offset-panel.pdf", width = 12, height = 12)
+p <- ggplot(m.aug, aes(spec_change, .resid, colour = inc, group = inc)) +
+  geom_point(alpha = 0.05) +
+  facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
+ggsave("portfolio/figs/offset-panel-mean-resid.pdf", width = 12, height = 12)
+
+m2 <- lmer(log(abs(.resid)) ~ days_change +
+  b1(spec_change, bp):days_change +
+  b2(spec_change, bp):days_change +
+  (b1(spec_change, bp) + b2(spec_change, bp) | strategy),
+  data = m.aug)
+summary(m2)
+
+res2 <- data.frame(strategy = row.names(ranef(m2)$strategy))
+res2$dec <- ranef(m2)$strategy[,2]
+res2$inc <- ranef(m2)$strategy[,3]
+res2 %>%
+  mutate(x1 = 0, x2 = 1) %>%
+  ggplot(aes(x = x1, xend = x2, y = -dec, yend = inc)) +
+  geom_segment(alpha = 0.5) +
+  geom_text(aes(label = strategy, x = x1, y = -dec)) +
+  geom_text(aes(label = strategy, x = x2, y = inc)) +
+  geom_hline(yintercept = 0, lty = 2, col = "red") +
+  xlim(-0.08, 1.08) + theme_light() +
+  scale_x_continuous(breaks = c(0, 1), labels = c("Decrease", "Increase"), limits = c(-0.25, 1.25)) +
+  xlab("Species diversity") + ylab("Slope")
+ggsave("portfolio/figs/offset-break-lmer-variance-bump.pdf", width = 5, height = 10)
