@@ -19,7 +19,7 @@ dat <- mutate(dat,
   spec_change = log(specDiv/specdiv.prev))
 
 dat <- mutate(dat, inc = ifelse(spec_change > 0, "inc", ifelse(spec_change == 0, "zero", "dec")))
-p <- ggplot(dat, aes(spec_change, revenue_change, colour = inc, group = inc)) +
+p <- ggplot(dat, aes(spec_change, revenue_change, colour = inc, group = inc)) + 
   geom_point(alpha = 0.05) +
   facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
 ggsave("portfolio/figs/offset-panel-mean.pdf", width = 12, height = 12)
@@ -30,7 +30,7 @@ m <- lmer(log(revenue)~
   days_change*spec_change +
   # I(days_change^2) + I(spec_change^2) +
   # poly(days_change, 2) + poly(spec_change) +
-  (-1 + spec_change |strategy) + (1|strategy_year),
+  (-1 + spec_change |strategy) + (1|strategy_year), 
   data = dat, offset = log(revenue.prev))
 
 summary(m)
@@ -50,15 +50,15 @@ ggsave("portfolio/figs/offset-mean-ranefs.pdf", width = 8, height = 10)
 m.aug <- augment(m)
 
 m.aug <- mutate(m.aug, inc = ifelse(spec_change > 0, "inc", ifelse(spec_change == 0, "zero", "dec")))
-p <- ggplot(filter(m.aug, .resid < 0), aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) +
+p <- ggplot(filter(m.aug, .resid < 0), aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) + 
   geom_point(alpha = 0.05) +
   facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
 ggsave("portfolio/figs/offset-panel-down-only.pdf", width = 12, height = 12)
-p <- ggplot(m.aug, aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) +
+p <- ggplot(m.aug, aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) + 
   geom_point(alpha = 0.05) +
   facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
 ggsave("portfolio/figs/offset-panel.pdf", width = 12, height = 12)
-p <- ggplot(m.aug, aes(spec_change, .resid, colour = inc, group = inc)) +
+p <- ggplot(m.aug, aes(spec_change, .resid, colour = inc, group = inc)) + 
   geom_point(alpha = 0.05) +
   facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
 ggsave("portfolio/figs/offset-panel-mean-resid.pdf", width = 12, height = 12)
@@ -66,7 +66,7 @@ ggsave("portfolio/figs/offset-panel-mean-resid.pdf", width = 12, height = 12)
 my_lm <- function(y, x) {
  coef(lm(y~x))[[2]]
 }
-effs <- group_by(m.aug, strategy, inc) %>%
+effs <- group_by(m.aug, strategy, inc) %>% 
   summarise(eff = my_lm(log(abs(.resid)), spec_change),
     n = n())
 
@@ -74,10 +74,10 @@ effs <- group_by(m.aug, strategy, inc) %>%
 # filter(effs, strategy == "B61B")
 # plot(x$spec_change, x$.resid)
 
-filter(effs, inc != "zero", n > 30) %>% select(-n) %>%
+filter(effs, inc != "zero", n > 30) %>% select(-n) %>% 
   tidyr::spread(inc, eff) %>%
   mutate(x1 = 0, x2 = 1) %>%
-  ggplot(aes(x = x1, xend = x2, y = dec, yend = inc)) +
+  ggplot(aes(x = x1, xend = x2, y = dec, yend = inc)) + 
   geom_segment(alpha = 0.5) +
   geom_text(aes(label = strategy, x = x1, y = dec)) +
   geom_text(aes(label = strategy, x = x2, y = inc)) +
@@ -165,25 +165,54 @@ ggplot(df, aes(year, est, group = strategy)) + geom_line() + facet_wrap(~ strate
 # breakpoint lmer()
 
 bp <- 0
-b1 <- function(x, bp) ifelse(x < bp, bp - x, 0)
-b2 <- function(x, bp) ifelse(x < bp, 0, x - bp)
+b1 <- function(x, bp) ifelse(x < bp, x, 0)
+b2 <- function(x, bp) ifelse(x < bp, 0, x)
 #Mixed effects model with break point = 4
-m <- lmer(log(revenue) ~ days_change +
-  b1(spec_change, bp):days_change +
-  b2(spec_change, bp):days_change +
-  (b1(spec_change, bp) + b2(spec_change, bp) | strategy) +
-  (1|strategy_year),
-  data = dat, offset = log(revenue.prev))
+m <- lmer(log(revenue) ~ #days_change + 
+  b1(spec_change, bp)*days_change + 
+  b2(spec_change, bp)*days_change + 
+  (-1 + b1(spec_change, bp) + b2(spec_change, bp) | strategy) +
+  (1|strategy_year), 
+  data = dat, offset = log(revenue.prev), REML = F)
 summary(m)
+m.b <- lmer(log(revenue) ~ 
+  spec_change*days_change + 
+  (-1 + b1(spec_change, bp) + b2(spec_change, bp) | strategy) +
+  (1|strategy_year), 
+  data = dat, offset = log(revenue.prev), REML = F)
+MuMIn::r.squaredGLMM(m)
+MuMIn::r.squaredGLMM(m.b)
+AIC(m) - AIC(m.b)
 
-res <- data.frame(strategy = row.names(ranef(m)$strategy))
-res$dec <- ranef(m)$strategy[,2]
-res$inc <- ranef(m)$strategy[,3]
-res %>%
+m <- lmer(log(revenue) ~
+  b1(spec_change, bp)*days_change + 
+  b2(spec_change, bp)*days_change + 
+  (-1 + b1(spec_change, bp) + b2(spec_change, bp) | strategy) +
+  (1|strategy_year), 
+  data = dat, offset = log(revenue.prev), REML = F)
+m.b <- lmer(log(revenue) ~ days_change +
+  b1(spec_change, bp) + 
+  b2(spec_change, bp) + 
+  (-1 + b1(spec_change, bp) + b2(spec_change, bp) | strategy) +
+  (1|strategy_year), 
+  data = dat, offset = log(revenue.prev), REML = F)
+AIC(m) - AIC(m.b)
+
+m <- lmer(log(revenue) ~
+  b1(spec_change, bp)*days_change + 
+  b2(spec_change, bp)*days_change + 
+  (-1 + b1(spec_change, bp) + b2(spec_change, bp) | strategy) +
+  (1|strategy_year), 
+  data = dat, offset = log(revenue.prev), REML = T)
+
+res <- data.frame(strategy = row.names(coef(m)$strategy))
+res$dec <- coef(m)$strategy[,"b1(spec_change, bp)"]
+res$inc <- coef(m)$strategy[,"b2(spec_change, bp)"]
+res %>% 
   mutate(x1 = 0, x2 = 1) %>%
-  ggplot(aes(x = x1, xend = x2, y = -dec, yend = inc)) +
+  ggplot(aes(x = x1, xend = x2, y = dec, yend = inc)) + 
   geom_segment(alpha = 0.5) +
-  geom_text(aes(label = strategy, x = x1, y = -dec)) +
+  geom_text(aes(label = strategy, x = x1, y = dec)) +
   geom_text(aes(label = strategy, x = x2, y = inc)) +
   geom_hline(yintercept = 0, lty = 2, col = "red") +
   xlim(-0.08, 1.08) + theme_light() +
@@ -194,37 +223,295 @@ m.aug <- augment(m)
 
 m.aug$spec_change <- dat$spec_change
 m.aug <- mutate(m.aug, inc = ifelse(spec_change > 0, "inc", ifelse(spec_change == 0, "zero", "dec")))
-p <- ggplot(filter(m.aug, .resid < 0), aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) +
+p <- ggplot(filter(m.aug, .resid < 0), aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) + 
   geom_point(alpha = 0.05) +
   facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
 ggsave("portfolio/figs/offset-panel-down-only.pdf", width = 12, height = 12)
-p <- ggplot(m.aug, aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) +
+p <- ggplot(m.aug, aes(spec_change, log(abs(.resid)), colour = inc, group = inc)) + 
   geom_point(alpha = 0.05) +
   facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
 ggsave("portfolio/figs/offset-panel.pdf", width = 12, height = 12)
-p <- ggplot(m.aug, aes(spec_change, .resid, colour = inc, group = inc)) +
+p <- ggplot(m.aug, aes(spec_change, .resid, colour = inc, group = inc)) + 
   geom_point(alpha = 0.05) +
   facet_wrap(~strategy) + geom_smooth(se=F, colour = "black", method = "lm")
 ggsave("portfolio/figs/offset-panel-mean-resid.pdf", width = 12, height = 12)
 
-m2 <- lmer(log(abs(.resid)) ~ days_change +
-  b1(spec_change, bp):days_change +
-  b2(spec_change, bp):days_change +
+m2 <- lmer(log(abs(.resid)) ~ #days_change + 
+  b1(spec_change, bp)*days_change + 
+  b2(spec_change, bp)*days_change + 
   (b1(spec_change, bp) + b2(spec_change, bp) | strategy),
-  data = m.aug)
+  data = m.aug, REML = F)
+m2.b <- lmer(log(abs(.resid)) ~ days_change + 
+  b1(spec_change, bp) + 
+  b2(spec_change, bp) + 
+  (b1(spec_change, bp) + b2(spec_change, bp) | strategy),
+  data = m.aug, REML = F)
+AIC(m2) - AIC(m2.b)
 summary(m2)
+MuMIn::r.squaredGLMM(m2)
+m2 <- lmer(log(abs(.resid)) ~
+  b1(spec_change, bp)*days_change + 
+  b2(spec_change, bp)*days_change + 
+  (b1(spec_change, bp) + b2(spec_change, bp) | strategy),
+  data = m.aug, REML = T)
 
-res2 <- data.frame(strategy = row.names(ranef(m2)$strategy))
-res2$dec <- ranef(m2)$strategy[,2]
-res2$inc <- ranef(m2)$strategy[,3]
-res2 %>%
+res2 <- data.frame(strategy = row.names(coef(m2)$strategy))
+res2$dec <- coef(m2)$strategy[,"b1(spec_change, bp)"]
+res2$inc <- coef(m2)$strategy[,"b2(spec_change, bp)"]
+res2 %>% 
   mutate(x1 = 0, x2 = 1) %>%
-  ggplot(aes(x = x1, xend = x2, y = -dec, yend = inc)) +
+  ggplot(aes(x = x1, xend = x2, y = dec, yend = inc)) + 
   geom_segment(alpha = 0.5) +
-  geom_text(aes(label = strategy, x = x1, y = -dec)) +
+  geom_text(aes(label = strategy, x = x1, y = dec)) +
   geom_text(aes(label = strategy, x = x2, y = inc)) +
   geom_hline(yintercept = 0, lty = 2, col = "red") +
   xlim(-0.08, 1.08) + theme_light() +
   scale_x_continuous(breaks = c(0, 1), labels = c("Decrease", "Increase"), limits = c(-0.25, 1.25)) +
   xlab("Species diversity") + ylab("Slope")
 ggsave("portfolio/figs/offset-break-lmer-variance-bump.pdf", width = 5, height = 10)
+
+gg <- dat %>% group_by(strategy) %>% summarise(mean_div = mean(specDiv),
+  median_div = median(specDiv))
+res99 <- res2
+res99$int <- coef(m2)$strategy[,1]
+res99 <- inner_join(res99, gg)
+ggplot(res99, aes(mean_div, int, color = grepl("S", strategy))) + geom_point() + geom_smooth(colour = "black", method = "lm")
+ggplot(res99, aes(median_div, int, color = grepl("S", strategy))) + geom_point() + geom_smooth(colour = "black", method = "lm")
+ggplot(dat, aes(specDiv)) + geom_histogram() + facet_wrap(~strategy, scales="free_y")
+
+library(scales)
+library(ggrepel)
+res <- mutate(res, mean_rev_re = (dec + inc)/2)
+res2$mean_rev_re <- NULL
+res2$dec_rev <- NULL
+res2$inc_rev <- NULL
+res3 <- rename(res, inc_rev = inc, dec_rev = dec)
+res2 <- inner_join(res2, res3)
+j <- jitter(rep(0, nrow(res2)), amount = 0.05)
+res2 %>% 
+  mutate(x1 = j, x2 = j + 1, x1_clean = 0-0.1, x2_clean = 1+0.1) %>%
+  mutate(strategy = as.character(strategy)) %>%
+  mutate(strategy1 = ifelse(inc>0.9 | inc<0.2, strategy, NA)) %>%
+  mutate(strategy0 = ifelse(dec> -0.3 | dec< -0.8, strategy, NA)) %>%
+  ggplot(aes(x = x1, xend = x2, y = dec, yend = inc)) + 
+  scale_color_gradient2(low = muted("red"), mid = "grey90", 
+    high = muted("blue"), space="Lab") +
+  geom_segment(alpha = 0.5, aes(colour = mean_rev_re)) +
+  geom_text_repel(aes(label = strategy0, x = x1, y = dec), size = 2.5, colour = "grey30") +
+  geom_text_repel(aes(label = strategy1, x = x2, y = inc), size = 2.5, colour = "grey30") +
+  geom_point(aes(x = x1, y = dec, colour = dec_rev), size = 2) +
+  geom_point(aes(x = x2, y = inc, colour = inc_rev), size = 2) +
+  geom_hline(yintercept = 0, lty = 2, col = "grey50") +
+  theme_light() +
+  scale_x_continuous(breaks = c(0, 1), labels = c("Decrease", "Increase"), 
+    limits = c(-0.4, 1.4)) +
+  xlab("Species diversity") + ylab("Slope") +
+  labs(colour = "Spp. diversity\nrevenue slope") +
+  theme(legend.position = c(0.8, 0.2))
+ggsave("portfolio/figs/offset-break-bump.pdf", width = 5, height = 9)
+
+ggplot(res2, aes(inc, inc_rev)) + geom_point()
+ggplot(res2, aes(dec, dec_rev)) + geom_point()
+ggplot(res2, aes(inc_rev - dec_rev, y = 1)) + geom_point()
+
+gg <- dat %>% group_by(strategy) %>% 
+  summarise(mean_div = mean(specDiv), nn = length(unique(p_holder)))
+
+library(viridis)
+
+res2 %>% 
+  mutate(strategy = as.character(strategy)) %>%
+  inner_join(gg) %>%
+  # ggplot(aes(mean_div, inc_rev)) + geom_point()
+  mutate(strategy1 = 
+    ifelse(inc>0.9 | inc< -2 | inc_rev > 0.4 | inc_rev < -0.6, strategy, NA)) %>%
+  mutate(strategy0 = 
+    ifelse(dec> 2 | dec< -0.8 | dec_rev > 0.4 | dec_rev < -0.6, strategy, NA)) %>%
+  ggplot(aes(x = inc_rev, xend = dec_rev, y = inc, yend = dec)) + 
+  geom_hline(yintercept = 0, lty = 2, col = "grey60") +
+  geom_vline(xintercept = 0, lty = 2, col = "grey60") +
+  geom_segment(alpha = 0.5, aes(colour = mean_div)) +
+  geom_point(aes(x = inc_rev, y = inc, size = nn), pch = 19, colour = "grey40") +
+  geom_point(aes(x = dec_rev, y = dec, size = nn), pch = 21, bg = "white",
+    colour = "grey40") +
+  geom_text(aes(label = strategy0, x = dec_rev, y = dec), nudge_y = -0.1, 
+    size = 3, colour = "grey50") +
+  geom_text(aes(label = strategy1, x = inc_rev, y = inc), nudge_y = 0.1, 
+    size = 3, colour = "grey50") +
+   scale_color_viridis() +
+  theme_light() +
+  xlab("Species diversity effect on revenue") + ylab("Species diversity effect on variability") +
+  labs(colour = "Mean species\ndiversity", size = "Permit holders") +
+  theme(panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()) +
+  xlim(-1.3, 0.8) +
+  annotate("text", x = 0.1, y = 1.9, label = "Generalize, inc. $, inc. var.", 
+    hjust = 0, size = 3) +
+  annotate("text", x = 0.1, y = -1.3, label = "Specialize, dec. $, inc. var.", 
+    hjust = 0, size = 3) +
+  annotate("text", x = -0.1, y = 1.9, label = "Generalize, dec. $, inc. var.", 
+    hjust = 1, size = 3) +
+  annotate("text", x = -0.1, y = -1.3, label = "Specialize, inc. $, inc. var.", 
+    hjust = 1, size = 3)
+ggsave("portfolio/figs/offset-break-spaghetti.pdf", width = 7.5, height = 5)
+
+p1 <- res2 %>% 
+  mutate(strategy = as.character(strategy)) %>%
+  inner_join(gg) %>%
+  mutate(strategy1 = ifelse(inc>0.9 | inc< -2, strategy, NA)) %>%
+  mutate(strategy0 = ifelse(dec> 2 | dec< -0.8, strategy, NA)) %>%
+  mutate(inc = -inc) %>%
+  ggplot(aes(x = inc_rev, y = inc)) + 
+  geom_hline(yintercept = 0, lty = 2, col = "grey60") +
+  geom_vline(xintercept = 0, lty = 2, col = "grey60") +
+  geom_point(aes(color = mean_div, size = nn)) +
+  geom_text(aes(label = strategy0, x = inc_rev, y = inc), nudge_y = 0.1, 
+    size = 3, colour = "grey50") +
+   scale_color_viridis() +
+  theme_light() +
+  xlab("Effect of generalizing on revenue") + 
+  ylab("Effect of generalizing on variability") +
+  labs(colour = "Mean sp.\ndiversity") +
+  theme(panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank())
+
+p2 <- res2 %>% 
+  mutate(strategy = as.character(strategy)) %>%
+  inner_join(gg) %>%
+  mutate(dec = dec, dec_rev = -dec_rev) %>%
+  mutate(strategy1 = ifelse(inc>0.9 | inc< -2, strategy, NA)) %>%
+  mutate(strategy0 = ifelse(dec> 2 | dec< -0.8, strategy, NA)) %>%
+  ggplot(aes(x = dec_rev, y = dec)) + 
+  geom_hline(yintercept = 0, lty = 2, col = "grey60") +
+  geom_vline(xintercept = 0, lty = 2, col = "grey60") +
+  geom_point(aes(color = mean_div, size = nn)) +
+  geom_text(aes(label = strategy1, x = dec_rev, y = dec), nudge_y = 0.1, 
+    size = 3, colour = "grey50") +
+   scale_color_viridis() +
+  theme_light() +
+  xlab("Effect of specializing on revenue") + 
+  ylab("Effect of specializing on variability") +
+  labs(colour = "Mean sp.\ndiversity") +
+  theme(panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank())
+
+pdf("portfolio/figs/offset-break-anti-spaghetti.pdf", width = 10, height = 4)
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+dev.off()
+
+p <- res2 %>% 
+  mutate(strategy = as.character(strategy)) %>%
+  inner_join(gg) %>%
+  # ggplot(aes(mean_div, inc_rev)) + geom_point()
+  mutate(strategy1 = 
+    ifelse(inc>0.9 | inc< -2 | inc_rev > 0.4 | inc_rev < -0.6, strategy, NA)) %>%
+  mutate(strategy0 = 
+    ifelse(dec> 2 | dec< -0.8 | dec_rev > 0.4 | dec_rev < -0.6, strategy, NA)) %>%
+  ggplot(aes(x = inc_rev, xend = dec_rev, y = inc, yend = dec)) + 
+  geom_hline(yintercept = 0, lty = 2, col = "grey60") +
+  geom_vline(xintercept = 0, lty = 2, col = "grey60") +
+  geom_segment(alpha = 0.5, aes(colour = mean_div)) +
+  geom_point(aes(x = inc_rev, y = inc, colour = nn), pch = 19, colour = "grey40") +
+  geom_point(aes(x = dec_rev, y = dec, colour = nn), pch = 21, bg = "white",
+    colour = "grey40") +
+  geom_text(aes(label = strategy0, x = dec_rev, y = dec), nudge_y = -0.1, 
+    size = 3, colour = "grey50") +
+  geom_text(aes(label = strategy1, x = inc_rev, y = inc), nudge_y = 0.1, 
+    size = 3, colour = "grey50") +
+   scale_color_viridis() +
+  theme_light() +
+  xlab("Species diversity effect on revenue") + ylab("Species diversity effect on variability") +
+  labs(colour = "Mean species\ndiversity", size = "Permit holders") +
+  theme(panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()) +
+  xlim(-1.3, 0.8) +
+  annotate("text", x = 0.1, y = 1.9, label = "Generalize, inc. $, inc. var.", 
+    hjust = 0, size = 3) +
+  annotate("text", x = 0.1, y = -1.3, label = "Specialize, dec. $, inc. var.", 
+    hjust = 0, size = 3) +
+  annotate("text", x = -0.1, y = 1.9, label = "Generalize, dec. $, inc. var.", 
+    hjust = 1, size = 3) +
+  annotate("text", x = -0.1, y = -1.3, label = "Specialize, inc. $, inc. var.", 
+    hjust = 1, size = 3)
+print(p)
+
+ggsave("portfolio/figs/offset-break-spaghetti-no-n.pdf", width = 7.5, height = 5)
+
+p <- res2 %>% 
+  mutate(strategy = as.character(strategy)) %>%
+  inner_join(gg) %>%
+  mutate(strategy1 = 
+    ifelse(inc>0.9 | inc< -2 | inc_rev > 0.4 | inc_rev < -0.6, strategy, NA)) %>%
+  mutate(strategy0 = 
+    ifelse(dec> 2 | dec< -0.8 | dec_rev > 0.4 | dec_rev < -0.6, strategy, NA)) %>%
+  mutate(rev_avg = (inc_rev + dec_rev)/2) %>%
+  mutate(dec = dec) %>%
+  ggplot(aes(x = rev_avg, xend = rev_avg, y = inc, yend = dec)) + 
+  geom_hline(yintercept = 0, lty = 2, col = "grey60") +
+  geom_vline(xintercept = 0, lty = 2, col = "grey60") +
+  geom_segment(alpha = 0.2) +
+  geom_point(aes(x = rev_avg, y = inc), pch = 19, colour = "#FF6848") +
+  geom_point(aes(x = rev_avg, y = dec), pch = 19, colour = "#4E94FF") +
+  geom_text(aes(label = strategy0, x = rev_avg, y = dec), nudge_y = -0.1, 
+    size = 3, colour = "grey50") +
+  geom_text(aes(label = strategy1, x = rev_avg, y = inc), nudge_y = 0.1, 
+    size = 3, colour = "grey50") +
+   scale_color_viridis() +
+  theme_light() +
+  xlab("Species diversity effect on revenue") + 
+  ylab("Species diversity effect on variability") +
+  labs(colour = "Mean species\ndiversity", size = "Permit holders") +
+  theme(panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank())# +
+  # xlim(-1.3, 0.8) +
+  # annotate("text", x = 0.1, y = 1.9, label = "Generalize, inc. $, inc. var.", 
+  #   hjust = 0, size = 3) +
+  # annotate("text", x = 0.1, y = -1.3, label = "Specialize, dec. $, inc. var.", 
+  #   hjust = 0, size = 3) +
+  # annotate("text", x = -0.1, y = 1.9, label = "Generalize, dec. $, inc. var.", 
+  #   hjust = 1, size = 3) +
+  # annotate("text", x = -0.1, y = -1.3, label = "Specialize, inc. $, inc. var.", 
+  #   hjust = 1, size = 3)
+print(p)
+
+ggsave("portfolio/figs/offset-break-spaghetti-simplified.pdf", width = 6.5, height = 4.5)
+
+p <- res2 %>% 
+  mutate(strategy = as.character(strategy)) %>%
+  inner_join(gg) %>%
+  mutate(strategy1 = 
+    ifelse(inc>0.9 | inc< -2 | inc_rev > 0.4 | inc_rev < -0.6, strategy, NA)) %>%
+  mutate(strategy0 = 
+    ifelse(dec> 2 | dec< -0.8 | dec_rev > 0.4 | dec_rev < -0.6, strategy, NA)) %>%
+  mutate(rev_avg = (inc_rev + dec_rev)/2) %>%
+  mutate(dec = dec) %>%
+  ggplot(aes(x = inc_rev, xend = dec_rev, y = inc, yend = dec)) + 
+  geom_hline(yintercept = 0, lty = 2, col = "grey60") +
+  geom_vline(xintercept = 0, lty = 2, col = "grey60") +
+  geom_segment(alpha = 0.2) +
+  geom_point(aes(x = inc_rev, y = inc), pch = 19, colour = "#FF6848") +
+  geom_point(aes(x = dec_rev, y = dec), pch = 19, colour = "#4E94FF") +
+  geom_text(aes(label = strategy0, x = dec_rev, y = dec), nudge_y = -0.1, 
+    size = 3, colour = "grey50") +
+  geom_text(aes(label = strategy1, x = inc_rev, y = inc), nudge_y = 0.1, 
+    size = 3, colour = "grey50") +
+   scale_color_viridis() +
+  theme_light() +
+  xlab("Species diversity effect on revenue") + 
+  ylab("Species diversity effect on variability") +
+  labs(colour = "Mean species\ndiversity", size = "Permit holders") +
+  theme(panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank())# +
+  # xlim(-1.3, 0.8) +
+  # annotate("text", x = 0.1, y = 1.9, label = "Generalize, inc. $, inc. var.", 
+  #   hjust = 0, size = 3) +
+  # annotate("text", x = 0.1, y = -1.3, label = "Specialize, dec. $, inc. var.", 
+  #   hjust = 0, size = 3) +
+  # annotate("text", x = -0.1, y = 1.9, label = "Generalize, dec. $, inc. var.", 
+  #   hjust = 1, size = 3) +
+  # annotate("text", x = -0.1, y = -1.3, label = "Specialize, inc. $, inc. var.", 
+  #   hjust = 1, size = 3)
+print(p)
+
+ggsave("portfolio/figs/offset-break-spaghetti-simplified2.pdf", width = 6.5, height = 4.5)
+
