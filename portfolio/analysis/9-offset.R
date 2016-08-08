@@ -355,23 +355,65 @@ res2 %>%
     hjust = 1, size = 3)
 ggsave("portfolio/figs/offset-break-spaghetti.pdf", width = 7.5, height = 5)
 
+gg <- dat %>% group_by(strategy) %>% 
+  summarise(mean_div = mean(specDiv), nn = length(unique(p_holder)))
+labels <- readr::read_csv("data/strategies-labels.csv")
+res2$str_label <- NULL
+res2 <- left_join(res2, select(labels, strategy, str_label))
+
+look_str <- function(str) {
+  x <- strsplit(str, " ")[[1]]
+  x <- sapply(x, function(xx) labels$str_label[labels$strategy == xx])
+  paste(x, collapse = ", ")
+}
+res2$str_label <- sapply(res2$strategy, function(x) look_str(x))
+res2$str_label <- gsub(" - ", " ", res2$str_label)
+
+library(gridExtra)
+library(grid)
+grid_arrange_shared_legend <- function(..., ncol = length(list(...)), nrow = 1, position = c("bottom", "right")) {
+
+	plots <- list(...)
+	position <- match.arg(position)
+	g <- ggplotGrob(plots[[1]] + theme(legend.position = position))$grobs
+	legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+	lheight <- sum(legend$height)
+	lwidth <- sum(legend$width)
+	gl <- lapply(plots, function(x) x + theme(legend.position="none"))
+	gl <- c(gl, ncol = ncol, nrow = nrow)
+
+	combined <- switch(position,
+		"bottom" = arrangeGrob(do.call(arrangeGrob, gl),
+			legend,
+			ncol = 1,
+			heights = unit.c(unit(1, "npc") - lheight, lheight)),
+		"right" = arrangeGrob(do.call(arrangeGrob, gl),
+			legend,
+			ncol = 2,
+			widths = unit.c(unit(1, "npc") - lwidth, lwidth)))
+	# grid.newpage()
+	grid.draw(combined)
+
+}
+
 p1 <- res2 %>% 
   mutate(strategy = as.character(strategy)) %>%
   inner_join(gg) %>%
-  mutate(strategy1 = ifelse(inc>0.9 | inc< -2, strategy, NA)) %>%
-  mutate(strategy0 = ifelse(dec> 2 | dec< -0.8, strategy, NA)) %>%
+  # mutate(strategy1 = ifelse(inc>0.9 | inc< -2, strategy, NA)) %>%
+  # mutate(strategy0 = ifelse(dec> 2 | dec< -0.8, strategy, NA)) %>%
+  mutate(strategy_label = ifelse(nn > 250, str_label, NA)) %>%
   mutate(inc = -inc) %>%
   ggplot(aes(x = inc_rev, y = inc)) + 
   geom_hline(yintercept = 0, lty = 2, col = "grey60") +
   geom_vline(xintercept = 0, lty = 2, col = "grey60") +
-  geom_point(aes(color = mean_div, size = nn)) +
-  geom_text(aes(label = strategy0, x = inc_rev, y = inc), nudge_y = 0.1, 
+  geom_text_repel(aes(label = strategy_label, x = inc_rev, y = inc), nudge_y = 0.05, 
     size = 3, colour = "grey50") +
    scale_color_viridis() +
+  geom_point(aes(color = mean_div, size = nn)) +
   theme_light() +
   xlab("Effect of generalizing on revenue") + 
   ylab("Effect of generalizing on variability") +
-  labs(colour = "Mean sp.\ndiversity") +
+  labs(colour = "Mean sp.\ndiversity", size = "Number of\npermits") +
   theme(panel.grid.major = element_blank(),
     panel.grid.minor = element_blank())
 
@@ -379,25 +421,27 @@ p2 <- res2 %>%
   mutate(strategy = as.character(strategy)) %>%
   inner_join(gg) %>%
   mutate(dec = dec, dec_rev = -dec_rev) %>%
+  mutate(strategy_label = ifelse(nn > 250, str_label, NA)) %>%
   mutate(strategy1 = ifelse(inc>0.9 | inc< -2, strategy, NA)) %>%
   mutate(strategy0 = ifelse(dec> 2 | dec< -0.8, strategy, NA)) %>%
   ggplot(aes(x = dec_rev, y = dec)) + 
   geom_hline(yintercept = 0, lty = 2, col = "grey60") +
   geom_vline(xintercept = 0, lty = 2, col = "grey60") +
-  geom_point(aes(color = mean_div, size = nn)) +
-  geom_text(aes(label = strategy1, x = dec_rev, y = dec), nudge_y = 0.1, 
+  geom_text_repel(aes(label = strategy_label, x = dec_rev, y = dec), nudge_y = 0.05, 
     size = 3, colour = "grey50") +
    scale_color_viridis() +
+  geom_point(aes(color = mean_div, size = nn)) +
   theme_light() +
   xlab("Effect of specializing on revenue") + 
   ylab("Effect of specializing on variability") +
-  labs(colour = "Mean sp.\ndiversity") +
+  labs(colour = "Mean sp.\ndiversity", size = "Number of\npermits") +
   theme(panel.grid.major = element_blank(),
     panel.grid.minor = element_blank())
 
 pdf("portfolio/figs/offset-break-anti-spaghetti.pdf", width = 10, height = 4)
-gridExtra::grid.arrange(p1, p2, ncol = 2)
+grid_arrange_shared_legend(p1, p2, ncol = 2, nrow = 1, position = "right")
 dev.off()
+
 
 p <- res2 %>% 
   mutate(strategy = as.character(strategy)) %>%
@@ -514,4 +558,5 @@ p <- res2 %>%
 print(p)
 
 ggsave("portfolio/figs/offset-break-spaghetti-simplified2.pdf", width = 6.5, height = 4.5)
+
 
