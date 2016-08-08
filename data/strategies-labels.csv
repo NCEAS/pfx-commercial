@@ -1,0 +1,29 @@
+strategy,description,str_label,big
+B61B,Halibut,Hal,1
+C61A,"SABLEFISH , LONGLINE, NORTHERN SOUTHEAST",Sab,
+C61B,"Sablefish, longline, statewide",Sab,
+D09,Dungeness crab ,Dun,
+G01,"Herring roe, purse seine ",Herr roe - seine,
+G34,"Herring roe, gillnet",Herr roe - gill,
+K91,King crab ,King,
+L21,"Herring, pound",Herr - pound,
+M07B,"Finfish, mechanical jig ",Fin - jig,
+M61B,"Finfish, longline, statewide",Fin - ll,
+M7HB,"Finfish, otter trawl, statewide",Fin - otter,
+M91B,"Finfish, pot gear, statewide",Fin - pot,
+Q11,Sea cucumber,Cuc,
+S01,"Salmon, purse seine, Cook Inlet and KODIAK",S - seine,
+S01A,"Salmon, purse seine, SOUTHEAST",S - seine,
+S01E,"Salmon, purse seine, PWS",S - seine,
+S01L,"Salmon, purse seine, CHIGNIK",S - seine,
+S01M,"Salmon, purse seine, ALASKA PENINSULA",S - seine,
+S03,"Salmon, drift gill net, COOK INLET, ALASKA PENINSULA, BRISTOL BAY",S - sock - drift,1
+S03A,"Salmon, drift gill net, SOUTHEAST",S - drift - SE,
+S03E,"Salmon, drift gill net, PWS",S - drift - PWS,
+S04a,"Salmon, gillnet, mostly sockeye specialists, PWS, COOK INLET, KODIAK,  ALASKA PENINSULA, BRISTOL BAY",S - sock - gill,1
+S04b,"Salmon, gillnet, norton sound and kuskokwim",S - gill,1
+S04D,"Salmon, gillnet, YAKUTAT",S - gill,
+S15B,"SALMON , POWER TROLL, STATEWIDE",S - troll,1
+T91Q,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA",Tan,
+P09,"Shrimp, pot",Shrimp,
+T09,Tanner crab ,Tan,
