@@ -12,6 +12,8 @@ Imports:
     coda,
     emdbook,
     ggplot2,
-    viridis
+    viridis,
+    gridExtra,
+    grid
 LazyData: TRUE
 RoxygenNote: 5.0.1

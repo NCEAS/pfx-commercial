@@ -14,3 +14,28 @@ theme_gg <- function(base_size = 11, base_family = "") {
     legend.title = element_text(size = rel(0.7))
   )
 }
+
+# from ggplot wiki
+grid_arrange_shared_legend <- function(..., ncol = length(list(...)),
+  nrow = 1, position = c("bottom", "right")) {
+
+  plots <- list(...)
+  position <- match.arg(position)
+  g <- ggplotGrob(plots[[1]] + theme(legend.position = position))$grobs
+  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+  lheight <- sum(legend$height)
+  lwidth <- sum(legend$width)
+  gl <- lapply(plots, function(x) x + theme(legend.position="none"))
+  gl <- c(gl, ncol = ncol, nrow = nrow)
+
+  combined <- switch(position,
+    "bottom" = gridExtra::arrangeGrob(do.call(gridExtra::arrangeGrob, gl),
+      legend,
+      ncol = 1,
+      heights =  grid::unit.c(grid::unit(1, "npc") - lheight, lheight)),
+    "right" = gridExtra::arrangeGrob(do.call(gridExtra::arrangeGrob, gl),
+      legend,
+      ncol = 2,
+      widths =  grid::unit.c(grid::unit(1, "npc") - lwidth, lwidth)))
+  grid::grid.draw(combined)
+}
