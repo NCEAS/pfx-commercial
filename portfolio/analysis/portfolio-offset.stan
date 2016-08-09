@@ -17,14 +17,16 @@ data {
   vector[N] b1_cov_i; // predictor data for random slope
   vector[N] b2_cov_i; // predictor data for random slope
   vector[N] g1_cov_i; // predictor data for random slope (sigma)
+  vector[N] g2_cov_i; // predictor data for random slope (sigma)
 
   vector[N] mean_div;
+  vector[n_strategy] mean_div_str;
 }
 parameters {
   real b0;
 
-  real b0_strategy[n_strategy];
-  real<lower=0> b0_strategy_tau;
+//  real b0_strategy[n_strategy];
+//  real<lower=0> b0_strategy_tau;
 
   real b0_str_yr[n_str_yr];
   real<lower=0> b0_str_yr_tau;
@@ -41,7 +43,9 @@ parameters {
 
   vector[K] g_k;
   vector[n_strategy] g1_strategy;
+  vector[n_strategy] g2_strategy;
   real<lower=0> g1_strategy_tau;
+  real<lower=0> g2_strategy_tau;
 
   real h1;
 }
@@ -53,21 +57,22 @@ transformed parameters {
   sigma = g0 + X_sigma_ik * g_k;
 
   for (i in 1:N) {
-    mu[i] = mu[i] + b0_strategy[strategy_i[i]] +
+    mu[i] = mu[i] + //b0_strategy[strategy_i[i]] +
             b0_str_yr[str_yr_i[i]] +
             b1_cov_i[i] * b1_strategy[strategy_i[i]] +
             b2_cov_i[i] * b2_strategy[strategy_i[i]];
 
     sigma[i] = sigma[i] +
-               g0_strategy[strategy_i[i]] + h1 * mean_div[i] +
-               g1_cov_i[i] * g1_strategy[strategy_i[i]];
+            g0_strategy[strategy_i[i]] + h1 * mean_div[i] +
+            g1_cov_i[i] * g1_strategy[strategy_i[i]] +
+            g2_cov_i[i] * g2_strategy[strategy_i[i]];
   }
 
   sigma = exp(sigma);
 }
 model {
   b0 ~ normal(0, 1);
-  b0_strategy ~ normal(0, 1);
+  //b0_strategy ~ normal(0, 1);
   //b0_strategy_tau ~ student_t(3, 0, 2);
   b0_str_yr ~ normal(0, b0_str_yr_tau);
   b0_str_yr_tau ~ student_t(3, 0, 2);
@@ -87,6 +92,22 @@ model {
   g_k ~ normal(0, 1);
   g1_strategy ~ normal(0, g1_strategy_tau);
   g1_strategy_tau ~ student_t(3, 0, 2);
+  g2_strategy ~ normal(0, g2_strategy_tau);
+  g2_strategy_tau ~ student_t(3, 0, 2);
 
   y_i ~ normal(mu, sigma);
+}
+generated quantities {
+  vector[n_strategy] coef_g0_strategy;
+  vector[n_strategy] coef_g1_strategy;
+  vector[n_strategy] coef_g2_strategy;
+  vector[n_strategy] coef_b1_strategy;
+  vector[n_strategy] coef_b2_strategy;
+  for (s in 1:n_strategy) {
+    coef_g0_strategy[s] = g0 + g0_strategy[s] + h1 * mean_div_str[s];
+    coef_g1_strategy[s] = g_k[1] + g1_strategy[s];
+    coef_g2_strategy[s] = g_k[2] + g2_strategy[s];
+    coef_b1_strategy[s] = b_j[1] + b1_strategy[s];
+    coef_b2_strategy[s] = b_j[2] + b2_strategy[s];
+  }
 }
