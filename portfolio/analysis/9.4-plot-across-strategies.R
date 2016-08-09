@@ -45,7 +45,7 @@ pl <- ggplot(g0, aes(x = strategy_mean_div, y = exp(g0.m))) +
   geom_ribbon(data = dd, aes(strategy_mean_div, y = exp(m), ymax=exp(u.5), ymin=exp(l.5)),
     alpha = 0.2) +
   geom_line(data = dd, aes(strategy_mean_div, exp(m))) +
-  geom_text_repel(aes(label = str_label), size = 2.5, colour = "grey55", alpha = 0.9, segment.color = "grey80") +
+  geom_text_repel(aes(label = str_label), size = 2.7, colour = "grey55", alpha = 0.9, segment.color = "grey80") +
   geom_point(aes(bg = (strategy_med_rev)), pch = 21, colour = "grey50") +
   scale_fill_distiller(palette = "YlOrRd") +
   coord_cartesian(ylim = c(0.2, 1.07)) + theme_gg() +
