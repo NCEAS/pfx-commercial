@@ -52,7 +52,7 @@ transformed parameters {
   sigma = g0 + X_sigma_ik * g_k;
 
   for (i in 1:N) {
-    mu[i] = mu[i]
+    mu[i] = mu[i] +
             b0_str_yr[str_yr_i[i]] +
             b1_cov_i[i] * b1_strategy[strategy_i[i]] +
             b2_cov_i[i] * b2_strategy[strategy_i[i]];
