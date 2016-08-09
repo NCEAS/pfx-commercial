@@ -95,6 +95,8 @@ for(i in 1:nrow(top_strategies)) {
   top_strategies$new.strategy[i] = paste(top_permits$new[match(lapply(lapply(top_strategies$strategy, strsplit, " "), unlist)[[i]],
   top_permits$orig)], collapse=" ")
 }
+top_strategies$new.strategy[which(top_strategies$new.strategy=="K91 K91 T91Q")] = "K91 T91Q"
+
 # join this into the data frame -- this is leaving ~ 70 strategies
 dat = left_join(dat, top_strategies) %>% select(-c(n, earn))
 dat$strategy=dat$new.strategy
