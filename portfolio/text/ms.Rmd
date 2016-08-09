@@ -1,0 +1,53 @@
+---
+title: Title here
+author: |
+  | Authors here
+date: ""
+geometry: margin=1.1in
+fontfamily: libertine
+fontsize: 12pt
+output: pdf_document
+---
+
+# Introduction
+
+# Methods
+
+# Results
+
+# Discussion
+
+# References
+
+# Figures
+
+\clearpage
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{../figs/stan-across-strategy-variability.pdf}
+\caption{Caption here}
+\label{fig:across}
+\end{center}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{../figs/stan-gg-spoke2.pdf}
+\caption{Caption here}
+\label{fig:spokes}
+\end{center}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\textwidth]{../figs/offset-break-anti-spaghetti.pdf}
+\caption{Caption here}
+\label{fig:within}
+\end{center}
+\end{figure}
+
