@@ -25,6 +25,15 @@ output: pdf_document
 
 \begin{figure}[htbp]
 \begin{center}
+\includegraphics[width=0.7\textwidth]{../figs/fig1.pdf}
+\caption{Caption here}
+\label{fig:ts}
+\end{center}
+\end{figure}
+
+
+\begin{figure}[htbp]
+\begin{center}
 \includegraphics[width=0.6\textwidth]{../figs/stan-across-strategy-variability.pdf}
 \caption{Caption here}
 \label{fig:across}
@@ -45,7 +54,7 @@ output: pdf_document
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=\textwidth]{../figs/offset-break-anti-spaghetti.pdf}
+\includegraphics[width=\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
 \caption{Caption here}
 \label{fig:within}
 \end{center}
