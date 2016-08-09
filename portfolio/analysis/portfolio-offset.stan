@@ -6,28 +6,23 @@ data {
   matrix[N,J] X_ij; // fixed covariate matrix for mean
   matrix[N,K] X_sigma_ik; // fixed covariate matrix for sigma
   vector[N] y_i; // vector to hold observations
-  vector[N] offset;
+  vector[N] offset; // revenue in the previous year
 
   int<lower=1> n_strategy;
   int<lower=1,upper=n_strategy> strategy_i[N]; // vector of IDs for strategy
 
   int<lower=1> n_str_yr;
-  int<lower=1,upper=n_str_yr> str_yr_i[N]; // vector of IDs for people
+  int<lower=1,upper=n_str_yr> str_yr_i[N]; // vector of IDs for strategy/years
 
   vector[N] b1_cov_i; // predictor data for random slope
   vector[N] b2_cov_i; // predictor data for random slope
   vector[N] g1_cov_i; // predictor data for random slope (sigma)
   vector[N] g2_cov_i; // predictor data for random slope (sigma)
 
-  vector[N] mean_div;
-  vector[n_strategy] mean_div_str;
+  vector[N] mean_div; // mean diversity per strategy (all rows)
+  vector[n_strategy] mean_div_str; // mean diversity per strategy
 }
 parameters {
-  real b0;
-
-//  real b0_strategy[n_strategy];
-//  real<lower=0> b0_strategy_tau;
-
   real b0_str_yr[n_str_yr];
   real<lower=0> b0_str_yr_tau;
 
@@ -47,17 +42,17 @@ parameters {
   real<lower=0> g1_strategy_tau;
   real<lower=0> g2_strategy_tau;
 
-  real h1;
+  real h1; // strategy-level predictor
 }
 transformed parameters {
   vector[N] mu;
   vector[N] sigma;
 
-  mu = b0 + X_ij * b_j + offset;
+  mu = X_ij * b_j + offset;
   sigma = g0 + X_sigma_ik * g_k;
 
   for (i in 1:N) {
-    mu[i] = mu[i] + //b0_strategy[strategy_i[i]] +
+    mu[i] = mu[i]
             b0_str_yr[str_yr_i[i]] +
             b1_cov_i[i] * b1_strategy[strategy_i[i]] +
             b2_cov_i[i] * b2_strategy[strategy_i[i]];
@@ -71,13 +66,10 @@ transformed parameters {
   sigma = exp(sigma);
 }
 model {
-  b0 ~ normal(0, 1);
-  //b0_strategy ~ normal(0, 1);
-  //b0_strategy_tau ~ student_t(3, 0, 2);
   b0_str_yr ~ normal(0, b0_str_yr_tau);
   b0_str_yr_tau ~ student_t(3, 0, 2);
 
-  b_j ~ normal(0, 1);
+  b_j ~ normal(0, 2);
   b1_strategy ~ normal(0, b1_strategy_tau);
   b2_strategy ~ normal(0, b2_strategy_tau);
   b1_strategy_tau ~ student_t(3, 0, 2);
@@ -87,9 +79,9 @@ model {
   g0_strategy ~ normal(0, g0_strategy_tau);
   g0_strategy_tau ~ student_t(3, 0, 2);
 
-  h1 ~ normal(0, 1);
+  h1 ~ normal(0, 2);
 
-  g_k ~ normal(0, 1);
+  g_k ~ normal(0, 2);
   g1_strategy ~ normal(0, g1_strategy_tau);
   g1_strategy_tau ~ student_t(3, 0, 2);
   g2_strategy ~ normal(0, g2_strategy_tau);
