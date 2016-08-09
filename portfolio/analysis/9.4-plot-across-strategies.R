@@ -34,18 +34,20 @@ g0$strategy_med_rev <- NULL
 g0 <- inner_join(g0, mr)
 
 pl <- ggplot(g0, aes(x = strategy_mean_div, y = exp(g0.m))) +
+
+  geom_ribbon(data = dd, aes(strategy_mean_div, y = exp(m), ymax=exp(u), ymin=exp(l)),
+    fill = "grey93") +
+  geom_ribbon(data = dd, aes(strategy_mean_div, y = exp(m), ymax=exp(u.5), ymin=exp(l.5)),
+    fill = "grey80") +
+  geom_line(data = dd, aes(strategy_mean_div, exp(m)), lwd = 0.7) +
   geom_segment(aes(y = exp(g0.l), yend = exp(g0.u), xend = strategy_mean_div),
-    lwd = 0.2, color = "grey50") +
+    lwd = 0.2, color = "grey60") +
   geom_segment(aes(y = exp(g0.l.5), yend = exp(g0.u.5), xend = strategy_mean_div),
     lwd = 0.7, color = "grey30") +
   # geom_point(aes(size = strategy_med_rev)) +
   # scale_size(range = c(0.5, 3)) +
-  geom_ribbon(data = dd, aes(strategy_mean_div, y = exp(m), ymax=exp(u), ymin=exp(l)),
-    alpha = 0.2) +
-  geom_ribbon(data = dd, aes(strategy_mean_div, y = exp(m), ymax=exp(u.5), ymin=exp(l.5)),
-    alpha = 0.2) +
-  geom_line(data = dd, aes(strategy_mean_div, exp(m))) +
-  geom_text_repel(aes(label = str_label), size = 2.7, colour = "grey55", alpha = 0.9, segment.color = "grey80") +
+
+  geom_text_repel(aes(label = str_label), size = 2.62, colour = "grey60", alpha = 1, segment.color = "grey80") +
   geom_point(aes(bg = (strategy_med_rev)), pch = 21, colour = "grey50") +
   scale_fill_distiller(palette = "YlOrRd") +
   coord_cartesian(ylim = c(0.2, 1.07)) + theme_gg() +
