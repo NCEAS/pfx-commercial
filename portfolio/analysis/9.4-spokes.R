@@ -7,7 +7,6 @@ devtools::load_all("pfxr")
 # -----------------------------------------------
 # spoke plots:
 mr <- group_by(dat, strategy) %>% summarise(strategy_med_rev = median(revenue)/1e3)
-# hist(filter(dat, strategy=="M61B")$revenue/1e6)
 b <- broom::tidy(m, conf.int = T, estimate.method = "median", conf.level = 0.5)
 md2 <- filter(b, grepl("coef_g0_strategy", term)) %>%
   mutate(strategy_id = 1:n()) %>% inner_join(md) %>% inner_join(mr)
@@ -66,13 +65,13 @@ permit_plot <- function(permit) {
 }
 
 sp <- plyr::ldply(c(
-  # "G01",
+  "G01",
   "G34",
   "K91",
-  # "T91Q",
+  "T91Q",
   "B61B",
-  # "C61B",
-  # "S01",
+  "C61B",
+  "S01",
   "S03"
   ),
   permit_plot)
@@ -89,6 +88,7 @@ sp$single_permit_clean <- factor(sp$single_permit_clean,
     "Herring roe, gillnet",
     "King crab",
     "Halibut"))
+
 pl <- ggplot(sp,
   aes(strategy_med_rev, exp(estimate), yend = exp(g0_less), xend = b0_less,
     label = str_label, colour = strategy_mean_div)) +
