@@ -167,7 +167,6 @@ ggplot(df, aes(year, est, group = strategy)) + geom_line() + facet_wrap(~ strate
 bp <- 0
 b1 <- function(x, bp) ifelse(x < bp, x, 0)
 b2 <- function(x, bp) ifelse(x < bp, 0, x)
-#Mixed effects model with break point = 4
 m <- lmer(log(revenue) ~ #days_change + 
   b1(spec_change, bp)*days_change + 
   b2(spec_change, bp)*days_change + 
