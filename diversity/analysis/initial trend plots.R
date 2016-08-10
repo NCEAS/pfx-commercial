@@ -80,6 +80,46 @@ group_by(cfec, year, taxa) %>%
 dev.off()
 
 
+# Make plot of trends in spatial diversity -- port or stat6 area
+cfec <- feather::read_feather("portfolio/data-generated/cfec.feather")
+cfec$year <- as.numeric(cfec$year)
 
+eff_area = group_by(cfec, year, p_holder, stat6) %>%
+  summarize(earn = sum(g_earn)) %>%
+  group_by(year, p_holder) %>%
+  summarize(effSpec_area = simp.div(earn))
+eff_port = group_by(cfec[cfec$port!="UNK",], year, p_holder, port) %>%
+  summarize(earn = sum(g_earn)) %>%
+  group_by(year, p_holder) %>%
+  summarize(effSpec_port = simp.div(earn))
+dat = left_join(dat, eff_area)
+dat = left_join(dat, eff_port)
+dat$effSpec_area = as.numeric(dat$effSpec_area)
+dat$effSpec_port = as.numeric(dat$effSpec_port)
 
+pdf("port plots.pdf")
+# How are resources distributed across ports?
+group_by(cfec[cfec$port!="UNK",], year, port) %>%
+  summarize(earn = sum(g_earn)) %>%
+  group_by(year) %>%
+  summarize(effSpec_port = simp.div(earn)) %>%
+  ggplot(aes(year, effSpec_port)) + geom_line() + ylab("Effective port diversity (total, ignoring people)")
 
+group_by(dat, year, strategy_permit) %>%
+  summarize(meanPort = mean(effSpec_port)) %>%
+  ggplot(aes(x = year, y = meanPort)) + geom_line() + facet_wrap(~ strategy_permit)
+dev.off()
+
+pdf("area plots.pdf")
+# How are resources distributed across area?
+group_by(cfec, year, stat6) %>%
+  summarize(earn = sum(g_earn)) %>%
+  group_by(year) %>%
+  summarize(effSpec_area = simp.div(earn)) %>%
+  ggplot(aes(year, effSpec_area)) + geom_line() + ylab("Effective area diversity (total, ignoring people)")
+
+# Look at breakdown of areas by permits/strategies
+group_by(dat, year, strategy_permit) %>%
+  summarize(meanArea = mean(effSpec_area)) %>%
+  ggplot(aes(x = year, y = meanArea)) + geom_line() + facet_wrap(~ strategy_permit, scale="free")
+dev.off()
