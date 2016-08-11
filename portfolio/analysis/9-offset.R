@@ -5,7 +5,7 @@ dat <- cullDat(diff = TRUE)
 
 # downsample for speed of testing
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.35)
+n_sample <- round(length(unique_holders)*0.30)
 set.seed(12)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
@@ -182,6 +182,24 @@ m.b <- lmer(log(revenue) ~
 MuMIn::r.squaredGLMM(m)
 MuMIn::r.squaredGLMM(m.b)
 AIC(m) - AIC(m.b)
+
+m.c <- lmer(log(revenue) ~ #days_change +
+  b1(spec_change, bp)*log_days +
+  b2(spec_change, bp)*log_days +
+  b1(spec_change, bp)*specdiv.prev +
+  b2(spec_change, bp)*specdiv.prev +
+  (-1 + b1(spec_change, bp) + b2(spec_change, bp) | strategy) +
+  (1|strategy_year),
+  data = dat, offset = log(revenue.prev), REML = F)
+summary(m.c)
+
+m.b <- lmer(log(revenue) ~
+  spec_change*days_change +
+  spec_change*specdiv.prev +
+  (-1 + spec_change + spec_change:specdiv.prev | strategy) +
+  (1|strategy_year),
+  data = dat, offset = log(revenue.prev), REML = F)
+summary(m.b)
 
 m <- lmer(log(revenue) ~
   b1(spec_change, bp)*days_change + 
