@@ -211,8 +211,12 @@ ggplot(demo, aes(speciesDiversity, effect, group = year)) + geom_line() + facet_
 
 ###This plot shows the time series of becoming increasingly diversified from 1 species on mean revenue. For S01E for example, there's huge benefits of diversifying in 1991, and huge costs in 2010. 2010 was a huge pink salmon year for PWS (with high prices specialization was good) and 1991 was the start of pink salmon stock + price collapse. Across permits, perhaps slight declines in some of these in recent years?  
   
-```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Time series of benefits of diversification by permit / strategy."}
-ggplot(df, aes(year, pred1, group = strategy, colour = as.factor(strategy))) + geom_line() + xlab("Year") + ylab("Benefit of increasing species diversity from 1 species") + facet_wrap(~ strategy, scale="free") + geom_smooth() + geom_hline(aes(yintercept=0)) + ggtitle("Effect on Mean")
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Time series of benefits of diversification by permit / strategy.", fig.height = 3}
+ggplot(df, aes(year, pred1, group = strategy, colour = as.factor(strategy))) + geom_line() + xlab("Year") + ylab("Benefit of increasing species diversity from 1 species") + ggtitle("Effect on Mean")
+```
+
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Time series of benefits of diversification split out by permit / strategy.", fig.height = 3}
+ggplot(df, aes(year, pred1, group = strategy, colour = as.factor(strategy))) + geom_line() + xlab("Year") + ylab("Benefit of increasing species diversity from 1 species") + facet_wrap(~ strategy, scale="free") + geom_smooth() + geom_hline(aes(yintercept=0))
 ```
   
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Time series of effects of diversification on mean and CV by permit."}
@@ -357,32 +361,45 @@ group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], ye
   ylab("Revenue (millions) ")
 ```
   
-```{r, fig.cap="Inflation adjusted prices / species by area, relative to 2002 (the year corresponding to the lowest average prices).", fig.pos="placeHere", echo=FALSE}
-group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, area) %>%
-  summarize(p = mean(g_price)) %>% 
-  group_by(spec, area) %>% 
+```{r, fig.cap="Inflation adjusted prices / species by area, relative to 2002 (the year corresponding to the lowest average prices).", fig.pos="placeHere", echo=FALSE, fig.height = 3.5}
+g = group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, area) %>%
+  summarize(p = mean(g_price))
+p1 = group_by(g, spec, area) %>% 
   mutate(p = p/p[which(year==2002)]) %>% 
   group_by(year, area) %>%
   ggplot(aes(year, log(p), group=spec, color = spec)) + geom_line() + facet_wrap(~area) +
-  ylab("Ln avg price relative to 2002")
+  ylab("Ln avg price relative to 2002") + ggtitle("Synchrony in prices: relative change")
+p1
+```
+  
+```{r, fig.cap="Percent change (log-difference) in inflation adjusted prices / species by area", fig.pos="placeHere", echo=FALSE, fig.height = 3.5}
+g = group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, area) %>%
+  summarize(p = mean(g_price))
+# do log-diff of prices -- get price year before
+g$p_t1 = g$p[match(paste(g$year, g$spec, g$area), 
+  paste(g$year+1, g$spec, g$area))]
+p2 = group_by(g, spec, area) %>% 
+  ggplot(aes(year, log(p/p_t1), group=spec, color = spec)) + geom_line() + facet_wrap(~area) +
+  ylab("Ln price (t/t-1)") + ggtitle("Synchrony in prices: percent change") 
+p2
 ```
 
-```{r, fig.cap="Trends in revenue and variability across people", fig.pos="placeHere", echo=FALSE}
+```{r, fig.cap="Trends in revenue and variability across people", fig.pos="placeHere", echo=FALSE, fig.height = 3.5}
 p2 = group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], p_holder, year, p_fshy) %>%
   summarize(gearn = sum(g_earn)) %>%
   group_by(year, p_fshy) %>%
   summarize(med = median(gearn), low = quantile(gearn, 0.25),
     upp = quantile(gearn,0.75)) %>%
   ggplot(aes(year, log(med))) + geom_line() + facet_wrap(~p_fshy, scale="free") + 
-  geom_ribbon(aes(ymin= log(low), ymax= log(upp)), alpha=0.4) + ylab("Ln quartiles of revenue (across people)")
+  geom_ribbon(aes(ymin= log(low), ymax= log(upp)), alpha=0.4) + ylab("Ln quartiles of revenue (across people)") + ggtitle("Trends in revenue")
 print(p2)
 ```
 
 Revenue is going up since 2000 -- but each permit holder is fishing more (more days, more total pounds) and the trend in weight is faster than the trend in price.  
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.height = 3.5, fig.cap="Trends in average landed weight per person", fig.pos="placeHere"}
 group_by(cfec, p_fshy, year, p_holder) %>% 
   summarize(meanW = mean(g_pounds/2000, na.rm=T)) %>% 
   group_by(p_fshy, year) %>% 
   summarize(meanW = mean(meanW, na.rm=T)) %>% 
-  ggplot(aes(year, meanW)) + geom_line() + facet_wrap(~ p_fshy, scale="free") + ylab("Mean total tons per person") + xlab("Year")
+  ggplot(aes(year, meanW)) + geom_line() + facet_wrap(~ p_fshy, scale="free") + ylab("Mean total tons per person") + xlab("Year") + ggtitle("Trends in landed weight")
 ```
