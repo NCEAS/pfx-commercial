@@ -25,12 +25,23 @@ output: pdf_document
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{../figs/fig1.pdf}
+\includegraphics[width=0.7\textwidth]{../figs/fig1-jk.pdf}
 \caption{Caption here}
 \label{fig:ts}
 \end{center}
 \end{figure}
 
+\clearpage
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../figs/stan-gg-spoke2.pdf}
+\caption{Caption here}
+\label{fig:spokes}
+\end{center}
+\end{figure}
+
+\clearpage
 
 \begin{figure}[htbp]
 \begin{center}
@@ -40,15 +51,7 @@ output: pdf_document
 \end{center}
 \end{figure}
 
-\clearpage
 
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{../figs/stan-gg-spoke2.pdf}
-\caption{Caption here}
-\label{fig:spokes}
-\end{center}
-\end{figure}
 
 \clearpage
 
