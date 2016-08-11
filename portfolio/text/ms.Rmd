@@ -35,7 +35,7 @@ output: pdf_document
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{../figs/stan-gg-spoke2.pdf}
+\includegraphics[width=0.9\textwidth]{../figs/stan-gg-spoke2.pdf}
 \caption{Caption here}
 \label{fig:spokes}
 \end{center}
@@ -45,7 +45,7 @@ output: pdf_document
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{../figs/stan-across-strategy-variability.pdf}
+\includegraphics[width=0.7\textwidth]{../figs/stan-across-strategy-variability.pdf}
 \caption{Caption here}
 \label{fig:across}
 \end{center}
@@ -57,7 +57,7 @@ output: pdf_document
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
+\includegraphics[width=1.1\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
 \caption{Caption here}
 \label{fig:within}
 \end{center}
