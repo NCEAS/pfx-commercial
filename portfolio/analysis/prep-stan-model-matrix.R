@@ -6,8 +6,8 @@ if (!exists("mm") | !exists("dat") | !exists("md")) {
 
   # downsample for fast testing
   unique_holders <- unique(dat$p_holder)
-  n_sample <- round(length(unique_holders)*0.50)
-  set.seed(1)
+  n_sample <- round(length(unique_holders)*0.5)
+  set.seed(121)
   dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
   nrow(dat)
 
@@ -44,7 +44,7 @@ if (!exists("mm") | !exists("dat") | !exists("md")) {
   look_str <- function(str) {
     x <- strsplit(str, " ")[[1]]
     x <- sapply(x, function(xx) labels$str_label[labels$strategy == xx])
-    paste(x, collapse = ", ")
+    paste(x, collapse = " + ")
   }
 
   md$str_label <- sapply(md$strategy, function(x) look_str(x))

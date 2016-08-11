@@ -1,8 +1,8 @@
 library(dplyr)
 library(ggplot2)
 library(viridis)
+library(ggrepel)
 source("portfolio/analysis/prep-stan-model-matrix.R")
-source("portfolio/analysis/grid_arrange_shared_legend.R")
 load("portfolio/data-generated/m.rda")
 devtools::load_all("pfxr")
 
@@ -27,34 +27,44 @@ ns <- dat %>% group_by(strategy) %>%
 res <- inner_join(res, ns)
 
 p1 <- res %>%
-  mutate(strategy_label = ifelse(nn > 250, str_label, NA)) %>%
-  mutate(inc = -inc) %>%
+  mutate(strategy_label = ifelse(nn > 100, str_label, NA)) %>%
+  mutate(inc = inc) %>%
   ggplot(aes(x = inc_rev, y = inc)) +
-  geom_hline(yintercept = 0, lty = 2, col = "grey60") +
-  geom_vline(xintercept = 0, lty = 2, col = "grey60") +
-  geom_text_repel(aes(label = strategy_label, x = inc_rev, y = inc), nudge_y = 0.05,
-    size = 3, colour = "grey50") +
-  scale_color_viridis() +
+  geom_hline(yintercept = 0, lty = 2, col = "grey65") +
+  geom_vline(xintercept = 0, lty = 2, col = "grey65") +
+  geom_text_repel(aes(label = strategy_label, x = inc_rev, y = inc),
+    size = 2.8, colour = "grey60", segment.color = "grey80",
+    point.padding = unit(0.3, "lines"), max.iter = 6e3, segment.size = 0.3) +
   geom_point(aes(color = strategy_mean_div, size = nn)) +
-  theme_gg() +
   xlab("Effect of generalizing on revenue") +
   ylab("Effect of generalizing on variability") +
-  labs(colour = "Mean sp.\ndiversity", size = "Number of\npermits")
+  scale_color_viridis() +
+  theme_gg() +
+  guides(
+    colour = guide_legend(override.aes = list(size=3.5), order = 1),
+    size = guide_legend(order = 2, override.aes = list(pch = 21))) +
+  annotate("text", x = min(res$inc_rev), y = max(res$inc), label = "A",
+    fontface = "bold", size = 5) +
+  labs(colour = "Mean sp.\ndiversity", size = "Number of\npermits") +
+  theme(legend.title = element_text(size = rel(0.85)))
 
 p2 <- res %>%
-  mutate(dec = dec, dec_rev = -dec_rev) %>%
-  mutate(strategy_label = ifelse(nn > 250, str_label, NA)) %>%
+  mutate(dec = -dec, dec_rev = -dec_rev) %>%
+  mutate(strategy_label = ifelse(nn > 100, str_label, NA)) %>%
   ggplot(aes(x = dec_rev, y = dec)) +
-  geom_hline(yintercept = 0, lty = 2, col = "grey60") +
-  geom_vline(xintercept = 0, lty = 2, col = "grey60") +
-  geom_text_repel(aes(label = strategy_label, x = dec_rev, y = dec), nudge_y = 0.05,
-    size = 3, colour = "grey50") +
-  scale_color_viridis() +
+  geom_hline(yintercept = 0, lty = 2, col = "grey65") +
+  geom_vline(xintercept = 0, lty = 2, col = "grey65") +
+  geom_text_repel(aes(label = strategy_label, x = dec_rev, y = dec),
+    size = 2.8, colour = "grey60", segment.color = "grey80",
+    point.padding = unit(0.3, "lines"), max.iter = 6e3, segment.size = 0.3) +
   geom_point(aes(color = strategy_mean_div, size = nn)) +
-  theme_gg() +
   xlab("Effect of specializing on revenue") +
   ylab("Effect of specializing on variability") +
-  labs(colour = "Mean sp.\ndiversity", size = "Number of\npermits")
+  scale_color_viridis() +
+  annotate("text", x = min(res$inc_rev), y = max(res$inc), label = "B",
+    fontface = "bold", size = 5) +
+  theme_gg()
+
 
 pdf("portfolio/figs/stan-offset-break-anti-spaghetti.pdf", width = 10, height = 4)
 grid_arrange_shared_legend(p1, p2, ncol = 2, nrow = 1, position = "right")

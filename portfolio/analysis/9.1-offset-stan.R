@@ -22,7 +22,7 @@ standat <- list(
   str_yr_i = dat$str_yr_id,
 
   b1_cov_i = b1(dat$spec_change),
-  b2_cov_i = b2(dat$days_change),
+  b2_cov_i = b2(dat$spec_change),
   g1_cov_i = b1(dat$spec_change),
   g2_cov_i = b2(dat$spec_change),
 
@@ -61,8 +61,9 @@ init_fun <- function() {
 }
 
 m <- stan("portfolio/analysis/portfolio-offset.stan",
-  data = standat, iter = 90, chains = 4,
-  pars = c("mu", "sigma", "b0_str_yr"), include = FALSE, init = init_fun)
+  data = standat, iter = 400, chains = 4,
+  pars = c("mu", "sigma", "b0_str_yr"), include = FALSE) #, init = init_fun)
+save(m, file = "portfolio/data-generated/m.rda")
 b <- broom::tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
 filter(b, rhat > 1.15)
 filter(b, ess < 40)

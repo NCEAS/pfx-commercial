@@ -1,5 +1,6 @@
 library(dplyr)
 library(ggplot2)
+library(rstan)
 
 source("portfolio/analysis/prep-stan-model-matrix.R")
 
@@ -9,13 +10,13 @@ load("portfolio/data-generated/m.rda")
 b <- broom::tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
 filter(b, rhat > 1.1)
 filter(b, ess < 100)
-filter(b, grepl("^h1", term))
-filter(b, grepl("^b0", term))
-filter(b, grepl("^g0", term))
-filter(b, grepl("^g_k", term))
+# filter(b, grepl("^h1", term))
+# filter(b, grepl("^b0", term))
+# filter(b, grepl("^g0", term))
+# filter(b, grepl("^g_k", term))
 filter(b, grepl("^b_j", term))
-filter(b, grepl("*_tau$", term))
-filter(b, grepl("^coef_*", term)) %>% select(rhat, ess)
+# filter(b, grepl("*_tau$", term))
+# filter(b, grepl("^coef_*", term)) %>% select(rhat, ess)
 
 # check mixing:
 pdf("portfolio/figs/stan-traces.pdf", width = 10, height = 8)
@@ -25,7 +26,7 @@ traceplot(m, pars = b$term[grepl("^b2_strategy\\[", b$term)], inc_warmup = F)
 traceplot(m, pars = b$term[grepl("^g1_strategy\\[", b$term)], inc_warmup = F)
 traceplot(m, pars = b$term[grepl("^g2_strategy\\[", b$term)], inc_warmup = F)
 traceplot(m, pars = b$term[grepl("^g0_strategy\\[", b$term)], inc_warmup = F)
-traceplot(m, pars = b$term[grepl("^g_k|^b_j|^b0$|^g0$", b$term)], inc_warmup = F)
+traceplot(m, pars = b$term[grepl("^g_k|^b_j|^g0$|^h1$", b$term)], inc_warmup = F)
 dev.off()
 
 # ----------------------------------------
@@ -59,7 +60,7 @@ tau_samples <- function(p) {
   hist(extract(m)[[p]], xlim = c(0, 5), main = p)
   t_prior()
 }
-normal_prior <- function(mu = 0, sigma=1) {
+normal_prior <- function(mu = 0, sigma=2) {
   x <- seq(-5, 5, length.out = 100)
   par(new = T)
   dens <- dnorm(x, mu, sigma)
@@ -80,8 +81,8 @@ par(mfrow = c(3, 4))
 ignore <- b$term[c(grep("b_j\\[", b$term), grep("g_k\\[", b$term))] %>%
   sapply(beta_samples)
 
-hist(extract(m)$b0, xlim = c(-5, 5))
-normal_prior(0, 1)
+# hist(extract(m)$b0, xlim = c(-5, 5))
+# normal_prior(0, 2)
 
 hist(extract(m)$g0, xlim = c(-5, 5))
 normal_prior(0, 2)

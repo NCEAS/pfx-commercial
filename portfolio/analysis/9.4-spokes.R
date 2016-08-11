@@ -80,30 +80,62 @@ library(ggrepel)
 
 labs <- data.frame(single_permit = c("S03", "G34", "K91", "B61B"),
   single_permit_clean =
-    c("Salmon, drift gillnet", "Herring roe, gillnet", "King crab", "Halibut"))
+    c("Salmon, drift gillnet", "bold(B)~Herring~roe~gillnet", "King crab", "bold(A)~Halibut"))
 sp <- inner_join(sp, labs)
 sp$single_permit_clean <- factor(sp$single_permit_clean,
   levels =  c(
+    "bold(A)~Halibut",
     "Salmon, drift gillnet",
-    "Herring roe, gillnet",
-    "King crab",
-    "Halibut"))
+    "bold(B)~Herring~roe~gillnet",
+    "King crab"
+    ))
+ns <- dat %>% group_by(strategy) %>%
+  summarise(nn = length(unique(p_holder)))
+sp <- inner_join(sp, ns)
 
-pl <- ggplot(sp,
+let <- data_frame(x = rep(min(sp$strategy_med_rev[sp$single_permit == "B61B"]), 2),
+  y = rep(.7, 2),
+  single_permit_clean = unique(sp$single_permit_clean)[c(3, 1)],
+  labs=LETTERS[1:2])
+
+pl <- filter(sp, !single_permit %in% c("S03", "K91")) %>%
+  mutate(str_label = ifelse(nn > 5, str_label, NA)) %>%
+  ggplot(
   aes(strategy_med_rev, exp(estimate), yend = exp(g0_less), xend = b0_less,
-    label = str_label, colour = strategy_mean_div)) +
+    label = str_label, colour = as.factor(n_permits))) +
   geom_segment(aes(x = strategy_med_rev, xend = strategy_med_rev,
-    y = exp(conf.low), yend = exp(conf.high)), alpha = 0.6, colour = "grey50") +
-  # geom_point() +
-  geom_segment() +
-  geom_text(size = 3) +
-  facet_wrap(~single_permit_clean, scales = "free") +
+    y = exp(conf.low), yend = exp(conf.high)), alpha = 0.5, size = 0.3,
+    colour = "grey60") +
+  geom_segment(colour = "grey70", alpha = 0.6, size = 0.5) +
+  geom_point(aes(size = nn)) +
+  geom_text_repel(size = 2.7,
+    point.padding = unit(0.15, "lines"), max.iter = 9e3, segment.size = 0,
+    box.padding = unit(0.15, "lines"), nudge_y = -0.03,
+    # label.r = unit(0, "lines"), label.size = 0.15, fill = "#FFFFFF40",
+    colour = "grey20") +
+  # geom_text(size = 2.9, colour = "grey20", vjust = "inward", hjust = "inward") +
+  facet_wrap(~single_permit_clean, scales = "free", labeller=label_parsed) +
   theme_gg() +
   labs(x = "Median revenue", y = "Estimated revenue variability",
-    colour = "Mean sp.\ndiversity") +
-  scale_color_viridis() +
+    colour = "Number of\npermits",
+    size = "Permit\nholders") +
+  # scale_color_viridis() +
+  scale_size_continuous() +
+  # scale_fill_viridis(guide = FALSE) +
+  # scale_colour_manual(values = gg_color_hue(3, l = 65)) +
+  scale_colour_manual(values = RColorBrewer::brewer.pal(4, "Blues")[2:4]) +
+  # scale_color_brewer(palette = "YlGnBu") +
   # theme(legend.position = "right") +
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1)) +
-  scale_x_continuous(expand = c(.2, .2))
+  theme(
+# legend.justification = c(1, 1), legend.position = c(1, 1),
+    legend.title = element_text(size = rel(0.75)),
+    strip.text.x = element_text(hjust = 0)) +
+  scale_x_continuous(expand = c(0.05, 0.07)) +
+  guides(
+    colour = guide_legend(override.aes = list(size=3.5), order = 1),
+    size = guide_legend(order = 2, override.aes = list(pch = 21)))
+  # geom_ann("text", data = let, aes(x, y, label = labs,
+    # yend = NULL, xend = NULL, colour = NULL), size = 5)
 # print(pl)
-ggsave("portfolio/figs/stan-gg-spoke2.pdf", width = 7, height = 6)
+# print(pl)
+ggsave("portfolio/figs/stan-gg-spoke2.pdf", width = 7, height = 3)
