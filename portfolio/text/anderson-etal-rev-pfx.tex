@@ -1,0 +1,97 @@
+\documentclass[12pt,english]{article}
+\usepackage{geometry}
+\geometry{verbose, letterpaper, tmargin = 2.54cm, bmargin = 2.54cm,
+  lmargin = 2.54cm, rmargin = 2.54cm}
+\geometry{letterpaper}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabu} % for spacing between rows in longtable
+\usepackage{titlesec}
+\usepackage{url}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{commath} % for \abs{}
+
+\usepackage{lineno}
+\usepackage{xcolor}
+\renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
+\modulolinenumbers[2]
+
+% Linux Libertine:
+\usepackage{textcomp}
+\usepackage[sb]{libertine}
+\usepackage[varqu,varl]{inconsolata}% sans serif typewriter
+\usepackage[libertine,bigdelims,vvarbb]{newtxmath} % bb from STIX
+\usepackage[cal=boondoxo]{mathalfa} % mathcal
+\useosf % osf for text, not math
+\usepackage[supstfm=libertinesups,%
+  supscaled=1.2,%
+  raised=-.13em]{superiors}
+
+\textheight 22.0cm
+
+\usepackage[round,sectionbib]{natbib}
+\bibpunct{(}{)}{;}{a}{}{;}
+
+% Fix line numbering and align environment
+% http://phaseportrait.blogspot.ca/2007/08/lineno-and-amsmath-compatibility.html
+\newcommand*\patchAmsMathEnvironmentForLineno[1]{%
+  \expandafter\let\csname old#1\expandafter\endcsname\csname #1\endcsname
+  \expandafter\let\csname oldend#1\expandafter\endcsname\csname end#1\endcsname
+  \renewenvironment{#1}%
+     {\linenomath\csname old#1\endcsname}%
+     {\csname oldend#1\endcsname\endlinenomath}}%
+\newcommand*\patchBothAmsMathEnvironmentsForLineno[1]{%
+  \patchAmsMathEnvironmentForLineno{#1}%
+  \patchAmsMathEnvironmentForLineno{#1*}}%
+\AtBeginDocument{%
+\patchBothAmsMathEnvironmentsForLineno{equation}%
+\patchBothAmsMathEnvironmentsForLineno{align}%
+\patchBothAmsMathEnvironmentsForLineno{flalign}%
+\patchBothAmsMathEnvironmentsForLineno{alignat}%
+\patchBothAmsMathEnvironmentsForLineno{gather}%
+\patchBothAmsMathEnvironmentsForLineno{multline}%
+}
+
+\title{Benefits and costs of income diversification for 
+  Alaskan fishermen
+\ldots}
+\author{
+Sean C. Anderson, 
+\ldots}
+\date{}
+
+% remove numbers in front of sections:
+\makeatletter
+\renewcommand\@seccntformat[1]{}
+\makeatother
+
+\begin{document}
+% \begin{flushleft}
+
+\maketitle
+
+\setlength{\parindent}{0.9cm}
+\setlength\parskip{0in}
+
+\vspace{-1cm}
+
+%\input{../analysis/values} % R output
+
+\thispagestyle{empty}
+
+\linenumbers
+
+
+\begin{spacing}{1.4}
+\input{ms}
+
+\end{spacing}
+% \end{flushleft}
+\end{document}

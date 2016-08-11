@@ -3,15 +3,110 @@
 \geometry{verbose, letterpaper, tmargin = 2.54cm, bmargin = 2.54cm,
   lmargin = 2.54cm, rmargin = 2.54cm}
 \geometry{letterpaper}
+\usepackage{graphicx}
+\usepackage{amssymb}
 \usepackage{amsmath}
-\usepackage{fixltx2e}
+\usepackage{amsfonts}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{mathtools}
+\usepackage{bm}
+\usepackage{lineno}
+\usepackage{xcolor}
+\renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
+\modulolinenumbers[2]
+
+% Linux Libertine:
+\usepackage{textcomp}
+\usepackage[sb]{libertine}
+\usepackage[varqu,varl]{inconsolata}% sans serif typewriter
+\usepackage[libertine,bigdelims,vvarbb]{newtxmath} % bb from STIX
+\usepackage[cal=boondoxo]{mathalfa} % mathcal
+%\useosf % osf for text, not math
+\usepackage[supstfm=libertinesups,%
+  supscaled=1.2,%
+  raised=-.13em]{superiors}
+
+\mathchardef\mhyphen="2D % math hyphen
+
+\textheight 22.0cm
+
+\usepackage[round,sectionbib]{natbib}
+\bibpunct{(}{)}{;}{a}{}{;}
+
+\setlength\parskip{0.10in}
+\setlength\parindent{0in}
+
+% Fix line numbering and align environment
+% http://phaseportrait.blogspot.ca/2007/08/lineno-and-amsmath-compatibility.html
+\newcommand*\patchAmsMathEnvironmentForLineno[1]{%
+  \expandafter\let\csname old#1\expandafter\endcsname\csname #1\endcsname
+  \expandafter\let\csname oldend#1\expandafter\endcsname\csname end#1\endcsname
+  \renewenvironment{#1}%
+     {\linenomath\csname old#1\endcsname}%
+     {\csname oldend#1\endcsname\endlinenomath}}%
+\newcommand*\patchBothAmsMathEnvironmentsForLineno[1]{%
+  \patchAmsMathEnvironmentForLineno{#1}%
+  \patchAmsMathEnvironmentForLineno{#1*}}%
+\AtBeginDocument{%
+\patchBothAmsMathEnvironmentsForLineno{equation}%
+\patchBothAmsMathEnvironmentsForLineno{align}%
+\patchBothAmsMathEnvironmentsForLineno{flalign}%
+\patchBothAmsMathEnvironmentsForLineno{alignat}%
+\patchBothAmsMathEnvironmentsForLineno{gather}%
+\patchBothAmsMathEnvironmentsForLineno{multline}%
+}
+
+% remove numbers in front of sections:
+\makeatletter
+\renewcommand\@seccntformat[1]{}
+\makeatother
+
+\title{Supporting Information}
+
+\author{
+}
+\date{}
 
 \begin{document}
 
-\section{Log-difference model}
+\maketitle
 
-The log-difference model has several pros and cons over the undifferenced
-model. Negatives are that it uses a smaller subset of the data; positives are
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+
+Hierarchical model
+
+\citep{kasperski2013}
+
+\begin{align*}
+\mathrm{Pr}(\nu_i < 10) &\sim \mathrm{Beta}(A_i, B_i)\\
+\mu_i &= \mathrm{logit}^{-1}(\alpha
+  + \alpha^\mathrm{class}_{j[i]}
+  + \alpha^\mathrm{order}_{k[i]}
+  + \alpha^\mathrm{species}_{l[i]}
+  + \bm{X_i} \bm{\beta}),
+  \: \\
+  &\quad \, \text{for } i = 1, \dots, 609\\
+A_i &= \phi_\mathrm{disp} \mu_i\\
+B_i &= \phi_\mathrm{disp} (1 - \mu_i)\\
+\alpha^\mathrm{class}_j &\sim
+  \mathrm{Normal}(0, \sigma^2_{\alpha \; \mathrm{class}}),
+  \: \text{for } j = 1, \dots, 6\\
+\alpha^\mathrm{order}_k &\sim
+  \mathrm{Normal}(0, \sigma^2_{\alpha \; \mathrm{order}}),
+  \: \text{for } k = 1, \dots, 38\\
+\alpha^\mathrm{species}_l &\sim
+  \mathrm{Normal}(0, \sigma^2_{\alpha \; \mathrm{species}}),
+  \: \text{for } l = 1, \dots, 301,
+\end{align*}
+
+Negatives are that it uses a smaller subset of the data; 
+
+positives are
 that it doesn't require estimating people-specific random effects (n = 3000+)
 and removes possible time effects. The basic regression model is 
 
@@ -73,5 +168,18 @@ variable \% change in revenue than others, similar to some stocks having higher
 variability in returns). I was interpreting the random slope $\gamma_{ 1,j }$
 as the effect of within-strategy diversification; in other words, the effect
 of increases in species diversification varied among different strategies. 
+
+\bibliographystyle{apalike}
+\bibliography{refs}
+
+\clearpage
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=\textwidth]{../figs/stan-str-posteriors-dot.pdf}
+\caption{Caption here}
+\label{fig:ts}
+\end{center}
+\end{figure}
 
 \end{document}

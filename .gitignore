@@ -30,6 +30,11 @@ portfolio/data-generated/strategies.csv
 *.fdb_latexmk
 
 *.fls
+*.bbl
+*.blg
+portfolio/text/ms.md
+portfolio/text/ms.tex
+*.synctex.*
 
 *.log
 
