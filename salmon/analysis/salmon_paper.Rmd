@@ -183,7 +183,7 @@ glmmTMB(log(revenue) ~ specDiv.change + specDiv.change:specdiv.prev +
 
 mu.mod = glmmTMB(log(revenue) ~ specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2) + days.change + (1+days.change|strategy_permit) + (-1+specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2)|year_permit), offset = log(revenue.prev), dat.salmon)
 
-cv.mod = glmmTMB(log(abs(residuals(mu.mod))) ~ specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2) + days.change + (1+days.change|strategy_permit) + (-1+specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2)|year_permit), offset = log(revenue.prev), dat.salmon)
+cv.mod = glmmTMB(log(abs(residuals(mu.mod))) ~ specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2) + days.change + (1+days.change|strategy_permit) + (-1+specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2)|year_permit), dat.salmon)
 # to ask whether benefit of diversificaiton is changing via strategy, we want to summarize (1) direction of 
 # benefit (e.g. is the effect negative or positive), and (2) the magnitude (how steep / shallow it is). With the
 # quadratic model, 
@@ -212,19 +212,22 @@ pdf("Salmon_residuals.pdf")
 dat.salmon$mu.resid = residuals(mu.mod)
 dat.salmon$mu.fitted = fitted(mu.mod)
 
-ggplot(dat.salmon, aes(mu.fitted, mu.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Fitted") + ylab("Residuals") + ggtitle("Mean model")
-ggplot(dat.salmon, aes(specDiv.change, mu.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
-ggplot(dat.salmon, aes(specdiv.prev, mu.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
-ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), mu.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Average revenue") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(mu.fitted, mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Fitted") + ylab("Residuals") + ggtitle("Mean model")
+ggplot(dat.salmon, aes(specDiv.change, mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specdiv.prev, mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Average revenue") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specDiv.change, log(abs(mu.resid)), group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Ln abs(residuals)") + ggtitle("Mean model")
+ggplot(dat.salmon, aes(specdiv.prev, log(abs(mu.resid)), group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Ln abs(residuals)") + ggtitle("Mean model")
+ggplot(dat.salmon, aes(specdiv.prev, log(abs(mu.resid)), group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Ln abs(residuals)") + ggtitle("Mean model")
 
 # Residuals for CV model
 dat.salmon$cv.resid = residuals(cv.mod)
 dat.salmon$cv.fitted = fitted(cv.mod)
 
-ggplot(dat.salmon, aes(cv.fitted, cv.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Fitted") + ylab("Residuals") + ggtitle("CV model")
-ggplot(dat.salmon, aes(specDiv.change, cv.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
-ggplot(dat.salmon, aes(specdiv.prev, cv.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
-ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), cv.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Average revenue") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(cv.fitted, cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Fitted") + ylab("Residuals") + ggtitle("CV model")
+ggplot(dat.salmon, aes(specDiv.change, cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specdiv.prev, cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Average revenue") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
 dev.off()
 ```
 
