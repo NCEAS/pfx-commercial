@@ -1,11 +1,12 @@
 ---
 title: "Diversification of salmon fishermen within strategies (permits)"
-author: ""
-date: ""
+author: ''
+date: ''
 output:
   pdf_document:
     fig_caption: yes
   html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
@@ -51,6 +52,8 @@ Key things to look at:
 \break  
   
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
+revenueThreshold = 10000
+
 dat.annual = readRDS(file="../../portfolio/data-generated/cfec-annual-for-modeling.rds")
 
 # single permit holders, salmon permits
@@ -73,7 +76,7 @@ agg.annual = group_by(dat.annual, strategy_permit, year) %>%
     upp = quantile(revenue,0.75))
 
 dat.diff = readRDS(file="../../portfolio/data-generated/cfec-diff-for-modeling.rds")
-dat.diff = dat.diff[which(dat.diff$revenue >= 5000 & dat.diff$revenue.prev >= 5000), ]
+dat.diff = dat.diff[which(dat.diff$revenue >= revenueThreshold & dat.diff$revenue.prev >= revenueThreshold), ]
 dat.diff = dat.diff[dat.diff$strategy_permit%in%c("S01A","S01E","S01K","S01L","S01M",
   "S03A","S03E","S03H","S03M","S03T","S04D","S04H","S04K","S04M","S04T"),]
 
@@ -202,6 +205,29 @@ demo = expand.grid("speciesDiversity" = seq(1,4,length.out=100), "year" = 1986:2
 demo = left_join(demo, df.s01e)
 demo$effect = demo$a * (demo$speciesDiversity^2) + demo$b * (demo$speciesDiversity) + demo$c
 ```
+
+```{r, echo = FALSE}
+pdf("Salmon_residuals.pdf")
+# Residuals for mean model
+dat.salmon$mu.resid = residuals(mu.mod)
+dat.salmon$mu.fitted = fitted(mu.mod)
+
+ggplot(dat.salmon, aes(mu.fitted, mu.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Fitted") + ylab("Residuals") + ggtitle("Mean model")
+ggplot(dat.salmon, aes(specDiv.change, mu.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specdiv.prev, mu.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), mu.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Average revenue") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+
+# Residuals for CV model
+dat.salmon$cv.resid = residuals(cv.mod)
+dat.salmon$cv.fitted = fitted(cv.mod)
+
+ggplot(dat.salmon, aes(cv.fitted, cv.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Fitted") + ylab("Residuals") + ggtitle("CV model")
+ggplot(dat.salmon, aes(specDiv.change, cv.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specdiv.prev, cv.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), cv.resid, group = strategy_permit)) + geom_point() + facet_wrap(~strategy_permit) + xlab("Average revenue") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+dev.off()
+```
+
 
 ###We can make quadratic plots of these effects by year and strategy. These plots represent the effect of increasing diversity (as relative change) on mean revenue. For example, in 1986 if you were fishing 3-4 species there would be little effect of adding more spp; but if you were fishing 1 species, there would be a slight negative effect of adding more. In 1991, there would be a huge benefit of increasing diversity, and that effect would taper off as more were added.  
 
