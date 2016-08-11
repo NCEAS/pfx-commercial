@@ -49,6 +49,147 @@ Key things to look at:
 - We're seeing increased specialization within permits. People in PWS are trending toward increased specialization on pink salmon. People in SEAK trending toward increased specialization on chum. Both of these are switches from higher value species (sockeye, chum) to lower value species. Both pink and chum have higher variability in year to year returns than sockeye do. 
 
 \break  
+
+
+```{r, echo = FALSE, cache=TRUE, eval = FALSE}
+# Effect of Diversification Across Space
+
+#Using the same strategies as paper # 1, the comparisons across areas are mostly related to #salmon fisheries (these are areas with 2 or more strategies present and strategies with 2 or #more areas represented). And as in paper # 1, this is for people making >= 5K / year. 
+
+dat = readRDS(file="../../portfolio/data-generated/cfec-diff-for-modeling.rds")
+### Eric's culling:
+# Filters: remove people-year combinations making < $10000
+dat = dat[-which(dat$nregion> 1 | dat$nregion.prev > 1 | (dat$region!=dat$region.prev)),]
+dat$region[which(dat$region%in%c("SEAK Outside","SEAK Inside"))] = "SEAK"
+dat = dat[dat$region%in%names(rev(sort(table(dat$region)))[1:10]), ]
+
+dat = dat[which(dat$revenue >= 5000 & dat$revenue.prev >= 5000), ]
+
+# note: grouping here is based on strategies defined by permits
+dat$strategy = dat$strategy_permit
+dat <- group_by(dat, strategy) %>%
+  mutate(npeople = length(unique(p_holder)))
+
+dat[dat$length<15 & !is.na(dat$length), ]$length <- NA
+
+dat <- dat %>% group_by(boat) %>%
+  mutate(median_length_boat = median(length, na.rm = T))
+
+dat <- dat %>% group_by(strategy) %>%
+  mutate(median_length_permit = median(length, na.rm = T))
+
+dat <- dat %>% mutate(length = ifelse(is.na(length), median_length_boat, length))
+dat <- dat %>% mutate(length = ifelse(is.na(length), median_length_permit, length))
+
+#2. For each person-year combination, we created 'strategies' by concatenating
+# all permits fished, and only retaining 'strategies' with >= 200 data points. Previously,
+# this was done by people-year, but Eric changed this to be including > 200 people / strategy
+top_strategies = group_by(dat, strategy) %>%
+  summarize(n = length(unique(p_holder)),
+    earn=sum(revenue)) %>%
+  filter(n>=50) # note -- the code should work fine with this >= 100 too
+
+# A few of these can be deleted (small in river fisheries, experimental, etc)
+top_strategies = top_strategies[-which(top_strategies$strategy %in% c("S04X","S04Y","Z12B","R18B")),]
+
+#3. We then tabulated the permits that make up these strategies, and there are only
+# 56.
+top_permits = data.frame("orig"=names(table(unlist(lapply(top_strategies$strategy, strsplit, " ")))))
+
+# 4. of these top permits, we proceeded to group permits that were targeting a single species
+# and other than area, were otherwise the same. In other words, someone fishing herring roe
+# in kodiak (G34K) and alaska peninsula (G34M) have a herring roe strategy. This combining
+# reduces permits to 59
+top_permits$new = as.character(top_permits$orig)
+top_permits$new[which(substr(top_permits$new,1,3)%in%c("D09","D9C","D9D"))] = "D09" # dungeness
+top_permits$new[which(substr(top_permits$new,1,3)=="G01")] = "G01" # herring roe, purse seine
+top_permits$new[which(substr(top_permits$new,1,3)=="G34")] = "G34" # herring roe, gillnet
+top_permits$new[which(substr(top_permits$new,1,3)=="K91")] = "K91" # king crab
+top_permits$new[which(substr(top_permits$new,1,3)=="L12")] = "L12" # herring, hand pick
+top_permits$new[which(substr(top_permits$new,1,3)=="L21")] = "L21" # herring, pound
+top_permits$new[which(substr(top_permits$new,1,3)=="P09")] = "P09" # shrimp pot gear
+top_permits$new[which(substr(top_permits$new,1,3)=="Q11")] = "Q11" # sea cucumber
+top_permits$new[which(substr(top_permits$new,1,3)=="T09")] = "T09" # tanner crab
+
+# 5. Combining multispecies finfish permits (M). There are 8 miscellaneous finfish permits (M)
+# remaining, and only 2 can be combined: M26B/G (mechanical jig, GOA/statewide)
+top_permits$new[which(substr(top_permits$new,1,3)=="M26")] = "M26" # mechanical jig
+
+# 6. Combine some of the longline categories based on vessel size.
+top_permits$new[top_permits$new=="C06B"] = "C61B"
+top_permits$new[top_permits$new=="B06B"] = "B61B"
+top_permits$new[top_permits$new=="S05B"] = "S15B"
+
+# 7. Combining salmon permits is a little more difficult, because the species composition
+# varies widely based on geography. For the drift gillnet (S03) permits, we
+# combined S03 permits from Cook Inlet, Bristol Bay, and Alaska Peninsula because sockeye
+# represents > 92% of species revenue
+top_permits$new[which(top_permits$new%in%c("S03H","S03M","S03T"))] = "S03" # drift gillnet
+# For the purse seine permits (S01), again there's wide variety in species landings by
+# area (85% pink in PWS to 85% sockeye on alaska peninsula). Of the 5 permits, only 2 had
+# similar species compositions, so we grouped Kodiak and Cook Inlet
+top_permits$new[which(top_permits$new%in%c("S01H","S01K"))] = "S01" # purse seine
+# For the set gillnet, S04 permits, there's some variety but also clear sockeye specialists. We
+# grouped permits that had > 80% sockeye
+top_permits$new[which(top_permits$new%in%c("S04E","S04H","S04K","S04M","S04T"))] = "S04a" # purse seine
+# We grouped permits from norton sound and kuskokwim because of similar species %
+top_permits$new[which(top_permits$new%in%c("S04W","S04Z"))] = "S04b"
+# There's a few remaining permits (S04D, S04X, S04P, S04Y) - but they're so different they can't be grouped
+
+#8. combine the new permit groupings into new strategies
+top_permits$orig = as.character(top_permits$orig)
+top_strategies$new.strategy = NA
+for(i in 1:nrow(top_strategies)) {
+  top_strategies$new.strategy[i] = paste(top_permits$new[match(lapply(lapply(top_strategies$strategy, strsplit, " "), unlist)[[i]],
+  top_permits$orig)], collapse=" ")
+}
+# join this into the data frame -- this is leaving ~ 70 strategies
+dat = left_join(dat, top_strategies) %>% select(-c(n, earn))
+dat$strategy=dat$new.strategy
+dat = dat[is.na(dat$strategy)==FALSE,]
+
+# 9. Remove data points where people only did a strategy in one year. Below
+# we try to include people-strategy random effects
+dat = group_by(dat, strategy, p_holder) %>%
+  mutate(nsp = n()) %>% filter(nsp > 1) %>% select(-nsp)
+
+# Derived variables
+scale2 <- function(x) {
+  x <- x - mean(x, na.rm = TRUE)
+  x / (2 * sd(x, na.rm = TRUE))
+}
+dat$log_spec_div <- scale2(log(dat$specDiv))
+dat$scaled_spec_div <- scale2(dat$specDiv)
+dat$log_length <- scale2(log(dat$length + 1))
+dat$log_weight <- scale2(log(dat$weight + 1))
+dat$log_days <- scale2(log(dat$days + 1))
+dat$log_npermit <- scale2(log(dat$npermit))
+dat$log_days_permit <- scale2(log(dat$days_permit+1))
+
+# delete strategy: region combinations with less than 50 observations
+dat$strategy_region = paste(dat$strategy, dat$region)
+dat = group_by(dat, strategy_region) %>% 
+  mutate(n = n()) %>% 
+  filter(n > 50) %>% select(-n)
+
+# delete strategies in one region
+dat = group_by(dat, strategy) %>% 
+  mutate(n = length(unique(region))) %>% 
+  filter(n > 1) %>% select(-n)
+
+# drop regions with < 3 strategies
+dat = group_by(dat, region) %>% 
+  mutate(n = length(unique(strategy))) %>% 
+  filter(n > 2) %>% select(-n)
+
+dat$logdiff = log(dat$revenue/dat$revenue.prev)
+dat$specdiff = log(dat$specDiv/dat$specdiv.prev)
+dat$daysdiff = log((dat$days_permit+1)/(dat$days_permit.prev+1))
+#mu.mod = glmmTMB(log(revenue) ~ specdiff * daysdiff + (1 + specdiff * daysdiff| strategy) + offset(log(revenue.prev)), data = dat)
+m = ceiling(table(dat$strategy, dat$region)/1.0e10)
+colnames(m) = c("AP", "Bering","BB","CookInlt","Kodiak","PWS","SEAK","Yakutat")
+kable(m)
+```
   
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
 dat.annual = readRDS(file="../../portfolio/data-generated/cfec-annual-for-modeling.rds")
@@ -105,12 +246,72 @@ cfec = cfec[which(paste(cfec$p_holder,cfec$year) %in% paste(dat.salmon$p_holder,
 ggplot(agg.annual, aes(year, people, colour = specDiv)) + geom_line() + facet_wrap(~ strategy_permit, scale="free") + ylab("Participation")
 ```
 
+```{r, fig.cap="Species diversity by year\\label{fig:diversitybyyear}", fig.pos="placeHere", echo=FALSE, eval=FALSE}
+#p1 = ggplot(agg, aes(year, specDiv, colour = strategy_permit)) + geom_line() + ylab("Species diversity")
+ggplot(agg.annual, aes(year, specDiv, colour = specDiv)) + geom_line() + facet_wrap(~ strategy_permit, scale="free") + ylab("Species diversity")
+```
+
+```{r, fig.cap="Mean revenue by year\\label{fig:medianrevenuebyyear}", fig.pos="placeHere", echo=FALSE, eval=FALSE}
+#p1 = ggplot(agg, aes(year, log(meanrev), color = strategy_permit)) + ylab("Ln median revenue") + geom_line()
+ggplot(agg.annual, aes(year, log(meanrev))) + facet_wrap(~ strategy_permit, scale="free") + ylab("Ln median revenue") + geom_ribbon(aes(ymin= log(low), ymax= log(upp)), alpha=0.4) + geom_line()
+```
+
 ```{r, fig.cap="Diversity, mean revenue and CV (aggregated across years)\\label{fig:pairsplot}", fig.pos="placeHere", echo=FALSE}
 
 p1 = ggplot(agg.diff, aes(specDiv, log(meanrev), colour = cv, label=strategy_permit)) + xlab("Species diversity") +ylab("Ln (mean revenue)") + geom_text(size=2)
 p2 = ggplot(agg.diff, aes(specDiv, cv, colour = log(meanrev), label=strategy_permit)) + xlab("Species diversity") +ylab("CV") + geom_text(size=2)
 p3 = ggplot(agg.diff, aes(log(meanrev), cv, colour = specDiv, label=strategy_permit)) + ylab("CV") + xlab("Ln (mean revenue)") + geom_text(size=2)
 gridExtra::grid.arrange(p1,p2,p3, ncol=2)
+```
+
+```{r, fig.cap="Diversity, mean revenue and CV (aggregated across years)", fig.pos="placeHere", echo=FALSE, eval=FALSE}
+# We can also do the same calculations by calculating means for each year and then averaging across years, 
+agg = group_by(dat, strategy_permit, year) %>% 
+  summarize(specDiv = mean(specDiv), meanrev = mean(revenue),
+    cv = sd(log(revenue/revenue.prev))) %>% 
+  group_by(strategy_permit) %>%
+  summarize(specDiv = mean(specDiv,na.rm=T), meanrev=mean(meanrev,na.rm=T),
+    cv = mean(cv,na.rm=T))
+
+p1 = ggplot(agg, aes(specDiv, log(meanrev), colour = cv, label=strategy_permit)) + xlab("Species diversity") +ylab("Ln (mean revenue)") + geom_text()
+p2 = ggplot(agg, aes(log(meanrev), cv, colour = specDiv, label=strategy_permit)) + ylab("CV") + xlab("Ln (mean revenue)") + geom_text()
+p3 = ggplot(agg, aes(specDiv, cv, colour = log(meanrev), label=strategy_permit)) + xlab("Species diversity") +ylab("CV") + geom_text()
+gridExtra::grid.arrange(p1,p2,p3, ncol=2)
+```
+
+```{r, fig.cap="CV of revenue by year", fig.pos="placeHere", echo=FALSE, eval=FALSE}
+#p1 = group_by(dat.diff, strategy_permit, year) %>% 
+#  summarize(sd_logdiff = sd(log(revenue/revenue.prev))) %>% 
+#  ggplot(aes(year, sd_logdiff, colour = strategy_permit)) + geom_line() + ylab("CV revenue")
+p2 = group_by(dat.diff, strategy_permit, year) %>% 
+  summarize(CV = sd(log(revenue/revenue.prev))) %>% 
+  ggplot(aes(year, CV, colour = CV)) + geom_line() + 
+  facet_wrap(~ strategy_permit, scale="free") + ylab("CV revenue")
+p2
+```
+
+```{r, fig.cap="Mean revenue versus CV", fig.pos="placeHere", echo=FALSE, eval=FALSE}
+group_by(dat.diff, strategy_permit, year) %>% 
+  summarize(meanrev = mean(revenue), sd_logdiff = sd(log(revenue/revenue.prev))) %>% 
+  ggplot(aes(log(meanrev), sd_logdiff, colour = sd_logdiff)) + 
+  geom_point() + facet_wrap(~ strategy_permit, scale="free") + 
+  ylab("CV revenue") + xlab("Ln mean revenue") + geom_smooth()
+```
+
+```{r, fig.cap="Species diversity versus ln (mean revenue)", fig.pos="placeHere", echo=FALSE, eval=FALSE}
+group_by(dat.diff, strategy_permit, year) %>% 
+  summarize(specDiv = mean(specDiv), meanrev = mean(revenue)) %>% 
+  ggplot(aes(specDiv, log(meanrev), colour = meanrev)) + 
+  geom_point() + facet_wrap(~ strategy_permit, scale="free") + 
+  ylab("Ln (mean revenue)") + xlab("Mean species diversity") + geom_smooth()
+```
+  
+```{r, fig.cap="Species diversity versus CV", fig.pos="placeHere", echo=FALSE, eval=FALSE}
+group_by(dat.diff, strategy_permit, year) %>% 
+  summarize(specDiv = mean(specDiv), sd_logdiff = sd(log(revenue/revenue.prev))) %>% 
+  ggplot(aes(specDiv, sd_logdiff, colour = sd_logdiff)) + 
+  geom_point() + facet_wrap(~ strategy_permit, scale="free") + 
+  ylab("CV revenue") + xlab("Mean species diversity") + geom_smooth()
 ```
 
 \break 
@@ -223,9 +424,14 @@ df.cv$strategy = substr(rownames(df.cv), 6, 9)
 # also calculate change of going from 1 to 2 spp
 df.cv$pred1.cv = df.cv$a.cv*(1^2) + df.cv$b.cv*1 + df.cv$c.cv + fixef(cv.mod)$cond["specDiv.change"] + fixef(cv.mod)$cond["specDiv.change:specdiv.prev"]*1
 
+#ggplot(df.cv, aes(year, pred1.cv, group = strategy, colour = as.factor(strategy))) + geom_line() + xlab("Year") + ylab("Benefit of increasing species diversity from 1 species") + facet_wrap(~ strategy, scale="free") + geom_smooth() + geom_hline(aes(yintercept=0)) + ggtitle("Effect on CV")
+
 ggplot(df.cv, aes(year, pred1.cv, group = strategy, colour = as.factor(strategy))) + geom_line(linetype="dashed") + geom_line(data=df, aes(year, pred1, group = strategy, colour = as.factor(strategy))) + xlab("Year") + ylab("Effect of increasing species diversity from 1 species") + facet_wrap(~ strategy, scale="free") + ggtitle("Effects on mean (solid) and CV (dashed)") + geom_hline(aes(yintercept=0), color="grey30")
 
+#df = left_join(df,df.cv)
+#ggplot(df, aes(pred1, pred1.cv, label=year)) + facet_wrap(~strategy, scale="free")+ #geom_vline(aes(xintercept=0)) + geom_hline(aes(yintercept=0)) + xlab("Benefit on the mean") + #ylab("Benefit on the CV") + geom_text(size=2)
 ```
+  
   
 \break  
 
@@ -279,7 +485,7 @@ dat$sumP2 = abs(dat$salm - dat$salm.prev) +
 dat = dat[which(dat$sumP2 < 0.3),]
 ```
 
-```{r, echo = FALSE, fig.cap="Results for PWS Purse seine fishery", fig.pos="placeHere", cache=TRUE}
+```{r, echo = FALSE, fig.cap="Results for PWS Purse seine fishery", echo=FALSE, fig.pos="placeHere", cache=TRUE}
 
 df = dat[which(dat$strategy_permit=="S01E"),]
 pamk_s01e <- pamk(df[,c("chum","pink","sock","salm")])
@@ -311,7 +517,7 @@ g = group_by(df, year, group) %>%
 gridExtra::grid.arrange(p3,p0,p1,p2,ncol=2)
 ```
 
-```{r, echo = FALSE, fig.cap="SEAK purse seine fishery", cache=TRUE, fig.pos="placeHere"}
+```{r, echo = FALSE, fig.cap="SEAK purse seine fishery", cache=TRUE, echo=FALSE, fig.pos="placeHere"}
 
 df = dat[which(dat$strategy_permit=="S01A"),]
 pamk_s01a <- pamk(df[,c("chum","pink","sock","salm")])
@@ -335,6 +541,147 @@ p2 = group_by(df, year, group) %>%
   summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
     cv = sd(logdiff,na.rm=T)) %>% 
 ggplot(aes(x = year, y = cv, group=group, col = as.factor(group))) + geom_line() + ylab("CV revenue") + ggtitle("S01A")
+    
+gridExtra::grid.arrange(p3, p0, p1, p2, ncol=2)
+```
+
+
+```{r, echo = FALSE, fig.cap="SEAK gillnet (clustering primarily in chum-sockeye-chinokook/coho dimensions)", echo=FALSE, fig.pos="placeHere", cache=TRUE, eval=FALSE}
+fishery = "S03A"
+df = dat[which(dat$strategy_permit==fishery),]
+pamk_s03a <- pamk(df[,c("chum","pink","sock","salm")], 3)
+df$group = pamk_s03a$pamobject$clustering
+
+p3 = ggtern(data=df[,c("chum","salm","sock","group")], aes(x=chum,y=salm,sock,color=as.factor(group))) +
+  geom_point(alpha=0.3) +
+  labs(x="CHUM",y="OTHER",z="SOCK") + theme(
+        axis.title=element_text(size=8)) + theme(legend.position = "none")
+
+p0 = group_by(df, year, group) %>% 
+  summarize(n = length(unique(p_holder))) %>% 
+ggplot(aes(x = year, y = n, group=group, col = as.factor(group))) + geom_line() + ylab("People") + ggtitle(fishery)
+
+p1 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = meanrev, group=group, col = as.factor(group))) + geom_line() + ylab("Mean revenue") + ggtitle(fishery)
+
+p2 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = cv, group=group, col = as.factor(group))) + geom_line() + ylab("CV revenue") + ggtitle(fishery)
+    
+gridExtra::grid.arrange(p3, p0, p1, p2, ncol=2)
+```
+  
+```{r, echo = FALSE, fig.cap="SEAK gillnet fishery (clustering primarily in sockeye-chinook/coho dimension)", echo=FALSE, fig.pos="placeHere", cache=TRUE, eval=FALSE}
+fishery = "S03E"
+df = dat[which(dat$strategy_permit==fishery),]
+pamk_s03e <- pamk(df[,c("chum","pink","sock","salm")])
+df$group = pamk_s03e$pamobject$clustering
+
+p3 = ggtern(data=df[,c("chum","salm","sock","group")], aes(x=chum,y=salm,sock,color=as.factor(group))) +
+  geom_point(alpha=0.3) +
+  labs(x="CHUM",y="OTHER",z="SOCK") + theme(
+        axis.title=element_text(size=8)) + theme(legend.position = "none")
+
+p0 = group_by(df, year, group) %>% 
+  summarize(n = length(unique(p_holder))) %>% 
+ggplot(aes(x = year, y = n, group=group, col = as.factor(group))) + geom_line() + ylab("People") + ggtitle(fishery)
+
+p1 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = meanrev, group=group, col = as.factor(group))) + geom_line() + ylab("Mean revenue") + ggtitle(fishery)
+
+p2 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = cv, group=group, col = as.factor(group))) + geom_line() + ylab("CV revenue") + ggtitle(fishery)
+    
+gridExtra::grid.arrange(p3, p0, p1, p2, ncol=2)
+```
+
+```{r, echo = FALSE, fig.cap="Kodiak purse seine (clustering primarily in sockeye-pink dimension)", echo=FALSE, fig.pos="placeHere", eval=FALSE, cache=TRUE}
+fishery = "S01K"
+df = dat[which(dat$strategy_permit==fishery),]
+pamk_s01k <- pamk(df[,c("chum","pink","sock","salm")])
+df$group = pamk_s01k$pamobject$clustering
+
+p3 = ggtern(data=df[,c("chum","salm","sock","group")], aes(x=chum,y=salm,sock,color=as.factor(group))) +
+  geom_point(alpha=0.3) +
+  labs(x="CHUM",y="OTHER",z="SOCK") + theme(
+        axis.title=element_text(size=8)) + theme(legend.position = "none")
+
+p0 = group_by(df, year, group) %>% 
+  summarize(n = length(unique(p_holder))) %>% 
+ggplot(aes(x = year, y = n, group=group, col = as.factor(group))) + geom_line() + ylab("People") + ggtitle(fishery)
+
+p1 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = meanrev, group=group, col = as.factor(group))) + geom_line() + ylab("Mean revenue") + ggtitle(fishery)
+
+p2 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = cv, group=group, col = as.factor(group))) + geom_line() + ylab("CV revenue") + ggtitle(fishery)
+    
+gridExtra::grid.arrange(p3, p0, p1, p2, ncol=2)
+```
+
+```{r, echo = FALSE, fig.cap="Kodiak gillnet (clustering primarily in sockeye-pink dimension)", echo=FALSE, fig.pos="placeHere", cache=TRUE, eval=FALSE}
+fishery = "S04K"
+df = dat[which(dat$strategy_permit==fishery),]
+pamk_s04k <- pamk(df[,c("chum","pink","sock","salm")])
+df$group = pamk_s04k$pamobject$clustering
+
+p3 = ggtern(data=df[,c("chum","salm","sock","group")], aes(x=chum,y=salm,sock,color=as.factor(group))) +
+  geom_point(alpha=0.3) +
+  labs(x="CHUM",y="OTHER",z="SOCK") + theme(
+        axis.title=element_text(size=8)) + theme(legend.position = "none")
+
+p0 = group_by(df, year, group) %>% 
+  summarize(n = length(unique(p_holder))) %>% 
+ggplot(aes(x = year, y = n, group=group, col = as.factor(group))) + geom_line() + ylab("People") + ggtitle(fishery)
+
+p1 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = meanrev, group=group, col = as.factor(group))) + geom_line() + ylab("Mean revenue") + ggtitle(fishery)
+
+p2 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = cv, group=group, col = as.factor(group))) + geom_line() + ylab("CV revenue") + ggtitle(fishery)
+    
+gridExtra::grid.arrange(p3, p0, p1, p2, ncol=2)
+```
+
+```{r, echo = FALSE, fig.cap="SEAK Purse seine (clustering primarily in sockeye-pink dimension)", echo=FALSE, fig.pos="placeHere", eval=FALSE, cache=TRUE}
+fishery = "S01M"
+df = dat[which(dat$strategy_permit==fishery),]
+pamk_s01m <- pamk(df[,c("chum","pink","sock","salm")])
+df$group = pamk_s01m$pamobject$clustering
+
+p3 = ggtern(data=df[,c("chum","pink","sock","group")], aes(x=chum,y=pink,sock,color=as.factor(group))) +
+  geom_point(alpha=0.3) +
+  labs(x="CHUM",y="PINK",z="SOCK") + theme(
+        axis.title=element_text(size=8)) + theme(legend.position = "none")
+
+p0 = group_by(df, year, group) %>% 
+  summarize(n = length(unique(p_holder))) %>% 
+ggplot(aes(x = year, y = n, group=group, col = as.factor(group))) + geom_line() + ylab("People") + ggtitle(fishery)
+
+p1 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = meanrev, group=group, col = as.factor(group))) + geom_line() + ylab("Mean revenue") + ggtitle(fishery)
+
+p2 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = cv, group=group, col = as.factor(group))) + geom_line() + ylab("CV revenue") + ggtitle(fishery)
     
 gridExtra::grid.arrange(p3, p0, p1, p2, ncol=2)
 ```
@@ -366,8 +713,23 @@ group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], ye
   ggplot(aes(year, log(p), group=spec, color = spec)) + geom_line() + facet_wrap(~area) +
   ylab("Ln avg price relative to 2002")
 ```
+  
+```{r, fig.cap="Number of people landing fish", fig.pos="placeHere", echo=FALSE, eval=FALSE}
+#Participation (people landing fish on one of these permits) generally followed trends in prices, with an uptick since early 2000s,  
+group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, p_fshy) %>%
+  summarize(people = length(unique(p_holder))) %>%
+  ggplot(aes(year, people)) + geom_line() + facet_wrap(~p_fshy, scale="free") + 
+  ylab("People")
+```
 
 ```{r, fig.cap="Trends in revenue and variability across people", fig.pos="placeHere", echo=FALSE}
+#p1 = group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], p_holder, year, p_fshy) %>%
+#  summarize(gearn = sum(g_earn)) %>%
+#  group_by(year, p_fshy) %>%
+#  summarize(cv = sd(gearn)/mean(gearn)) %>%
+#  ggplot(aes(year, cv, color = p_fshy)) + geom_line() + 
+#  ylab("CV revenue (across people")
+
 p2 = group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], p_holder, year, p_fshy) %>%
   summarize(gearn = sum(g_earn)) %>%
   group_by(year, p_fshy) %>%
@@ -386,3 +748,35 @@ group_by(cfec, p_fshy, year, p_holder) %>%
   summarize(meanW = mean(meanW, na.rm=T)) %>% 
   ggplot(aes(year, meanW)) + geom_line() + facet_wrap(~ p_fshy, scale="free") + ylab("Mean total tons per person") + xlab("Year")
 ```
+  
+```{r, fig.cap="CV of average species composition. This quantifies the synchrony across people -- so low CVs mean everyone's doing the same thing.", fig.pos="placeHere", echo=FALSE, eval=FALSE}
+# Another way to think about diversification is to calculate the deviations in species composition from the mean. Bascially what's the variability of euclidian distances? Given trends in total landings and diversity, the 'portfolio' of species available to any of these permit holders has changed through time. Another way to think about the diversification is whether the variability of people around the mean has changed (basically whether there's been trends in the CV of species diveristy across people).
+
+dat.salm = group_by(dat, year, p_holder) %>% 
+  mutate(earn = (chnk+coho+chum+pink+sock),
+    chnk=chnk/earn, coho=coho/earn,
+    chum=chum/earn, sock=sock/earn,
+    pink=pink/earn) %>% 
+  as.data.frame 
+dat.salm$chnk[is.na(dat.salm$chnk)] = 0
+dat.salm$coho[is.na(dat.salm$coho)] = 0
+dat.salm$chum[is.na(dat.salm$chum)] = 0
+dat.salm$pink[is.na(dat.salm$pink)] = 0
+dat.salm$sock[is.na(dat.salm$sock)] = 0
+
+dat.salm = group_by(dat.salm, year, strategy_permit) %>% 
+  mutate(mean.chnk = mean(chnk,na.rm=T), mean.chum = mean(chum,na.rm=T),
+    mean.pink = mean(pink,na.rm=T), mean.coho = mean(coho,na.rm=T), 
+    mean.sock = mean(sock,na.rm=T))
+
+dat.salm$eucld = (dat.salm$mean.chnk-dat.salm$chnk)^2 + (dat.salm$mean.coho-dat.salm$coho)^2 + (dat.salm$mean.pink-dat.salm$pink)^2 + (dat.salm$mean.sock-dat.salm$sock)^2 + (dat.salm$mean.chum-dat.salm$chum)^2
+
+p1 = group_by(dat.salm, year, strategy_permit) %>%
+  summarize(sd = sd(eucld)) %>%
+  ggplot(aes(year, sd, color = as.factor(strategy_permit))) + geom_line() + ylab("SD of euclidian dist.") + facet_wrap(~strategy_permit)
+
+group_by(dat, year, strategy_permit) %>% 
+  summarize(cv = sd(specDiv)/mean(specDiv)) %>% 
+  ggplot(aes(year, cv, color = as.factor(strategy_permit))) + geom_line() + ylab("CV of species diversity (across people)") + facet_wrap(~ strategy_permit, scale="free") + geom_smooth()
+```
+
