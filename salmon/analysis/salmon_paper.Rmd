@@ -206,8 +206,8 @@ demo = left_join(demo, df.s01e)
 demo$effect = demo$a * (demo$speciesDiversity^2) + demo$b * (demo$speciesDiversity) + demo$c
 ```
 
-```{r, echo = FALSE}
-pdf("Salmon_residuals.pdf")
+```{r, echo = FALSE, warning=FALSE, message=FALSE, results='hide'}
+pdf("../../salmon/Salmon_residuals.pdf")
 # Residuals for mean model
 dat.salmon$mu.resid = residuals(mu.mod)
 dat.salmon$mu.fitted = fitted(mu.mod)
@@ -231,13 +231,14 @@ ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), cv.resid, group = strategy
 dev.off()
 ```
 
-
 ###We can make quadratic plots of these effects by year and strategy. These plots represent the effect of increasing diversity (as relative change) on mean revenue. For example, in 1986 if you were fishing 3-4 species there would be little effect of adding more spp; but if you were fishing 1 species, there would be a slight negative effect of adding more. In 1991, there would be a huge benefit of increasing diversity, and that effect would taper off as more were added.  
 
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Variation in effects of diversification by year for the S01E (PWS purse seine) permit holders. "}
 ggplot(demo, aes(speciesDiversity, effect, group = year)) + geom_line() + facet_wrap(~ year) + xlab("Species Diversity") + ylab("Effect of increasing diversity (relative change)")
 ```
 
+\break  
+  
 ###This plot shows the time series of becoming increasingly diversified from 1 species on mean revenue. For S01E for example, there's huge benefits of diversifying in 1991, and huge costs in 2010. 2010 was a huge pink salmon year for PWS (with high prices specialization was good) and 1991 was the start of pink salmon stock + price collapse. Across permits, perhaps slight declines in some of these in recent years?  
   
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Time series of benefits of diversification by permit / strategy.", fig.height = 3}
