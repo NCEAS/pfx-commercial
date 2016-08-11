@@ -45,7 +45,7 @@ p1 <- res %>%
     size = guide_legend(order = 2, override.aes = list(pch = 21))) +
   annotate("text", x = min(res$inc_rev), y = max(res$inc), label = "A",
     fontface = "bold", size = 5) +
-  labs(colour = "Mean sp.\ndiversity", size = "Number of\npermits") +
+  labs(colour = "Mean sp.\ndiversity", size = "Number of\npermit holders") +
   theme(legend.title = element_text(size = rel(0.85)))
 
 p2 <- res %>%
