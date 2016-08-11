@@ -396,6 +396,7 @@ print(p2)
 ```
 
 Revenue is going up since 2000 -- but each permit holder is fishing more (more days, more total pounds) and the trend in weight is faster than the trend in price.  
+  
 ```{r, echo=FALSE, fig.height = 3.5, fig.cap="Trends in average landed weight per person", fig.pos="placeHere"}
 group_by(cfec, p_fshy, year, p_holder) %>% 
   summarize(meanW = mean(g_pounds/2000, na.rm=T)) %>% 
