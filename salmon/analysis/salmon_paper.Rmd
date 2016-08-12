@@ -3,10 +3,10 @@ title: "Diversification of salmon fishermen within strategies (permits)"
 author: ''
 date: ''
 output:
+  word_document: default
   pdf_document:
     fig_caption: yes
   html_document: default
-  word_document: default
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
@@ -21,6 +21,7 @@ library(mgcv)
 library(fpc)
 library(gridExtra)
 library(glmmTMB)
+library(zoo)
 ```
 
 ## Intro / thoughts
@@ -35,6 +36,8 @@ library(glmmTMB)
 
 ## Methods
 
+### Hatchery programs were designed to reduce variation in harvest. Has that happened?  
+  
 ### Does diversification exist within permits and if so, do we see similar advantages of diversification on revenue + CV?  
   
 ### Is there a changing benefit to diversification over time?  
@@ -115,6 +118,60 @@ p2 = ggplot(agg.diff, aes(specDiv, cv, colour = log(meanrev), label=strategy_per
 p3 = ggplot(agg.diff, aes(log(meanrev), cv, colour = specDiv, label=strategy_permit)) + ylab("CV") + xlab("Ln (mean revenue)") + geom_text(size=2)
 gridExtra::grid.arrange(p1,p2,p3, ncol=2)
 ```
+
+\break 
+  
+# Has variability in harvest been reduced? (in part due to increased hatchery production?)
+
+### There's a number of ways we can think about quantifying variation  
+- We can calculate the aggregate (total harvest weight or revenue summed over people)  
+- We can calculate the variability in revenue across individual fishermen  
+- We can compare variability of revenue of individual people  
+
+What we see here is that (1) aggregate variability remains high at the fishery level. In part because of large swings in prices in late 1990s/early 2000s. We also see (2) variability across people flat or increasing for most fisheries, with the exception of S03A. Finally, we see (3) Increased CV of revenue for people fishing in the recent decade who were also fishing 1985-1995 (exception: S01A)
+
+```{r, fig.cap="Trends in annual variability by fishery", fig.pos="placeHere", echo=FALSE}
+summary = group_by(cfec.raw[cfec.raw$spec%in%c("CHUM","COHO","CHNK","SOCK","PINK"),], year, p_fshy) %>% 
+  summarize(sumg = log(sum(g_earn)), sumw = log(sum(g_pounds))) %>% 
+  arrange(p_fshy, year) %>% group_by(p_fshy) %>% 
+  mutate(logdiffg = rollapply(c(NA, diff(sumg)), 3, sd, fill=c(NA, NULL, NA)), 
+    logdiffw = rollapply(c(NA, diff(sumw)), 3, sd, fill=c(NA, NULL, NA)))
+
+ggplot(summary, aes(year, logdiffg )) + geom_line(color ="green" ) + facet_wrap(~ p_fshy, scale="free") + geom_line(aes(year, logdiffw), color = "blue") + ylab("3 year rolling CV") + xlab("Year") + ggtitle("Total revenue (green) and weight (blue)")
+```
+
+```{r, fig.cap="Trends in variability across people", fig.pos="placeHere", echo=FALSE, fig.height=3.5}
+summary = group_by(cfec.raw[cfec.raw$spec%in%c("CHUM","COHO","CHNK","SOCK","PINK"),], year, p_fshy, p_holder) %>% 
+  summarize(sumg = sum(g_earn), sumw = sum(g_pounds)) %>% 
+  group_by(p_fshy, year) %>% 
+  summarize(cvg = sd(sumg,na.rm=T)/mean(sumg,na.rm=T),
+    cvw = sd(sumw,na.rm=T)/mean(sumw,na.rm=T))
+
+ggplot(summary, aes(year, cvg )) + geom_line(color ="green" ) + facet_wrap(~ p_fshy, scale="free") + geom_line(aes(year, cvw), color = "blue") + ylab("3 year rolling CV") + xlab("Year") + ggtitle("Variability across people: total revenue (green) and weight (blue)")
+
+```
+
+```{r, fig.cap="Change in CV for individual people", fig.pos="placeHere", echo=FALSE, fig.height=3.5}
+summary = group_by(cfec.raw[cfec.raw$spec%in%c("CHUM","COHO","CHNK","SOCK","PINK"),], year, p_fshy, p_holder) %>% 
+  summarize(sumg = sum(g_earn)) %>% 
+  group_by(p_fshy, p_holder) %>% 
+  mutate(nPre = length(which(year%in%seq(1985,1995))),
+    nPost = length(which(year%in%seq(2005,2014)))) %>% 
+  filter(nPre > 3 & nPost > 3) %>% select(-nPre, -nPost) %>% 
+  summarize(cv.pre = mean(sumg[which(year <= 1995)],na.rm=T)/sd(sumg[which(year <= 1995)],na.rm=T),
+    cv.post = mean(sumg[which(year >= 2005)],na.rm=T)/sd(sumg[which(year >= 2005)],na.rm=T))
+
+ggplot(summary, aes(log(cv.post/cv.pre))) + geom_histogram(bins=100) + facet_wrap(~ p_fshy) + geom_vline(aes(xintercept = 0)) + ylab("Count") + xlab("% Change in CV for individual people (2005-2014 / 1985-1995)") + ggtitle("Change in variability for individual people")
+#summary = left_join(expand.grid(year = unique(summary$year), p_holder = unique(summary$p_holder)), summary)
+
+# add rolling CV for each person
+#summary = group_by(summary, p_holder) %>% 
+#  mutate(logdiffg = rollapply(c(NA, diff(sumg)), 3, sd, fill=c(NA, NULL, NA))) %>%
+#  do(fit = lm(logdiffg ~ year, data = .))
+
+```
+
+
 
 \break 
   
