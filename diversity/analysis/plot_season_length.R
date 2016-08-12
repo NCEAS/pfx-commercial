@@ -29,5 +29,5 @@ season_diversity = group_by(cfec_new, year, p_fshy, day) %>%
   summarize(div = simp.div(g))
 pdf("season_diversity.pdf")
 ggplot(season_diversity, aes(year, div)) + geom_line() + facet_wrap(~ p_fshy, scale="free_y") +
-  ylab("Species diversity") + xlab("Year") + ggtitle("Effective days fished (weighted by g_earn)")
+  ylab("Calendar day diversity") + xlab("Year") + ggtitle("Effective days fished (weighted by g_earn)")
 dev.off()
