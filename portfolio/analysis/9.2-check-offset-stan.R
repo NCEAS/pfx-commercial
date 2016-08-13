@@ -173,14 +173,14 @@ term_lu <- data.frame(
     "b4 (days fished %:specializing)",
     "b5 (days fished %:generalizing)",
 
-    "g1 (specializing)",
-    "g2 (generalizing)",
-    "g3 (days fished % change)",
-    "g4 (days fished %:specializing)",
-    "g5 (days fished %:generalizing)",
+    "g1 (specializing, variability)",
+    "g2 (generalizing, variability)",
+    "g3 (days fished % change, variability)",
+    "g4 (days fished %:specializing, variability)",
+    "g5 (days fished %:generalizing, variability)",
 
-    "g0 (global scale intercept)",
-    "u1 (strategy-level diversity effect)"
+    "g0 (global intercept, variability)",
+    "u1 (strategy-level diversity effect, variability)"
   )
   )
 p$term_clean <- NULL
@@ -199,4 +199,4 @@ p1 <- ggplot(p, aes(x = term_clean, y = m)) +
   geom_vline(aes(xintercept = 7.5), lty = 2, col = "grey60") +
   geom_vline(aes(xintercept = 1.5), lty = 2, col = "grey60") +
   coord_flip() + theme_gg() + xlab("")
-ggsave("portfolio/figs/stan-main-effects.pdf", width = 5.5, height = 4)
+ggsave("portfolio/figs/stan-main-effects.pdf", width = 5.6, height = 4)
