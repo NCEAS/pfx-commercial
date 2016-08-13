@@ -4,7 +4,7 @@ theme_gg <- function(base_size = 11, base_family = "") {
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     strip.background = element_rect(fill = NA, colour = NA),
-    strip.text.x = element_text(colour = "grey30"),
+    strip.text.x = element_text(colour = "grey10"),
     axis.text = element_text(colour = "grey30"),
     axis.title = element_text(colour = "grey30"),
     legend.title = element_text(colour = "grey30"),
