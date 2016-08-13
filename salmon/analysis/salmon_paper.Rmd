@@ -1,8 +1,9 @@
 ---
 title: "Diversification of salmon fishermen within strategies (permits)"
-author: ""
-date: ""
+author: ''
+date: ''
 output:
+  word_document: default
   pdf_document:
     fig_caption: yes
   html_document: default
@@ -20,6 +21,7 @@ library(mgcv)
 library(fpc)
 library(gridExtra)
 library(glmmTMB)
+library(zoo)
 ```
 
 ## Intro / thoughts
@@ -34,6 +36,8 @@ library(glmmTMB)
 
 ## Methods
 
+### Hatchery programs were designed to reduce variation in harvest. Has that happened?  
+  
 ### Does diversification exist within permits and if so, do we see similar advantages of diversification on revenue + CV?  
   
 ### Is there a changing benefit to diversification over time?  
@@ -51,6 +55,8 @@ Key things to look at:
 \break  
   
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
+revenueThreshold = 10000
+
 dat.annual = readRDS(file="../../portfolio/data-generated/cfec-annual-for-modeling.rds")
 
 # single permit holders, salmon permits
@@ -73,7 +79,7 @@ agg.annual = group_by(dat.annual, strategy_permit, year) %>%
     upp = quantile(revenue,0.75))
 
 dat.diff = readRDS(file="../../portfolio/data-generated/cfec-diff-for-modeling.rds")
-dat.diff = dat.diff[which(dat.diff$revenue >= 5000 & dat.diff$revenue.prev >= 5000), ]
+dat.diff = dat.diff[which(dat.diff$revenue >= revenueThreshold & dat.diff$revenue.prev >= revenueThreshold), ]
 dat.diff = dat.diff[dat.diff$strategy_permit%in%c("S01A","S01E","S01K","S01L","S01M",
   "S03A","S03E","S03H","S03M","S03T","S04D","S04H","S04K","S04M","S04T"),]
 
@@ -112,6 +118,60 @@ p2 = ggplot(agg.diff, aes(specDiv, cv, colour = log(meanrev), label=strategy_per
 p3 = ggplot(agg.diff, aes(log(meanrev), cv, colour = specDiv, label=strategy_permit)) + ylab("CV") + xlab("Ln (mean revenue)") + geom_text(size=2)
 gridExtra::grid.arrange(p1,p2,p3, ncol=2)
 ```
+
+\break 
+  
+# Has variability in harvest been reduced? (in part due to increased hatchery production?)
+
+### There's a number of ways we can think about quantifying variation  
+- We can calculate the aggregate (total harvest weight or revenue summed over people)  
+- We can calculate the variability in revenue across individual fishermen  
+- We can compare variability of revenue of individual people  
+
+What we see here is that (1) aggregate variability remains high at the fishery level. In part because of large swings in prices in late 1990s/early 2000s. We also see (2) variability across people flat or increasing for most fisheries, with the exception of S03A. Finally, we see (3) Increased CV of revenue for people fishing in the recent decade who were also fishing 1985-1995 (exception: S01A)
+
+```{r, fig.cap="Trends in annual variability by fishery", fig.pos="placeHere", echo=FALSE}
+summary = group_by(cfec.raw[cfec.raw$spec%in%c("CHUM","COHO","CHNK","SOCK","PINK"),], year, p_fshy) %>% 
+  summarize(sumg = log(sum(g_earn)), sumw = log(sum(g_pounds))) %>% 
+  arrange(p_fshy, year) %>% group_by(p_fshy) %>% 
+  mutate(logdiffg = rollapply(c(NA, diff(sumg)), 3, sd, fill=c(NA, NULL, NA)), 
+    logdiffw = rollapply(c(NA, diff(sumw)), 3, sd, fill=c(NA, NULL, NA)))
+
+ggplot(summary, aes(year, logdiffg )) + geom_line(color ="green" ) + facet_wrap(~ p_fshy, scale="free") + geom_line(aes(year, logdiffw), color = "blue") + ylab("3 year rolling CV") + xlab("Year") + ggtitle("Total revenue (green) and weight (blue)")
+```
+
+```{r, fig.cap="Trends in variability across people", fig.pos="placeHere", echo=FALSE, fig.height=3.5}
+summary = group_by(cfec.raw[cfec.raw$spec%in%c("CHUM","COHO","CHNK","SOCK","PINK"),], year, p_fshy, p_holder) %>% 
+  summarize(sumg = sum(g_earn), sumw = sum(g_pounds)) %>% 
+  group_by(p_fshy, year) %>% 
+  summarize(cvg = sd(sumg,na.rm=T)/mean(sumg,na.rm=T),
+    cvw = sd(sumw,na.rm=T)/mean(sumw,na.rm=T))
+
+ggplot(summary, aes(year, cvg )) + geom_line(color ="green" ) + facet_wrap(~ p_fshy, scale="free") + geom_line(aes(year, cvw), color = "blue") + ylab("3 year rolling CV") + xlab("Year") + ggtitle("Variability across people: total revenue (green) and weight (blue)")
+
+```
+
+```{r, fig.cap="Change in CV for individual people", fig.pos="placeHere", echo=FALSE, fig.height=3.5}
+summary = group_by(cfec.raw[cfec.raw$spec%in%c("CHUM","COHO","CHNK","SOCK","PINK"),], year, p_fshy, p_holder) %>% 
+  summarize(sumg = sum(g_earn)) %>% 
+  group_by(p_fshy, p_holder) %>% 
+  mutate(nPre = length(which(year%in%seq(1985,1995))),
+    nPost = length(which(year%in%seq(2005,2014)))) %>% 
+  filter(nPre > 3 & nPost > 3) %>% select(-nPre, -nPost) %>% 
+  summarize(cv.pre = mean(sumg[which(year <= 1995)],na.rm=T)/sd(sumg[which(year <= 1995)],na.rm=T),
+    cv.post = mean(sumg[which(year >= 2005)],na.rm=T)/sd(sumg[which(year >= 2005)],na.rm=T))
+
+ggplot(summary, aes(log(cv.post/cv.pre))) + geom_histogram(bins=100) + facet_wrap(~ p_fshy) + geom_vline(aes(xintercept = 0)) + ylab("Count") + xlab("% Change in CV for individual people (2005-2014 / 1985-1995)") + ggtitle("Change in variability for individual people")
+#summary = left_join(expand.grid(year = unique(summary$year), p_holder = unique(summary$p_holder)), summary)
+
+# add rolling CV for each person
+#summary = group_by(summary, p_holder) %>% 
+#  mutate(logdiffg = rollapply(c(NA, diff(sumg)), 3, sd, fill=c(NA, NULL, NA))) %>%
+#  do(fit = lm(logdiffg ~ year, data = .))
+
+```
+
+
 
 \break 
   
@@ -180,7 +240,7 @@ glmmTMB(log(revenue) ~ specDiv.change + specDiv.change:specdiv.prev +
 
 mu.mod = glmmTMB(log(revenue) ~ specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2) + days.change + (1+days.change|strategy_permit) + (-1+specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2)|year_permit), offset = log(revenue.prev), dat.salmon)
 
-cv.mod = glmmTMB(log(abs(residuals(mu.mod))) ~ specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2) + days.change + (1+days.change|strategy_permit) + (-1+specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2)|year_permit), offset = log(revenue.prev), dat.salmon)
+cv.mod = glmmTMB(log(abs(residuals(mu.mod))) ~ specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2) + days.change + (1+days.change|strategy_permit) + (-1+specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2)|year_permit), dat.salmon)
 # to ask whether benefit of diversificaiton is changing via strategy, we want to summarize (1) direction of 
 # benefit (e.g. is the effect negative or positive), and (2) the magnitude (how steep / shallow it is). With the
 # quadratic model, 
@@ -203,12 +263,39 @@ demo = left_join(demo, df.s01e)
 demo$effect = demo$a * (demo$speciesDiversity^2) + demo$b * (demo$speciesDiversity) + demo$c
 ```
 
+```{r, echo = FALSE, warning=FALSE, message=FALSE, results='hide'}
+pdf("../../salmon/Salmon_residuals.pdf")
+# Residuals for mean model
+dat.salmon$mu.resid = residuals(mu.mod)
+dat.salmon$mu.fitted = fitted(mu.mod)
+
+ggplot(dat.salmon, aes(mu.fitted, mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Fitted") + ylab("Residuals") + ggtitle("Mean model")
+ggplot(dat.salmon, aes(specDiv.change, mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specdiv.prev, mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Average revenue") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specDiv.change, log(abs(mu.resid)), group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Ln abs(residuals)") + ggtitle("Mean model")
+ggplot(dat.salmon, aes(specdiv.prev, log(abs(mu.resid)), group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Ln abs(residuals)") + ggtitle("Mean model")
+ggplot(dat.salmon, aes(specdiv.prev, log(abs(mu.resid)), group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Ln abs(residuals)") + ggtitle("Mean model")
+
+# Residuals for CV model
+dat.salmon$cv.resid = residuals(cv.mod)
+dat.salmon$cv.fitted = fitted(cv.mod)
+
+ggplot(dat.salmon, aes(cv.fitted, cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Fitted") + ylab("Residuals") + ggtitle("CV model")
+ggplot(dat.salmon, aes(specDiv.change, cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specdiv.prev, cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Average revenue") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+dev.off()
+```
+
 ###We can make quadratic plots of these effects by year and strategy. These plots represent the effect of increasing diversity (as relative change) on mean revenue. For example, in 1986 if you were fishing 3-4 species there would be little effect of adding more spp; but if you were fishing 1 species, there would be a slight negative effect of adding more. In 1991, there would be a huge benefit of increasing diversity, and that effect would taper off as more were added.  
 
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Variation in effects of diversification by year for the S01E (PWS purse seine) permit holders. "}
 ggplot(demo, aes(speciesDiversity, effect, group = year)) + geom_line() + facet_wrap(~ year) + xlab("Species Diversity") + ylab("Effect of increasing diversity (relative change)")
 ```
 
+\break  
+  
 ###This plot shows the time series of becoming increasingly diversified from 1 species on mean revenue. For S01E for example, there's huge benefits of diversifying in 1991, and huge costs in 2010. 2010 was a huge pink salmon year for PWS (with high prices specialization was good) and 1991 was the start of pink salmon stock + price collapse. Across permits, perhaps slight declines in some of these in recent years?  
   
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Time series of benefits of diversification by permit / strategy.", fig.height = 3}
