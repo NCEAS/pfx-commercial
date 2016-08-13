@@ -1,8 +1,27 @@
+```{r set-knitr-options, cache=FALSE, echo=FALSE}
+library("knitr")
+opts_chunk$set(cache=TRUE, echo=FALSE, message=FALSE, autodep=TRUE,
+  results='hide')
+opts_chunk$set(warning=FALSE, message=FALSE, cache.path="../cache/",
+  cache.lazy=TRUE)
+```
+
+
+```{r get-dat, cache=FALSE}
+load("../data-generated/output-values.rda")
+```
+
 # Introduction
 
 [@kasperski2013]
+[@simpson1949]
+[@sethi2012b]
+[@sethi2014]
+
 
 # Methods
+
+[@standevelopmentteam2015]
 
 # Results
 
