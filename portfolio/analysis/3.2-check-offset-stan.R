@@ -8,8 +8,8 @@ load("portfolio/data-generated/m.rda")
 
 # ------------------------
 b <- broom::tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
-stopifnot(nrow(filter(b, rhat > 1.1)) == 0)
-stopifnot(nrow(filter(b, ess < 100)) == 0)
+if(nrow(filter(b, rhat > 1.05)) > 0) warning("all rhat not <= 1.05")
+if(nrow(filter(b, ess < 200)) > 0) warning("all ess not >= 200")
 filter(b, grepl("^h1", term))
 filter(b, grepl("^g0", term))
 filter(b, grepl("^g_k", term))
