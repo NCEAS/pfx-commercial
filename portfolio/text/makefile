@@ -33,8 +33,17 @@ rtf: $(TEXT).pdf
 	latex2rtf -f0 -M6 -E0 $(TEXT).tex
 
 clean:
-	rm ms.md
 	latexmk -c
+	rm $(SOM).tex
+	rm $(MS).tex
+	rm $(SOM).pdf
+	rm $(TEXT).pdf
 
 continuous:
 	while true; do make --silent; sleep 1; done
+
+touch:
+	touch $(MS).Rmd
+	touch $(SOM).Rnw
+	touch $(TEXT).tex
+
