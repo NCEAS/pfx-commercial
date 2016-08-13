@@ -77,6 +77,28 @@
 
 \begin{document}
 
+<<set-knitr-options, cache=FALSE, echo=FALSE>>=
+library("knitr")
+opts_chunk$set(fig.align='center', fig.pos="htpb", cache=TRUE, echo=FALSE,
+  message=FALSE, autodep=TRUE, results='hide', fig.path='../figs/',
+  fig.width=6, par=TRUE)
+opts_chunk$set(warning=FALSE, message=FALSE, tidy=FALSE, refresh=TRUE,
+  cache.path="../cache/", cache.lazy=TRUE, size="small", cache.comments=FALSE)
+opts_chunk$set(dev = 'pdf')
+opts_knit$set(out.format = "latex", out.width="\\textwidth")
+opts_knit$set(eval.after = 'fig.cap') # evaluate fig.cap after the chunk
+opts_chunk$set(collapse = TRUE, comment = "")
+@
+
+
+<<get-values, cache=TRUE>>=
+wd <- getwd()
+setwd("../../")
+source("portfolio/analysis/prep-stan-model-matrix.R")
+rows_dat <- nrow(mm)
+setwd(wd)
+@
+
 \maketitle
 
 \renewcommand{\thefigure}{S\arabic{figure}}
@@ -84,6 +106,7 @@
 
 \section{Hierarchical model}
 
+Rows of data: \Sexpr{rows_dat}.
 
  % mm <- model.matrix(log(revenue) ~ -1 + b1(spec_change) + b2(spec_change) +
       % days_change + b1(spec_change):days_change + b2(spec_change):days_change,

@@ -44,3 +44,6 @@ portfolio/text/ms.tex
 *.zip
 
 data/cfec_070616
+portfolio/cache/*
+
+portfolio/text/supp.tex

@@ -8,6 +8,9 @@ all: $(TEXT).pdf $(SOM).pdf
 %.md: %.Rmd
 	Rscript -e "knitr::knit('$<')"
 
+%.tex: %.Rnw
+	Rscript -e "knitr::knit('$<')"
+
 %.tex: %.md
 	pandoc -S --no-wrap --bibliography=$(REFS).bib --natbib -fmarkdown-all_symbols_escapable $< -o $@
 	perl -p -i -e "s/Figure /Figure~/g" $@
