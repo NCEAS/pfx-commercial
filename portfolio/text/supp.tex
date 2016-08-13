@@ -11,6 +11,10 @@
 \usepackage{booktabs}
 \usepackage{verbatim}
 \usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabu} % for spacing between rows in longtable
 \usepackage{url}
 \usepackage{mathtools}
 \usepackage{bm}
@@ -222,10 +226,22 @@ and removes time effects.
 
 % \verbatiminput{../analysis/portfolio-offset.stan}
 
+
 \bibliographystyle{apalike}
 \bibliography{refs}
 
 \clearpage
+
+\begin{table}[h!]
+  \centering
+  \caption{Caption.}
+  \label{tab:strategies}
+  \begin{tabular}{ll}
+  \toprule
+\input{../figs/strategy-table.tex}
+  \end{tabular}
+\end{table}
+
 
 \begin{figure}[htbp]
 \begin{center}

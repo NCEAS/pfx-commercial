@@ -1,6 +1,6 @@
 strategy,description,str_label,big
 B61B,Halibut,Hal,1
-C61A,"SABLEFISH , LONGLINE, NORTHERN SOUTHEAST",Sab - SE,
+C61A,"Sablefish , longline, Southeast Alaska",Sab - SE,
 C61B,"Sablefish, longline, statewide",Sab,
 D09,Dungeness crab ,Dun C,
 G01,"Herring roe, purse seine ",Herr roe - seine,
@@ -12,19 +12,19 @@ M61B,"Finfish, longline, statewide",Fin - ll,
 M7HB,"Finfish, otter trawl, statewide",Fin - otter,
 M91B,"Finfish, pot gear, statewide",Fin - pot,
 Q11,Sea cucumber,Sea cuc,
-S01,"Salmon, purse seine, Cook Inlet and KODIAK",S - seine - K,
-S01A,"Salmon, purse seine, SOUTHEAST",S - seine - SE,
+S01,"Salmon, purse seine, Cook Inlet and Kodiak",S - seine - K,
+S01A,"Salmon, purse seine, Southeast Alaska",S - seine - SE,
 S01E,"Salmon, purse seine, PWS",S - seine - PWS,
-S01L,"Salmon, purse seine, CHIGNIK",S - seine - CH,
-S01M,"Salmon, purse seine, ALASKA PENINSULA",S - seine - AP,
-S03,"Salmon, drift gill net, COOK INLET, ALASKA PENINSULA, BRISTOL BAY",S - sockeye - drift,1
-S03A,"Salmon, drift gill net, SOUTHEAST",S - set - SE,
-S03E,"Salmon, drift gill net, PWS",S - set - PWS,
-S04a,"Salmon, gillnet, a lot of sockeye, PWS, COOK INLET, KODIAK,  ALASKA PENINSULA, BRISTOL BAY",S - sockeye - set,1
-S04b,"Salmon, gillnet, norton sound and kuskokwim",S - set - NS/K,1
-S04D,"Salmon, gillnet, YAKUTAT",S - set - YAK,
-S15B,"SALMON , POWER TROLL, STATEWIDE",S - troll,1
-T91Q,"TANNER CRAB , POT GEAR VESSEL 60' OR OVER, BERING SEA",Tan C,
-P09,"Shrimp, pot",Shrimp,
-T09,Tanner crab ,Tan C,
-S04Y,"Salmon, gillnet, Lower Yukon",S - set - YUK,
+S01L,"Salmon, purse seine, Chignik",S - seine - CH,
+S01M,"Salmon, purse seine, Alaska Penninsula",S - seine - AP,
+S03,"Salmon (mostly sockeye), drift gill net, CI, AP, BB","S - drift - CI, AP, BB (sock)",1
+S03A,"Salmon, drift gill net, Southeast Alaska",S - drift - SE,
+S03E,"Salmon, drift gill net, PWS",S - drift - PWS,
+S04a,"Salmon (mostly sockeye), set gillnet, PWS, CI, K,  AP, BB","S - set - PWS, CI, K, AP, BB (sock)",1
+S04b,"Salmon, set gillnet, Norton Sound and Kuskokwim",S - set - NS/K,1
+S04D,"Salmon, set gillnet, Yakutat",S - set - YAK,
+S15B,"Salmon , power troll, statewide",S - troll,1
+T91Q,"Tanner crab, pot gear vessel over 60'",Tan C - large,
+P09,Shrimp,Shrimp,
+T09,"Tanner crab, pot gear vessel under 60'",Tan C,
+S04Y,"Salmon, gillnet, lower Yukon",S - set - YUK,
