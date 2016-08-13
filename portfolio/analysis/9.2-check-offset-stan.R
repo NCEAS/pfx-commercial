@@ -146,3 +146,57 @@ filter(b, grepl("b_j\\[", term) | grepl("g_k\\[", term) | grepl("h1", term)) %>%
   geom_hline(yintercept = 0, lty = 2) +
   coord_flip()
 ggsave("portfolio/figs/stan-main-effects.pdf", width = 6.5, height = 6)
+
+p <- stanhelpers::extract_df(m, output = "long_df") %>%
+  filter(grepl("^b_j", variable) | grepl("^g0$", variable) |
+      grepl("^h1", variable) | grepl("^g_k", variable)) %>%
+  mutate(variable = as.character(variable)) %>%
+  group_by(variable) %>%
+  summarize(l = quantile(value, probs = 0.025),
+    l.5 = quantile(value, probs = 0.25),
+    m = quantile(value, probs = 0.5),
+    u.5 = quantile(value, probs = 0.75),
+    u = quantile(value, probs = 0.975))
+
+# changed?
+stopifnot(p$variable == c("b_j_1", "b_j_2", "b_j_3", "b_j_4", "b_j_5",
+  "g_k_1", "g_k_2",
+  "g_k_3", "g_k_4", "g_k_5", "g0", "h1"))
+
+term_lu <- data.frame(
+  variable = c("b_j_1", "b_j_2", "b_j_3", "b_j_4", "b_j_5", "g_k_1", "g_k_2",
+    "g_k_3", "g_k_4", "g_k_5", "g0", "h1"),
+  term_clean = c(
+    "b1 (specializing)",
+    "b2 (generalizing)",
+    "b3 (days fished % change)",
+    "b4 (days fished %:specializing)",
+    "b5 (days fished %:generalizing)",
+
+    "g1 (specializing)",
+    "g2 (generalizing)",
+    "g3 (days fished % change)",
+    "g4 (days fished %:specializing)",
+    "g5 (days fished %:generalizing)",
+
+    "g0 (global scale intercept)",
+    "u1 (strategy-level diversity effect)"
+  )
+  )
+p$term_clean <- NULL
+p <- inner_join(p, term_lu)
+p$term_clean <- factor(p$term_clean,
+  levels = rev(sort(as.character(p$term_clean))))
+
+devtools::load_all("pfxr")
+
+p1 <- ggplot(p, aes(x = term_clean, y = m)) +
+  geom_point() +
+  geom_pointrange(aes(ymin = l, ymax = u), size = 0.2) +
+  geom_linerange(aes(ymin = l.5, ymax = u.5), size = 0.9) +
+  ylab("Parameter estimate") +
+  geom_hline(aes(yintercept = 0), lty = 2, col = "grey60") +
+  geom_vline(aes(xintercept = 7.5), lty = 2, col = "grey60") +
+  geom_vline(aes(xintercept = 1.5), lty = 2, col = "grey60") +
+  coord_flip() + theme_gg() + xlab("")
+ggsave("portfolio/figs/stan-main-effects.pdf", width = 5.5, height = 4)
