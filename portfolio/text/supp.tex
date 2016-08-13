@@ -78,96 +78,149 @@
 \renewcommand{\thefigure}{S\arabic{figure}}
 \renewcommand{\thetable}{S\arabic{table}}
 
-Hierarchical model
+\section{Hierarchical model}
 
-\citep{kasperski2013}
 
-\begin{align*}
-\mathrm{Pr}(\nu_i < 10) &\sim \mathrm{Beta}(A_i, B_i)\\
-\mu_i &= \mathrm{logit}^{-1}(\alpha
-  + \alpha^\mathrm{class}_{j[i]}
-  + \alpha^\mathrm{order}_{k[i]}
-  + \alpha^\mathrm{species}_{l[i]}
-  + \bm{X_i} \bm{\beta}),
-  \: \\
-  &\quad \, \text{for } i = 1, \dots, 609\\
-A_i &= \phi_\mathrm{disp} \mu_i\\
-B_i &= \phi_\mathrm{disp} (1 - \mu_i)\\
-\alpha^\mathrm{class}_j &\sim
-  \mathrm{Normal}(0, \sigma^2_{\alpha \; \mathrm{class}}),
-  \: \text{for } j = 1, \dots, 6\\
-\alpha^\mathrm{order}_k &\sim
-  \mathrm{Normal}(0, \sigma^2_{\alpha \; \mathrm{order}}),
-  \: \text{for } k = 1, \dots, 38\\
-\alpha^\mathrm{species}_l &\sim
-  \mathrm{Normal}(0, \sigma^2_{\alpha \; \mathrm{species}}),
-  \: \text{for } l = 1, \dots, 301,
-\end{align*}
+ % mm <- model.matrix(log(revenue) ~ -1 + b1(spec_change) + b2(spec_change) +
+      % days_change + b1(spec_change):days_change + b2(spec_change):days_change,
 
-Negatives are that it uses a smaller subset of the data; 
+The basic model is a heirarchical linear regression with Gaussian errors
+predicting $\log$ revenue, $\log(R_{i,t})$, for
+each fisher $i$ and time (year) $t$:
 
+\begin{equation}
+\log(R_{i,t}) \sim \mathrm{N} \left(\widehat{\log(R_{i,t})}, \widehat{\sigma_{i,t}^2} \right).
+\end{equation}
+
+Each year $t$ of revenue for fisher $i$
+is assigned a strategy indexed by $j$ and
+expected $\log(R_{i,t})$ is modelled as:
+
+\begin{equation}
+\widehat{\log(R_{i,t})} = \beta_{0,j,t} +
+  \beta_{1,j} S_{i,t} I_{i,t} +
+  \beta_{2,j} S_{i,t} I_{i,t} +
+  \beta_3 D_{i,t} +
+  \beta_4 S_{i,t} D_{i,t} I_{i,t} +
+  \beta_5 S_{i,t} D_{i,t} I_{i,t} +
+  \log(R_{i,t-1})
+\end{equation}
+
+\noindent
+where $S_{i,t}$ is the percent change in species diversity,
+$\log \left(\mathrm{div}_{i,t}/\mathrm{div}_{i,t-1}\right)$,
+$D_{i,t}$ is the percent change in days fished,
+$\log \left(\mathrm{days}_{i,t}/\mathrm{days}_{i,t-1}\right)$, and
+$I_{i,t}$ is an indicator variable that takes a value $0$
+if $\mathrm{div}_{i,t} \ge \mathrm{div}_{i,t-1}$
+(species diversity increasing; generalizing)
+and takes a value $1$ if
+$\mathrm{div}_{i,t} < \mathrm{div}_{i,t-1}$
+(species diversity decreasing; specializing).
+$\log(R_{i,t-1}$) is treated as an offset term:
+it is added on the right side of the equation
+to essentially model percent change in revenue,
+i.e., $\log(R_{i,t}) - \log(R_{i,t-1}) = \log(R_{i,t}/R_{i,t-1})$.
+
+The $\beta$'s represent estimated coefficients, some of which are
+allowed to vary.
+The intercepts $\beta_{0,j,t}$ are allowed to vary by
+strategy-year combinations,
+are centered on zero, and are constrained by a normal distribution:
+
+\begin{equation}
+\beta_{0,j,t} \sim \mathrm{N} \left(0, \sigma^2_{\beta_{j,t}} \right).
+\end{equation}
+
+This, combined with the lack of a global intercept, constrains
+the mean change in log revenue across all fishers and years to
+be zero. I.e., we assume that the data are stationary
+after accounting for all covariates and including
+an intercept that varies with strategy-year combinations.
+Initial versions of the model
+confirmed that the global intercept along with stragey-level
+intercepts would be estimated at almost exactly zero.
+
+TODO EXPLAIN WHY DO THIS
+
+The slopes $\beta_{1,j}$ and $\beta_{1,j}$
+are then allowed to vary by strategy with estimated means:
+
+\begin{align}
+\beta_{1,j} &\sim \mathrm{N} \left(\beta_1, \sigma^2_{\beta_1}\right),\\
+\beta_{2,j} &\sim \mathrm{N} \left(\beta_1, \sigma^2_{\beta_2}\right).
+\end{align}
+
+The $\beta_{1,j}$'s represent how much an X\% decrease in species
+diversity within a strategy translates to a Y\% change in revenue.
+The $\beta_{2,j}$'s represent how much an X\% increase in species
+diversity within a strategy translates to a Y\% change in revenue.
+These are after controlling for percent change in days fished, $\beta_3$,
+and the interaction between days fished and percent change in species
+diversity, $\beta_4$ and $\beta_5$.
+
+Whereas a typical heirarchical linear regression model
+would estimate a single residual error scale term, $\sigma$,
+we model the scale of the residual error  with
+another heirarchical model with a similar form:
+
+\begin{equation}
+\widehat{\sigma_{i,t}} =
+\exp \left( \gamma_{0,j} + \eta_1 M_j +
+\gamma_{1,j} S_{i,t} I_{i,t} +
+\gamma_{2,j} S_{i,t} I_{i,t} +
+\gamma_3 D_{i,t} +
+\gamma_4 S_{i,t} D_{i,t} I_{i,t} +
+\gamma_5 S_{i,t} D_{i,t} I_{i,t}\right),
+\end{equation}
+
+where $M_j$ represents the raw mean species diversity for strategy $j$
+and $\eta_1$ represents an estimated strategy-level predictor.
+In other words, $\gamma_{0,j} + \eta_1 M_j$ represents the intercept
+with a built-in strategy-level regression (Fig.~3)
+that incorporates parameter uncertainty.
+Again, $S_{i,t}$ and $I_{i,t}$ represent, respectively,
+percent change in species
+diversity and an indicator variable for increasing or
+decreasing species diversity.
+We exponentiate the equation to ensure all scale parameters, $\sigma_{i,t}$,
+are positive.
+
+The $\gamma$'s are estimated coefficients, three of which
+are allowed to vary by strategy, constrained by normal distributions
+and with estimated means:
+
+\begin{align}
+\gamma_{0,j}  &\sim \mathrm{N} \left(\gamma_0, \sigma^2_{\gamma_0}\right),\\
+\gamma_{1,j}  &\sim \mathrm{N} \left(\gamma_1, \sigma^2_{\gamma_1}\right),\\
+\gamma_{2,j}  &\sim \mathrm{N} \left(\gamma_2, \sigma^2_{\gamma_2}\right).
+\end{align}
+
+We fit our models in Stan version 2.11.1. \ldots
+
+We checked our models with a two-part modelling approach
+using the R package lme4.
+To do this, we fit the initial model of the mean component $\log(R_{i,t})$
+and then fit the second model to the log absolute value of the
+residuals, $\log | \widehat{\log(R_{i,t})} - \log(R_{i,t}) |$.
+Most importantly, (1) this model does not carry uncertainty
+from the first mean-component model to the variance-component model, but
+(2) it also leaves the residuals in the mean-component model strongly
+heteroskedastic and therefore improperly weights individual data points, and
+(3) does not allow for proper modelling of the strategy-level predictor,
+$\eta_1$. Nonetheless, it provides a check that our results
+from the Stan model are approximately correct and allowed us
+to quickly iterate and build intuition about the models.
+
+
+\subsection{points to include}
+
+Negatives are that it uses a smaller subset of the data;
 positives are
 that it doesn't require estimating people-specific random effects (n = 3000+)
-and removes possible time effects. The basic regression model is 
+and removes time effects.
 
-\begin{equation}
-  { Y }_{ i,t } \sim \mathrm{N}(\hat { { Y }}_{ i,t } ,\sigma^2 )
-\end{equation}
-
-\subsection{Model for the mean}
-
-The model's expectation is written as a hierarchical random effects linear
-model with random effects in the intercept and slope. 
-
-\begin{equation}
-{ \hat { Y }  }_{ t,i }={ B }_{ 0,j }+{ B }_{ 1,j }\cdot { s }_{ t,i }+{o}_{ t,i}
-\end{equation}
-
-\noindent
-where ${ B }_{ 0,j }$ is a normally distributed random effect intercept in the
-mean (j subscripting different strategies). The interpretation of ${B}_{ 0,j}$
-is that each after log-differencing, each strategy has different effects on
-changes in revenue (some tend to be winners, others tend to be losers). Initial
-versions of this model included estimating ${ B }_{ 0,j }$, which were largely
-centered on 0 (as expected), so these random effects were set to 0.  \newline  
-  
-The covariate ${ s }_{ t,i }$ is input as data, and represents the percent
-change in species diversity over the same time period that the percent change
-in revenue is being modeled, $\log\left( \frac { { div }_{ t+1,i } }{ { div }_{
-t,i } }  \right)$ where ${ div }_{ t,i }$ is the effective diversity of
-individual $i$ at time $t$. The coefficient ${ B }_{ 1,j }$ is a random effect
-on the slope, by strategy, representing how much an X\% change in species
-diversity within a strategy translates to a Y\% change in revenue. 
-
-\subsection{Offset}
-
-To account for variable effort over time (changes in revenue could be
-attributed to diversification, but also to more fishing) we included an offset
-term ${o}_{t,i}$, representing the percent change in landing dates between
-years. We experimented with different versions of the offset and when included
-in the model as a predictor, the coefficient is estimated to be $\sim$ 1, so this is
-a reasonable assumption. The offset is calculated as $\log\left( \frac { { day
-}_{ t+1,i } }{ { day }_{ t,i } }  \right)$. \newline
-
-\subsection{Equation for the variance}
-
-Finally, the scale of the residual error term is also modeled as a linear
-function of covariates, 
-
-\begin{equation}
-{ \sigma  }_{ t,i }=
-\sqrt { \exp \left( \gamma _{ 0,j }+
-{ \gamma  }_{ 1,j }\cdot { s }_{ t,i } \right)  }
-\end{equation}
-
-\noindent
-where the $\gamma_{ 0,j }$ and $\gamma_{ 1,j }$ represent random intercepts and
-slopes in the strategies. I had been interpreting the intercepts as the
-between-group variability in strategies (some strategies will have more
-variable \% change in revenue than others, similar to some stocks having higher
-variability in returns). I was interpreting the random slope $\gamma_{ 1,j }$
-as the effect of within-strategy diversification; in other words, the effect
-of increases in species diversification varied among different strategies. 
+% \verbatiminput{../analysis/portfolio-offset.stan}
 
 \bibliographystyle{apalike}
 \bibliography{refs}
