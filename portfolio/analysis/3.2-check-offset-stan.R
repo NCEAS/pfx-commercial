@@ -8,15 +8,13 @@ load("portfolio/data-generated/m.rda")
 
 # ------------------------
 b <- broom::tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
-filter(b, rhat > 1.1)
-filter(b, ess < 100)
-# filter(b, grepl("^h1", term))
-# filter(b, grepl("^b0", term))
-# filter(b, grepl("^g0", term))
-# filter(b, grepl("^g_k", term))
+stopifnot(nrow(filter(b, rhat > 1.1)) == 0)
+stopifnot(nrow(filter(b, ess < 100)) == 0)
+filter(b, grepl("^h1", term))
+filter(b, grepl("^g0", term))
+filter(b, grepl("^g_k", term))
 filter(b, grepl("^b_j", term))
-# filter(b, grepl("*_tau$", term))
-# filter(b, grepl("^coef_*", term)) %>% select(rhat, ess)
+filter(b, grepl("*_tau$", term))
 
 # check mixing:
 pdf("portfolio/figs/stan-traces.pdf", width = 10, height = 8)
@@ -109,12 +107,6 @@ group_model <- function(par = "coef_g0_strategy", type = "diversity") {
   p
 }
 
-# md <- dat %>% group_by(strategy_id, strategy) %>% summarise(mean_group = mean(scaled_spec_div))
-#   filter(b, grepl("sigma0_dev", term)) %>% mutate(strategy_id = 1:n()) %>% inner_join(md)
-#   filter(b, grepl("b1_sig_dev", term)) %>% mutate(strategy_id = 1:n()) %>% inner_join(md) %>%
-#     select(estimate, std.error, strategy) %>% arrange(estimate)
-
-
 pdf("portfolio/figs/stan-group-relationships.pdf", width = 8, height = 10)
 p1 <- group_model("coef_g0_strategy")
 #p2 <- group_model("coef_b0_strategy")
@@ -140,63 +132,10 @@ gridExtra::grid.arrange(p1, p3, p4, p5, p6)
 dev.off()
 
 filter(b, grepl("b_j\\[", term) | grepl("g_k\\[", term) | grepl("h1", term)) %>%
-  mutate(par = c(paste("[mu]", colnames(mm)), paste("[sigma]", colnames(mm2)), "[str. level] h1")) %>%
+  mutate(par = c(paste("[mu]", colnames(mm)),
+    paste("[sigma]", colnames(mm2)), "[str. level] h1")) %>%
   ggplot(aes(par, estimate)) +
   geom_pointrange(aes(ymin = conf.low, ymax = conf.high), size = 0.35) +
   geom_hline(yintercept = 0, lty = 2) +
   coord_flip()
-ggsave("portfolio/figs/stan-main-effects.pdf", width = 6.5, height = 6)
-
-p <- stanhelpers::extract_df(m, output = "long_df") %>%
-  filter(grepl("^b_j", variable) | grepl("^g0$", variable) |
-      grepl("^h1", variable) | grepl("^g_k", variable)) %>%
-  mutate(variable = as.character(variable)) %>%
-  group_by(variable) %>%
-  summarize(l = quantile(value, probs = 0.025),
-    l.5 = quantile(value, probs = 0.25),
-    m = quantile(value, probs = 0.5),
-    u.5 = quantile(value, probs = 0.75),
-    u = quantile(value, probs = 0.975))
-
-# changed?
-stopifnot(p$variable == c("b_j_1", "b_j_2", "b_j_3", "b_j_4", "b_j_5",
-  "g_k_1", "g_k_2",
-  "g_k_3", "g_k_4", "g_k_5", "g0", "h1"))
-
-term_lu <- data.frame(
-  variable = c("b_j_1", "b_j_2", "b_j_3", "b_j_4", "b_j_5", "g_k_1", "g_k_2",
-    "g_k_3", "g_k_4", "g_k_5", "g0", "h1"),
-  term_clean = c(
-    "b1 (specializing)",
-    "b2 (generalizing)",
-    "b3 (days fished % change)",
-    "b4 (days fished %:specializing)",
-    "b5 (days fished %:generalizing)",
-
-    "g1 (specializing, variability)",
-    "g2 (generalizing, variability)",
-    "g3 (days fished % change, variability)",
-    "g4 (days fished %:specializing, variability)",
-    "g5 (days fished %:generalizing, variability)",
-
-    "g0 (global intercept, variability)",
-    "u1 (strategy-level diversity effect, variability)"
-  )
-  )
-p$term_clean <- NULL
-p <- inner_join(p, term_lu)
-p$term_clean <- factor(p$term_clean,
-  levels = rev(sort(as.character(p$term_clean))))
-
-devtools::load_all("pfxr")
-
-p1 <- ggplot(p, aes(x = term_clean, y = m)) +
-  geom_point() +
-  geom_pointrange(aes(ymin = l, ymax = u), size = 0.2) +
-  geom_linerange(aes(ymin = l.5, ymax = u.5), size = 0.9) +
-  ylab("Parameter estimate") +
-  geom_hline(aes(yintercept = 0), lty = 2, col = "grey60") +
-  geom_vline(aes(xintercept = 7.5), lty = 2, col = "grey60") +
-  geom_vline(aes(xintercept = 1.5), lty = 2, col = "grey60") +
-  coord_flip() + theme_gg() + xlab("")
-ggsave("portfolio/figs/stan-main-effects.pdf", width = 5.6, height = 4)
+ggsave("portfolio/figs/stan-main-effects-broom.pdf", width = 6.5, height = 6)
