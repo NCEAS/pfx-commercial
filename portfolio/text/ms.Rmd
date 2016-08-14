@@ -63,7 +63,7 @@ and with permit holders omitted each year who fished any of the
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.9\textwidth]{../figs/stan-gg-spoke2.pdf}
-\caption{Adding permits reduces risk.
+\caption{Diversifying permits reduces risk and usually increases revenue.
 Two examples of expected revenue variability 
 and median revenue for
 owners of (A) individual halibut and (B) gillnet herring roe permits
@@ -81,14 +81,15 @@ credible intervals.}
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../figs/stan-across-strategy-variability.pdf}
-\caption{Fishing strategies with higher species diversity
+\caption{Individuals who choose
+permits with higher species diversity
 have lower expected revenue variability.
 On the y-axis, dots, thick lines, and thin lines represent posterior medians,
 50\%, and 95\% credible intervals for
-the `r nstr` most common strategies.
-Thick black line, dark, and light grey shaded regions
+the `r nstr` most common permit strategies.
+Thick black line, and dark and light grey shaded regions
 indicate median, 50\%, and 95\% credible intervals
-of strategy-level regression built into the heirarchical model.
+of strastegy-level regression built into the heirarchical model.
 }
 \label{fig:across}
 \end{center}
@@ -101,8 +102,17 @@ of strategy-level regression built into the heirarchical model.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1.1\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
-\caption{Effects of generalizing and specializing from year to year for
-individual permit holders across the `r nstr` most common strategies.}
+\caption{Effects of (A) generalizing and (B) specializing from year to year for
+individual permit holders across the `r nstr` most common strategies.
+Changing species diversity from year to year 
+is associated with higher variability
+for individuals within the strategies above the zero line.
+Generalizing (A) or specializing (B) is associated with
+greater expected revenue to the right of the zero line
+and lower expected revenue to the left of the zero line.
+These effects are estimated holding
+fishing season length constant from year to year.
+}
 \label{fig:within}
 \end{center}
 \end{figure}
