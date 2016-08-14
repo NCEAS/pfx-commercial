@@ -11,13 +11,8 @@
 \usepackage{booktabs}
 \usepackage{verbatim}
 \usepackage{amsmath}
-\usepackage{longtable}
-\usepackage{multirow}
-\usepackage{array}
-\usepackage{tabu} % for spacing between rows in longtable
 \usepackage{url}
 \usepackage{mathtools}
-\usepackage{bm}
 \usepackage{lineno}
 \usepackage{xcolor}
 \renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
@@ -33,8 +28,6 @@
 \usepackage[supstfm=libertinesups,%
   supscaled=1.2,%
   raised=-.13em]{superiors}
-
-\mathchardef\mhyphen="2D % math hyphen
 
 \textheight 22.0cm
 
@@ -94,14 +87,24 @@ load("../data-generated/output-values.rda")
 \renewcommand{\thefigure}{S\arabic{figure}}
 \renewcommand{\thetable}{S\arabic{table}}
 
-\section{Hierarchical model}
+\section{Data filtering}
 
 Rows of data: \Sexpr{nrows}.
 Number of permit holders: \Sexpr{npholders}.
 Range of years: \Sexpr{range_yrs}.
+
+\section{Assigning strategies}
+
 Number of strategies: \Sexpr{nstr}
 
-\citep{gelman2014}
+\section{Hierarchical model}
+
+Overview... why first diff, why 2 part
+
+Negatives are that it uses a smaller subset of the data;
+positives are
+that it doesn't require estimating people-specific random effects (n = 3000+)
+and removes time effects.
 
 The basic model is a heirarchical linear regression with Gaussian errors
 predicting $\log$ revenue, $\log(R_{i,t})$, for
@@ -218,6 +221,9 @@ and with estimated means:
 We fit our models in Stan version 2.11.1. \ldots
 \citep{hoffman2014, standevelopmentteam2015a, carpenter2015a, standevelopmentteam2015}
 
+\citep{gelman2014}
+\citep{rcoreteam2016}
+
 We checked our models with a two-part modelling approach
 using the R package lme4.
 To do this, we fit the initial model of the mean component $\log(R_{i,t})$
@@ -232,13 +238,6 @@ $\eta_1$. Nonetheless, it provides a check that our results
 from the Stan model are approximately correct and allowed us
 to quickly iterate and build intuition about the models.
 
-
-\subsection{points to include}
-
-Negatives are that it uses a smaller subset of the data;
-positives are
-that it doesn't require estimating people-specific random effects (n = 3000+)
-and removes time effects.
 
 % \verbatiminput{../analysis/portfolio-offset.stan}
 

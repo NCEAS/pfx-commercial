@@ -11,6 +11,9 @@ opts_chunk$set(warning=FALSE, message=FALSE, cache.path="../cache/",
 load("../data-generated/output-values.rda")
 ```
 
+# Abstract
+
+
 # Introduction
 
 [@kasperski2013]
@@ -22,6 +25,7 @@ load("../data-generated/output-values.rda")
 # Methods
 
 [@standevelopmentteam2015]
+[@rcoreteam2016]
 
 # Results
 
@@ -37,7 +41,19 @@ load("../data-generated/output-values.rda")
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../figs/fig1-jk.pdf}
-\caption{Caption here}
+\caption{
+Trends in revenue and diversification over time.
+(A) Map of fishing regions in Alaska, USA.
+(B) Total revenue in billions of 20XX U.S. dollars from `r range_yrs[1]` to
+`r range_yrs[2]` for multiple (grey) and single (blue) permit holders.
+(C) Proportion of single permit holders for all fisheries (thick black line)
+and with permit holders omitted each year who fished any of the
+`r n_jacknifed` top species groups (thin lines).
+(D) Mean effective diversity of species fished (Simpson's diversity index) 
+for all fisheries (thick black line)
+and with permit holders omitted each year who fished any of the
+`r n_jacknifed` top species groups (thin lines).
+}
 \label{fig:ts}
 \end{center}
 \end{figure}
@@ -47,7 +63,15 @@ load("../data-generated/output-values.rda")
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.9\textwidth]{../figs/stan-gg-spoke2.pdf}
-\caption{Caption here}
+\caption{Adding permits reduces risk.
+Two examples of expected revenue variability 
+and median revenue for
+owners of (A) individual halibut and (B) gillnet herring roe permits
+(light blue)
+compared with owners of the same permit plus one more (medium blue)
+or two more permits (dark blue).
+On the y-axis, dots and lines represent posterior median and 50\%
+credible intervals.}
 \label{fig:spokes}
 \end{center}
 \end{figure}
@@ -57,7 +81,15 @@ load("../data-generated/output-values.rda")
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../figs/stan-across-strategy-variability.pdf}
-\caption{Caption here}
+\caption{Fishing strategies with higher species diversity
+have lower expected revenue variability.
+On the y-axis, dots, thick lines, and thin lines represent posterior medians,
+50\%, and 95\% credible intervals for
+the `r nstr` most common strategies.
+Thick black line, dark, and light grey shaded regions
+indicate median, 50\%, and 95\% credible intervals
+of strategy-level regression built into the heirarchical model.
+}
 \label{fig:across}
 \end{center}
 \end{figure}
@@ -69,7 +101,8 @@ load("../data-generated/output-values.rda")
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1.1\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
-\caption{Caption here}
+\caption{Effects of generalizing and specializing from year to year for
+individual permit holders across the `r nstr` most common strategies.}
 \label{fig:within}
 \end{center}
 \end{figure}
