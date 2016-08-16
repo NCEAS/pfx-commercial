@@ -3,10 +3,10 @@ title: "Diversification of salmon fishermen within strategies (permits)"
 author: ''
 date: ''
 output:
-  word_document: default
   pdf_document:
     fig_caption: yes
   html_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
@@ -30,6 +30,7 @@ library(zoo)
 - Across strategies, we see little effect of species diversity on mean revenue or CV -- the strongest relationship might be a slight negative effect of increased species diversity on the CV. Figure \ref{fig:pairsplot} . There's certainly some strategies (permits) that are not very diverse, but have high revenue + low CVs.  
 - There's a number of salmon permits that allow people to diversify.  Some don't (sockeye in Bristol Bay, Cook Inlet, etc), so we'll focus on the permits where people may be able to choose different within-permit strategies.  
 - It's ok to be specialized if both abundance and prices are high. If one or the other is high, that may be ok too -- but if abundance and prices drop, things are in bad quadrant.  
+- Late 1980s/early 1990s saw pretty strong declines in pink prices + high abundance (tie in with crash of foreign currencies)  
 - Substitution of high value species (Chinook, sockeye) for lower value species (pink,chum) has analogs in terrestrial farming (e.g. tobacco or cocoa substitution). Extremes are high-value low volume crops (e.g. cereals) vs low-volume high value (e.g. spices).  
 - Diversifying has analog in terrestrial world -- specialization increases the CV and may or may not have benefit to the mean. Purdy, Barry M; Langemeier, Michael R; Featherstone, Allen M. Journal of Agricultural and Applied Economics29.1 (Jul 1, 1997): 149.  
 - Hook: Specialization on certain spcecies a result of management (hatchery releases) + economics (+ marketing); reduced diversification on abundant low-value spp
@@ -37,7 +38,8 @@ library(zoo)
 ## Methods
 
 ### Hatchery programs were designed to reduce variation in harvest. Has that happened?  
-  
+Below we quantified 3 trends in variation: year-to-year variation at the entire fishery level, year-to-year variation at the individual level, and variability between people
+
 ### Does diversification exist within permits and if so, do we see similar advantages of diversification on revenue + CV?  
   
 ### Is there a changing benefit to diversification over time?  
@@ -49,7 +51,10 @@ Key things to look at:
 
 ## Discussion
 
-- Prices synchronous for coho/chum/pink. Have increased more quickly for these than sockeye and Chinook in most areas since 2002. Projecting future prices are complex -- Gunnar Knapp has a good presentation on this   http://www.adfg.alaska.gov/static/fishing/PDFs/commercial/gk_trends_4-12-12.pdf  
+- Prices synchronous for coho/chum/pink. Have increased more quickly for these than sockeye and Chinook in most areas since 2002. Projecting future prices are complex -- Gunnar Knapp has a good presentation on this http://www.adfg.alaska.gov/static/fishing/PDFs/commercial/gk_trends_4-12-12.pdf
+
+- Ability to specialize primarily driven by forces beyond control of fishermen. But in some situations, diversification is possible by extending fishing season to exploit additional spp (fishing earlier for chum in PWS S01E).  
+  
 - We're seeing increased specialization within permits. People in PWS are trending toward increased specialization on pink salmon. People in SEAK trending toward increased specialization on chum. Both of these are switches from higher value species (sockeye, chum) to lower value species. Both pink and chum have higher variability in year to year returns than sockeye do. 
 
 \break  
@@ -95,6 +100,9 @@ cfec$year = as.numeric(substr(cfec$landdate, 1, 4))
 # only use people who are using just that permit - diversification within permit
 cfec.raw = cfec
 dat.salmon = dat.diff[dat.diff$strategy_permit%in%c("S01A", "S01E", "S01K", "S03A", "S03E","S01M","S04K"),]
+
+# Restrict analysis to people who keep same strategy - complicates days, etc
+dat.salmon = dat.salmon[which(dat.salmon$strategy_permit==dat.salmon$strategy_permit.prev),]
 
 dat.salmon$days.change = log((dat.salmon$days_permit+1) / (dat.salmon$days_permit.prev+1))
 dat.salmon$year_permit = as.factor(paste(dat.salmon$year, dat.salmon$strategy_permit))
@@ -170,8 +178,6 @@ ggplot(summary, aes(log(cv.post/cv.pre))) + geom_histogram(bins=100) + facet_wra
 #  do(fit = lm(logdiffg ~ year, data = .))
 
 ```
-
-
 
 \break 
   
@@ -400,6 +406,44 @@ g = group_by(df, year, group) %>%
     cv = sd(logdiff,na.rm=T))
     
 gridExtra::grid.arrange(p3,p0,p1,p2,ncol=2)
+```
+
+```{r, echo=FALSE, eval = FALSE}
+# These are the run  timing plots per Milo's questions
+
+# for 2008, create cumulative density plots of salmon landings by calday
+pinkchum = cfec.raw[cfec.raw$p_fshy=="S 01E" & cfec.raw$spec%in%c("PINK","CHUM","SOCK"),]
+#pinkchum = cfec.raw[cfec.raw$p_fshy=="S 03T" & cfec.raw$spec%in%c("PINK","SOCK","CHNK"),]
+
+# aggregate by calendar day
+pinkchum$month = as.numeric(substr(pinkchum$day, 1, 2))
+pinkchum$day = as.numeric(substr(pinkchum$day, 4, 5))
+pinkchum$jday = date::mdy.date(pinkchum$month, pinkchum$day, pinkchum$year) - date::mdy.date(1,1,pinkchum$year)
+
+group_by(pinkchum, jday, year) %>% 
+  summarize(pink = sum(g_earn[spec=="PINK"]), 
+    chum = sum(g_earn[spec=="CHUM"]),
+    sock = sum(g_earn[spec=="SOCK"])) %>% 
+  group_by(year) %>% 
+  mutate(tot = sum(pink) + sum(chum) + sum(sock), pink = pink/tot, chum = chum/tot, sock = sock/tot) %>% 
+ggplot(aes(jday, pink)) + geom_line(color="pink") + geom_line(aes(jday, chum), color="darkgreen") + geom_line(aes(jday, sock), color="lightblue") + facet_wrap(~ year, scale="free")
+
+# make plot of all earnings or weight by jday
+salm = cfec.raw[cfec.raw$p_fshy=="S 01E",]
+salm$month = as.numeric(substr(salm$day, 1, 2))
+salm$day = as.numeric(substr(salm$day, 4, 5))
+salm$jday = date::mdy.date(salm$month, salm$day, salm$year) - date::mdy.date(1,1,salm$year)
+
+g = group_by(salm, jday, year) %>% 
+  summarize(earn = sum(g_earn), 
+    lbs = sum(g_pounds), 
+    pink = sum(g_earn[spec=="PINK"])/earn,
+    sock = sum(g_earn[spec=="SOCK"])/earn,
+    chum = sum(g_earn[spec=="CHUM"])/earn,
+    coho = sum(g_earn[spec=="COHO"])/earn,
+    chnk = sum(g_earn[spec=="CHNK"])/earn) %>% 
+ggplot(g, aes(jday, (earn))) + geom_line(colour = rgb(g$sock+g$coho+g$chnk, g$chum, g$pink)) + facet_wrap(~ year, scale="free_y")
+
 ```
 
 ```{r, echo = FALSE, fig.cap="SEAK purse seine fishery", cache=TRUE, fig.pos="placeHere"}
