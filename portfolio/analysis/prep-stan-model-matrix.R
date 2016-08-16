@@ -4,16 +4,16 @@ if (!exists("mm") | !exists("dat") | !exists("md")) {
   source("portfolio/analysis/cull-dat.R")
   dat <- cullDat(diff = TRUE)
 
-  # downsample for fast testing
-  unique_holders <- unique(dat$p_holder)
-  n_sample <- round(length(unique_holders)*0.5)
-  set.seed(121)
-  dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
-  nrow(dat)
+  # # downsample for fast testing
+  # unique_holders <- unique(dat$p_holder)
+  # n_sample <- round(length(unique_holders)*0.5)
+  # set.seed(121)
+  # dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
+  # nrow(dat)
 
-  dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 0)
-  nrow(dat)
-  length(unique(dat$strategy))
+  # dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 0)
+  # nrow(dat)
+  # length(unique(dat$strategy))
 
   dat <- mutate(dat,
     revenue_change = log(revenue/revenue.prev),
