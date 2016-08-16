@@ -16,16 +16,30 @@ load("../data-generated/output-values.rda")
 
 # Introduction
 
-[@kasperski2013]
-[@simpson1949]
-[@sethi2012b]
-[@sethi2014]
+What's been done
 
+[@kasperski2013]
+[@sethi2012b]
+[@sethi2010b]
+[@sethi2014]
+[@perruso2005]
+[@hilborn2001]
+[@edwards2004]
+[@trenkel2013]
+[@mumford2009]
+[@oostenbrugge2002]
+[@baldursson1997]
+[@jardine2015]
+[@sanchirico2008]
+
+Multiple ways one can diversify: 
+buy another permit, pick diverse permit, diversify within existing constraints.
 
 # Methods
 
 [@standevelopmentteam2015]
 [@rcoreteam2016]
+[@simpson1949]
 
 # Results
 
