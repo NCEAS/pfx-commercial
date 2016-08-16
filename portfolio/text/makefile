@@ -25,9 +25,10 @@ $(TEXT).pdf: $(MS).tex $(TEXT).tex $(REFS).bib
 $(SOM).pdf: $(SOM).tex $(REFS).bib
 	latexmk $(SOM)
 
-dropbox: $(TEXT).pdf rtf
+dropbox: $(TEXT).pdf $(SOM).pdf
 	cp $(TEXT).pdf ~/Dropbox/Public/$(TEXT).pdf
-	cp $(TEXT).rtf ~/Dropbox/Public/$(TEXT).rtf
+	cp $(SOM).pdf ~/Dropbox/Public/$(SOM).pdf
+	# cp $(TEXT).rtf ~/Dropbox/Public/$(TEXT).rtf
 
 rtf: $(TEXT).pdf
 	latex2rtf -f0 -M6 -E0 $(TEXT).tex
