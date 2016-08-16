@@ -3,7 +3,6 @@ title: "Create data sets for modeling"
 output:
   pdf_document:
     fig_caption: yes
-  html_document: default
 ---
 
 ## Differenced vs. undifferenced datasets:
@@ -22,9 +21,7 @@ library(knitr)
 library(ggplot2)
 library(date)
 
-
 cfec <- feather::read_feather("portfolio/data-generated/cfec.feather")
-
 
 # convert 6-dig p_fshy codes to 5 digits
 # removing blank space - now they're all length(5)
@@ -36,7 +33,6 @@ cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1),
 idx = which(substr(cfec$p_fshy, 2, 2) == " ")
 cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1),
   substr(cfec$p_fshy[idx], 3, length(cfec$p_fshy[idx])), sep="")
-
 ```
 
 ## Function definition
@@ -64,6 +60,8 @@ cfecnew = cfec
 #cfecnew = cfec.1boat
 
 dim(cfecnew)[1]
+ndat <- list()
+ndat$initial <- nrow(cfecnew)
 ```
 
 ## Combine some strategies 
@@ -121,13 +119,17 @@ permit_rev = group_by(cfecnew, p_holder, year, p_fshy) %>%
   group_by(p_holder, year) %>%
   mutate(tot.rev = sum(permit.rev))
 permit_rev$permit.rev = permit_rev$permit.rev/permit_rev$tot.rev # fraction of total
+ndat$rev_b4_10perc <- sum(permit_rev$permit.rev)
 permit_rev = permit_rev[permit_rev$permit.rev < 0.1,]
+ndat$rev_after_10perc <- sum(permit_rev$permit.rev)
 
 # Delete these minimal earnings
 nrow(cfecnew)
+ndat$before_10_perc <- nrow(cfecnew)
 cfecnew = cfecnew[-which(paste(cfecnew$p_holder, cfecnew$year, cfecnew$p_fshy) %in% 
   paste(permit_rev$p_holder, permit_rev$year, permit_rev$p_fshy)), ]
 nrow(cfecnew)
+ndat$nrow_over_10_perc <- nrow(cfecnew)
 
 topstrategies = group_by(cfecnew, p_holder, year) %>%
   summarize(strategy = paste(sort(unique(p_spec)), collapse = ", ")) %>%
@@ -293,16 +295,13 @@ Save the data for modeling:
 ```{r}
 # make sure the data are tidy:
 cfecAnnual <- as_data_frame(cfecAnnual)
-
-## Filtering out people with 10+ years of fishing. Drops rows from 13.7 to 10 million.
-## (now doing this at the beginning of the modeling scripts)
-# cfecAnnual = group_by(cfecAnnual, p_holder) %>%
-#   mutate(nyr = length(unique(year))) %>%
-#   filter(nyr >= 10)
+ndat$annual <- nrow(cfecAnnual)
 
 saveRDS(cfecAnnual, file="portfolio/data-generated/cfec-annual-for-modeling.rds")
 
 cfecAnnual$specDiv.change = cfecAnnual$specDiv - cfecAnnual$specdiv.prev
 cfecAnnual.diff = cfecAnnual[is.na(cfecAnnual$specDiv.change)==FALSE, ]
 saveRDS(cfecAnnual.diff, file="portfolio/data-generated/cfec-diff-for-modeling.rds")
+ndat$annual_diff <- nrow(cfecAnnual.diff)
+saveRDS(ndat, file = "portfolio/data-generated/ndat.rds")
 ```

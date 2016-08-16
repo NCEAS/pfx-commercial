@@ -89,13 +89,78 @@ load("../data-generated/output-values.rda")
 
 \section{Data filtering}
 
-Rows of data: \Sexpr{nrows}.
-Number of permit holders: \Sexpr{npholders}.
-Range of years: \Sexpr{range_yrs}.
+<<nothing, eval=FALSE>>=
+permit_rev = group_by(cfecnew, p_holder, year, p_fshy) %>%
+  summarize(permit.rev = sum(g_earn)) %>%
+  as_data_frame() %>%
+  group_by(p_holder, year) %>%
+  mutate(tot.rev = sum(permit.rev))
+permit_rev$permit.rev = permit_rev$permit.rev/permit_rev$tot.rev # fraction of total
+permit_rev = permit_rev[permit_rev$permit.rev < 0.1,]
+
+# Delete these minimal earnings
+cfecnew = cfecnew[-which(paste(cfecnew$p_holder, cfecnew$year, cfecnew$p_fshy) %in%
+  paste(permit_rev$p_holder, permit_rev$year, permit_rev$p_fshy)), ]
+
+cfecnew <- filter(cfecnew, p_spec != "Freshwater") # only 1400 rows
+@
+
+
+Rows of data initial: \Sexpr{round(ndat$initial/1e6,2)} million
+
+Rows of data annual: \Sexpr{ndat$annual}
+
+Rows of data diff: \Sexpr{ndat$annual_diff}
+
+% \Sexpr{ndat$rev_b4_10perc/1e9}
+% \Sexpr{round(ndat$rev_after_10perc/1e9,2)}
+
+\Sexpr{ndat$before_10_perc}
+
+Rows of data after 10,000 cull: \Sexpr{ndat$large_only}
+
+10,000 cull: rev:
+\Sexpr{round(1-ndat$rev_large_only/ndat$rev_b4_large_only,2)*100}
+
+\Sexpr{round(ndat$rev_large_only/1e9,2)}
 
 \section{Assigning strategies}
 
+\Sexpr{nstrat$enough_pholders}
+
+\Sexpr{round(ndat$rev_enough_pholders/1e9,2)}
+
+\Sexpr{nstrat$no_river_exp}
+
+\Sexpr{round(ndat$rev_no_river_exp/1e9,2)}
+
 Number of strategies: \Sexpr{nstr}
+
+Rows of data before no singles: \Sexpr{ndat$before_nosingles}
+
+% \Sexpr{ndat$b4_no_na_strat}
+%
+% \Sexpr{ndat$rev_b4_no_na_strat}
+%
+% \Sexpr{ndat$after_no_na_strat}
+
+lost \% rev no strat:
+\Sexpr{round(ndat$rev_after_no_na_strat/ndat$rev_b4_no_na_strat,2)*100}
+
+lost rows no strat:
+\Sexpr{round(ndat$after_no_na_strat/ndat$b4_no_na_strat,2)*100}
+
+% \Sexpr{ndat$rev_after_no_na_strat}
+%
+% \Sexpr{ndat$rev_final}
+
+Rows of data: \Sexpr{ndat$final}
+
+Number of permit holders: \Sexpr{npholders}
+
+Range of years: \Sexpr{range_yrs}
+
+Number of strategy-years: \Sexpr{nstr_yrs}
 
 \section{Hierarchical model}
 

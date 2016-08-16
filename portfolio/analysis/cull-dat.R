@@ -12,7 +12,11 @@ if(diff==TRUE) dat = readRDS(file="portfolio/data-generated/cfec-diff-for-modeli
 #  filter(nyr >= 5)
 
 # Filters: remove people-year combinations making < $5000
+ndat <- list()
+ndat$rev_b4_large_only <- sum(dat$revenue)
 dat = dat[which(dat$revenue >= 10000), ]
+ndat$large_only <- nrow(dat)
+ndat$rev_large_only <- sum(dat$revenue)
 
 # note: grouping here is based on strategies defined by permits
 dat$strategy = dat$strategy_permit
@@ -34,19 +38,25 @@ dat <- dat %>% mutate(length = ifelse(is.na(length), median_length_permit, lengt
 
 
 #2. For each person-year combination, we created 'strategies' by concatenating
-# all permits fished, and only retaining 'strategies' with >= 200 data points. Previously,
-# this was done by people-year, but Eric changed this to be including > 200 people / strategy
+# all permits fished, and only retaining 'strategies' with >= 100 data points. Previously,
+# this was done by people-year, but Eric changed this to be including > 100 people / strategy
 top_strategies = group_by(dat, strategy) %>%
   summarize(n = length(unique(p_holder)),
     earn=sum(revenue)) %>%
-  filter(n>=100) # note -- the code should work fine with this >= 100 too
+  filter(n>=100)
+nstrat <- list()
+nstrat$enough_pholders <- nrow(top_strategies)
+ndat$rev_enough_pholders <- sum(top_strategies$earn)
 
 # A few of these can be deleted (small in river fisheries, experimental, etc)
 top_strategies = top_strategies[-which(top_strategies$strategy %in% c("S04X","S04Y","Z12B","R18B")),]
+nstrat$no_river_exp <- nrow(top_strategies)
+ndat$rev_no_river_exp <- sum(top_strategies$earn)
 
 #3. We then tabulated the permits that make up these strategies, and there are only
 # 56.
 top_permits = data.frame("orig"=names(table(unlist(lapply(top_strategies$strategy, strsplit, " ")))))
+nstrat$top_permits <- nrow(top_permits)
 
 # 4. of these top permits, we proceeded to group permits that were targeting a single species
 # and other than area, were otherwise the same. In other words, someone fishing herring roe
@@ -96,16 +106,25 @@ for(i in 1:nrow(top_strategies)) {
   top_permits$orig)], collapse=" ")
 }
 top_strategies$new.strategy[which(top_strategies$new.strategy=="K91 K91 T91Q")] = "K91 T91Q"
+nstrat$final <- nrow(top_strategies)
 
 # join this into the data frame -- this is leaving ~ 70 strategies
 dat = left_join(dat, top_strategies) %>% select(-c(n, earn))
 dat$strategy=dat$new.strategy
+
+ndat$b4_no_na_strat <- nrow(dat)
+ndat$rev_b4_no_na_strat <- sum(dat$revenue)
 dat = dat[is.na(dat$strategy)==FALSE,]
+ndat$after_no_na_strat <- nrow(dat)
+ndat$rev_after_no_na_strat <- sum(dat$revenue)
 
 # 9. Remove data points where people only did a strategy in one year. Below
 # we try to include people-strategy random effects
+ndat$before_nosingles <- nrow(dat)
 dat = group_by(dat, strategy, p_holder) %>%
   mutate(nsp = n()) %>% filter(nsp > 1) %>% select(-nsp)
+ndat$final <- nrow(dat)
+ndat$rev_final <- sum(dat$revenue)
 
 # Derived variables
 scale2 <- function(x) {
@@ -120,6 +139,8 @@ dat$log_days <- scale2(log(dat$days + 1))
 dat$log_npermit <- scale2(log(dat$npermit))
 dat$log_days_permit <- scale2(log(dat$days_permit+1))
 
-return(dat)
-# ggplot(dat, aes(strategy, log10(length))) + geom_boxplot() + coord_flip()
+saveRDS(ndat, file = "portfolio/data-generated/ndat-cull.rds")
+saveRDS(nstrat, file = "portfolio/data-generated/nstrat-cull.rds")
+
+dat
 }

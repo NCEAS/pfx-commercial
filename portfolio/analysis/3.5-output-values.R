@@ -5,13 +5,15 @@ load("portfolio/data-generated/fig1-dat.rda")
 library(dplyr)
 
 nums <- c("one" = 1, "two" = 2, "three" = 3, "four" = 4, "five" = 5, "six" = 6,
-  "seven" = 7, "eight" = 8, "nine" = 9, "ten" = 10, "11" = 11, "12" = 12, "13" = 13)
+  "seven" = 7, "eight" = 8, "nine" = 9, "ten" = 10, "11" = 11, "12" = 12, "13" = 13,
+  "14" = 14, "15" = 15, "16" = 16)
 
 nrows <- nrow(mm)
 npholders <- length(unique(dat$p_holder))
 range_yrs <- range(dat$year)
 nstr <- length(unique(dat$strategy))
 rvers <- paste(R.version$major, R.version$minor, sep = ".")
+nstr_yrs <- length(unique(dat$strategy_year))
 
 prop_single_all <- filter(out_permits, jk == "x")$prop_single
 min_prop_single <- min(prop_single_all)
@@ -41,5 +43,9 @@ max_spdiv_salm <- max_spdiv_salm %>% round(2) * 100
 n_jacknifed <- length(unique(out_div$jk)) - 1
 n_jacknifed <- names(nums[n_jacknifed])
 
-rm(cullDat, mm, mm2, dat, unique_holders)
+ndat <- readRDS("portfolio/data-generated/ndat.rds")
+ndat_cull <- readRDS("portfolio/data-generated/ndat-cull.rds")
+ndat <- c(ndat, ndat_cull)
+nstrat <- readRDS("portfolio/data-generated/nstrat-cull.rds")
+rm(cullDat, mm, mm2, dat)
 save.image(file = "portfolio/data-generated/output-values.rda")
