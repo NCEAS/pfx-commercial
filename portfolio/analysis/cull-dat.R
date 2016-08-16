@@ -53,10 +53,11 @@ top_strategies = top_strategies[-which(top_strategies$strategy %in% c("S04X","S0
 nstrat$no_river_exp <- nrow(top_strategies)
 ndat$rev_no_river_exp <- sum(top_strategies$earn)
 
-#3. We then tabulated the permits that make up these strategies, and there are only
-# 56.
+#3. We then tabulated the permits that make up these strategies...
 top_permits = data.frame("orig"=names(table(unlist(lapply(top_strategies$strategy, strsplit, " ")))))
 nstrat$top_permits <- nrow(top_permits)
+print("n permits raw:")
+print(nrow(top_permits))
 
 # 4. of these top permits, we proceeded to group permits that were targeting a single species
 # and other than area, were otherwise the same. In other words, someone fishing herring roe
