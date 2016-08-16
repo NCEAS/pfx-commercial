@@ -72,6 +72,7 @@ top_permits$new[which(substr(top_permits$new,1,3)=="L21")] = "L21" # herring, po
 top_permits$new[which(substr(top_permits$new,1,3)=="P09")] = "P09" # shrimp pot gear
 top_permits$new[which(substr(top_permits$new,1,3)=="Q11")] = "Q11" # sea cucumber
 top_permits$new[which(substr(top_permits$new,1,3)=="T09")] = "T09" # tanner crab
+top_permits$new[which(substr(top_permits$new,1,3)=="T91")] = "T09" # tanner crab (larger boats)
 
 # 5. Combining multispecies finfish permits (M). There are 8 miscellaneous finfish permits (M)
 # remaining, and only 2 can be combined: M26B/G (mechanical jig, GOA/statewide)
