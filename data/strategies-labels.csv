@@ -1,5 +1,5 @@
 strategy,description,str_label,big
-B61B,Halibut,Hal,1
+B61B,"Halibut, longline",Hal - ll,1
 C61A,"Sablefish , longline, Southeast Alaska",Sab - SE,
 C61B,"Sablefish, longline, statewide",Sab,
 D09,Dungeness crab ,Dun C,
@@ -30,3 +30,6 @@ S04Y,"Salmon, gillnet, lower Yukon",S - set - YUK,
 J11A,Geoduck clams,Geo Cl,
 U11A,Sea urchin,Sea urc,
 B05B,"Halibut, hand troll",Hal - troll,
+B26B,"Halibut, mechanical jig",Hal - jig,
+M05B,"Finfish, hand troll",Fin - troll,
+A12B,Abalone,Ab,
