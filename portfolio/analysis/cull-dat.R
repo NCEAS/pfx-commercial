@@ -83,7 +83,7 @@ top_permits$new[which(substr(top_permits$new,1,3)=="M26")] = "M26" # mechanical 
 top_permits$new[top_permits$new=="C61A"] = "C61B"
 
 # combine vessel sizes across King crab:
-top_permits$new[top_permits$new=="K09Z"] = "K911f"
+top_permits$new[top_permits$new=="K09Z"] = "K91"
 
 # combine vessel sizes across shrimp:
 top_permits$new[top_permits$new=="P91A"] = "P09"
