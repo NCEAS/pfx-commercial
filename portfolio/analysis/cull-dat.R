@@ -37,13 +37,12 @@ dat <- dat %>% mutate(length = ifelse(is.na(length), median_length_boat, length)
 dat <- dat %>% mutate(length = ifelse(is.na(length), median_length_permit, length))
 
 
-#2. For each person-year combination, we created 'strategies' by concatenating
-# all permits fished, and only retaining 'strategies' with >= 100 data points. Previously,
-# this was done by people-year, but Eric changed this to be including > 100 people / strategy
+#2.W e created 'strategies' by concatenating
+# all permits fished, and only retaining 'strategies' with >= 50 people
 top_strategies = group_by(dat, strategy) %>%
   summarize(n = length(unique(p_holder)),
     earn=sum(revenue)) %>%
-  filter(n>=100)
+  filter(n>=50)
 nstrat <- list()
 nstrat$enough_pholders <- nrow(top_strategies)
 ndat$rev_enough_pholders <- sum(top_strategies$earn)
@@ -65,6 +64,7 @@ print(nrow(top_permits))
 # reduces permits to 59
 top_permits$new = as.character(top_permits$orig)
 top_permits$new[which(substr(top_permits$new,1,3)%in%c("D09","D9C","D9D"))] = "D09" # dungeness
+top_permits$new[which(substr(top_permits$new,1,2)%in%c("D9"))] = "D09" # dungeness
 top_permits$new[which(substr(top_permits$new,1,3)=="G01")] = "G01" # herring roe, purse seine
 top_permits$new[which(substr(top_permits$new,1,3)=="G34")] = "G34" # herring roe, gillnet
 top_permits$new[which(substr(top_permits$new,1,3)=="K91")] = "K91" # king crab
@@ -78,6 +78,27 @@ top_permits$new[which(substr(top_permits$new,1,3)=="T91")] = "T09" # tanner crab
 # 5. Combining multispecies finfish permits (M). There are 8 miscellaneous finfish permits (M)
 # remaining, and only 2 can be combined: M26B/G (mechanical jig, GOA/statewide)
 top_permits$new[which(substr(top_permits$new,1,3)=="M26")] = "M26" # mechanical jig
+
+# combine northern Southeast and statewide sablefish permits:
+top_permits$new[top_permits$new=="C61A"] = "C61B"
+
+# combine vessel sizes across King crab:
+top_permits$new[top_permits$new=="K09Z"] = "K911f"
+
+# combine vessel sizes across shrimp:
+top_permits$new[top_permits$new=="P91A"] = "P09"
+
+# combine vessel sizes for otter trawl finfish statewide:
+top_permits$new[top_permits$new=="M7IB"] = "M7HB"
+
+# combine vessel sizes for longline finfish statewide:
+top_permits$new[top_permits$new=="M6AB"] = "M61B"
+
+# combine vessel sizes for pot gear statewide:
+top_permits$new[top_permits$new=="M09B"] = "M91B"
+
+# combine vessel sizes for longline finfish statewide:
+top_permits$new[top_permits$new=="M06B"] = "M61B"
 
 # 6. Combine some of the longline categories based on vessel size.
 top_permits$new[top_permits$new=="C06B"] = "C61B"
@@ -122,11 +143,17 @@ ndat$rev_after_no_na_strat <- sum(dat$revenue)
 
 # 9. Remove data points where people only did a strategy in one year. Below
 # we try to include people-strategy random effects
-ndat$before_nosingles <- nrow(dat)
-dat = group_by(dat, strategy, p_holder) %>%
-  mutate(nsp = n()) %>% filter(nsp > 1) %>% select(-nsp)
-ndat$final <- nrow(dat)
-ndat$rev_final <- sum(dat$revenue)
+# ndat$before_nosingles <- nrow(dat)
+# dat = group_by(dat, strategy, p_holder) %>%
+#   mutate(nsp = n()) %>% filter(nsp > 1) %>% select(-nsp)
+# ndat$final <- nrow(dat)
+# ndat$rev_final <- sum(dat$revenue)
+
+# and after all the aggregating, remove strategies with less than one hundred people:
+dat <- as_data_frame(dat) %>% group_by(strategy) %>%
+  mutate(n_pholders = length(unique(p_holder))) %>%
+  filter(n_pholders >= 100) %>%
+  as_data_frame()
 
 # Derived variables
 scale2 <- function(x) {
