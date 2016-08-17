@@ -1,7 +1,9 @@
-cullDat = function(diff = FALSE, rev_threshold = 10000) {
+library(dplyr)
 
-if(diff==FALSE) dat = readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
-if(diff==TRUE) dat = readRDS(file="portfolio/data-generated/cfec-diff-for-modeling.rds")
+cullDat = function(rev_threshold = 10000, npholders_thres1 = 50,
+  npholders_thres2 = 100) {
+
+dat <- readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
 
 ### Eric's culling:
 #1. We restricted our analysis to p_holders who fished for 5 or more years
@@ -17,9 +19,9 @@ if(diff==TRUE) dat = readRDS(file="portfolio/data-generated/cfec-diff-for-modeli
   ndat$rev_b4_large_only <- sum(dat$revenue)
   # dat3 = dat[which(dat$revenue >= rev_threshold), ]
   dat3 <- as_data_frame(dat) %>% group_by(p_holder) %>%
-    mutate(avg_rev = median(revenue)) %>%
-    filter(avg_rev >= rev_threshold) %>% # as in K and H PNAS
-    select(-avg_rev) %>%
+    mutate(med_rev = median(revenue)) %>%
+    filter(med_rev >= rev_threshold) %>% # as in K and H PNAS
+    select(-med_rev) %>%
     as_data_frame()
 
   ndat$large_only <- nrow(dat)
@@ -43,19 +45,18 @@ if(diff==TRUE) dat = readRDS(file="portfolio/data-generated/cfec-diff-for-modeli
   dat <- dat %>% mutate(length = ifelse(is.na(length), median_length_boat, length))
   dat <- dat %>% mutate(length = ifelse(is.na(length), median_length_permit, length))
 
-
-  #2.W e created 'strategies' by concatenating
+  #2. We created 'strategies' by concatenating
   # all permits fished, and only retaining 'strategies' with >= 50 people
   top_strategies = group_by(dat, strategy) %>%
     summarize(n = length(unique(p_holder)),
       earn=sum(revenue)) %>%
-    filter(n>=50)
+    filter(n>=npholders_thres1)
   nstrat <- list()
   nstrat$enough_pholders <- nrow(top_strategies)
   ndat$rev_enough_pholders <- sum(top_strategies$earn)
 
   # A few of these can be deleted (small in river fisheries, experimental, etc)
-  top_strategies = top_strategies[-which(top_strategies$strategy %in% c("S04X","S04Y","Z12B","R18B")),]
+  top_strategies = top_strategies[-which(top_strategies$strategy %in% c("S04X","S04Y","Z12B","R18B", "Z12B")),]
   nstrat$no_river_exp <- nrow(top_strategies)
   ndat$rev_no_river_exp <- sum(top_strategies$earn)
 
@@ -104,8 +105,17 @@ if(diff==TRUE) dat = readRDS(file="portfolio/data-generated/cfec-diff-for-modeli
   # combine vessel sizes for pot gear statewide:
   top_permits$new[top_permits$new=="M09B"] = "M91B"
 
+  # merge in GOA pot gear finfish:
+  top_permits$new[top_permits$new=="M09G"] = "M91B"
+
   # combine vessel sizes for longline finfish statewide:
   top_permits$new[top_permits$new=="M06B"] = "M61B"
+
+  # combine otter trawl finfish sizes:
+  top_permits$new[top_permits$new=="M07B"] = "M7HB"
+
+  # combine sea urchin permits:
+  top_permits$new[top_permits$new=="U12B"] = "U11A"
 
   # 6. Combine some of the longline categories based on vessel size.
   top_permits$new[top_permits$new=="C06B"] = "C61B"
@@ -130,13 +140,15 @@ if(diff==TRUE) dat = readRDS(file="portfolio/data-generated/cfec-diff-for-modeli
 
 #8. combine the new permit groupings into new strategies
 top_permits$orig = as.character(top_permits$orig)
+
+
 top_strategies$new.strategy = NA
 for(i in 1:nrow(top_strategies)) {
   top_strategies$new.strategy[i] = paste(top_permits$new[match(lapply(lapply(top_strategies$strategy, strsplit, " "), unlist)[[i]],
   top_permits$orig)], collapse=" ")
 }
-top_strategies$new.strategy[which(top_strategies$new.strategy=="K91 K91 T91Q")] = "K91 T91Q"
-nstrat$final <- nrow(top_strategies)
+top_strategies$new.strategy <- sub("K91 K91", "K91", top_strategies$new.strategy)
+
 
 # join this into the data frame -- this is leaving ~ 70 strategies
 dat = left_join(dat, top_strategies) %>% select(-c(n, earn))
@@ -156,27 +168,49 @@ ndat$rev_after_no_na_strat <- sum(dat$revenue)
 # ndat$final <- nrow(dat)
 # ndat$rev_final <- sum(dat$revenue)
 
-# and after all the aggregating, remove strategies with less than one hundred people:
-dat <- as_data_frame(dat) %>% group_by(strategy) %>%
-  mutate(n_pholders = length(unique(p_holder))) %>%
-  filter(n_pholders >= 100) %>%
-  as_data_frame()
+# and now calculate previous year statistics:
+# Also merge in previous revenue. Idx stores index of people last year
+idx = match(paste(dat$p_holder,dat$year-1), paste(dat$p_holder,dat$year))
+dat$revenue.prev = dat$revenue[idx]
+dat$specdiv.prev = dat$specDiv[idx]
+dat$strategy.prev = dat$strategy[idx]
+dat_diff = dat[!is.na(dat$specdiv.prev), ] # remove rows without a previous value
+nrow(dat_diff)
+ndat$diff <- nrow(dat_diff)
+ndat$rev_diff <- sum(dat_diff$revenue)
 
-# Derived variables
-scale2 <- function(x) {
-  x <- x - mean(x, na.rm = TRUE)
-  x / (2 * sd(x, na.rm = TRUE))
-}
-dat$log_spec_div <- scale2(log(dat$specDiv))
-dat$scaled_spec_div <- scale2(dat$specDiv)
-dat$log_length <- scale2(log(dat$length + 1))
-dat$log_weight <- scale2(log(dat$weight + 1))
-dat$log_days <- scale2(log(dat$days + 1))
-dat$log_npermit <- scale2(log(dat$npermit))
-dat$log_days_permit <- scale2(log(dat$days_permit+1))
+# remove people that switch strategies from one year to the next:
+dat_diff = dat_diff[dat_diff$strategy == dat_diff$strategy.prev, ]
+ndat$diff_same_strategy <- nrow(dat_diff)
+ndat$rev_diff_same_strategy <- sum(dat_diff$revenue)
+
+# and after all the aggregating, remove strategies with less than one hundred people:
+dat_diff <- as_data_frame(dat_diff) %>% group_by(strategy) %>%
+  mutate(n_pholders = length(unique(p_holder))) %>%
+  filter(n_pholders >= npholders_thres2) %>%
+  as_data_frame()
+ndat$after_pholder_thresh2 <- nrow(dat_diff)
+ndat$rev_after_pholder_thresh2 <- sum(dat_diff$revenue)
+
+dat_diff <- filter(dat_diff, !is.na(specDiv)) # 2 rows slipped through somehow
+
+# if species diversity changes in less than one percent
+# of the people-year combinations, then assume these may be data entry errors
+# this should affect about 2 of the strategies:
+dat_diff <- mutate(dat_diff, spec_change = log(specDiv/specdiv.prev))
+dat_diff <- group_by(dat_diff, strategy) %>%
+  mutate(n0 = sum(spec_change == 0)/n()*100) %>%
+  filter(!(n0 > 99 & spec_change != 0))
+
+# clean up:
+dat_diff <- as_data_frame(dat_diff) %>%
+  select(p_holder, year, days_permit, days_permit.prev, revenue, revenue.prev,
+    length, strategy, specDiv, specdiv.prev)
+
+nstrat$final <- length(unique(dat_diff$strategy))
 
 saveRDS(ndat, file = "portfolio/data-generated/ndat-cull.rds")
 saveRDS(nstrat, file = "portfolio/data-generated/nstrat-cull.rds")
 
-dat
+dat_diff
 }
