@@ -341,4 +341,44 @@ to quickly iterate and build intuition about the models.
 \end{center}
 \end{figure}
 
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=1\textwidth]{../figs/stan-gg-spoke-all.pdf}
+\caption{Caption here}
+\label{fig:spoke-all}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid.png}
+\caption{Caption here}
+\label{fig:resid}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid-down.png}
+\caption{Downside only}
+\label{fig:resid-downside}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=1\textwidth]{../figs/strategy-year-effects.pdf}
+\caption{Caption here}
+\label{fig:str-yrs}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{../figs/lmer-vs-stan.pdf}
+\caption{Caption here}
+\label{fig:lmer-stan}
+\end{center}
+\end{figure}
+
 \end{document}

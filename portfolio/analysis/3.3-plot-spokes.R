@@ -6,13 +6,16 @@ devtools::load_all("pfxr")
 
 # -----------------------------------------------
 # spoke plots:
-mr <- group_by(dat, strategy) %>% summarise(strategy_med_rev = median(revenue)/1e3)
+mr <- group_by(dat, strategy) %>%
+  summarise(strategy_med_rev = median(revenue)/1e3,
+    n_permits = npermit[1])
 b <- broom::tidy(m, conf.int = T, estimate.method = "median", conf.level = 0.5)
 md2 <- filter(b, grepl("coef_g0_strategy", term)) %>%
   mutate(strategy_id = 1:n()) %>% inner_join(md) %>% inner_join(mr)
 
 
 permit_plot <- function(permit) {
+  message(permit)
   gre1 <- paste0(permit, " ")
   gre2 <- paste0(permit, "$")
 
@@ -68,7 +71,7 @@ sp <- plyr::ldply(c(
   "G01",
   "G34",
   "K91",
-  "T91Q",
+  "T09",
   "B61B",
   "C61B",
   "S01",
@@ -139,3 +142,57 @@ pl <- filter(sp, !single_permit %in% c("S03", "K91")) %>%
 # print(pl)
 # print(pl)
 ggsave("portfolio/figs/stan-gg-spoke2.pdf", width = 7, height = 3)
+
+
+# ------------------------------------------------------
+# more for SI
+sp <- plyr::ldply(c(
+  "G01",
+  "G34",
+  "K91",
+  "T09",
+  "B61B",
+  "C61B",
+  "S01",
+  "S03"
+),  permit_plot)
+
+labs <- readr::read_csv("data/strategies-labels.csv") %>%
+  rename(single_permit_clean = description,
+    single_permit = strategy) %>%
+  select(-str_label)
+sp <- inner_join(sp, labs, by = "single_permit")
+
+ns <- dat %>% group_by(strategy) %>%
+  summarise(nn = length(unique(p_holder)))
+sp <- inner_join(sp, ns)
+
+pl <- sp %>%
+  mutate(str_label = ifelse(nn > 20, str_label, NA)) %>%
+  ggplot(
+    aes(strategy_med_rev, exp(estimate), yend = exp(g0_less), xend = b0_less,
+      label = str_label, colour = as.factor(n_permits))) +
+  geom_segment(aes(x = strategy_med_rev, xend = strategy_med_rev,
+    y = exp(conf.low), yend = exp(conf.high)), alpha = 0.5, size = 0.3,
+    colour = "grey60") +
+  geom_segment(colour = "grey70", alpha = 0.6, size = 0.5) +
+  geom_point(aes(size = nn)) +
+  geom_text_repel(size = 2.7,
+    point.padding = unit(0.15, "lines"), max.iter = 9e3, segment.size = 0,
+    box.padding = unit(0.15, "lines"), nudge_y = -0.03,
+    colour = "grey20") +
+  facet_wrap(~single_permit_clean, scales = "free") +
+  theme_gg() +
+  labs(x = "Median revenue", y = "Estimated revenue variability",
+    colour = "Number of\npermits",
+    size = "Permit\nholders") +
+  scale_size_continuous() +
+  scale_colour_manual(values = RColorBrewer::brewer.pal(4, "Blues")[2:4]) +
+  theme(
+    legend.title = element_text(size = rel(0.75)),
+    strip.text.x = element_text(hjust = 0, size = 8)) +
+  scale_x_continuous(expand = c(0.05, 0.07)) +
+  guides(
+    colour = guide_legend(override.aes = list(size=3.5), order = 1),
+    size = guide_legend(order = 2, override.aes = list(pch = 21)))
+ggsave("portfolio/figs/stan-gg-spoke-all.pdf", width = 9, height = 7)
