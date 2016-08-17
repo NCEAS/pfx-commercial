@@ -94,7 +94,7 @@ ggsave("portfolio/figs/stan-offset-panel-mean-resid-down.png", dpi = 150,
 # ---------------------------------------------------------
 # str-yrs:
 
-iters <- seq(1, 1000, 500)
+iters <- seq(1, 1000, 50)
 print(length(iters))
 o <- plyr::ldply(iters, function(i) {
   b0_str_yr <- gather(p$b0_str_yr[i,], str_yr_id, b0_str_yr) %>%
@@ -110,11 +110,11 @@ o <- plyr::ldply(iters, function(i) {
 fake <- expand.grid(year = seq(min(o$year), max(o$year)),
   str_label = unique(o$str_label), iter = iters, stringsAsFactors = FALSE)
 
-# missing <- anti_join(fake, o) %>%
-#   mutate(missing = NA)
-# o <- full_join(o, missing)
+missing <- anti_join(fake, o) %>%
+  mutate(missing = NA)
+o <- full_join(o, missing)
 
-g <- ggplot(o, aes(year, b0_str_yr, group = iter)) + geom_line(alpha = 0.2) +
+g <- ggplot(o, aes(year, b0_str_yr, group = iter)) + geom_line(alpha = 0.1) +
   facet_wrap(~str_label) +
   theme_gg() +
   theme(panel.grid.major = element_line(colour = "grey85",
@@ -124,8 +124,8 @@ g <- ggplot(o, aes(year, b0_str_yr, group = iter)) + geom_line(alpha = 0.2) +
   ylab("Strategy-year intercept (b0)")
 ggsave("portfolio/figs/strategy-year-effects.pdf", width = 10, height = 9)
 
-dat_ann = readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
-dat_diff = readRDS(file="portfolio/data-generated/cfec-diff-for-modeling.rds")
+# dat_ann = readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
+# dat_diff = readRDS(file="portfolio/data-generated/cfec-diff-for-modeling.rds")
 
 # filter(dat_diff, substr(strategy_permit,1,3)%in%c("D09","D9C","D9D")) %>%
 
