@@ -1,18 +1,19 @@
 library(dplyr)
 
 source("portfolio/analysis/cull-dat.R")
-dat <- cullDat()
+dat <- cullDat(rev_threshold = 10000, npholders_thres1 = 50,
+  npholders_thres2 = 100)
 
-#downsample for fast testing
-unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.4)
-set.seed(1)
-dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
-nrow(dat)
+# #downsample for fast testing
+# unique_holders <- unique(dat$p_holder)
+# n_sample <- round(length(unique_holders)*0.4)
+# set.seed(1)
+# dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
+# nrow(dat)
 
-dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 0)
-nrow(dat)
-length(unique(dat$strategy))
+# dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 0)
+# nrow(dat)
+# length(unique(dat$strategy))
 
 dat <- mutate(dat,
   revenue_change = log(revenue/revenue.prev),
@@ -52,4 +53,21 @@ look_str <- function(str) {
 
 md$str_label <- sapply(md$strategy, function(x) look_str(x))
 md$str_label <- gsub(" - ", " ", md$str_label)
+
+save(dat, mm, mm2, md, file = "portfolio/data-generated/diff-dat-stan.rda")
+
+# library(ggplot2)
+# ggplot(dat, aes(year, log(revenue))) + geom_point(alpha = 0.1) + facet_wrap(~strategy)
+
+ggplot(dat, aes(year, specDiv)) + geom_point(alpha = 0.1) + facet_wrap(~strategy)
+ggplot(dat, aes(year, spec_change)) + geom_point(alpha = 0.1) + facet_wrap(~strategy)
+
+# filter(dat, strategy == "T09", spec_change != 0)
+# cfec <- feather::read_feather("portfolio/data-generated/cfec.feather")
+# filter(cfec, p_holder == 17410, year ==1993) %>% select(p_fshy, spec, g_earn, landdate) %>% arrange(landdate) %>% mutate(g_earn = round(g_earn/1e3,1))
+
+# filter(dat, strategy == "B05B", spec_change != 0)
+# filter(cfec, p_holder == 17410, year ==1993) %>% select(p_fshy, spec, g_earn, landdate) %>% arrange(landdate) %>% mutate(g_earn = round(g_earn/1e3,1))
+#
+# group_by(dat, strategy) %>% summarize(n0 = round(sum(spec_change == 0)/n()*100, 2)) %>% arrange(-n0) %>% as.data.frame()
 
