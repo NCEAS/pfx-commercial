@@ -89,6 +89,7 @@ load("../data-generated/output-values.rda")
 
 \section{Data filtering}
 
+
 <<nothing, eval=FALSE>>=
 permit_rev = group_by(cfecnew, p_holder, year, p_fshy) %>%
   summarize(permit.rev = sum(g_earn)) %>%
@@ -184,6 +185,7 @@ is assigned a strategy indexed by $j$ and
 expected $\log(R_{i,t})$ is modelled as:
 
 \begin{equation}
+\label{eq:mean}
 \widehat{\log(R_{i,t})} = \beta_{0,j,t} +
   \beta_{1,j} S_{i,t} I_{i,t} +
   \beta_{2,j} S_{i,t} I_{i,t} +
@@ -252,6 +254,7 @@ we model the scale of the residual error  with
 another heirarchical model with a similar form:
 
 \begin{equation}
+\label{eq:cv}
 \widehat{\sigma_{i,t}} =
 \exp \left( \gamma_{0,j} + \eta_1 M_j +
 \gamma_{1,j} S_{i,t} I_{i,t} +
@@ -314,7 +317,10 @@ to quickly iterate and build intuition about the models.
 
 \begin{table}[h!]
   \centering
-  \caption{Caption.}
+  \caption{Labels and descriptions of fishing strategies. In many cases, 
+a particular strategy represents a group of similar permits across areas 
+or vessel sizes. These strategies all had at least 100 
+permit holders.}
   \label{tab:strategies}
   \begin{tabular}{ll}
   \toprule
@@ -322,11 +328,14 @@ to quickly iterate and build intuition about the models.
   \end{tabular}
 \end{table}
 
-
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=5in]{../figs/stan-main-effects.pdf}
-\caption{Caption here}
+\caption{Main effects from the hierarchical model 
+predicting revenue (b or $\beta$) and variability (g or $\gamma$) in revenue.
+The coefficient $u_1$ represents a strategy level predictor
+relating mean species diversity of a strategy
+to the expected magnitude of residual error.}
 \label{fig:fe}
 \end{center}
 \end{figure}
@@ -335,8 +344,14 @@ to quickly iterate and build intuition about the models.
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1.05\textwidth]{../figs/stan-str-posteriors-dot.pdf}
-\caption{Caption here}
+\includegraphics[width=1.06\textwidth]{../figs/stan-str-posteriors-dot.pdf}
+\caption{Estimates of within strategy effects from the hierarchical model. 
+Panels refer in order to $\gamma_0$ (g0), $\gamma_1$ (g1), $\gamma_2$ (g2),
+$\beta_1$ (b1), and $\beta_2$ (b2) from Eqns \ref{eq:mean} and \ref{eq:cv}.
+Shown are medians (dots) and 50\% and 90\% credible intervals
+(thick and thin line segments).
+Strategies are ordered from high to low mean
+species diversity from top to bottom.}
 \label{fig:re}
 \end{center}
 \end{figure}
@@ -344,7 +359,10 @@ to quickly iterate and build intuition about the models.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1\textwidth]{../figs/stan-gg-spoke-all.pdf}
-\caption{Caption here}
+\caption{The effect of adding a permit to ones strategy
+on estimated revenue variability and median revenue.
+This is an extended version of Fig.~2 that includes all major 
+strategy combinations.}
 \label{fig:spoke-all}
 \end{center}
 \end{figure}
@@ -352,7 +370,10 @@ to quickly iterate and build intuition about the models.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid.png}
-\caption{Caption here}
+\caption{The log-absolute value residuals from the mean-component model (Eq.~\ref{eq:mean}).
+It is these residuals that are modeled in the variance-component model
+(Eq.~\ref{eq:cv}).
+Breakpoint linear regression fits are overlaid in red for visual interpretation.}
 \label{fig:resid}
 \end{center}
 \end{figure}
@@ -360,7 +381,10 @@ to quickly iterate and build intuition about the models.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid-down.png}
-\caption{Downside only}
+\caption{The log-absolute value of downside (negative) residuals from the main
+component model.
+Figure looks qualitatively the same as Fig.~\ref{fig:resid} and so justifies
+using variability (positive and negative residuals) as a measure of risk.}
 \label{fig:resid-downside}
 \end{center}
 \end{figure}
@@ -368,17 +392,19 @@ to quickly iterate and build intuition about the models.
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1\textwidth]{../figs/strategy-year-effects.pdf}
-\caption{Caption here}
+\caption{Strategy-year intercept estimates ($\beta_{0,j,t}$ in
+Eq.~\ref{eq:mean}) from the hierarchical model. 
+Shown are 40 samples from the posterior distribution.}
 \label{fig:str-yrs}
 \end{center}
 \end{figure}
 
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{../figs/lmer-vs-stan.pdf}
-\caption{Caption here}
-\label{fig:lmer-stan}
-\end{center}
-\end{figure}
+% \begin{figure}[htbp]
+% \begin{center}
+% \includegraphics[width=0.9\textwidth]{../figs/lmer-vs-stan2.pdf}
+% \caption{Comparison of }
+% \label{fig:lmer-stan}
+% \end{center}
+% \end{figure}
 
 \end{document}
