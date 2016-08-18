@@ -17,15 +17,15 @@ S01A,"Salmon, purse seine, Southeast Alaska",S - seine - SE,
 S01E,"Salmon, purse seine, PWS",S - seine - PWS,
 S01L,"Salmon, purse seine, Chignik",S - seine - CH,
 S01M,"Salmon, purse seine, Alaska Penninsula",S - seine - AP,
-S03,"Salmon (mostly sockeye), drift gill net, CI, AP, BB","S - drift - CI, AP, BB (sock)",1
-S03A,"Salmon, drift gill net, Southeast Alaska",S - drift - SE,
-S03E,"Salmon, drift gill net, PWS",S - drift - PWS,
+S03,"Salmon (mostly sockeye), drift gillnet, CI, AP, BB","S - drift - CI, AP, BB (sock)",1
+S03A,"Salmon, drift gillnet, Southeast Alaska",S - drift - SE,
+S03E,"Salmon, drift gillnet, PWS",S - drift - PWS,
 S04a,"Salmon (mostly sockeye), set gillnet, PWS, CI, K,  AP, BB","S - set - PWS, CI, K, AP, BB (sock)",1
 S04b,"Salmon, set gillnet, Norton Sound and Kuskokwim",S - set - NS/K,1
 S04D,"Salmon, set gillnet, Yakutat",S - set - YAK,
 S15B,"Salmon, power troll, statewide",S - troll,1
 P09,Shrimp,Shrimp,
-T09,"Tanner crab, pot gear vessel under 60'",Tan C,
+T09,"Tanner crab, pot gear",Tan C,
 S04Y,"Salmon, gillnet, Lower Yukon",S - set - YUK,
 J11A,Geoduck clams,Geo Cl,
 U11A,Sea urchin,Sea urc,
