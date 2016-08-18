@@ -3,7 +3,11 @@ library(rstan)
 options(mc.cores = 4L)
 rstan_options(auto_write = TRUE)
 
-source("portfolio/analysis/prep-stan-model-matrix.R")
+source("portfolio/analysis/3.0-prep-model-matrix.R")
+load("portfolio/data-generated/diff-dat-stan.rda")
+
+b1 <- function(x, bp = 0) ifelse(x < bp, x, 0)
+b2 <- function(x, bp = 0) ifelse(x < bp, 0, x)
 
 standat <- list(
   N = nrow(dat),
@@ -26,15 +30,46 @@ standat <- list(
   g1_cov_i = b1(dat$spec_change),
   g2_cov_i = b2(dat$spec_change),
 
-  mean_div = dat$strategy_mean_div,
-  mean_div_str = md$strategy_mean_div
-  )
+  mean_div_str = md$scaled_strategy_mean_div,
+  mean_day_str = md$scaled_strategy_mean_days
+)
+
+# custom tighter inits:
+beta_init <- function() rnorm(standat$J)
+sigma_init <- function() rnorm(standat$K)
+dev_str_init <- function() rnorm(standat$n_strategy, 0, 0.2)
+dev_yr_init <- function() rnorm(standat$n_str_yr, 0, 0.2)
+tau_init <- function() runif(1, 0.05, 0.5)
+init_fun <- function() {
+  list(
+    b0 = beta_init()[1],
+    b0_strategy = dev_str_init(),
+    b0_str_yr = dev_yr_init(),
+    b0_strategy_tau = tau_init(),
+    b0_str_yr_tau = tau_init(),
+    b_j = beta_init(),
+    h1 = beta_init()[1],
+    h2 = beta_init()[1],
+    b1_strategy = dev_str_init(),
+    b1_strategy_tau = tau_init(),
+    b2_strategy = dev_str_init(),
+    b2_strategy_tau = tau_init(),
+    g0 = sigma_init()[1],
+    g0_strategy = dev_str_init(),
+    g0_strategy_tau = tau_init(),
+    g_k = sigma_init(),
+    g1_strategy = dev_str_init(),
+    g1_strategy_tau = tau_init(),
+    g2_strategy = dev_str_init(),
+    g2_strategy_tau = tau_init())
+}
 
 m <- stan("portfolio/analysis/portfolio-offset.stan",
-  data = standat, iter = 2000, chains = 4,
-  pars = c("mu", "sigma", "b0_str_yr"), include = FALSE)
-save(m, file = "portfolio/data-generated/m.rda")
-b <- broom::tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
+  data = standat, iter = 500, chains = 4,
+  pars = c("mu", "sigma"), include = FALSE, init = init_fun)
+save(m, standat, file = "portfolio/data-generated/m.rda")
+
+b <- broom::tidy(m1, conf.int = T, estimate.method = "median", rhat = T, ess = T)
 filter(b, rhat > 1.05)
 filter(b, ess < 100)
 filter(b, grepl("^h1", term))
@@ -43,3 +78,28 @@ filter(b, grepl("^g0", term))
 filter(b, grepl("^g_k", term))
 filter(b, grepl("^b_j", term))
 filter(b, grepl("*_tau$", term))
+
+## m_ns <- stan("portfolio/analysis/portfolio-offset-nosigma.stan",
+##   data = standat, iter = 120, chains = 2,
+##   pars = c("mu", "sigma", "b0_str_yr"), include = FALSE)
+## save(m_ns, file = "portfolio/data-generated/m_ns.rda")
+## broom::tidy(m_ns, rhat = T, ess = T) %>% filter(grepl("b_j", term))
+## broom::tidy(m_ns, rhat = T, ess = T) %>% filter(grepl("tau", term))
+## broom::tidy(m, rhat = T, ess = T) %>% filter(grepl("b_j", term))
+## broom::tidy(m, rhat = T, ess = T) %>% filter(grepl("tau", term))
+## library(lme4)
+##
+## b1 <- function(x, bp = 0) ifelse(x < bp, x, 0)
+## b2 <- function(x, bp = 0) ifelse(x < bp, 0, x)
+##
+## library(lme4)
+## m_lmer <- lmer(
+##   log(revenue) ~ -1 + b1(spec_change) + b2(spec_change) +
+##     days_change + b1(spec_change):days_change + b2(spec_change):days_change +
+##     (-1 + b1(spec_change) |strategy) +
+##     (-1 + b2(spec_change) |strategy)+
+##     (1|strategy_year),
+##   data = dat, offset = log(revenue.prev))
+## arm::display(m_lmer)
+## broom::tidy(m_ns, rhat = T, ess = T) %>% filter(grepl("b_j", term))
+##
