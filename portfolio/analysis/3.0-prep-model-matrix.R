@@ -54,13 +54,20 @@ look_str <- function(str) {
 md$str_label <- sapply(md$strategy, function(x) look_str(x))
 md$str_label <- gsub(" - ", " ", md$str_label)
 
+scale_2d = function(x) {
+  x = x - mean(x)
+  x / (2 * sd(x))
+}
+md <- mutate(md, scaled_strategy_mean_div = scale_2d(strategy_mean_div),
+  scaled_strategy_mean_days = scale_2d(strategy_mean_days))
+
 save(dat, mm, mm2, md, file = "portfolio/data-generated/diff-dat-stan.rda")
 
 # library(ggplot2)
 # ggplot(dat, aes(year, log(revenue))) + geom_point(alpha = 0.1) + facet_wrap(~strategy)
 
-ggplot(dat, aes(year, specDiv)) + geom_point(alpha = 0.1) + facet_wrap(~strategy)
-ggplot(dat, aes(year, spec_change)) + geom_point(alpha = 0.1) + facet_wrap(~strategy)
+#ggplot(dat, aes(year, specDiv)) + geom_point(alpha = 0.1) + facet_wrap(~strategy)
+#ggplot(dat, aes(year, spec_change)) + geom_point(alpha = 0.1) + facet_wrap(~strategy)
 
 # filter(dat, strategy == "T09", spec_change != 0)
 # cfec <- feather::read_feather("portfolio/data-generated/cfec.feather")
