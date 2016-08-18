@@ -19,10 +19,8 @@ data {
   vector[N] g1_cov_i; // predictor data for random slope (sigma)
   vector[N] g2_cov_i; // predictor data for random slope (sigma)
 
-  vector[N] mean_div; // mean diversity per strategy (all rows)
   vector[n_strategy] mean_div_str; // mean diversity per strategy
 
-  vector[N] mean_day; // mean days per strategy (all rows)
   vector[n_strategy] mean_day_str; // mean days per strategy
 }
 parameters {
@@ -63,8 +61,6 @@ transformed parameters {
 
     sigma[i] = sigma[i] +
             g0_strategy[strategy_i[i]] +
-              h1 * mean_div[i] +
-              h2 * mean_day[i] +
             g1_cov_i[i] * g1_strategy[strategy_i[i]] +
             g2_cov_i[i] * g2_strategy[strategy_i[i]];
   }
@@ -82,7 +78,7 @@ model {
   b2_strategy_tau ~ student_t(3, 0, 2);
 
   g0 ~ normal(0, 2);
-  g0_strategy ~ normal(0, g0_strategy_tau);
+  g0_strategy ~ normal(h1 * mean_div_str + h2 * mean_day_str, g0_strategy_tau);
   g0_strategy_tau ~ student_t(3, 0, 2);
 
   h1 ~ normal(0, 2);
@@ -104,7 +100,7 @@ generated quantities {
   vector[n_strategy] coef_b2_strategy;
   for (s in 1:n_strategy) {
     coef_g0_strategy[s] = g0 + g0_strategy[s] + h1 * mean_div_str[s] +
-                                              + h2 * mean_day_str[s];
+                                                h2 * mean_day_str[s];
     coef_g1_strategy[s] = g_k[1] + g1_strategy[s];
     coef_g2_strategy[s] = g_k[2] + g2_strategy[s];
     coef_b1_strategy[s] = b_j[1] + b1_strategy[s];
