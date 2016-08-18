@@ -1,7 +1,6 @@
 library(dplyr)
 
-source("portfolio/analysis/prep-stan-model-matrix.R")
-
+load("portfolio/data-generated/diff-dat-stan.rda")
 load("portfolio/data-generated/m.rda")
 devtools::load_all("pfxr")
 
