@@ -2,15 +2,14 @@ library(dplyr)
 library(ggplot2)
 library(rstan)
 
-source("portfolio/analysis/prep-stan-model-matrix.R")
-
+load("portfolio/data-generated/diff-dat-stan.rda")
 load("portfolio/data-generated/m.rda")
 
 # ------------------------
 b <- broom::tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
 if(nrow(filter(b, rhat > 1.05)) > 0) warning("all rhat not <= 1.05")
-if(nrow(filter(b, ess < 200)) > 0) warning("all ess not >= 200")
-filter(b, grepl("^h1", term))
+if(nrow(filter(b, ess < 100)) > 0) warning("all ess not >= 100")
+filter(b, grepl("^h1|^h2", term))
 filter(b, grepl("^g0", term))
 filter(b, grepl("^g_k", term))
 filter(b, grepl("^b_j", term))
@@ -24,14 +23,14 @@ traceplot(m, pars = b$term[grepl("^b2_strategy\\[", b$term)], inc_warmup = F)
 traceplot(m, pars = b$term[grepl("^g1_strategy\\[", b$term)], inc_warmup = F)
 traceplot(m, pars = b$term[grepl("^g2_strategy\\[", b$term)], inc_warmup = F)
 traceplot(m, pars = b$term[grepl("^g0_strategy\\[", b$term)], inc_warmup = F)
-traceplot(m, pars = b$term[grepl("^g_k|^b_j|^g0$|^h1$", b$term)], inc_warmup = F)
+traceplot(m, pars = b$term[grepl("^g_k|^b_j|^g0$|^h", b$term)], inc_warmup = F)
 dev.off()
 
 # ----------------------------------------
 # plot coefs:
 
 pdf("portfolio/figs/stan-coefs.pdf", width = 8, height = 11)
-filter(b, !grepl("_strategy\\[", term)) %>%
+g <- filter(b, !grepl("_strategy\\[", term)) %>%
   ggplot(aes(term, estimate, ymin = conf.low, ymax = conf.high, colour = rhat)) +
   geom_pointrange() + coord_flip() + geom_hline(yintercept = 0, lty = 2)
 
@@ -43,6 +42,7 @@ filter(b, grepl("_strategy\\[", term)) %>%
   ggplot(aes(strategy, estimate, ymin = conf.low, ymax = conf.high, colour = rhat)) +
   geom_pointrange() + coord_flip()  + geom_hline(yintercept = 0, lty = 2) +
   facet_wrap(~coef)
+print(g)
 dev.off()
 
 # ----------------------------------------
@@ -84,15 +84,16 @@ ignore <- b$term[c(grep("b_j\\[", b$term), grep("g_k\\[", b$term))] %>%
 
 hist(extract(m)$g0, xlim = c(-5, 5))
 normal_prior(0, 2)
+
 dev.off()
 
 group_model <- function(par = "coef_g0_strategy", type = "diversity") {
   if (type == "diversity")
-    md <- dat %>% group_by(strategy_id, strategy) %>% summarise(mean_group = mean(scaled_spec_div))
+    md <- dat %>% group_by(strategy_id, strategy) %>% summarise(mean_group = mean(specDiv))
   if (type == "revenue")
     md <- dat %>% group_by(strategy_id, strategy) %>% summarise(mean_group = mean(log(revenue)))
   if (type == "days")
-    md <- dat %>% group_by(strategy_id, strategy) %>% summarise(mean_group = mean(log_days_permit))
+    md <- dat %>% group_by(strategy_id, strategy) %>% summarise(mean_group = mean(log(days_permit+1)))
 
   md <- filter(b, grepl(par, term)) %>% mutate(strategy_id = 1:n()) %>% inner_join(md)
 
@@ -131,11 +132,22 @@ p6 <- group_model("coef_b2_strategy", "days")
 gridExtra::grid.arrange(p1, p3, p4, p5, p6)
 dev.off()
 
-filter(b, grepl("b_j\\[", term) | grepl("g_k\\[", term) | grepl("h1", term)) %>%
+filter(b, grepl("b_j\\[", term) | grepl("g_k\\[", term) |
+    grepl("h1", term) | grepl("h2", term)) %>%
   mutate(par = c(paste("[mu]", colnames(mm)),
-    paste("[sigma]", colnames(mm2)), "[str. level] h1")) %>%
+    paste("[sigma]", colnames(mm2)), "[str. level] h1",
+    "[str. level] h2")) %>%
   ggplot(aes(par, estimate)) +
   geom_pointrange(aes(ymin = conf.low, ymax = conf.high), size = 0.35) +
   geom_hline(yintercept = 0, lty = 2) +
   coord_flip()
 ggsave("portfolio/figs/stan-main-effects-broom.pdf", width = 6.5, height = 6)
+
+# # check: days as a group-level predictor?
+# q <- filter(b, grepl("coef_g0_strategy", term)) %>%
+#   mutate(strategy_id = 1:n()) %>%
+#   inner_join(md)
+#
+# mq <- lm(estimate~strategy_mean_div * strategy_mean_days,
+#   data = q)
+# arm::display(mq)
