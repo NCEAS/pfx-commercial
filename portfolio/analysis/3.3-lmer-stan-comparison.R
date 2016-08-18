@@ -1,6 +1,6 @@
 library(dplyr)
 library(ggplot2)
-source("portfolio/analysis/prep-stan-model-matrix.R")
+load("portfolio/data-generated/diff-dat-stan.rda")
 load("portfolio/data-generated/m.rda")
 devtools::load_all("pfxr")
 library(lme4)
@@ -51,11 +51,11 @@ pos <- group_by(po, term, parameter) %>% summarise(
 
 b1 <- filter(pos, parameter == "b1") %>%
   inner_join(select(re_lmer, strategy, `b1(spec_change)`)) %>%
-  mutate(parameter = "b1") %>%
+  mutate(parameter = "beta[1][j]") %>%
   rename(blmer = `b1(spec_change)`)
 b2 <- filter(pos, parameter == "b2") %>%
   inner_join(select(re_lmer, strategy, `b2(spec_change)`)) %>%
-  mutate(parameter = "b2") %>%
+  mutate(parameter = "beta[2][j]") %>%
   rename(blmer = `b2(spec_change)`)
 bs <- bind_rows(b1, b2)
 
@@ -65,7 +65,7 @@ g <- ggplot(bs, aes(blmer, y = m)) +
   geom_segment(aes(x = blmer, xend = blmer, y = l, yend = u), lwd = 0.2, alpha = 0.5) +
   coord_flip() +
   # coord_fixed() +
-  facet_wrap(~parameter) +
+  facet_wrap(~parameter, labeller = label_parsed) +
   geom_abline(intercept = 0, slope = 1, lty = 2) +
   theme_gg() +
   geom_hline(yintercept = 0, lty = 2) +

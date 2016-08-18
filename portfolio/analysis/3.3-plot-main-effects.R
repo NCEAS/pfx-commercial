@@ -3,10 +3,13 @@ library(ggplot2)
 library(rstan)
 devtools::load_all("pfxr")
 
+load("portfolio/data-generated/diff-dat-stan.rda")
+load("portfolio/data-generated/m.rda")
+
 # devtools::install_github("seananderson/stanhelpers")
 p <- stanhelpers::extract_df(m, output = "long_df") %>%
   filter(grepl("^b_j", variable) | grepl("^g0$", variable) |
-      grepl("^h1", variable) | grepl("^g_k", variable)) %>%
+      grepl("^h[1-2]", variable) | grepl("^g_k", variable)) %>%
   mutate(variable = as.character(variable)) %>%
   group_by(variable) %>%
   summarize(l = quantile(value, probs = 0.025),
@@ -18,26 +21,27 @@ p <- stanhelpers::extract_df(m, output = "long_df") %>%
 # changed?
 stopifnot(p$variable == c("b_j_1", "b_j_2", "b_j_3", "b_j_4", "b_j_5",
   "g_k_1", "g_k_2",
-  "g_k_3", "g_k_4", "g_k_5", "g0", "h1"))
+  "g_k_3", "g_k_4", "g_k_5", "g0", "h1", "h2"))
 
 term_lu <- data.frame(
   variable = c("b_j_1", "b_j_2", "b_j_3", "b_j_4", "b_j_5", "g_k_1", "g_k_2",
-    "g_k_3", "g_k_4", "g_k_5", "g0", "h1"),
+    "g_k_3", "g_k_4", "g_k_5", "g0", "h1", "h2"),
   term_clean = c(
-    "b1 (specializing)",
-    "b2 (generalizing)",
-    "b3 (days fished % change)",
-    "b4 (days fished %:specializing)",
-    "b5 (days fished %:generalizing)",
+    "β1 (specializing)",
+    "β2 (generalizing)",
+    "β3 (days fished % change)",
+    "β4 (days fished %:specializing)",
+    "β5 (days fished %:generalizing)",
 
-    "g1 (specializing, variability)",
-    "g2 (generalizing, variability)",
-    "g3 (days fished % change, variability)",
-    "g4 (days fished %:specializing, variability)",
-    "g5 (days fished %:generalizing, variability)",
+    "γ1 (specializing, variability)",
+    "γ2 (generalizing, variability)",
+    "γ3 (days fished % change, variability)",
+    "γ4 (days fished %:specializing, variability)",
+    "γ5 (days fished %:generalizing, variability)",
 
-    "g0 (global intercept, variability)",
-    "u1 (strategy-level diversity effect, variability)"
+    "γ0 (global intercept, variability)",
+    "η1 (strategy-level diversity effect, variability)",
+    "η2 (strategy-level days-fished effect, variability)"
   )
 )
 p$term_clean <- NULL
@@ -51,7 +55,10 @@ p1 <- ggplot(p, aes(x = term_clean, y = m)) +
   geom_linerange(aes(ymin = l.5, ymax = u.5), size = 0.9) +
   ylab("Parameter estimate") +
   geom_hline(aes(yintercept = 0), lty = 2, col = "grey60") +
-  geom_vline(aes(xintercept = 7.5), lty = 2, col = "grey60") +
-  geom_vline(aes(xintercept = 1.5), lty = 2, col = "grey60") +
+  geom_vline(aes(xintercept = 8.5), lty = 2, col = "grey60") +
+  geom_vline(aes(xintercept = 2.5), lty = 2, col = "grey60") +
   coord_flip() + theme_gg() + xlab("")
-ggsave("portfolio/figs/stan-main-effects.pdf", width = 5.6, height = 4)
+# ggsave("portfolio/figs/stan-main-effects.pdf", width = 5.6, height = 4)
+cairo_pdf("portfolio/figs/stan-main-effects.pdf", width = 5.6, height = 4)
+print(p1)
+dev.off()
