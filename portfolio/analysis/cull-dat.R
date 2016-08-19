@@ -184,7 +184,7 @@ dat_diff = dat_diff[dat_diff$strategy == dat_diff$strategy.prev, ]
 ndat$diff_same_strategy <- nrow(dat_diff)
 ndat$rev_diff_same_strategy <- sum(dat_diff$revenue)
 
-# and after all the aggregating, remove strategies with less than one hundred people:
+# and after all the aggregating, remove strategies with less X
 dat_diff <- as_data_frame(dat_diff) %>% group_by(strategy) %>%
   mutate(n_pholders = length(unique(p_holder))) %>%
   filter(n_pholders >= npholders_thres2) %>%
@@ -205,7 +205,7 @@ dat_diff <- group_by(dat_diff, strategy) %>%
 # clean up:
 dat_diff <- as_data_frame(dat_diff) %>%
   select(p_holder, year, days_permit, days_permit.prev, revenue, revenue.prev,
-    length, strategy, specDiv, specdiv.prev)
+    length, strategy, specDiv, specdiv.prev, npermit)
 
 nstrat$final <- length(unique(dat_diff$strategy))
 
