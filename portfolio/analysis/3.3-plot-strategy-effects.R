@@ -13,14 +13,17 @@ p <- stanhelpers::extract_df(m)
 names(p$b_j) <- colnames(mm)
 names(p$g_k) <- colnames(mm2)
 
+colnames(p$g0_strategy) <- md$strategy
 colnames(p$coef_g0_strategy) <- md$strategy
 colnames(p$coef_g1_strategy) <- md$strategy
 colnames(p$coef_g2_strategy) <- md$strategy
 colnames(p$coef_b1_strategy) <- md$strategy
 colnames(p$coef_b2_strategy) <- md$strategy
 
-g0 <- tidyr::gather(p$coef_g0_strategy, term, posterior) %>%
-  mutate(parameter = "g0")
+g0 <- tidyr::gather(p$g0_strategy, term, posterior) %>%
+  mutate(parameter = "g0", g0main = rep(p$g0[[1]], length(unique(md$strategy))))
+g0 <- mutate(g0, posterior = posterior + g0main) %>%
+  select(-g0main)
 g1 <- tidyr::gather(p$coef_g1_strategy, term, posterior) %>%
   mutate(parameter = "g1")
 g2 <- tidyr::gather(p$coef_g2_strategy, term, posterior) %>%
@@ -58,13 +61,16 @@ pos[pos$parameter == "g0", "line"] <- NA
 pos <- as_data_frame(pos)
 
 pos$parameter <- factor(pos$parameter, levels = c("g0", "g1", "g2", "b1", "b2"))
+pos$parameter <- factor(pos$parameter,
+  labels = c("gamma[0][j]", "gamma[1][j]", "gamma[2][j]", "beta[1][j]", "beta[2][j]"))
 pl <- ggplot(pos, aes(x = str_label, y = m)) +
   geom_point() +
   geom_pointrange(aes(ymin = l, ymax = u), size = 0.2) +
   geom_linerange(aes(ymin = l.5, ymax = u.5), size = 0.9) +
-  facet_wrap(~parameter, nrow=1) + ylab("Parameter estimate") +
+  facet_wrap(~parameter, nrow=1, labeller = label_parsed) +
+      ylab("Parameter estimate") +
   geom_hline(aes(yintercept = line), lty = 2, col = "grey40") +
   coord_flip() + theme_gg() +
   theme(panel.grid.major = element_line(colour = "grey93",
     size = 0.2), panel.grid.minor = element_blank()) + xlab("")
-ggsave("portfolio/figs/stan-str-posteriors-dot.pdf", width = 15, height = 9)
+ggsave("portfolio/figs/stan-str-posteriors-dot.pdf", width = 9.5, height = 6)
