@@ -91,10 +91,10 @@ pl <-  g0 %>% mutate(str_label = ifelse(nn > 50, str_label, NA)) %>%
   point.padding = unit(0.0001, "lines"), max.iter = 3e4, segment.size = 0.2) +
   geom_point(aes(bg = nn), pch = 21, size = 1.9) +
   scale_fill_distiller(palette = "YlOrRd", trans = "log10") +
-  coord_cartesian(ylim = c(0.05, 1.27)) + theme_gg() +
+  coord_cartesian(ylim = c(0.2, 0.95)) + theme_gg() +
   labs(x = "Mean species diversity", y = "Estimated revenue variability",
     fill = "Number of\npermit holders") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1),
     legend.title = element_text(size = rel(0.75)))
 
-ggsave("portfolio/figs/stan-across-strategy-variability.pdf", width = 5.4, height = 4.1)
+ggsave("portfolio/figs/stan-across-strategy-variability.pdf", width = 5.4, height = 4.3)
