@@ -281,7 +281,7 @@ are allowed to vary by strategy, constrained by normal distributions
 and with estimated means:
 
 \begin{align}
-\gamma_{0,j}  &\sim \mathrm{N} \left(\gamma_0, \sigma^2_{\gamma_0}\right),\\
+\gamma_{0,j}  &\sim \mathrm{N} \left(\gamma_0 + \eta_1 M_j + \eta_2 A_j, \sigma^2_{\gamma_0}\right),\\
 \gamma_{1,j}  &\sim \mathrm{N} \left(\gamma_1, \sigma^2_{\gamma_1}\right),\\
 \gamma_{2,j}  &\sim \mathrm{N} \left(\gamma_2, \sigma^2_{\gamma_2}\right).
 \end{align}
@@ -317,9 +317,9 @@ to quickly iterate and build intuition about the models.
 
 \begin{table}[h!]
   \centering
-  \caption{Labels and descriptions of fishing strategies. In many cases, 
-a particular strategy represents a group of similar permits across areas 
-or vessel sizes. These strategies all had at least 100 
+  \caption{Labels and descriptions of fishing strategies. In many cases,
+a particular strategy represents a group of similar permits across areas
+or vessel sizes. These strategies all had at least 100
 permit holders.}
   \label{tab:strategies}
   \begin{tabular}{ll}
@@ -331,11 +331,14 @@ permit holders.}
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=5in]{../figs/stan-main-effects.pdf}
-\caption{Main effects from the hierarchical model 
-predicting revenue (b or $\beta$) and variability (g or $\gamma$) in revenue.
-The coefficient $u_1$ represents a strategy level predictor
-relating mean species diversity of a strategy
-to the expected magnitude of residual error.}
+\caption{Main effects from the hierarchical model
+predicting revenue ($\beta$) and variability ($\gamma$) in revenue.
+The $\eta$ coefficients represents strategy-level predictors
+relating mean species diversity and mean days fished
+within a strategy
+(both centered by their means and divided by
+two times their standard deivations)
+to the magnitude of residual error.}
 \label{fig:fe}
 \end{center}
 \end{figure}
@@ -345,10 +348,9 @@ to the expected magnitude of residual error.}
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1.06\textwidth]{../figs/stan-str-posteriors-dot.pdf}
-\caption{Estimates of within strategy effects from the hierarchical model. 
-Panels refer in order to $\gamma_0$ (g0), $\gamma_1$ (g1), $\gamma_2$ (g2),
-$\beta_1$ (b1), and $\beta_2$ (b2) from Eqns \ref{eq:mean} and \ref{eq:cv}.
-Shown are medians (dots) and 50\% and 90\% credible intervals
+\caption{Estimates of within-strategy effects from the hierarchical model.
+Panels refer to parameters in Eqns \ref{eq:mean} and \ref{eq:cv}.
+Shown are medians (dots) and 50\% and 95\% credible intervals
 (thick and thin line segments).
 Strategies are ordered from high to low mean
 species diversity from top to bottom.}
@@ -361,7 +363,7 @@ species diversity from top to bottom.}
 \includegraphics[width=1\textwidth]{../figs/stan-gg-spoke-all.pdf}
 \caption{The effect of adding a permit to ones strategy
 on estimated revenue variability and median revenue.
-This is an extended version of Fig.~2 that includes all major 
+This is an extended version of Fig.~2 that includes all major
 strategy combinations.}
 \label{fig:spoke-all}
 \end{center}
@@ -393,7 +395,7 @@ using variability (positive and negative residuals) as a measure of risk.}
 \begin{center}
 \includegraphics[width=1\textwidth]{../figs/strategy-year-effects.pdf}
 \caption{Strategy-year intercept estimates ($\beta_{0,j,t}$ in
-Eq.~\ref{eq:mean}) from the hierarchical model. 
+Eq.~\ref{eq:mean}) from the hierarchical model.
 Shown are 40 samples from the posterior distribution.}
 \label{fig:str-yrs}
 \end{center}

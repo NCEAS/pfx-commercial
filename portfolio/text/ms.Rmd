@@ -58,7 +58,7 @@ buy another permit, pick diverse permit, diversify within existing constraints.
 \caption{
 Trends in revenue and diversification over time.
 (A) Map of fishing regions in Alaska, USA.
-(B) Total revenue in billions of 20XX U.S. dollars from `r range_yrs[1]` to
+(B) Total revenue in billions of 2009 U.S. dollars from `r range_yrs[1]` to
 `r range_yrs[2]` for multiple (grey) and single (blue) permit holders.
 (C) Proportion of single permit holders for all fisheries (thick black line)
 and with permit holders omitted each year who fished any of the
@@ -95,21 +95,24 @@ credible intervals.}
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../figs/stan-across-strategy-variability.pdf}
-\caption{Individuals who choose
-permits with higher species diversity
+\caption{Individuals who fish
+permits and permit combinations (permit strategies) with higher species diversity
 have lower expected revenue variability.
 On the y-axis, dots, thick lines, and thin lines represent posterior medians,
 50\%, and 95\% credible intervals for
 the `r nstr` most common permit strategies.
 Thick black line, and dark and light grey shaded regions
 indicate median, 50\%, and 95\% credible intervals
-of strastegy-level regression built into the heirarchical model.
+of strategy-level regression built into the hierarchical model.
+Estimated variability represents expected standard deviation
+at an average of about
+`r mean_permit_days` combined fishing days across permits,
+and for a permit holder who does not change
+species diversity or days fished from year to year.
 }
 \label{fig:across}
 \end{center}
 \end{figure}
-
-
 
 \clearpage
 
