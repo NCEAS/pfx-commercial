@@ -6,13 +6,41 @@ devtools::load_all("pfxr")
 
 # -----------------------------------------------
 # spoke plots:
-mr <- group_by(dat, strategy) %>%
+# devtools::install_github("seananderson/stanhelpers")
+p <- stanhelpers::extract_df(m)
+
+# exp(g0 + unique(g0j)[1] + xh1[1] * h1 + xh2[2] * h2)
+g0_temp <- p$g0_strategy %>%
+  tidyr::gather(strategy, posterior) %>%
+  mutate(strategy_id =
+      as.numeric(sub("g0_strategy_([0-9]+)", "\\1", strategy))) %>%
+  select(-strategy) %>%
+  inner_join(md) %>%
+  mutate(
+    h1 = rep(p$h1[[1]], nrow(md)),
+    h2 = rep(p$h2[[1]], nrow(md)),
+    g0main = rep(p$g0[[1]], nrow(md))) %>%
+  rename(g0j = posterior)
+
+# controlling for days only:
+g0_temp <- mutate(g0_temp, posterior =
+    g0main +
+    (g0j + h1 * scaled_strategy_mean_div -
+        h2 * scaled_strategy_mean_days)/2)
+
+md2 <- g0_temp %>% group_by(strategy) %>%
+  summarise(
+    estimate = median(posterior),
+    conf.low = quantile(posterior, probs = 0.05),
+    conf.high = quantile(posterior, probs = 0.95)) %>%
+  ungroup() %>%
+  inner_join(md)
+
+nperms <- group_by(dat, strategy) %>%
   summarise(strategy_med_rev = median(revenue)/1e3,
     n_permits = npermit[1])
-b <- broom::tidy(m, conf.int = T, estimate.method = "median", conf.level = 0.5)
-md2 <- filter(b, grepl("coef_g0_strategy", term)) %>%
-  mutate(strategy_id = 1:n()) %>% inner_join(md) %>% inner_join(mr)
 
+md2 <- inner_join(md2, nperms)
 
 permit_plot <- function(permit) {
   message(permit)
@@ -58,17 +86,18 @@ permit_plot <- function(permit) {
         }
       }
     }
-    three$b0_less[i] <- two[id, "strategy_med_rev"]
-    three$g0_less[i] <- two[id, "estimate"]
+    three$b0_less[i] <- as.numeric(two[id, "strategy_med_rev"])
+    three$g0_less[i] <- as.numeric(two[id, "estimate"])
   }
 
   out <- bind_rows(single, two, three)
   out$single_permit <- permit
+
   out
 }
 
 sp <- plyr::ldply(c(
-  "G01",
+  # "G01",
   "G34",
   "K91",
   "T09",
@@ -102,7 +131,7 @@ let <- data_frame(x = rep(min(sp$strategy_med_rev[sp$single_permit == "B61B"]), 
   labs=LETTERS[1:2])
 
 pl <- filter(sp, !single_permit %in% c("S03", "K91")) %>%
-  mutate(str_label = ifelse(nn > 5, str_label, NA)) %>%
+  mutate(str_label = ifelse(nn > 10, str_label, NA)) %>%
   ggplot(
   aes(strategy_med_rev, exp(estimate), yend = exp(g0_less), xend = b0_less,
     label = str_label, colour = as.factor(n_permits))) +
@@ -111,6 +140,9 @@ pl <- filter(sp, !single_permit %in% c("S03", "K91")) %>%
     colour = "grey60") +
   geom_segment(colour = "grey70", alpha = 0.6, size = 0.5) +
   geom_point(aes(size = nn)) +
+  geom_point(data =
+      filter(sp, n_permits == 1, !single_permit %in% c("S03", "K91")),
+    aes(size = nn), pch = 21, col = "black") +
   geom_text_repel(size = 2.7,
     point.padding = unit(0.15, "lines"), max.iter = 9e3, segment.size = 0,
     box.padding = unit(0.15, "lines"), nudge_y = -0.03,
@@ -140,14 +172,13 @@ pl <- filter(sp, !single_permit %in% c("S03", "K91")) %>%
   # geom_ann("text", data = let, aes(x, y, label = labs,
     # yend = NULL, xend = NULL, colour = NULL), size = 5)
 # print(pl)
-# print(pl)
 ggsave("portfolio/figs/stan-gg-spoke2.pdf", width = 7, height = 3)
 
 
 # ------------------------------------------------------
 # more for SI
 sp <- plyr::ldply(c(
-  "G01",
+  # "G01",
   "G34",
   "K91",
   "T09",
@@ -168,7 +199,7 @@ ns <- dat %>% group_by(strategy) %>%
 sp <- inner_join(sp, ns)
 
 pl <- sp %>%
-  mutate(str_label = ifelse(nn > 20, str_label, NA)) %>%
+  mutate(str_label = ifelse(nn > 2, str_label, NA)) %>%
   ggplot(
     aes(strategy_med_rev, exp(estimate), yend = exp(g0_less), xend = b0_less,
       label = str_label, colour = as.factor(n_permits))) +
@@ -177,6 +208,7 @@ pl <- sp %>%
     colour = "grey60") +
   geom_segment(colour = "grey70", alpha = 0.6, size = 0.5) +
   geom_point(aes(size = nn)) +
+  geom_point(data = filter(sp, n_permits == 1), aes(size = nn), pch = 21, col = "black") +
   geom_text_repel(size = 2.7,
     point.padding = unit(0.15, "lines"), max.iter = 9e3, segment.size = 0,
     box.padding = unit(0.15, "lines"), nudge_y = -0.03,
