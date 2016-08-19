@@ -1,5 +1,5 @@
 rm(list = ls())
-source("portfolio/analysis/prep-stan-model-matrix.R")
+load("portfolio/data-generated/diff-dat-stan.rda")
 load("portfolio/data-generated/fig1-dat.rda")
 
 library(dplyr)
@@ -43,9 +43,11 @@ max_spdiv_salm <- max_spdiv_salm %>% round(2) * 100
 n_jacknifed <- length(unique(out_div$jk)) - 1
 n_jacknifed <- names(nums[n_jacknifed])
 
+mean_permit_days <- round(mean(md$strategy_mean_days)/10) * 10
+
 ndat <- readRDS("portfolio/data-generated/ndat.rds")
 ndat_cull <- readRDS("portfolio/data-generated/ndat-cull.rds")
 ndat <- c(ndat, ndat_cull)
 nstrat <- readRDS("portfolio/data-generated/nstrat-cull.rds")
-rm(cullDat, mm, mm2, dat)
+rm(mm, mm2, dat)
 save.image(file = "portfolio/data-generated/output-values.rda")
