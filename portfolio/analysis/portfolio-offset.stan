@@ -99,8 +99,7 @@ generated quantities {
   vector[n_strategy] coef_b1_strategy;
   vector[n_strategy] coef_b2_strategy;
   for (s in 1:n_strategy) {
-    coef_g0_strategy[s] = g0 + g0_strategy[s] + h1 * mean_div_str[s] +
-                                                h2 * mean_day_str[s];
+    coef_g0_strategy[s] = g0 + g0_strategy[s];
     coef_g1_strategy[s] = g_k[1] + g1_strategy[s];
     coef_g2_strategy[s] = g_k[2] + g2_strategy[s];
     coef_b1_strategy[s] = b_j[1] + b1_strategy[s];
