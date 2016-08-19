@@ -55,7 +55,7 @@ t_prior <- function() {
   plot(x, dens, type = "l", ylim = c(0, max(dens)), xlim = c(0, 5))
 }
 tau_samples <- function(p) {
-  hist(extract(m)[[p]], xlim = c(0, 5), main = p)
+  hist(rstan::extract(m)[[p]], xlim = c(0, 5), main = p)
   t_prior()
 }
 normal_prior <- function(mu = 0, sigma=2) {
@@ -67,7 +67,7 @@ normal_prior <- function(mu = 0, sigma=2) {
 beta_samples <- function(p, sigma=1) {
   column <- as.numeric(gsub("[a-z0-9_]*\\[([0-9])\\]", "\\1", p))
   term <- gsub("\\[[0-9]\\]", "", p)
-  hist(extract(m)[[term]][,column], xlim = c(-5, 5), main = p)
+  hist(rstan::extract(m)[[term]][,column], xlim = c(-5, 5), main = p)
   normal_prior(sigma=sigma)
 }
 
@@ -82,7 +82,7 @@ ignore <- b$term[c(grep("b_j\\[", b$term), grep("g_k\\[", b$term))] %>%
 # hist(extract(m)$b0, xlim = c(-5, 5))
 # normal_prior(0, 2)
 
-hist(extract(m)$g0, xlim = c(-5, 5))
+hist(rstan::extract(m)$g0, xlim = c(-5, 5))
 normal_prior(0, 2)
 
 dev.off()
