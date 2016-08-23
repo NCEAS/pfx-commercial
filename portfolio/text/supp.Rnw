@@ -172,7 +172,7 @@ positives are
 that it doesn't require estimating people-specific random effects (n = 3000+)
 and removes time effects.
 
-The basic model is a heirarchical linear regression with Gaussian errors
+The basic model is a hierarchical linear regression with Gaussian errors
 predicting $\log$ revenue, $\log(R_{i,t})$, for
 each fisher $i$ and time (year) $t$:
 
@@ -248,10 +248,10 @@ These are after controlling for percent change in days fished, $\beta_3$,
 and the interaction between days fished and percent change in species
 diversity, $\beta_4$ and $\beta_5$.
 
-Whereas a typical heirarchical linear regression model
+Whereas a typical hierarchical linear regression model
 would estimate a single residual error scale term, $\sigma$,
 we model the scale of the residual error  with
-another heirarchical model with a similar form:
+another hierarchical model with a similar form:
 
 \begin{equation}
 \label{eq:cv}
@@ -272,8 +272,7 @@ We exponentiate the equation to ensure all scale parameters, $\sigma_{i,t}$,
 are positive.
 
 The $\gamma$'s are estimated coefficients, three of which
-are allowed to vary by strategy, constrained by normal distributions
-and with estimated means:
+are allowed to vary by strategy, constrained by normal distributions:
 
 \begin{align}
 \gamma_{0,j}  &\sim \mathrm{N} \left(\gamma_0 + \eta_1 M_j + \eta_2 E_j, \sigma^2_{\gamma_0}\right),\\
