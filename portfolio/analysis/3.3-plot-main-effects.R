@@ -49,6 +49,10 @@ p <- inner_join(p, term_lu)
 p$term_clean <- factor(p$term_clean,
   levels = rev(sort(as.character(p$term_clean))))
 
+# invert specializing coefs to match fig 4:
+p[grepl("specializing", p$term_clean),c("l", "l.5", "m", "u.5", "u")] <-
+  -1 * p[grepl("specializing", p$term_clean),c("l", "l.5", "m", "u.5", "u")]
+
 p1 <- ggplot(p, aes(x = term_clean, y = m)) +
   geom_point() +
   geom_pointrange(aes(ymin = l, ymax = u), size = 0.2) +

@@ -25,11 +25,13 @@ g0 <- tidyr::gather(p$g0_strategy, term, posterior) %>%
 g0 <- mutate(g0, posterior = posterior + g0main) %>%
   select(-g0main)
 g1 <- tidyr::gather(p$coef_g1_strategy, term, posterior) %>%
-  mutate(parameter = "g1")
+  mutate(parameter = "g1") %>%
+  mutate(posterior = -1 * posterior) # invert to match fig 4
 g2 <- tidyr::gather(p$coef_g2_strategy, term, posterior) %>%
   mutate(parameter = "g2")
 b1 <- tidyr::gather(p$coef_b1_strategy, term, posterior) %>%
-  mutate(parameter = "b1")
+  mutate(parameter = "b1") %>%
+  mutate(posterior = -1 * posterior) # invert to match fig 4
 b2 <- tidyr::gather(p$coef_b2_strategy, term, posterior) %>%
   mutate(parameter = "b2")
 po <- bind_rows(g0, g1, g2, b1, b2)
