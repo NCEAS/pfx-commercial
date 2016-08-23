@@ -186,10 +186,10 @@ expected $\log(R_{i,t})$ is modelled as:
 
 \begin{equation}
 \label{eq:mean}
-\widehat{\log(R_{i,t})} = \beta_{0,j,t} +
+\widehat{\log(R_{i,t})} = \beta_{0,j,t} -
   \beta_{1,j} S_{i,t} I_{i,t} +
   \beta_{2,j} S_{i,t} I_{i,t} +
-  \beta_3 D_{i,t} +
+  \beta_3 D_{i,t} -
   \beta_4 S_{i,t} D_{i,t} I_{i,t} +
   \beta_5 S_{i,t} D_{i,t} I_{i,t} +
   \log(R_{i,t-1})
@@ -256,19 +256,14 @@ another heirarchical model with a similar form:
 \begin{equation}
 \label{eq:cv}
 \widehat{\sigma_{i,t}} =
-\exp \left( \gamma_{0,j} + \eta_1 M_j +
+\exp \left( \gamma_{0,j} -
 \gamma_{1,j} S_{i,t} I_{i,t} +
 \gamma_{2,j} S_{i,t} I_{i,t} +
-\gamma_3 D_{i,t} +
+\gamma_3 D_{i,t} -
 \gamma_4 S_{i,t} D_{i,t} I_{i,t} +
-\gamma_5 S_{i,t} D_{i,t} I_{i,t}\right),
+\gamma_5 S_{i,t} D_{i,t} I_{i,t}\right).
 \end{equation}
 
-where $M_j$ represents the raw mean species diversity for strategy $j$
-and $\eta_1$ represents an estimated strategy-level predictor.
-In other words, $\gamma_{0,j} + \eta_1 M_j$ represents the intercept
-with a built-in strategy-level regression (Fig.~3)
-that incorporates parameter uncertainty.
 Again, $S_{i,t}$ and $I_{i,t}$ represent, respectively,
 percent change in species
 diversity and an indicator variable for increasing or
@@ -281,10 +276,19 @@ are allowed to vary by strategy, constrained by normal distributions
 and with estimated means:
 
 \begin{align}
-\gamma_{0,j}  &\sim \mathrm{N} \left(\gamma_0 + \eta_1 M_j + \eta_2 A_j, \sigma^2_{\gamma_0}\right),\\
+\gamma_{0,j}  &\sim \mathrm{N} \left(\gamma_0 + \eta_1 M_j + \eta_2 E_j, \sigma^2_{\gamma_0}\right),\\
 \gamma_{1,j}  &\sim \mathrm{N} \left(\gamma_1, \sigma^2_{\gamma_1}\right),\\
 \gamma_{2,j}  &\sim \mathrm{N} \left(\gamma_2, \sigma^2_{\gamma_2}\right).
 \end{align}
+
+The mean of the $\gamma_{0,j}$ coefficients is
+modelled with
+two strategy-level predictors.
+The symbols $M_j$ and $E_j$ represent the raw mean species diversity and
+mean combined fishing season length (effort) for strategy $j$.
+The coefficients $\eta_1$ and $\eta_2$ represent predictors
+in this strategy-level regression.
+The effect of $\eta_1$ is shown in Fig.~3.
 
 We fit our models in Stan version 2.11.1. \ldots
 \citep{hoffman2014, standevelopmentteam2015a, carpenter2015a, standevelopmentteam2015}

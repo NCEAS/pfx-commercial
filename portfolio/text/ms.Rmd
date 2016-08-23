@@ -204,6 +204,8 @@ greater expected revenue to the right of the zero line
 and lower expected revenue to the left of the zero line.
 These effects are estimated holding
 fishing season length constant from year to year.
+Dots and line segments represent medians and 
+50\% credible intervals of posteriors.
 }
 \label{fig:within}
 \end{center}
