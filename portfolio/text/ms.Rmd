@@ -22,7 +22,7 @@ but changing species diversity can be risky, costly, and limited by regulations.
 Individuals relying on natural resources as their primary source of income
 often experience high levels of income-variability 
 due to the combined effects of environmental and price variation. 
-Fishing is a prime example and
+Commercial fishermen are a prime example and
 recent work has sought to identify regulations and fishing behaviours 
 that can reduce this variability. 
 A top candidate has been that fishing higher levels of species diversity
@@ -33,7 +33,7 @@ However, it is unknown if this species-diversity effect
 on income variability holds 
 across multiple approaches to diversifying catch,
 at the level of individual permit holders,
-and across all fisheries. 
+and across different fishing strategies. 
 Here, we simultaneously estimate the effects of three 
 methods of diversification for Alaskan fishery permit holders
 on revenue and revenue variability:
@@ -43,8 +43,8 @@ and (3) adjusting species diversity within the constraints of a permit.
 We control for changes in effort and other 
 residual effects through time.
 We find that 
-fishing an additional permit is associated with lower variability (~XX--XX%) 
-and higher revenue,
+fishing an additional permit is associated with 
+lower variability (~XX--XX%) and higher revenue,
 fishing permits with higher species diversity reduces risk 
 (XX--XX% per unit increase in Simpson's diversity index),
 but that changing species diversity within a
@@ -56,7 +56,7 @@ is mostly an across-permit effect, not
 a benefit that can be easily harnessed by an individual permit holder.
 Effective methods of diversification --- 
 purchasing additional permits or switching permits ---
-is costly and often limited by regulations such as limited entry
+are costly and often limited by regulations such as limited entry
 programs and individual transferable quotas (ITQs).
 Our results suggest ...
 
