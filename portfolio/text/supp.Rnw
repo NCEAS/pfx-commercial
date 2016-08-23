@@ -304,10 +304,12 @@ Most importantly, (1) this model does not carry uncertainty
 from the first mean-component model to the variance-component model, but
 (2) it also leaves the residuals in the mean-component model strongly
 heteroskedastic and therefore improperly weights individual data points, and
-(3) does not allow for proper modelling of the strategy-level predictor,
-$\eta_1$. Nonetheless, it provides a check that our results
+(3) does not allow for proper modelling of the strategy-level predictors,
+$\eta_1$ and $\eta_2$. Nonetheless, it provides a check that our results
 from the Stan model are approximately correct and allowed us
 to quickly iterate and build intuition about the models.
+A version of the Stan model without the variance-component
+matched the estimates of the same model in lme4 almost exactly.
 
 
 % \verbatiminput{../analysis/portfolio-offset.stan}

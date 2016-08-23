@@ -20,15 +20,13 @@ but changing species diversity can be risky, costly, and limited by regulations.
 <!-- The increasing the diversity of species fished has been proposed to reduce risk for fishermen --> 
 
 Individuals relying on natural resources as their primary source of income
-often experience high levels of income-variability 
+often experience highly variable income levels 
 due to the combined effects of environmental and price variation. 
-Commercial fishermen are a prime example and
+Commercial fishers are a prime example and
 recent work has sought to identify regulations and fishing behaviours 
 that can reduce this variability. 
 A top candidate has been that fishing higher levels of species diversity
-decreases income variability, which is concerning 
-given that some fishing regulations and market forces
-may be increasingly promoting specialization. 
+decreases income variability.
 However, it is unknown if this species-diversity effect 
 on income variability holds 
 across multiple approaches to diversifying catch,
@@ -50,6 +48,12 @@ fishing permits with higher species diversity reduces risk
 but that changing species diversity within a
 permit's constraints has a fishery-dependent effect on revenue and 
 is usually (XX%) associated with increased revenue variability.
+At the same time, Alaskan commercial fisheries
+have increasingly focussed on 
+single-permit (often salmon) fishing strategies
+with single-permit fishers earning 
+more than multiple-permit fishers
+for the first time in 2014.
 Our results suggest that the benefit of species diversity
 on reducing revenue variability 
 is mostly an across-permit effect, not
@@ -58,7 +62,7 @@ Effective methods of diversification ---
 purchasing additional permits or switching permits ---
 are costly and often limited by regulations such as limited entry
 programs and individual transferable quotas (ITQs).
-Our results suggest ...
+Take home ...
 
 \bigskip
 \noindent
@@ -67,6 +71,9 @@ Extra:
 - there is often limited room for intentional diversification within a permit
 - in fact, specializing can be profitable within some fisheries
 
+<!-- , which is concerning  -->
+<!-- given that some fishing regulations and market forces -->
+<!-- may be increasingly promoting specialization. -->
 <!-- Main message in 25 words or less: -->
 
 <!-- Take 1: -->
