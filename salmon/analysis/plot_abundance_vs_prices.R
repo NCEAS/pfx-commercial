@@ -24,7 +24,7 @@ prices = group_by(cfec[cfec$spec%in%c("CHUM","CHNK","PINK","SOCK"),], spec, year
   filter(year <= 2007)
 
 # read in abundance data per Rich
-returns = read.csv("salmon/data/totalReturnByBY.csv")
+returns = read.csv("salmon/data-generated/totalReturnByBY.csv")
 returns = returns[returns$BroodYearReturn <= 2007 & returns$BroodYearReturn >= 1985 & is.na(returns$BroodYearReturn)==F,]
 
 sock = data.frame("spec"="SOCK", "year"=seq(1985,2007), "totalrun"=returns$TotalSockeye)
@@ -40,11 +40,11 @@ salmon$meanPrice = as.numeric(salmon$meanPrice)
 
 salmon = group_by(salmon, spec) %>%
   mutate(scaledRun = scale(log(totalrun), scale=FALSE), scaledPrice = scale(log(meanPrice),scale=FALSE))
-
+pdf("Returns_v_prices.pdf")
 ggplot(salmon, aes(scaledRun, scaledPrice, color = spec, label=year)) +
-  geom_text(size=3) + facet_wrap(~spec, scale="free") +
-  xlab("Scaled ln run size") + ylab("Scaled ln price") + geom_hline(aes(yintercept=0),color="grey") + geom_vline(aes(xintercept=0),color="grey")
-
+  geom_text(size=3) + facet_wrap(~spec) +
+  xlab("Centered ln run size") + ylab("Centered ln price") + geom_hline(aes(yintercept=0),color="grey") + geom_vline(aes(xintercept=0),color="grey")
+dev.off()
 
 
 
