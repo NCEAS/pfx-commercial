@@ -20,7 +20,7 @@ but changing species diversity can be risky, costly, and limited by regulations.
 <!-- The increasing the diversity of species fished has been proposed to reduce risk for fishermen --> 
 
 Individuals relying on natural resources as their primary source of income
-often experience highly variable income levels 
+often experience high levels of income variability 
 due to the combined effects of environmental and price variation. 
 Commercial fishers are a prime example and
 recent work has sought to identify regulations and fishing behaviours 
@@ -53,7 +53,7 @@ have increasingly focussed on
 single-permit (often salmon) fishing strategies
 with single-permit fishers earning 
 more than multiple-permit fishers
-for the first time in 2014.
+since 2013.
 Our results suggest that the benefit of species diversity
 on reducing revenue variability 
 is mostly an across-permit effect, not
@@ -166,7 +166,7 @@ owners of (A) individual halibut and (B) gillnet herring roe permits
 (light blue)
 compared with owners of the same permit plus one more (medium blue)
 or two more permits (dark blue).
-On the y-axis, dots and lines represent posterior median and 50\%
+On the y-axis, dots and lines represent posterior median and 90\%
 credible intervals.}
 \label{fig:spokes}
 \end{center}
