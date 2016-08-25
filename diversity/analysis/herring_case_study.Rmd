@@ -1,0 +1,173 @@
+---
+title: "Herring: case study 1"
+author: ''
+date: ''
+output:
+  pdf_document:
+    fig_caption: yes
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(date)
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, results = "hide"}
+cfec <- feather::read_feather("../../portfolio/data-generated/cfec.feather")
+cfec$year <- as.numeric(cfec$year)
+
+herring = cfec[substr(cfec$p_fshy,1,1) %in% c("L","G"),]
+
+herring_summary = group_by(herring, p_fshy, year) %>%
+  summarize(g = sum(g_earn), p = mean(g_price,na.rm=T), lbs = sum(g_pounds), people = length(unique(p_holder))) %>%
+  group_by(p_fshy) %>%
+  mutate(n = length(unique(year)), maxpeople = max(people,na.rm=T)) %>%
+  filter(n > 9) %>%
+  filter(maxpeople > 25)
+```
+
+## Overview  
+
+First, we can pull out the herring permits by all areas. We'll restrict the analysis to (1) fisheries with 10 or more years of data, and (2) fisheries that at their max had at least 25 people landing catch in a year. We see that people generally decline to 0, except fisheries in SE (G01A, G34A), and spawn on kelp fisheries (L21). Despite catch being flat or maybe increasing, we see prices go down or flat for nearly all permits (and spawn on kelp L21 permits have significantly higher price / lb compared to roe fisheries).
+
+In terms of the diversification of these permit holders, some questions to ask might be (1) if people stopped fishing herring, did they stop fishing entirely, or fish something else? (2) for the people that stayed, how many of them are diversified (other permits) and how much of their revenue comes from other permits? 
+
+For a lot of permits, we see decreases in the proportion of people fishing only herring. In terms of spatial diversity, for several of the fisheries that haven't crashed, we see increases in diversity: G01M/T, G34N, L21. In terms of diversifying to other types of herring permits, 
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, results = "hide", fig.pos="placeHere", fig.cap = "Herring permit holders by year."}
+  ggplot(herring_summary, aes(year, people)) + geom_line() + facet_wrap(~ p_fshy, scale="free_y") + xlab("Year") + ylab("People")
+```
+
+\break  
+  
+```{r, echo = FALSE, warning = FALSE, message = FALSE, results = "hide", fig.pos="placeHere", fig.cap = "Trends in landed catch by permit.", fig.height=3.5}
+  ggplot(herring_summary, aes(year, log(lbs))) + geom_line() + 
+  facet_wrap(~ p_fshy) + ylab("Ln (tons)") + xlab("Year")
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, results = "hide", fig.pos="placeHere", fig.cap = "Trends in prices by permit.", fig.height=3.5}
+  ggplot(herring_summary, aes(year, p)) + geom_line() + 
+  facet_wrap(~ p_fshy, scale="free_y") + ylab("Price (Dollars / lb.)") + xlab("Year")
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, results = "hide", fig.pos="placeHere", fig.cap = "Scatterplots of prices versus revenue by permit."}
+  ggplot(herring_summary, aes(p, log(lbs/2000), colour = year)) + geom_point() + facet_wrap(~ p_fshy, scale="free") + ylab("Ln (tons)") + xlab("Price (dollars / lb.)")
+
+```
+
+\break  
+  
+## How much of your revenue is driven by non-herring? 
+
+```{r, echo = FALSE}
+
+herring_permits = unique(herring_summary$p_fshy)
+
+# the complicated thing here is that people may hold multiple herring permits, 
+# multiple permits, no permits. So for each permit type we need to calculate 
+# each of these groups independently. Some people may be counted multiple times. 
+
+# next calculate strategies for diversification
+calc_permit_summary = function(this_permit) {
+people_year = group_by(cfec[cfec$p_fshy == this_permit,], p_holder, year) %>% 
+  summarize(g = sum(g_earn)) %>% 
+  filter(g > 0) %>% 
+  select(-g)
+# grab all records pertaining to these people-year combinations
+herring = left_join(people_year, cfec)
+
+# aggregate fish tickets to permits
+herring = group_by(herring, p_holder, p_fshy, year) %>% 
+  summarize(g_earn = sum(g_earn))
+ 
+permit_summary = group_by(herring, p_holder, year) %>% 
+  summarize(npermit = length(unique(p_fshy)),
+    npermit_herring = length(which(p_fshy %in% herring_permits)),
+    npermit_g34 = length(which(p_fshy %in% herring_permits & substr(p_fshy,1,4)=="G 34")),
+    npermit_g01 = length(which(p_fshy %in% herring_permits & substr(p_fshy,1,4)=="G 01")),
+    npermit_l12 = length(which(p_fshy %in% herring_permits & substr(p_fshy,1,4)=="L 12")),
+    npermit_l21 = length(which(p_fshy %in% herring_permits & substr(p_fshy,1,4)=="L 21")),
+    nmult = ceiling(npermit_g34/100) + ceiling(npermit_g01/100) + ceiling(npermit_l21/100) + ceiling(npermit_l12/100)) %>% 
+    as.data.frame() %>%
+    group_by(year) %>% 
+  summarize(only_herring_single = length(which(npermit==1 & npermit_herring == 1)),
+    only_herring_multiple = length(which(npermit>1 & npermit_herring >1 & npermit == npermit_herring)), herring_combo = length(which(npermit > 1 & npermit_herring >= 1 & npermit > npermit_herring)), g34 = length(which(npermit_g34 > 1)), g01 = length(which(npermit_g01 > 1)),
+    l12 = length(which(npermit_l12 > 1)), l21 = length(which(npermit_l21 > 1)), 
+    multiple_fisheries = length(which(nmult > 1)))
+
+permit_summary$p_fshy = this_permit
+return(permit_summary)
+}
+
+
+herring_summary = calc_permit_summary(herring_permits[1])
+for(i in 2:length(herring_permits)) {
+  herring_summary = rbind(herring_summary, calc_permit_summary(herring_permits[i]))
+}
+
+```
+  
+  
+```{r, echo = FALSE, warning = FALSE, message = FALSE, results = "hide", fig.pos="placeHere", fig.cap = "Proportion of permit holders specializing on herring.", fig.height=3.5}
+ggplot(herring_summary, aes(year, (only_herring_single+only_herring_multiple)/(only_herring_single+only_herring_multiple+herring_combo))) + facet_wrap(~p_fshy) + geom_line() + xlab("Year") + ylab("Proportion of people only fishing herring")
+```
+  
+```{r, echo = FALSE, warning = FALSE, message = FALSE, results = "hide", fig.pos="placeHere", fig.cap = "Proportion of permit holders diversifying spatially.", fig.height=3.5}
+p1 = ggplot(herring_summary, aes(year, (g34)/(only_herring_single+only_herring_multiple+herring_combo), group = p_fshy, colour = p_fshy)) + geom_line() + xlab("Year") + ylab("Proportion of people diversifying spatially")
+
+p2 = ggplot(herring_summary, aes(year, (g01)/(only_herring_single+only_herring_multiple+herring_combo), group = p_fshy, colour = p_fshy)) + geom_line() + xlab("Year") + ylab("Proportion of people diversifying spatially")
+
+p3 = ggplot(herring_summary, aes(year, (l21)/(only_herring_single+only_herring_multiple+herring_combo), group = p_fshy, colour = p_fshy)) + geom_line() + xlab("Year") + ylab("Proportion of people diversifying spatially")
+
+p4 = ggplot(herring_summary, aes(year, (l12)/(only_herring_single+only_herring_multiple+herring_combo), group = p_fshy, colour = p_fshy)) + geom_line() + xlab("Year") + ylab("Proportion of people diversifying spatially")
+
+gridExtra::grid.arrange(p1, p2, p3, p4)
+```
+  
+\break  
+  
+```{r, echo = FALSE, warning = FALSE, message = FALSE, results = "hide", fig.pos="placeHere", fig.cap = "Proportion of people diversifying w/diff herring permits.", fig.height=3.5}
+ggplot(herring_summary, aes(year, (multiple_fisheries)/(only_herring_single+only_herring_multiple+herring_combo))) + facet_wrap(~p_fshy) + geom_line() + xlab("Year") + ylab("Proportion of people diversifying w/diff herring permits")
+```
+  
+```{r, echo = FALSE, warning = FALSE, message = FALSE, results = "hide", fig.pos="placeHere", fig.cap = "Ratio of effective diversity to total number of permit holders (as measure of evenness). Values near 1 indicate everyone's revenue is similar.", fig.height=3.5}
+# We can also calculate how herring catch is distributed across fisherment
+simp.div = function(x) {1/sum((x/sum(x))^2)}
+
+group_by(cfec[cfec$p_fshy%in%herring_permits,], year, p_holder, p_fshy) %>% 
+  summarize(g = sum(g_earn)) %>% 
+  group_by(year, p_fshy) %>% 
+  summarize(div = simp.div(g), n = length(unique(p_holder))) %>% 
+  ggplot(aes(year, div/n)) + facet_wrap(~p_fshy, scale="free_y") + geom_line() + xlab("Year") + ylab("Diversity across people")
+```  
+  
+\break  
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, results = "hide", fig.pos="placeHere", fig.cap = "Fraction of revenue made up of herring (median, of per-person fractions).",eval=FALSE}
+
+herring_permits = unique(herring_summary$p_fshy)
+
+herring_people = group_by(cfec, p_fshy, year, p_holder) %>%
+  summarize(g = sum(g_earn),
+  herring_landing = ifelse(length(which(p_fshy %in% herring_permits)) == 0, 0, 1)) %>% 
+  data.frame() %>% 
+  group_by(p_holder, year) %>% 
+  mutate(herring_personyear = ifelse(length(which(p_fshy %in% herring_permits)) == 0, 0, 1),
+  g_herring = sum(g[herring_landing==1]), g_other = sum(g[herring_landing==0]),
+  p_fshy = p_fshy[which(p_fshy %in% herring_permits)][1]) %>% 
+  group_by(p_holder) %>% 
+  mutate(ever_herring = sum(herring_personyear)) %>%   
+  filter(ever_herring > 0) %>% 
+  select(-g, -herring_landing, -herring_personyear, -ever_herring)
+
+herring_people$p_herring = herring_people$g_herring / (herring_people$g_herring + herring_people$g_other)
+group_by(herring_people[herring_people$p_fshy %in% herring_permits, ], p_fshy, year) %>% 
+  summarize(g = median(p_herring)) %>% 
+  ggplot(aes(year, g)) + geom_line() + facet_wrap(~p_fshy) + ylab("Median % herring (as fraction of total revenue)") + xlab("Year")
+```
+
