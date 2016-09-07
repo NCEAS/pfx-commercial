@@ -4,7 +4,7 @@ library(rstan)
 devtools::load_all("pfxr")
 
 load("portfolio/data-generated/diff-dat-stan.rda")
-load("portfolio/data-generated/m.rda")
+load("portfolio/data-generated/m-2016-08-23.rda")
 
 # devtools::install_github("seananderson/stanhelpers")
 p <- stanhelpers::extract_df(m, output = "long_df") %>%

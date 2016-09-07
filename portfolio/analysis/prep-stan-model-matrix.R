@@ -5,8 +5,8 @@ dat <- cullDat()
 
 #downsample for fast testing
 unique_holders <- unique(dat$p_holder)
-n_sample <- round(length(unique_holders)*0.4)
-set.seed(1)
+n_sample <- round(length(unique_holders)*0.5)
+set.seed(123)
 dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
 nrow(dat)
 

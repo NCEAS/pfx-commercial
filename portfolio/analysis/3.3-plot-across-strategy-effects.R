@@ -3,7 +3,7 @@ library(ggplot2)
 library(ggrepel)
 devtools::load_all("pfxr")
 load("portfolio/data-generated/diff-dat-stan.rda")
-load("portfolio/data-generated/m.rda")
+load("portfolio/data-generated/m-2016-08-23.rda")
 
 # devtools::install_github("seananderson/stanhelpers")
 p <- stanhelpers::extract_df(m)
@@ -73,7 +73,7 @@ g0$strategy_med_rev <- NULL
 g0$nn <- NULL
 g0 <- inner_join(g0, mr)
 
-pl <-  g0 %>% mutate(str_label = ifelse(nn > 50, str_label, NA)) %>%
+pl <-  g0 %>% mutate(str_label = ifelse(nn > 10, str_label, NA)) %>%
   ggplot(aes(x = strategy_mean_div, y = exp(g0.m))) +
   geom_ribbon(data = dd, aes(strategy_mean_div, y = exp(m), ymax=exp(u),
     ymin=exp(l)), fill = "grey85", alpha = 0.3) +

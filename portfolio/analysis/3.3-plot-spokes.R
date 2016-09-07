@@ -1,7 +1,7 @@
 library(dplyr)
 library(ggplot2)
 load("portfolio/data-generated/diff-dat-stan.rda")
-load("portfolio/data-generated/m.rda")
+load("portfolio/data-generated/m-2016-08-23.rda")
 devtools::load_all("pfxr")
 
 # -----------------------------------------------
@@ -140,9 +140,9 @@ pl <- filter(sp, !single_permit %in% c("S03", "K91")) %>%
     colour = "grey60") +
   geom_segment(colour = "grey70", alpha = 0.6, size = 0.5) +
   geom_point(aes(size = nn)) +
-  geom_point(data =
-      filter(sp, n_permits == 1, !single_permit %in% c("S03", "K91")),
-    aes(size = nn), pch = 21, col = "black") +
+  # geom_point(data =
+  #     filter(sp, n_permits == 1, !single_permit %in% c("S03", "K91")),
+  #   aes(size = nn), pch = 21, col = "black") +
   geom_text_repel(size = 2.7,
     point.padding = unit(0.15, "lines"), max.iter = 9e3, segment.size = 0,
     box.padding = unit(0.15, "lines"), nudge_y = -0.03,
@@ -151,14 +151,14 @@ pl <- filter(sp, !single_permit %in% c("S03", "K91")) %>%
   # geom_text(size = 2.9, colour = "grey20", vjust = "inward", hjust = "inward") +
   facet_wrap(~single_permit_clean, scales = "free", labeller=label_parsed) +
   theme_gg() +
-  labs(x = "Median revenue", y = "Estimated revenue variability",
+  labs(x = "Median revenue ($1000/year)", y = "Estimated revenue variability",
     colour = "Number of\npermits",
     size = "Permit\nholders") +
   # scale_color_viridis() +
   scale_size_continuous() +
   # scale_fill_viridis(guide = FALSE) +
   # scale_colour_manual(values = gg_color_hue(3, l = 65)) +
-  scale_colour_manual(values = RColorBrewer::brewer.pal(4, "Blues")[2:4]) +
+  scale_colour_manual(values = RColorBrewer::brewer.pal(4, "Blues")[4:2]) +
   # scale_color_brewer(palette = "YlGnBu") +
   # theme(legend.position = "right") +
   theme(
@@ -208,18 +208,18 @@ pl <- sp %>%
     colour = "grey60") +
   geom_segment(colour = "grey70", alpha = 0.6, size = 0.5) +
   geom_point(aes(size = nn)) +
-  geom_point(data = filter(sp, n_permits == 1), aes(size = nn), pch = 21, col = "black") +
+  # geom_point(data = filter(sp, n_permits == 1), aes(size = nn), pch = 21, col = "black") +
   geom_text_repel(size = 2.7,
     point.padding = unit(0.15, "lines"), max.iter = 9e3, segment.size = 0,
     box.padding = unit(0.15, "lines"), nudge_y = -0.03,
     colour = "grey20") +
   facet_wrap(~single_permit_clean, scales = "free") +
   theme_gg() +
-  labs(x = "Median revenue", y = "Estimated revenue variability",
+  labs(x = "Median revenue ($1000/year)", y = "Estimated revenue variability",
     colour = "Number of\npermits",
     size = "Permit\nholders") +
   scale_size_continuous() +
-  scale_colour_manual(values = RColorBrewer::brewer.pal(4, "Blues")[2:4]) +
+  scale_colour_manual(values = RColorBrewer::brewer.pal(4, "Blues")[4:2]) +
   theme(
     legend.title = element_text(size = rel(0.75)),
     strip.text.x = element_text(hjust = 0, size = 8)) +

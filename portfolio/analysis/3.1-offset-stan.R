@@ -37,8 +37,8 @@ standat <- list(
 # custom tighter inits:
 beta_init <- function() rnorm(standat$J)
 sigma_init <- function() rnorm(standat$K)
-dev_str_init <- function() rnorm(standat$n_strategy, 0, 0.2)
-dev_yr_init <- function() rnorm(standat$n_str_yr, 0, 0.2)
+dev_str_init <- function() rnorm(standat$n_strategy, 0, 0.1)
+dev_yr_init <- function() rnorm(standat$n_str_yr, 0, 0.1)
 tau_init <- function() runif(1, 0.05, 0.5)
 init_fun <- function() {
   list(

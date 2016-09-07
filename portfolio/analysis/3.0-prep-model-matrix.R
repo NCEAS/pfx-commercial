@@ -4,12 +4,12 @@ source("portfolio/analysis/cull-dat.R")
 dat <- cullDat(rev_threshold = 10000, npholders_thres1 = 50,
   npholders_thres2 = 100)
 
-# #downsample for fast testing
-# unique_holders <- unique(dat$p_holder)
-# n_sample <- round(length(unique_holders)*0.4)
-# set.seed(1)
-# dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
-# nrow(dat)
+#downsample for fast testing
+unique_holders <- unique(dat$p_holder)
+n_sample <- round(length(unique_holders)*0.5)
+set.seed(123)
+dat <- dplyr::filter(dat, p_holder %in% base::sample(unique_holders, n_sample))
+nrow(dat)
 
 # dat <- dat %>% group_by(strategy) %>% mutate(n=n()) %>% filter(n > 0)
 # nrow(dat)
