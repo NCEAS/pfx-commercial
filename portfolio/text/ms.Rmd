@@ -16,49 +16,49 @@ but changing species diversity can be risky, costly, and limited by regulations.
 
 # Abstract
 
-<!-- Fishing is inherently risky and we have long-sought regulations and fishing behaviors that reduce this risk. --> 
-<!-- The increasing the diversity of species fished has been proposed to reduce risk for fishermen --> 
+<!-- Fishing is inherently risky and we have long-sought regulations and fishing behaviors that reduce this risk. -->
+<!-- The increasing the diversity of species fished has been proposed to reduce risk for fishermen -->
 
 Individuals relying on natural resources as their primary source of income
-often experience high levels of income variability 
-due to the combined effects of environmental and price variation. 
+often experience high levels of income variability
+due to the combined effects of environmental, biological, and price variation.
 Commercial fishers are a prime example and
-recent work has sought to identify regulations and fishing behaviours 
-that can reduce this variability. 
+recent work has sought to identify regulations and fishing behaviours
+that can reduce this variability.
 A top candidate has been that fishing higher levels of species diversity
 decreases income variability.
-However, it is unknown if this species-diversity effect 
-on income variability holds 
+However, it is unknown if this species-diversity effect
+on income variability holds
 across multiple approaches to diversifying catch,
 at the level of individual permit holders,
-and across different fishing strategies. 
-Here, we simultaneously estimate the effects of three 
+and across different fishing strategies.
+Here, we simultaneously estimate the effects of three
 methods of diversification for Alaskan fishery permit holders
 on revenue and revenue variability:
-(1) owning multiple permits, 
-(2) owning permits that inherently fish higher species diversity, 
-and (3) adjusting species diversity within the constraints of a permit.
-We control for changes in effort and other 
-residual effects through time.
-We find that 
-fishing an additional permit is associated with 
+(1) owning multiple permits,
+(2) owning permits that inherently fish higher species diversity,
+and (3) increasing species diversity within the constraints of a permit set.
+We control for changes in effort and other
+latent effects through time.
+We find that
+fishing an additional permit is associated with
 lower variability (~XX--XX%) and higher revenue,
-fishing permits with higher species diversity reduces risk 
-(XX--XX% per unit increase in Simpson's diversity index),
-but that changing species diversity within a
-permit's constraints has a fishery-dependent effect on revenue and 
+fishing permits with higher species diversity reduces risk
+(XX% [XX--XX 95% CI] per unit increase in mean Simpson's diversity index),
+but that increasing species diversity within
+the constraints of a permit set has a fishery-dependent effect on revenue and
 is usually (XX%) associated with increased revenue variability.
 At the same time, Alaskan commercial fisheries
-have increasingly focussed on 
+have been increasingly focussed on
 single-permit (often salmon) fishing strategies
-with single-permit fishers earning 
+with single-permit fishers earning
 more than multiple-permit fishers
-since 2013.
+for the first time in 2013.
 Our results suggest that the benefit of species diversity
-on reducing revenue variability 
+on reducing revenue variability
 is mostly an across-permit effect, not
 a benefit that can be easily harnessed by an individual permit holder.
-Effective methods of diversification --- 
+Effective methods of diversification ---
 purchasing additional permits or switching permits ---
 are costly and often limited by regulations such as limited entry
 programs and individual transferable quotas (ITQs).
@@ -88,34 +88,78 @@ Extra:
 <!-- depends on the type of diversification and the fishery. -->
 
 <!-- Introduction, Methods, Results, Discussion, Conclusion:
-<!-- 600, 900, 500, 800, 200, --> 
+<!-- 600, 900, 500, 800, 200, -->
 
-<!-- write out each paragraph’s main message in 15 words or less --> 
+<!-- write out each paragraph’s main message in 15 words or less -->
 
 <!-- circulate skeleton ... this is the time to fix problems with flow, -->
 <!-- ideas/content, main message -->
 
-
 # Introduction
 
-What's been done
+Natural resources such as forests, land animals, and fishes
+provide a primary source of income for billions(?) of people worldwide [REFS].
+However, environmental,
+biological, and price variation
+combined with regulatory changes
+and human-caused environmental disasters
+generate high levels of income variability and risk
+for these individuals.
+For example, ...
+And EVOS example
 
-[@kasperski2013]
-[@sethi2012b]
-[@sethi2010b]
-[@sethi2014]
-[@perruso2005]
-[@hilborn2001]
-[@edwards2004]
-[@trenkel2013]
-[@mumford2009]
-[@oostenbrugge2002]
-[@baldursson1997]
-[@jardine2015]
-[@sanchirico2008]
+\bigskip
 
-Multiple ways one can diversify: 
-buy another permit, pick diverse permit, diversify within existing constraints.
+Targeting a higher diversity of species
+has been proposed as a risk-buffering mechanism...
+Give examples from other sectors
+
+\bigskip
+
+This effect has been identified for fisheries.
+At community level, ... [@sethi2014]
+At vessel level, ... [@kasperski2013] ...
+
+\bigskip
+
+Despite this existing work,
+key questions remain on the relationship between species diversity and
+fishing revenue variability.
+First, we do not know the effect of changing species diversity
+for individual permit holders on a year-by-year basis ---
+existing approaches have worked at the vessel or community level
+and condensed time series into single metrics of variability or risk.
+Second, we do not know the effect of changing species diversity
+on revenue itself ---
+existing approaches have focused solely on variability or risk.
+Third, we do not know if the approach to
+diversifying affects the relationship between
+species diversity and revenue variability.
+A fisheries permit holder can purchase
+an additional permit to target other species,
+pick a permit that inherently targets many species,
+or increase species diversity
+within the constraints of his or her existing permits.
+Many permit holders may be limited to the last approach
+given that the first two may be costly and limited by regulations,
+but it is unclear if the benefits and costs are the same.
+Here, we address these questions by
+simultaneously estimating the effects of
+these three approaches to species diversification
+for Alaskan fishery permit holders on
+annual revenue and revenue variability.
+Our model makes use of the entire time series,
+controls for effort and latent time effects,
+and allows the effect of species diversity
+to vary by fishing strategy (sets of similar permits)
+in a hierarchical model.
+
+
+
+
+<!-- Multiple ways one can diversify: -->
+<!-- buy another permit, pick diverse permit, diversify within existing constraints. -->
+
 
 # Methods
 
@@ -145,7 +189,7 @@ Trends in revenue and diversification over time.
 (C) Proportion of single permit holders for all fisheries (thick black line)
 and with permit holders omitted each year who fished any of the
 `r n_jacknifed` top species groups (thin lines).
-(D) Mean effective diversity of species fished (Simpson's diversity index) 
+(D) Mean effective diversity of species fished (Simpson's diversity index)
 for all fisheries (thick black line)
 and with permit holders omitted each year who fished any of the
 `r n_jacknifed` top species groups (thin lines).
@@ -160,7 +204,7 @@ and with permit holders omitted each year who fished any of the
 \begin{center}
 \includegraphics[width=0.9\textwidth]{../figs/stan-gg-spoke2.pdf}
 \caption{Diversifying permits reduces risk and usually increases revenue.
-Two examples of expected revenue variability 
+Two examples of expected revenue variability
 and median revenue for
 owners of (A) individual halibut and (B) gillnet herring roe permits
 (light blue)
@@ -203,7 +247,7 @@ species diversity or days fished from year to year.
 \includegraphics[width=1.1\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
 \caption{Effects of (A) generalizing and (B) specializing from year to year for
 individual permit holders across the `r nstr` most common strategies.
-Changing species diversity from year to year 
+Changing species diversity from year to year
 is associated with higher variability
 for individuals within the strategies above the zero line.
 Generalizing (A) or specializing (B) is associated with
@@ -211,10 +255,56 @@ greater expected revenue to the right of the zero line
 and lower expected revenue to the left of the zero line.
 These effects are estimated holding
 fishing season length constant from year to year.
-Dots and line segments represent medians and 
+Dots and line segments represent medians and
 50\% credible intervals of posteriors.
 }
 \label{fig:within}
 \end{center}
 \end{figure}
 
+\clearpage
+
+# Notes
+
+Fishing can be big $ but is risky, for example, Alaska
+
+
+What's been done
+
+## @kasperski2013
+- vessel-level CFEC data
+- dome-shaped result
+- Herfindahl-Hirschman Index/HHI (Simpson)
+- diversity decreasing for those still fishing in 2010, but not otherwise
+
+## @sethi2012b
+- risk measures to 90 Alaskan fishing fishery/fleets
+- revenue more variable than catch (+ price = extra variability)
+- large catches, big fleets = lower risk
+
+## @sethi2010b
+- risk management for fisheries review
+
+## @sethi2012
+- equal-share catch-pooling cooperatives in king and snow crab
+- "variability reduction depends on the degree of correlation amongst
+  participants’ catches"
+
+## @sethi2014
+- community-level CFEC data
+- number of fisheries strongest predictor of (lower) CV/CVaR
+- also simpson index
+- suggest barriers to commercial entry increase community risk by restricting
+  access to 'variety of fisheries'
+- some communities have limited ability to diversify; may need to diversify
+  outside of fishing
+
+[@perruso2005]
+[@hilborn2001]
+[@edwards2004]
+[@trenkel2013]
+[@mumford2009]
+[@oostenbrugge2002]
+[@baldursson1997]
+[@jardine2015]
+[@sanchirico2008]
