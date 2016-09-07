@@ -80,8 +80,15 @@ b <- broom::tidy(msim, estimate.method = "median", rhat = T, ess = T)
 filter(b, grepl("^b_j|^g_k|^h", term))
 filter(b, grepl("^g0$", term))
 filter(b, grepl("tau", term))
-plot(filter(b, grepl("^coef_g0", term))$estimate/2+g0/2, (g0 + unique(g0j)), asp = 1)
+plot(filter(b, grepl("^coef_g0", term))$estimate, (unique(g0j)), asp = 1)
 abline(a = 0, b = 1)
+
+plot(filter(b, grepl("^coef_g0", term))$estimate, (g0 + unique(g0j)), asp = 1)
+abline(a = 0, b = 1)
+
+plot(filter(b, grepl("^g0_strategy\\[", term))$estimate + g0, (g0 + unique(g0j)), asp = 1)
+abline(a = 0, b = 1)
+
 
 plot(filter(b, grepl("^g0_strategy\\[", term))$estimate, (unique(g0j)), asp = 1)
 abline(a = 0, b = 1)
@@ -98,7 +105,7 @@ abline(a = g0, b = h1)
 sd(unique(g0j) - h1 * xh1 - h2 * xh2)
 
 mean_g0j = h1 * xh1 + h2 * xh2
-plot(mean_g0j, unique(g0j))
+plot(g0 + mean_g0j, g0 + unique(g0j))
 abline(a = 0, b = 1)
 
 plot(xh1, (h1 * xh1 + mean_g0j - h2 * xh2)/2)
