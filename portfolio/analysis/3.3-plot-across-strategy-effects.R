@@ -34,21 +34,38 @@ g0_temp <- p$g0_strategy %>%
     g0main = rep(p$g0[[1]], nrow(md))) %>%
   rename(g0j = posterior)
 
-# # see 3.6-sim for the proof of the algebra behind this, ouch:
-# plot(xh1, g0 + (h1 * xh1 + unique(g0j) - h2 * xh2)/2)
+# # see 3.6-sim for the simulation of this:
+# residual <- unique(g0j) - (h1 * xh1 + h2 * xh2)
+# plot(xh1, g0 + h1 * xh1 + residual)
 # abline(a = g0, b = h1)
-g0_temp <- mutate(g0_temp, part_resid =
-    g0main +
-    (g0j + h1 * scaled_strategy_mean_div -
-           h2 * scaled_strategy_mean_days)/2)
+
+g0_temp <- mutate(g0_temp, resid =
+    g0j - (h1 * scaled_strategy_mean_div + h2 * scaled_strategy_mean_days),
+  component_resid_div = resid + g0main + h1 * scaled_strategy_mean_div,
+  component_resid_days = resid + g0main + h2 * scaled_strategy_mean_days)
+
+p1 <- ggplot(g0_temp, aes(scaled_strategy_mean_div, component_resid_div,
+  group = strategy_id)) +
+  geom_point(alpha = 0.01, position = position_jitter(width = 0.05))
+
+p2 <- ggplot(g0_temp, aes(scaled_strategy_mean_div, exp(component_resid_div),
+  group = strategy_id)) +
+  geom_point(alpha = 0.01, position = position_jitter(width = 0.05))
+
+p3 <- ggplot(g0_temp, aes(scaled_strategy_mean_days, component_resid_days,
+  group = strategy_id)) +
+  geom_point(alpha = 0.01, position = position_jitter(width = 0.05))
+
+gridExtra::grid.arrange(p1, p3, ncol = 2)
+# gridExtra::grid.arrange(p1, p2, ncol = 2)
 
 g0 <- g0_temp %>% group_by(strategy) %>%
   summarise(
-    g0.m = median(part_resid),
-    g0.l = quantile(part_resid, probs = 0.05),
-    g0.u = quantile(part_resid, probs = 0.95),
-    g0.l.5 = quantile(part_resid, probs = 0.25),
-    g0.u.5 = quantile(part_resid, probs = 0.75)) %>%
+    g0.m = median(component_resid_div),
+    g0.l = quantile(component_resid_div, probs = 0.05),
+    g0.u = quantile(component_resid_div, probs = 0.95),
+    g0.l.5 = quantile(component_resid_div, probs = 0.25),
+    g0.u.5 = quantile(component_resid_div, probs = 0.75)) %>%
   ungroup() %>%
   inner_join(md)
 
@@ -73,17 +90,20 @@ g0$strategy_med_rev <- NULL
 g0$nn <- NULL
 g0 <- inner_join(g0, mr)
 
+tr <- exp
+# tr <- I
+
 pl <-  g0 %>% mutate(str_label = ifelse(nn > 10, str_label, NA)) %>%
-  ggplot(aes(x = strategy_mean_div, y = exp(g0.m))) +
-  geom_ribbon(data = dd, aes(strategy_mean_div, y = exp(m), ymax=exp(u),
-    ymin=exp(l)), fill = "grey85", alpha = 0.3) +
-  geom_ribbon(data = dd, aes(strategy_mean_div, y = exp(m), ymax=exp(u.5),
-    ymin=exp(l.5)), fill = "grey80", alpha = 0.8) +
-  geom_line(data = dd, aes(strategy_mean_div, exp(m)), lwd = 0.8,
+  ggplot(aes(x = strategy_mean_div, y = tr(g0.m))) +
+  geom_ribbon(data = dd, aes(strategy_mean_div, y = tr(m), ymax=tr(u),
+    ymin=tr(l)), fill = "grey85", alpha = 0.3) +
+  geom_ribbon(data = dd, aes(strategy_mean_div, y = tr(m), ymax=tr(u.5),
+    ymin=tr(l.5)), fill = "grey80", alpha = 0.8) +
+  geom_line(data = dd, aes(strategy_mean_div, tr(m)), lwd = 0.8,
     col = "grey20") +
-  geom_segment(aes(y = exp(g0.l), yend = exp(g0.u),
+  geom_segment(aes(y = tr(g0.l), yend = tr(g0.u),
     xend = strategy_mean_div), lwd = 0.2, color = "grey60") +
-  geom_segment(aes(y = exp(g0.l.5), yend = exp(g0.u.5),
+  geom_segment(aes(y = tr(g0.l.5), yend = tr(g0.u.5),
     xend = strategy_mean_div),
   lwd = 0.7, color = "grey35") +
   geom_text_repel(aes(label = str_label), size = 2.7, colour = "grey60",
@@ -91,10 +111,11 @@ pl <-  g0 %>% mutate(str_label = ifelse(nn > 10, str_label, NA)) %>%
   point.padding = unit(0.0001, "lines"), max.iter = 3e4, segment.size = 0.2) +
   geom_point(aes(bg = nn), pch = 21, size = 1.9) +
   scale_fill_distiller(palette = "YlOrRd", trans = "log10") +
-  coord_cartesian(ylim = c(0.2, 0.95)) + theme_gg() +
+  coord_cartesian(ylim = c(0.2, 1.2)) +
+  theme_gg() +
   labs(x = "Mean species diversity", y = "Estimated revenue variability",
     fill = "Number of\npermit holders") +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1),
     legend.title = element_text(size = rel(0.75)))
 
-ggsave("portfolio/figs/stan-across-strategy-variability.pdf", width = 5.4, height = 4.3)
+ggsave("portfolio/figs/stan-across-strategy-variability2.pdf", width = 5.4, height = 4.3)
