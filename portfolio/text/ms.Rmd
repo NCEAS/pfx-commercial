@@ -7,7 +7,11 @@ opts_chunk$set(warning=FALSE, message=FALSE, cache.path="../cache/",
 ```
 ```{r get-dat, cache=FALSE}
 load("../data-generated/output-values.rda")
+h1 <- readRDS("../data-generated/h1_effect.rds")
+spoke <- readRDS("../data-generated/spoke_fraction.rds")
+g2_dens <- readRDS("../data-generated/g2_prob_dens_above_zero.rds")
 ```
+
 
 \noindent
 Main message:
@@ -41,13 +45,17 @@ and (3) increasing species diversity within the constraints of a permit set.
 We control for changes in effort and other
 latent effects through time.
 We find that
-fishing an additional permit is associated with
-lower variability (~XX--XX%) and higher revenue,
-fishing permits with higher species diversity reduces risk
-(XX% [XX--XX 95% CI] per unit increase in mean Simpson's diversity index),
+fishing an additional permit is associated with higher revenue
+and lower variability (e.g., 
+`r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR] lower
+expected standard deviation for halibut permit holders), 
+fishing permits with higher species diversity reduces variability
+(`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit 
+increase in mean Simpson's diversity index),
 but that increasing species diversity within
 the constraints of a permit set has a fishery-dependent effect on revenue and
-is usually (XX%) associated with increased revenue variability.
+is usually (`r g2_dens`% of probability density) 
+associated with increased revenue variability.
 At the same time, Alaskan commercial fisheries
 have been increasingly focussed on
 single-permit (often salmon) fishing strategies
@@ -91,7 +99,6 @@ Extra:
 <!-- 600, 900, 500, 800, 200, -->
 
 <!-- write out each paragraph’s main message in 15 words or less -->
-
 <!-- circulate skeleton ... this is the time to fix problems with flow, -->
 <!-- ideas/content, main message -->
 
@@ -207,11 +214,11 @@ and with permit holders omitted each year who fished any of the
 Two examples of expected revenue variability
 and median revenue for
 owners of (A) individual halibut and (B) gillnet herring roe permits
-(light blue)
+(dark blue)
 compared with owners of the same permit plus one more (medium blue)
-or two more permits (dark blue).
-On the y-axis, dots and lines represent posterior median and 90\%
-credible intervals.}
+or two more permits (light blue).
+On the y-axis, dots and lines represent posterior median and 95\%
+credible intervals of expected standard deviation.}
 \label{fig:spokes}
 \end{center}
 \end{figure}
@@ -220,7 +227,7 @@ credible intervals.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{../figs/stan-across-strategy-variability.pdf}
+\includegraphics[width=0.7\textwidth]{../figs/stan-across-strategy-variability2.pdf}
 \caption{Individuals who fish
 permits and permit combinations (permit strategies) with higher species diversity
 have lower expected revenue variability.
@@ -231,10 +238,9 @@ Thick black line, and dark and light grey shaded regions
 indicate median, 50\%, and 95\% credible intervals
 of strategy-level regression built into the hierarchical model.
 Estimated variability represents expected standard deviation
-at an average of about
-`r mean_permit_days` combined fishing days across permits,
-and for a permit holder who does not change
-species diversity or days fished from year to year.
+for a permit holder who does not change
+species diversity or days fished from year to year
+with the strategy-level effect of mean days fished removed.
 }
 \label{fig:across}
 \end{center}

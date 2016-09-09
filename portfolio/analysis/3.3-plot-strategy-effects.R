@@ -36,6 +36,10 @@ b2 <- tidyr::gather(p$coef_b2_strategy, term, posterior) %>%
   mutate(parameter = "b2")
 po <- bind_rows(g0, g1, g2, b1, b2)
 
+g2_prob_dens_above_zero <- round(sum(g2$posterior > 0)/nrow(g2)*100, 0)
+saveRDS(g2_prob_dens_above_zero,
+  file = "portfolio/data-generated/g2_prob_dens_above_zero.rds")
+
 md2 <- md
 md2$str_label <- as.factor(md2$str_label)
 md2$str_label <- factor(md2$str_label, levels = md2$str_label[order(md2$strategy_mean_div)])

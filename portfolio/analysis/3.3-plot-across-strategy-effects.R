@@ -44,6 +44,15 @@ g0_temp <- mutate(g0_temp, resid =
   component_resid_div = resid + g0main + h1 * scaled_strategy_mean_div,
   component_resid_days = resid + g0main + h2 * scaled_strategy_mean_days)
 
+scale_factor <- sd(md$strategy_mean_div) * 2
+# effect for paper:
+h1_effect <- quantile(g0_temp$h1, probs = c(0.025, 0.5, 0.975)) %>% exp() %>%
+  `*`(100) %>% `/`(scale_factor) %>% round(0)
+# # test with figure:
+# max(dd$m) %>% exp * (1-h1_effect[[2]]*0.01)
+# max(dd$m) %>% exp * (1-h1_effect[[2]]*0.01) * (1-h1_effect[[2]]*0.01)
+saveRDS(h1_effect, file = "portfolio/data-generated/h1_effect.rds")
+
 p1 <- ggplot(g0_temp, aes(scaled_strategy_mean_div, component_resid_div,
   group = strategy_id)) +
   geom_point(alpha = 0.01, position = position_jitter(width = 0.05))
@@ -62,8 +71,8 @@ gridExtra::grid.arrange(p1, p3, ncol = 2)
 g0 <- g0_temp %>% group_by(strategy) %>%
   summarise(
     g0.m = median(component_resid_div),
-    g0.l = quantile(component_resid_div, probs = 0.05),
-    g0.u = quantile(component_resid_div, probs = 0.95),
+    g0.l = quantile(component_resid_div, probs = 0.025),
+    g0.u = quantile(component_resid_div, probs = 0.975),
     g0.l.5 = quantile(component_resid_div, probs = 0.25),
     g0.u.5 = quantile(component_resid_div, probs = 0.75)) %>%
   ungroup() %>%
@@ -77,8 +86,8 @@ dd <- plyr::ldply(seq_along(x_scaled), function(i) {
   xx <- x_scaled[i]
   data.frame(strategy_mean_div = x_true[i],
     m = median(p$h1[[1]] * xx + p$g0[[1]]),
-    l = quantile(p$h1[[1]] * xx + p$g0[[1]], probs = 0.05),
-    u = quantile(p$h1[[1]] * xx + p$g0[[1]], probs = 0.95),
+    l = quantile(p$h1[[1]] * xx + p$g0[[1]], probs = 0.025),
+    u = quantile(p$h1[[1]] * xx + p$g0[[1]], probs = 0.975),
     l.5 = quantile(p$h1[[1]] * xx + p$g0[[1]], probs = 0.25),
     u.5 = quantile(p$h1[[1]] * xx + p$g0[[1]], probs = 0.75)
   )})
