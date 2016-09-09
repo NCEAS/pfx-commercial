@@ -3,7 +3,7 @@ library(ggplot2)
 library(rstan)
 
 load("portfolio/data-generated/diff-dat-stan.rda")
-load("portfolio/data-generated/m.rda")
+load("portfolio/data-generated/m-2016-08-23.rda")
 
 # ------------------------
 b <- broom::tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
