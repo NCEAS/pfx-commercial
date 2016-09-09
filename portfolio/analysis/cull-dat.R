@@ -13,19 +13,16 @@ dat <- readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
 #  as_data_frame() %>%
 #  filter(nyr >= 5)
 
-  # Filters: remove people-year combinations making < $rev_threshold
-
   ndat <- list()
-  ndat$rev_b4_large_only <- sum(dat$revenue)
-  # dat3 = dat[which(dat$revenue >= rev_threshold), ]
-  dat3 <- as_data_frame(dat) %>% group_by(p_holder) %>%
+  ndat$rev_b4_large_only <- sum(dat$revenue, na.rm = TRUE)
+  dat <- as_data_frame(dat) %>% group_by(p_holder) %>%
     mutate(med_rev = median(revenue)) %>%
     filter(med_rev >= rev_threshold) %>% # as in K and H PNAS
     select(-med_rev) %>%
     as_data_frame()
 
   ndat$large_only <- nrow(dat)
-  ndat$rev_large_only <- sum(dat$revenue)
+  ndat$rev_large_only <- sum(dat$revenue, na.rm = TRUE)
 
   # note: grouping here is based on strategies defined by permits
   dat$strategy = dat$strategy_permit
