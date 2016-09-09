@@ -48,7 +48,7 @@ We find that
 fishing an additional permit is associated with higher revenue
 and lower variability (e.g., 
 `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR] lower
-expected standard deviation for halibut permit holders), 
+expected standard deviation compared to single halibut permits), 
 fishing permits with higher species diversity reduces variability
 (`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit 
 increase in mean Simpson's diversity index),
@@ -63,7 +63,7 @@ with single-permit fishers earning
 more than multiple-permit fishers
 for the first time in 2013.
 Our results suggest that the benefit of species diversity
-on reducing revenue variability
+for revenue variability
 is mostly an across-permit effect, not
 a benefit that can be easily harnessed by an individual permit holder.
 Effective methods of diversification ---
