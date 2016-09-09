@@ -78,8 +78,9 @@ opts_chunk$set(warning=FALSE, message=FALSE, cache.path="../cache/",
   cache.lazy=TRUE)
 @
 
-<<get-values, cache=FALSE>>=
+<<get-values, cache=FALSE, echo=FALSE>>=
 load("../data-generated/output-values.rda")
+n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 @
 
 \maketitle
@@ -87,83 +88,125 @@ load("../data-generated/output-values.rda")
 \renewcommand{\thefigure}{S\arabic{figure}}
 \renewcommand{\thetable}{S\arabic{table}}
 
-\section{Data filtering}
+\section{Filtering data and grouping permits into strategies}
 
+We filtered the data in a number of ways before fitting our model. 
+We began with \Sexpr{round(ndat$initial/1e6,2)} million rows of data.
+We removed revenue from permit-year combinations 
+that made up less than 10\% of annual revenue
+for a given permit holder. 
+We removed permit holders whose median revenue
+was less than \$10,000 USD (adjusted to 2009 values)
+to focus on individuals actively engaged 
+in commercial fishing.
+This reduced the total revenue from \Sexpr{round(ndat$rev_b4_large_only/1e9,0)}
+billion 2009 USD
+to \Sexpr{round(ndat$rev_large_only/1e9,0)} billion 2009 USD.
 
-<<nothing, eval=FALSE>>=
-permit_rev = group_by(cfecnew, p_holder, year, p_fshy) %>%
-  summarize(permit.rev = sum(g_earn)) %>%
-  as_data_frame() %>%
-  group_by(p_holder, year) %>%
-  mutate(tot.rev = sum(permit.rev))
-permit_rev$permit.rev = permit_rev$permit.rev/permit_rev$tot.rev # fraction of total
-permit_rev = permit_rev[permit_rev$permit.rev < 0.1,]
+To limit the number of permits 
+and permit strategies 
+and focus on the main fisheries, 
+we removed all permits with less than 50 unique permit holders 
+across all years. 
+We also removed permits for freshwater species and
+for experimental fisheries.
+A list of all CFEC permit codes and descriptions is available at:
+\url{https://www.cfec.state.ak.us/misc/FshyDesC.htm}
 
-# Delete these minimal earnings
-cfecnew = cfecnew[-which(paste(cfecnew$p_holder, cfecnew$year, cfecnew$p_fshy) %in%
-  paste(permit_rev$p_holder, permit_rev$year, permit_rev$p_fshy)), ]
+We then proceeded to combine similar permits in the following steps. 
+We combined a number of permits that were the same except for vessel size.
+We combined permits for 
+otter troll, 
+longline finfish,
+pot gear.
+king crab, 
+and
+shrimp.
+We grouped a number of permits that were targeting a single species 
+and differed only in region fished.
+For example, someone fishing herring roe in the Kodiak (G34K)
+and someone fishing herring roe in Alaska Peninsula (G34M) 
+were both considered to have a herring roe permit strategy.
+We combined permits across each of 
+dungeness crab, 
+herring roe purse seining,
+herring roe gillnet,
+herring hand picked,
+herring pound fishing,
+sea cucumber,
+sea urchin,
+tanner crabs
 
-cfecnew <- filter(cfecnew, p_spec != "Freshwater") # only 1400 rows
-@
+Combining salmon permits was more difficult because 
+the species composition varies widely based on geography. 
+We grouped salmon permits within gear type-region 
+combinations that shared similar species composition.
+For the drift gillnet (S03) permits, 
+we combined permits from 
+Cook Inlet, Bristol Bay, and Alaska Peninsula because sockeye
+represents greater than 90\% of species revenue.
+For the purse seine permits (S01),
+there was a wide variety in species revenue by
+area ($\sim$ 85\% pink in Prince William Sound to
+85\% sockeye on the Alaskan Peninsula). 
+Of the five permits, only two had similar species compositions, 
+so we grouped Kodiak and Cook Inlet.
+For the set gillnet salmon permits (S04), 
+there was some variety but also clear sockeye specialists. 
+We grouped permits that had greater than 80\% sockeye revenue.
+This combined permits across 
+Prince William Sound, 
+Cook Inlet,
+Kodiak,
+Alaska Peninsula,
+and Bristol Bay.
+We grouped permits from Norton Sound
+and Kuskokwim because of similar species compositions.
+The remaining salmon permits were relatively unique 
+and were left ungrouped. 
 
+After this process of combining permits, 
+we were left with \Sexpr{n_grouped_permits}
+unique fishing strategies (Table~\ref{tab:strategies}),
+which we aggregated
+within each person-year combination.
+For example, if someone fished halibut 
+and sablefish in the same year 
+their strategy for that year would be ``halibut-sablefish''.
+We removed people who switched strategies from one year to the next
+since we were working with changes in revenue from year to year
+and so needed consistent strategies across any pair of years
+for a permit holder.
+We removed strategies with less than 100 unique permit holders
+across all years to focus on the major strategies
+leaving us with a total of \Sexpr{nstr} strategies.
+Finally, we removed all person-year combinations without 
+revenue recorded in the following year 
+in order to calculate percent change in revenue
+from year to year.
+This reduced the rows (person-year combinations)
+in the final dataset from \Sexpr{ndat$annual} to
+\Sexpr{ndat$annual_diff}.
 
-Rows of data initial: \Sexpr{round(ndat$initial/1e6,2)} million
-
-Rows of data annual: \Sexpr{ndat$annual}
-
-Rows of data diff: \Sexpr{ndat$annual_diff}
-
-% \Sexpr{ndat$rev_b4_10perc/1e9}
-% \Sexpr{round(ndat$rev_after_10perc/1e9,2)}
-
-\Sexpr{ndat$before_10_perc}
-
-Rows of data after 10,000 cull: \Sexpr{ndat$large_only}
-
-10,000 cull: rev:
-\Sexpr{round(1-ndat$rev_large_only/ndat$rev_b4_large_only,2)*100}
-
-\Sexpr{round(ndat$rev_large_only/1e9,2)}
-
-\section{Assigning strategies}
-
-\Sexpr{nstrat$enough_pholders}
-
-\Sexpr{round(ndat$rev_enough_pholders/1e9,2)}
-
-\Sexpr{nstrat$no_river_exp}
-
-\Sexpr{round(ndat$rev_no_river_exp/1e9,2)}
-
-Number of strategies: \Sexpr{nstr}
-
-Rows of data before no singles: \Sexpr{ndat$before_nosingles}
-
-% \Sexpr{ndat$b4_no_na_strat}
-%
-% \Sexpr{ndat$rev_b4_no_na_strat}
-%
-% \Sexpr{ndat$after_no_na_strat}
-
-lost \% rev no strat:
-\Sexpr{round(ndat$rev_after_no_na_strat/ndat$rev_b4_no_na_strat,2)*100}
-
-lost rows no strat:
-\Sexpr{round(ndat$after_no_na_strat/ndat$b4_no_na_strat,2)*100}
-
-% \Sexpr{ndat$rev_after_no_na_strat}
-%
-% \Sexpr{ndat$rev_final}
-
-Rows of data: \Sexpr{ndat$final}
-
-Number of permit holders: \Sexpr{npholders}
-
-Range of years: \Sexpr{range_yrs}
-
-Number of strategy-years: \Sexpr{nstr_yrs}
+% Rows of data: \Sexpr{ndat$final}
+% Number of permit holders: \Sexpr{npholders}
+% Range of years: \Sexpr{range_yrs}
+% Number of strategy-years: \Sexpr{nstr_yrs}
+% \Sexpr{nstrat$enough_pholders}
+% \Sexpr{round(ndat$rev_enough_pholders/1e9,2)}
+% lost \% rev no strat:
+% \Sexpr{round(ndat$rev_after_no_na_strat/ndat$rev_b4_no_na_strat,2)*100}
+% lost rows no strat:
+% \Sexpr{round(ndat$after_no_na_strat/ndat$b4_no_na_strat,2)*100}
 
 \section{Hierarchical model}
+
+Describe predictors
+
+We adjusted for inflation by setting all revenues 2009 USD.
+
+We calculated Simpson's diversity index weighted by revenue
+as: 1/sum((x/sum(x)) squared)
 
 Overview... why first diff, why 2 part
 
@@ -324,8 +367,7 @@ matched the estimates of the same model in lme4 almost exactly.
   \centering
   \caption{Labels and descriptions of fishing strategies. In many cases,
 a particular strategy represents a group of similar permits across areas
-or vessel sizes. These strategies all had at least 100
-permit holders.}
+or vessel sizes.}
   \label{tab:strategies}
   \begin{tabular}{ll}
   \toprule
