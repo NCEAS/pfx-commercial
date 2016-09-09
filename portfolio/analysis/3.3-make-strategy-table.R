@@ -24,3 +24,5 @@ xtable::print.xtable(
   timestamp = NULL
 )
 
+n_grouped_permits <- nrow(d)
+saveRDS(n_grouped_permits, "portfolio/data-generated/n_grouped_permits.rds")
