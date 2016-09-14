@@ -401,16 +401,14 @@ is available at <https://github.com/NCEAS/pfx-commercial>.
 
 # Results
 
-\noindent
-Fig. \ref{fig:ts} - limited entry + movement towards salmon and specialization in Alaska
+### Fig. \ref{fig:ts} - limited entry + movement towards salmon and specialization in Alaska
 
 - move towards specialization, salmon fig 1D (overall declining trend disappears if you exclude salmon)
 - halibut most often combined with other permits (exclude permit holders that hold any halibut and about ninety percent of the remaining permit holders hold only one permit) fig 1c
 - Salmon the most often on its own (exclude salmon and the proportioned single permit decreases to about 70%) fig 1c
 - majority are single permit holders (70-90%) fig 1C, but the single permit holders make up only about half of the overall revenue (and surpassed half for the first time in 2013 and stayed that way) fig 1B
 
-\noindent
-Something about overall model fit 
+### Something about overall model fit 
 
 - Parameters from hierarchical model (main: Fig. S\ref{fig:fe}, varying: S\ref{fig:re})
 - Residuals clearly show pattern that we see in the parameter estimates (Fig. S\ref{fig:resid})
@@ -422,8 +420,7 @@ everyone in that strategy tended to do better or worse ---
 this accounts for that and therefore compares everything to 
 the expected revenue for that year 
 
-\noindent
-Fig. \ref{fig:spokes} - add permits
+### Fig. \ref{fig:spokes} - add permits
 
 - nearly universal reduction in variability (Fig. S\ref{fig:spoke-all})
 - e.g., `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR] 
@@ -432,8 +429,7 @@ for halibut plus another permit vs. single halibut permits);
 - usually associated with higher median revenue 
 - but can be very expensive (provide some examples from website)
 
-\noindent
-Fig. \ref{fig:across} - across strategies
+### Fig. \ref{fig:across} - across strategies
 
 - clear exponential decline in standardized variability with strategies that are inherently more species diverse 
 - not a clear effect of days fished at this level
@@ -441,8 +437,7 @@ Fig. \ref{fig:across} - across strategies
 (`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit
 increase in mean effective species diversity);
 
-\noindent
-Fig. \ref{fig:within} - within strategies
+### Fig. \ref{fig:within} - within strategies
 
 - fish more days, make more money (Fig. S\ref{fig:fe})
 - after accounting for days fished, most commonly, 
@@ -460,6 +455,57 @@ associated with increased uncertainty in revenue.
 (Fig. \ref{fig:within})
 
 # Discussion
+
+### Take homes / summary
+
+- What's novel
+    - Huge dataset
+    - Permit level data
+    - Account for covariates
+    - Accounting for strategies
+    - Keeping annual data (not condensing to mean and cv)
+    - Joint modelling
+    - look at different mechanisms of diversification
+- Suggests it's mostly an across strategy/permit effect (lowering variability),
+  which isn't always a possibility because of regulations and cost 
+- Adjusting within current permit constraints is risky... Not clearly risk
+  reducing to generalize from one year to the next
+- not as simple as increase diversity (within permit) and reduce risk
+- 2 dimensions to think about (revenue and variability); and the trade-off is fishery specific 
+    - effects within a permit strategy are permit specific  
+    - Importantly it's a tradeoff - 2 dimensions - sometimes make more money by specializing... Some highly variable single species permits make a ton of money... which preferable?
+
+### Reconciling the effects at different levels of species diversity 
+
+- How fit in with K and H?
+- Year to year risky... But maybe evens out/better over time
+- diversity within permit - often bycatch, limited room for intentional diversification
+- Risk results not really risk, but unpredictability given our covariates ...
+don't change anything and it's most predictable how well you'll do
+- What's unpredictable in our model, might be more predictable on a year to
+year, species by species basis for individual permit holder
+- Equilibrium, average variability vs year to year effect for one person
+
+### Limitations + obvious extensions
+
+- limitations...
+- Vary by time
+- Vary by mean diversity
+- Spatial variation
+- Nonlinear effects
+- Response to specific events like EVOS and ITQs
+
+### Implications for limited entry, ITQs, and catch shares
+
+- if this is true, this is concerning because in many areas of the world and
+fisheries, regulations and market forces have encouraged specialization 
+- Permit diversity result: a privileged position - expensive to get to into
+(quote king crab license) 
+- Locking into permits limits ability to pick lower risk strategies and is
+getting people locked into low diversity permits that may be doing well now,
+but not necessarily always
+
+### Conclusions + recommendations
 
 \bibliographystyle{apalike}
 \bibliography{refs}
