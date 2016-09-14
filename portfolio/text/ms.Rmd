@@ -56,7 +56,7 @@ increase in mean effective species diversity);
 but that increasing species diversity within
 the constraints of a permit set has a fishery-dependent effect on revenue and
 is usually (`r g2_dens`% probability) 
-associated with increased revenue variability.
+associated with increased uncertainty in revenue.
 At the same time, Alaskan commercial fisheries
 have been increasingly focussed on
 single-permit (often salmon) fishing strategies
@@ -106,7 +106,7 @@ Extra:
 # Introduction
 
 Natural resources such as forests, land animals, and fishes
-provide a primary source of income for millions(?) of people worldwide [REFS].
+provide a primary source of income for millions of people worldwide [REFS].
 However, environmental,
 biological, and price variation
 combined with regulatory changes
