@@ -3,7 +3,7 @@ library(ggplot2)
 library(ggrepel)
 devtools::load_all("pfxr")
 load("portfolio/data-generated/diff-dat-stan.rda")
-load("portfolio/data-generated/m-2016-08-23.rda")
+load("portfolio/data-generated/m.rda")
 
 # devtools::install_github("seananderson/stanhelpers")
 p <- stanhelpers::extract_df(m)

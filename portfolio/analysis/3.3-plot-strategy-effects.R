@@ -1,7 +1,7 @@
 library(dplyr)
 
 load("portfolio/data-generated/diff-dat-stan.rda")
-load("portfolio/data-generated/m-2016-08-23.rda")
+load("portfolio/data-generated/m.rda")
 devtools::load_all("pfxr")
 
 # -----------------------------------------------

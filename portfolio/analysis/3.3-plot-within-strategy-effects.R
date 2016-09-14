@@ -3,7 +3,7 @@ library(ggplot2)
 library(viridis)
 library(ggrepel)
 load("portfolio/data-generated/diff-dat-stan.rda")
-load("portfolio/data-generated/m-2016-08-23.rda")
+load("portfolio/data-generated/m.rda")
 devtools::load_all("pfxr")
 
 b <- broom::tidyMCMC(m, conf.int = T, estimate.method = "median",

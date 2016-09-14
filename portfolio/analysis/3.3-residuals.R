@@ -1,7 +1,7 @@
 library(dplyr)
 library(ggplot2)
 load("portfolio/data-generated/diff-dat-stan.rda")
-load("portfolio/data-generated/m-2016-08-23.rda")
+load("portfolio/data-generated/m.rda")
 devtools::load_all("pfxr")
 
 # devtools::install_github("seananderson/stanhelpers")
