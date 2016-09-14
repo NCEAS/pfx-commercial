@@ -68,7 +68,8 @@
 }
 \date{}
 
-
+\newlabel{eq:mean}{3}
+\newlabel{eq:cv}{7}
 
 \begin{document}
 
@@ -133,7 +134,7 @@ and
 shrimp.
 We grouped a number of permits that were targeting a single species
 and differed only in region fished.
-For example, someone fishing herring roe in the Kodiak (G34K)
+For example, someone fishing herring roe in Kodiak (G34K)
 and someone fishing herring roe in Alaska Peninsula (G34M)
 were both considered to have a herring roe permit strategy.
 We combined permits across each of
@@ -181,7 +182,7 @@ which we aggregated
 within each person-year combination.
 For example, if someone fished halibut
 and sablefish in the same year
-their strategy for that year would be ``halibut-sablefish''.
+their strategy for that year would be `halibut-sablefish'.
 We removed people who switched strategies from one year to the next
 since we were working with changes in revenue from year to year
 and so needed consistent strategies across any pair of years

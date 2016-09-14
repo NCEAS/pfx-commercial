@@ -10,6 +10,7 @@ load("../data-generated/output-values.rda")
 h1 <- readRDS("../data-generated/h1_effect.rds")
 spoke <- readRDS("../data-generated/spoke_fraction.rds")
 g2_dens <- readRDS("../data-generated/g2_prob_dens_above_zero.rds")
+n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 ```
 
 # Abstract
@@ -189,7 +190,33 @@ to focus on individuals actively engaged in commercial fishing
 In particular, we removed permit holders whose median revenue
 was less than $10,000 2009 USD.
 
-Our models focused on the predictor species diversity,
+We combined similar permits into permit groupings 
+and identified sets of 
+permit groupings held by an individual 
+in a specific year as 'strategies' (Supporting Information). 
+For example, we combined permits that were the same except for vessel size,
+and we combined a number of permits that were targeting a single species 
+and differed only in region fished.
+Therefore, someone fishing herring roe in Kodiak
+and someone fishing herring roe in Alaska Peninsula
+were both considered to have a 'herring roe' permit group.
+For salmon permits, 
+we grouped permits using the same gear type across regions
+for groups that shared similar species composition. 
+After this process of combining permits,
+we were left with `r n_grouped_permits`
+unique fishing permit groups (Table S\ref{tab:strategies}),
+which we aggregated
+within each person-year combination 
+to form permit strategies.
+For example, if someone fished halibut
+and sablefish in the same year,
+their strategy for that year would be `halibut-sablefish'.
+Specific details on our strategy definitions are available in 
+the Supporting Information.
+
+Our models focused on species diversity
+as a possible predictor of revenue and revenue variability
 while controlling for effort.
 We calculated effective species diversity for
 permit holder $i$ and time (year) $t$ as the inverse of
@@ -228,8 +255,9 @@ each fisher $i$ and time $t$:
 
 \noindent
 Each year $t$ of revenue for fisher $i$
-is assigned a strategy indexed by $j$ and
-expected $\log(R_{i,t})$ is modelled as:
+is assigned a strategy indexed by $j$ 
+(Supporting Information, Table \ref{tab:strategies})
+and expected $\log(R_{i,t})$ is modelled as:
 
 \begin{equation}
 \label{eq:mean}
@@ -372,6 +400,64 @@ Code to reproduce our results (with a simulated data set)
 is available at <https://github.com/NCEAS/pfx-commercial>.
 
 # Results
+
+\noindent
+Fig. \ref{fig:ts} - limited entry + movement towards salmon and specialization in Alaska
+
+- move towards specialization, salmon fig 1D (overall declining trend disappears if you exclude salmon)
+- halibut most often combined with other permits (exclude permit holders that hold any halibut and about ninety percent of the remaining permit holders hold only one permit) fig 1c
+- Salmon the most often on its own (exclude salmon and the proportioned single permit decreases to about 70%) fig 1c
+- majority are single permit holders (70-90%) fig 1C, but the single permit holders make up only about half of the overall revenue (and surpassed half for the first time in 2013 and stayed that way) fig 1B
+
+\noindent
+Something about overall model fit 
+
+- Parameters from hierarchical model (main: Fig. S\ref{fig:fe}, varying: S\ref{fig:re})
+- Residuals clearly show pattern that we see in the parameter estimates (Fig. S\ref{fig:resid})
+- Downside residuals look very similar and justify using the full data set
+(upside and downside) (Fig. S\ref{fig:resid-downside})
+- Mention the year-permit varying intercepts and what they mean 
+(Fig. S\ref{fig:str-yrs}) --- good and bad years where 
+everyone in that strategy tended to do better or worse ---
+this accounts for that and therefore compares everything to 
+the expected revenue for that year 
+
+\noindent
+Fig. \ref{fig:spokes} - add permits
+
+- nearly universal reduction in variability (Fig. S\ref{fig:spoke-all})
+- e.g., `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR] 
+lower expected standard deviation
+for halibut plus another permit vs. single halibut permits);
+- usually associated with higher median revenue 
+- but can be very expensive (provide some examples from website)
+
+\noindent
+Fig. \ref{fig:across} - across strategies
+
+- clear exponential decline in standardized variability with strategies that are inherently more species diverse 
+- not a clear effect of days fished at this level
+- fishing permits with higher species diversity reduces variability
+(`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit
+increase in mean effective species diversity);
+
+\noindent
+Fig. \ref{fig:within} - within strategies
+
+- fish more days, make more money (Fig. S\ref{fig:fe})
+- after accounting for days fished, most commonly, 
+specializing is associated with higher revenue, 
+but sometimes the reverse (Fig. \ref{fig:within})
+- if we don't account for changes in effort, then higher species diversity 
+means more money fairly consistently (TODO make figure)
+- changing species diversity (number of species fished or evenness of species
+fished) tends to be associated with greater variability / uncertainty
+year-to-year (Figs. \ref{fig:within}, S\ref{fig:fe})
+- increasing species diversity within
+the constraints of a permit set has a fishery-dependent effect on revenue and
+is usually (`r g2_dens`% probability)
+associated with increased uncertainty in revenue.
+(Fig. \ref{fig:within})
 
 # Discussion
 
