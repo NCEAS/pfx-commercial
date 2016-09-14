@@ -172,13 +172,16 @@ in a hierarchical model.
 # Methods
 
 - overview
-
 - describe predictors
-
 - We adjusted for inflation by setting all revenues in 2009 USD 
 based on data from TODO.
+- note the filtering and referred to the supplement
 
-We calculated effective species diversity for
+## Predictors
+
+
+Our models focused on the predictor species diversity, 
+while controlling for effort. We calculated effective species diversity for
 permit holder $i$ and year $t$ as the inverse of 
 Simpson's diversity index $\lambda$ [@simpson1949]
 weighted by revenue $R$ (herein 'species diversity'):
@@ -190,6 +193,15 @@ weighted by revenue $R$ (herein 'species diversity'):
 
 \noindent
 where $s$ indexes species from $1$ through $n$.
+We calculated effort or effective season length as
+the sum of days fished across each permit each year. 
+For example, if someone fished for 30 days
+on a salmon drift gillnet permit in Southeast Alaska
+and 40 days on a statewide longline halibut permit,
+that individual's season length 
+would be 70 days.
+
+## Hierarchical model
 
 The basic model is a hierarchical linear regression with Gaussian errors
 predicting $\log$ revenue, $\log(R_{i,t})$, for
