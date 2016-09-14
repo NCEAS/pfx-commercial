@@ -68,7 +68,16 @@
 }
 \date{}
 
+
+
 \begin{document}
+
+\linenumbers
+
+\setlength{\parindent}{0.9cm}
+\setlength\parskip{0in}
+
+\begin{spacing}{1.3}
 
 <<set-knitr-options, cache=FALSE, echo=FALSE>>=
 library("knitr")
@@ -90,45 +99,45 @@ n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 
 \section{Filtering data and grouping permits into strategies}
 
-We filtered the data in a number of ways before fitting our model. 
+We filtered the data in a number of ways before fitting our model.
 We began with \Sexpr{round(ndat$initial/1e6,2)} million rows of data.
-We removed revenue from permit-year combinations 
+We removed revenue from permit-year combinations
 that made up less than 10\% of annual revenue
-for a given permit holder. 
+for a given permit holder.
 We removed permit holders whose median revenue
 was less than \$10,000 USD (adjusted to 2009 values)
-to focus on individuals actively engaged 
+to focus on individuals actively engaged
 in commercial fishing.
 This reduced the total revenue from \Sexpr{round(ndat$rev_b4_large_only/1e9,0)}
 billion 2009 USD
 to \Sexpr{round(ndat$rev_large_only/1e9,0)} billion 2009 USD.
 
-To limit the number of permits 
-and permit strategies 
-and focus on the main fisheries, 
-we removed all permits with less than 50 unique permit holders 
-across all years. 
+To limit the number of permits
+and permit strategies
+and focus on the main fisheries,
+we removed all permits with less than 50 unique permit holders
+across all years.
 We also removed permits for freshwater species and
 for experimental fisheries.
 A list of all CFEC permit codes and descriptions is available at:
 \url{https://www.cfec.state.ak.us/misc/FshyDesC.htm}
 
-We then proceeded to combine similar permits in the following steps. 
+We then proceeded to combine similar permits in the following steps.
 We combined a number of permits that were the same except for vessel size.
-We combined permits for 
-otter troll, 
+We combined permits for
+otter troll,
 longline finfish,
 pot gear.
-king crab, 
+king crab,
 and
 shrimp.
-We grouped a number of permits that were targeting a single species 
+We grouped a number of permits that were targeting a single species
 and differed only in region fished.
 For example, someone fishing herring roe in the Kodiak (G34K)
-and someone fishing herring roe in Alaska Peninsula (G34M) 
+and someone fishing herring roe in Alaska Peninsula (G34M)
 were both considered to have a herring roe permit strategy.
-We combined permits across each of 
-dungeness crab, 
+We combined permits across each of
+dungeness crab,
 herring roe purse seining,
 herring roe gillnet,
 herring hand picked,
@@ -137,41 +146,41 @@ sea cucumber,
 sea urchin,
 tanner crabs
 
-Combining salmon permits was more difficult because 
-the species composition varies widely based on geography. 
-We grouped salmon permits within gear type-region 
+Combining salmon permits was more difficult because
+the species composition varies widely based on geography.
+We grouped salmon permits within gear type-region
 combinations that shared similar species composition.
-For the drift gillnet (S03) permits, 
-we combined permits from 
+For the drift gillnet (S03) permits,
+we combined permits from
 Cook Inlet, Bristol Bay, and Alaska Peninsula because sockeye
 represents greater than 90\% of species revenue.
 For the purse seine permits (S01),
 there was a wide variety in species revenue by
 area ($\sim$ 85\% pink in Prince William Sound to
-85\% sockeye on the Alaskan Peninsula). 
-Of the five permits, only two had similar species compositions, 
+85\% sockeye on the Alaskan Peninsula).
+Of the five permits, only two had similar species compositions,
 so we grouped Kodiak and Cook Inlet.
-For the set gillnet salmon permits (S04), 
-there was some variety but also clear sockeye specialists. 
+For the set gillnet salmon permits (S04),
+there was some variety but also clear sockeye specialists.
 We grouped permits that had greater than 80\% sockeye revenue.
-This combined permits across 
-Prince William Sound, 
+This combined permits across
+Prince William Sound,
 Cook Inlet,
 Kodiak,
 Alaska Peninsula,
 and Bristol Bay.
 We grouped permits from Norton Sound
 and Kuskokwim because of similar species compositions.
-The remaining salmon permits were relatively unique 
-and were left ungrouped. 
+The remaining salmon permits were relatively unique
+and were left ungrouped.
 
-After this process of combining permits, 
+After this process of combining permits,
 we were left with \Sexpr{n_grouped_permits}
 unique fishing strategies (Table~\ref{tab:strategies}),
 which we aggregated
 within each person-year combination.
-For example, if someone fished halibut 
-and sablefish in the same year 
+For example, if someone fished halibut
+and sablefish in the same year
 their strategy for that year would be ``halibut-sablefish''.
 We removed people who switched strategies from one year to the next
 since we were working with changes in revenue from year to year
@@ -180,14 +189,15 @@ for a permit holder.
 We removed strategies with less than 100 unique permit holders
 across all years to focus on the major strategies
 leaving us with a total of \Sexpr{nstr} strategies.
-Finally, we removed all person-year combinations without 
-revenue recorded in the following year 
+Finally, we removed all person-year combinations without
+revenue recorded in the following year
 in order to calculate percent change in revenue
 from year to year.
 This reduced the rows (person-year combinations)
 in the final dataset from \Sexpr{ndat$annual} to
 \Sexpr{ndat$annual_diff}.
 
+TODO length(unique(pholders))
 % Rows of data: \Sexpr{ndat$final}
 % Number of permit holders: \Sexpr{npholders}
 % Range of years: \Sexpr{range_yrs}
@@ -354,12 +364,13 @@ to quickly iterate and build intuition about the models.
 A version of the Stan model without the variance-component
 matched the estimates of the same model in lme4 almost exactly.
 
-
 % \verbatiminput{../analysis/portfolio-offset.stan}
 
 
 \bibliographystyle{apalike}
 \bibliography{refs}
+
+\end{spacing}
 
 \clearpage
 
