@@ -29,7 +29,7 @@ due to the combined effects of environmental, biological, and price variation.
 Commercial fishers are a prime example and
 recent work has sought to identify regulations and fishing behaviours
 that can reduce this variability.
-A top candidate has been that fishing higher levels of species diversity
+One candidate has been that fishing higher levels of species diversity
 decreases income variability.
 However, it is unknown if this species-diversity effect
 on income variability holds
@@ -48,13 +48,14 @@ We find that
 fishing an additional permit is associated with higher revenue
 and lower variability (e.g., 
 `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR] lower
-expected standard deviation compared to single halibut permits), 
+expected standard deviation
+for halibut plus another permit vs. single halibut permits); 
 fishing permits with higher species diversity reduces variability
 (`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit 
-increase in mean Simpson's diversity index),
+increase in mean Simpson's diversity index);
 but that increasing species diversity within
 the constraints of a permit set has a fishery-dependent effect on revenue and
-is usually (`r g2_dens`% of probability density) 
+is usually (`r g2_dens`% probability) 
 associated with increased revenue variability.
 At the same time, Alaskan commercial fisheries
 have been increasingly focussed on
@@ -105,7 +106,7 @@ Extra:
 # Introduction
 
 Natural resources such as forests, land animals, and fishes
-provide a primary source of income for billions(?) of people worldwide [REFS].
+provide a primary source of income for millions(?) of people worldwide [REFS].
 However, environmental,
 biological, and price variation
 combined with regulatory changes
