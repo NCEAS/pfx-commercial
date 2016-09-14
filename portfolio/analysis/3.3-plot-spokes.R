@@ -181,7 +181,7 @@ sp2 <- filter(sp2, single_permit!=strategy)
 # hist(sp2$fract_rev)
 spoke_fraction <- quantile(sp2$fract, probs = c(0.025, 0.5, 0.975)) %>%
   round(2)%>% `*`(100)
-spoke_fraction <- quantile(sp2$fract, probs = c(0.25, 0.5, 75)) %>%
+spoke_fraction <- quantile(sp2$fract, probs = c(0.25, 0.5, 0.75)) %>%
   round(2)%>% `*`(100)
 saveRDS(spoke_fraction, file = "portfolio/data-generated/spoke_fraction.rds")
 
