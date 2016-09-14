@@ -62,6 +62,7 @@ cfecnew = cfec
 dim(cfecnew)[1]
 ndat <- list()
 ndat$initial <- nrow(cfecnew)
+ndat$initial_tot_rev <- sum(cfecnew$g_earn)
 ```
 
 ## Combine some strategies 
