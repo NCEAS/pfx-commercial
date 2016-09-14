@@ -52,7 +52,7 @@ expected standard deviation
 for halibut plus another permit vs. single halibut permits); 
 fishing permits with higher species diversity reduces variability
 (`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit 
-increase in mean Simpson's diversity index);
+increase in mean effective species diversity);
 but that increasing species diversity within
 the constraints of a permit set has a fishery-dependent effect on revenue and
 is usually (`r g2_dens`% probability) 
@@ -133,17 +133,17 @@ At vessel level, ... [@kasperski2013] ...
 Despite this existing work,
 key questions remain on the relationship between species diversity and
 fishing revenue variability.
-First, we do not know the effect of changing species diversity
-for individual permit holders on a year-by-year basis ---
+First, the effect of changing species diversity
+for individual permit holders on a year-by-year basis is unknown ---
 existing approaches have worked at the vessel or community level
 and condensed time series into single metrics of variability or risk.
-Second, we do not know the effect of changing species diversity
-on revenue itself ---
+Second, the effect of changing species diversity
+on revenue itself is unknown ---
 existing approaches have focused solely on variability or risk.
-Third, we do not know if the approach to
-diversifying affects the relationship between
-species diversity and revenue variability.
-A fisheries permit holder can purchase
+Third, it is unknown if the approach to
+diversifying species fished affects the relationship between
+species diversity and revenue variability ---
+a fisheries permit holder can purchase
 an additional permit to target other species,
 pick a permit that inherently targets many species,
 or increase species diversity
@@ -171,9 +171,166 @@ in a hierarchical model.
 
 # Methods
 
-[@standevelopmentteam2015]
-[@rcoreteam2016]
-[@simpson1949]
+- overview
+
+- describe predictors
+
+- We adjusted for inflation by setting all revenues in 2009 USD 
+based on data from TODO.
+
+We calculated effective species diversity for
+permit holder $i$ and year $t$ as the inverse of 
+Simpson's diversity index $\lambda$ [@simpson1949]
+weighted by revenue $R$ (herein 'species diversity'):
+
+\begin{equation}
+1/\lambda_{i,t} = 1 / \left(\sum\limits_{s=1}^{n_{i,t}}
+  \left(R_{i,s,t}/ \sum\limits_{s=1}^{n_{i,t}} R_{i,s,t}\right)\right)^2,
+\end{equation}
+
+\noindent
+where $s$ indexes species from $1$ through $n$.
+
+The basic model is a hierarchical linear regression with Gaussian errors
+predicting $\log$ revenue, $\log(R_{i,t})$, for
+each fisher $i$ and time (year) $t$:
+
+\begin{equation}
+\log(R_{i,t}) \sim \mathrm{N} \left(\widehat{\log(R_{i,t})}, \widehat{\sigma_{i,t}^2} \right).
+\end{equation}
+
+\noindent
+Each year $t$ of revenue for fisher $i$
+is assigned a strategy indexed by $j$ and
+expected $\log(R_{i,t})$ is modelled as:
+
+\begin{equation}
+\label{eq:mean}
+\widehat{\log(R_{i,t})} = \beta_{0,j,t} -
+  \beta_{1,j} S_{i,t} I_{i,t} +
+  \beta_{2,j} S_{i,t} I_{i,t} +
+  \beta_3 D_{i,t} -
+  \beta_4 S_{i,t} D_{i,t} I_{i,t} +
+  \beta_5 S_{i,t} D_{i,t} I_{i,t} +
+  \log(R_{i,t-1})
+\end{equation}
+
+\noindent
+where $S_{i,t}$ is the percent change in species diversity,
+$\log \left(\mathrm{div}_{i,t}/\mathrm{div}_{i,t-1}\right)$,
+$D_{i,t}$ is the percent change in days fished,
+$\log \left(\mathrm{days}_{i,t}/\mathrm{days}_{i,t-1}\right)$, and
+$I_{i,t}$ is an indicator variable that takes a value $0$
+if $\mathrm{div}_{i,t} \ge \mathrm{div}_{i,t-1}$
+(species diversity increasing; generalizing)
+and takes a value $1$ if
+$\mathrm{div}_{i,t} < \mathrm{div}_{i,t-1}$
+(species diversity decreasing; specializing).
+
+The term $\log(R_{i,t-1}$) is treated as an offset term:
+it is added on the right side of the equation
+to essentially model percent change in revenue,
+i.e., $\log(R_{i,t}) - \log(R_{i,t-1}) = \log(R_{i,t}/R_{i,t-1})$.
+While this approach required filtering the data 
+to remove person-year combinations without a subsequent year of revenue,
+it has a number of advantages: 
+it eliminates having to deal with the nonstationary 
+timeseries and eliminates having to 
+estimate thousands of people-specific intercepts.
+
+The $\beta$'s represent estimated coefficients, some of which are
+allowed to vary.
+The intercepts $\beta_{0,j,t}$ are allowed to vary by
+strategy-year combinations,
+are centered on zero, and are constrained by a normal distribution:
+
+\begin{equation}
+\beta_{0,j,t} \sim \mathrm{N} \left(0, \sigma^2_{\beta_{j,t}} \right).
+\end{equation}
+
+\noindent
+This, combined with the lack of a global intercept, constrains
+the mean change in log revenue across all fishers and years to
+be zero. I.e., we assume that the data are stationary
+after accounting for all covariates and including
+an intercept that varies with strategy-year combinations.
+Initial versions of the model
+confirmed that the global intercept along with stragey-level
+intercepts would be estimated at almost exactly zero.
+
+The slopes $\beta_{1,j}$ and $\beta_{1,j}$
+are then allowed to vary by strategy with estimated means:
+
+\begin{align}
+\beta_{1,j} &\sim \mathrm{N} \left(\beta_1, \sigma^2_{\beta_1}\right),\\
+\beta_{2,j} &\sim \mathrm{N} \left(\beta_1, \sigma^2_{\beta_2}\right).
+\end{align}
+
+\noindent
+The $\beta_{1,j}$'s represent how much an X\% decrease in species
+diversity within a strategy translates to a Y\% change in revenue.
+The $\beta_{2,j}$'s represent how much an X\% increase in species
+diversity within a strategy translates to a Y\% change in revenue.
+These are after controlling for percent change in days fished, $\beta_3$,
+and the interaction between days fished and percent change in species
+diversity, $\beta_4$ and $\beta_5$.
+
+Whereas a typical hierarchical linear regression model
+would estimate a single residual error scale term, $\sigma$,
+we model the scale of the residual error  with
+another hierarchical model with a similar form:
+
+\begin{equation}
+\label{eq:cv}
+\widehat{\sigma_{i,t}} =
+\exp \left( \gamma_{0,j} -
+\gamma_{1,j} S_{i,t} I_{i,t} +
+\gamma_{2,j} S_{i,t} I_{i,t} +
+\gamma_3 D_{i,t} -
+\gamma_4 S_{i,t} D_{i,t} I_{i,t} +
+\gamma_5 S_{i,t} D_{i,t} I_{i,t}\right).
+\end{equation}
+
+\noindent
+Again, $S_{i,t}$ and $I_{i,t}$ represent, respectively,
+percent change in species
+diversity and an indicator variable for increasing or
+decreasing species diversity.
+We exponentiate the equation to ensure all scale parameters, $\sigma_{i,t}$,
+are positive. The $\gamma$'s are estimated coefficients, three of which
+are allowed to vary by strategy, constrained by normal distributions:
+
+\begin{align}
+\gamma_{0,j}  &\sim \mathrm{N} \left(\gamma_0 + \eta_1 M_j + \eta_2 E_j, \sigma^2_{\gamma_0}\right),\\
+\gamma_{1,j}  &\sim \mathrm{N} \left(\gamma_1, \sigma^2_{\gamma_1}\right),\\
+\gamma_{2,j}  &\sim \mathrm{N} \left(\gamma_2, \sigma^2_{\gamma_2}\right).
+\end{align}
+
+\noindent
+The mean of the $\gamma_{0,j}$ coefficients is
+modelled with
+two strategy-level predictors.
+The symbols $M_j$ and $E_j$ represent the raw mean species diversity and
+mean combined fishing season length (effort) for strategy $j$.
+The coefficients $\eta_1$ and $\eta_2$ represent predictors
+in this strategy-level regression
+estimating effects across strategies.
+
+We fit our models with Stan 2.11.1
+[@hoffman2014; @standevelopmentteam2015; @standevelopmentteam2015a; @carpenter2015]
+and R 3.3.1 [@rcoreteam2016].
+Stan implements the 
+No-U-Turn Hamiltonian Markov chain Monte Carlo algorithm [@hoffman2014]
+to perform Bayesian statistical inference.
+We ran four chains and 2,000 iterations and discarded
+the first 1,000 iterations of each chain
+as warm up (i.e. 4,000 final samples). 
+We checked for chain convergence visually with trace plots.
+We also ensured that $\hat{R}<1.05$ (the potential scale reduction factor)
+and that the effective sample size was 
+greater than 200 for all parameters [@gelman2014].
+Code to reproduce our results (with a simulated data set)
+is available at <https://github.com/NCEAS/pfx-commercial>.
 
 # Results
 
@@ -185,6 +342,7 @@ in a hierarchical model.
 \clearpage
 
 # Figures
+
 
 \begin{figure}[htbp]
 \begin{center}
