@@ -344,14 +344,21 @@ and R 3.3.1 [@rcoreteam2016].
 Stan implements the
 No-U-Turn Hamiltonian Markov chain Monte Carlo algorithm [@hoffman2014]
 to perform Bayesian statistical inference.
+We assigned weakly informative priors on all parameters:
+$N(0, 2^2)$ priors on all 
+$\beta$, $\gamma$, and $\eta$ parameters,
+and half-$t(3, 0, 2)$ priors 
+(i.e. degrees of freedom of 3 and scale of 2)
+on all $\sigma$ parameters.
 We ran four chains and 2,000 iterations and discarded
 the first 1,000 iterations of each chain
 as warm up (i.e. 4,000 final samples).
 We checked for chain convergence visually with trace plots.
 We also ensured that $\hat{R}<1.05$ (the potential scale reduction factor)
-and that the effective sample size was
-greater than 200 for all parameters [@gelman2014].
-We verified that our model was coded correctly by
+and that the effective sample size,
+as calculated by the rstan package, 
+was greater than 200 for all parameters [@gelman2014].
+We verified that our model returned sensible estimates by
 comparing our estimates to an ad-hoc two-stage
 model fit with the lme4 R package [@bates2015],
 and by fitting our model to simulated data
