@@ -12,12 +12,6 @@ spoke <- readRDS("../data-generated/spoke_fraction.rds")
 g2_dens <- readRDS("../data-generated/g2_prob_dens_above_zero.rds")
 ```
 
-
-\noindent
-Main message:
-Diversified portfolios of fishing permits and species reduce risk for fishermen,
-but changing species diversity can be risky, costly, and limited by regulations.
-
 # Abstract
 
 <!-- Fishing is inherently risky and we have long-sought regulations and fishing behaviors that reduce this risk. -->
@@ -46,16 +40,16 @@ We control for changes in effort and other
 latent effects through time.
 We find that
 fishing an additional permit is associated with higher revenue
-and lower variability (e.g., 
+and lower variability (e.g.,
 `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR] lower
 expected standard deviation
-for halibut plus another permit vs. single halibut permits); 
+for halibut plus another permit vs. single halibut permits);
 fishing permits with higher species diversity reduces variability
-(`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit 
+(`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit
 increase in mean effective species diversity);
 but that increasing species diversity within
 the constraints of a permit set has a fishery-dependent effect on revenue and
-is usually (`r g2_dens`% probability) 
+is usually (`r g2_dens`% probability)
 associated with increased uncertainty in revenue.
 At the same time, Alaskan commercial fisheries
 have been increasingly focussed on
@@ -79,6 +73,11 @@ Extra:
 
 - there is often limited room for intentional diversification within a permit
 - in fact, specializing can be profitable within some fisheries
+
+\noindent
+Main message:
+Diversified portfolios of fishing permits and species reduce risk for fishermen,
+but changing species diversity can be risky, costly, and limited by regulations.
 
 <!-- , which is concerning  -->
 <!-- given that some fishing regulations and market forces -->
@@ -175,25 +174,25 @@ in a hierarchical model.
 
 ## Data
 
-We obtained landings and revenue data for 
-all permit holders in Alaska 
+We obtained landings and revenue data for
+all permit holders in Alaska
 from `r range_yrs[1]` to `r range_yrs[2]`
 from the Alaskan Commercial Fisheries Entry Commission (CFEC).
-These data represent a total of 
+These data represent a total of
 nearly `r round(ndat$initial_tot_rev/1e9)` billion 2009 USD
 and a combined `r round(ndat$initial/1e6,1)` million rows of data.
-We adjusted for inflation by setting all revenues in 2009 USD 
+We adjusted for inflation by setting all revenues in 2009 USD
 based on data from TODO.
-We implemented a number of filtering steps 
+We implemented a number of filtering steps
 to focus on individuals actively engaged in commercial fishing
-(Supporting Information). 
+(Supporting Information).
 In particular, we removed permit holders whose median revenue
 was less than $10,000 2009 USD.
 
-Our models focused on the predictor species diversity, 
-while controlling for effort. 
+Our models focused on the predictor species diversity,
+while controlling for effort.
 We calculated effective species diversity for
-permit holder $i$ and year $t$ as the inverse of 
+permit holder $i$ and year $t$ as the inverse of
 Simpson's diversity index $\lambda$ [@simpson1949]
 weighted by revenue $R$ ('species diversity'):
 
@@ -205,11 +204,11 @@ weighted by revenue $R$ ('species diversity'):
 \noindent
 where $s$ indexes species from $1$ through $n$.
 We calculated effort or effective season length as
-the sum of days fished across each permit each year. 
+the sum of days fished across each permit each year.
 For example, if someone fished for 30 days
 on a salmon drift gillnet permit in Southeast Alaska
 and 40 days on a statewide longline halibut permit,
-that individual's season length 
+that individual's season length
 would be 70 days.
 
 ## Hierarchical model
@@ -254,11 +253,11 @@ The term $\log(R_{i,t-1}$) is treated as an offset term:
 it is added on the right side of the equation
 to essentially model percent change in revenue,
 i.e., $\log(R_{i,t}) - \log(R_{i,t-1}) = \log(R_{i,t}/R_{i,t-1})$.
-While this approach required filtering the data 
+While this approach required filtering the data
 to remove person-year combinations without a subsequent year of revenue,
-it has a number of advantages: 
-it eliminates having to deal with the non-stationary 
-time series and eliminates having to 
+it has a number of advantages:
+it eliminates having to deal with the non-stationary
+time series and eliminates having to
 estimate thousands of people-specific intercepts.
 
 The $\beta$'s represent estimated coefficients, some of which are
@@ -342,16 +341,21 @@ estimating effects across strategies.
 We fit our models with Stan 2.11.1
 [@hoffman2014; @standevelopmentteam2015; @standevelopmentteam2015a; @carpenter2015]
 and R 3.3.1 [@rcoreteam2016].
-Stan implements the 
+Stan implements the
 No-U-Turn Hamiltonian Markov chain Monte Carlo algorithm [@hoffman2014]
 to perform Bayesian statistical inference.
 We ran four chains and 2,000 iterations and discarded
 the first 1,000 iterations of each chain
-as warm up (i.e. 4,000 final samples). 
+as warm up (i.e. 4,000 final samples).
 We checked for chain convergence visually with trace plots.
 We also ensured that $\hat{R}<1.05$ (the potential scale reduction factor)
-and that the effective sample size was 
+and that the effective sample size was
 greater than 200 for all parameters [@gelman2014].
+We verified that our model was coded correctly by
+comparing our estimates to an ad-hoc two-stage
+model fit with the lme4 R package [@bates2015],
+and by fitting our model to simulated data
+and recovering the true values.
 Code to reproduce our results (with a simulated data set)
 is available at <https://github.com/NCEAS/pfx-commercial>.
 
