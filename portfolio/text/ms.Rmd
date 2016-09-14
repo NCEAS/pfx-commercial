@@ -172,19 +172,30 @@ in a hierarchical model.
 # Methods
 
 - overview
-- describe predictors
-- We adjusted for inflation by setting all revenues in 2009 USD 
+
+## Data
+
+We obtained landings and revenue data for 
+all permit holders in Alaska 
+from `r range_yrs[1]` to `r range_yrs[2]`
+from the Alaskan Commercial Fisheries Entry Commission (CFEC).
+These data represent a total of 
+nearly `r round(ndat$initial_tot_rev/1e9)` billion 2009 USD
+and a combined `r round(ndat$initial/1e6,1)` million rows of data.
+We adjusted for inflation by setting all revenues in 2009 USD 
 based on data from TODO.
-- note the filtering and referred to the supplement
-
-## Predictors
-
+We implemented a number of filtering steps 
+to focus on individuals actively engaged in commercial fishing
+(Supporting Information). 
+In particular, we removed permit holders whose median revenue
+was less than $10,000 2009 USD.
 
 Our models focused on the predictor species diversity, 
-while controlling for effort. We calculated effective species diversity for
+while controlling for effort. 
+We calculated effective species diversity for
 permit holder $i$ and year $t$ as the inverse of 
 Simpson's diversity index $\lambda$ [@simpson1949]
-weighted by revenue $R$ (herein 'species diversity'):
+weighted by revenue $R$ ('species diversity'):
 
 \begin{equation}
 1/\lambda_{i,t} = 1 / \left(\sum\limits_{s=1}^{n_{i,t}}
@@ -246,8 +257,8 @@ i.e., $\log(R_{i,t}) - \log(R_{i,t-1}) = \log(R_{i,t}/R_{i,t-1})$.
 While this approach required filtering the data 
 to remove person-year combinations without a subsequent year of revenue,
 it has a number of advantages: 
-it eliminates having to deal with the nonstationary 
-timeseries and eliminates having to 
+it eliminates having to deal with the non-stationary 
+time series and eliminates having to 
 estimate thousands of people-specific intercepts.
 
 The $\beta$'s represent estimated coefficients, some of which are

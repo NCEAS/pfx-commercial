@@ -209,12 +209,10 @@ TODO length(unique(pholders))
 % lost rows no strat:
 % \Sexpr{round(ndat$after_no_na_strat/ndat$b4_no_na_strat,2)*100}
 
-\section{Hierarchical model}
+\section{Model checking with two-stage approach}
 
-
-
-We checked our models with a two-part modelling approach
-using the R package lme4.
+We checked our models with a two-stage modelling approach
+using the R package lme4 \citep{bates2015}.
 To do this, we fit the initial model of the mean component $\log(R_{i,t})$
 and then fit the second model to the log absolute value of the
 residuals, $\log | \widehat{\log(R_{i,t})} - \log(R_{i,t}) |$.
@@ -228,6 +226,7 @@ from the Stan model are approximately correct and allowed us
 to quickly iterate and build intuition about the models.
 A version of the Stan model without the variance-component
 matched the estimates of the same model in lme4 almost exactly.
+
 
 % \verbatiminput{../analysis/portfolio-offset.stan}
 
