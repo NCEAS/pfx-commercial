@@ -174,7 +174,7 @@ in a hierarchical model.
 
 ## Data
 
-We obtained landings and revenue data for
+We obtained fisheries landings and revenue data for
 all permit holders in Alaska
 from `r range_yrs[1]` to `r range_yrs[2]`
 from the Alaskan Commercial Fisheries Entry Commission (CFEC).
@@ -192,7 +192,7 @@ was less than $10,000 2009 USD.
 Our models focused on the predictor species diversity,
 while controlling for effort.
 We calculated effective species diversity for
-permit holder $i$ and year $t$ as the inverse of
+permit holder $i$ and time (year) $t$ as the inverse of
 Simpson's diversity index $\lambda$ [@simpson1949]
 weighted by revenue $R$ ('species diversity'):
 
@@ -215,7 +215,7 @@ would be 70 days.
 
 The basic model is a hierarchical linear regression with Gaussian errors
 predicting $\log$ revenue, $\log(R_{i,t})$, for
-each fisher $i$ and time (year) $t$:
+each fisher $i$ and time $t$:
 
 \begin{equation}
 \log(R_{i,t}) \sim \mathrm{N} \left(\widehat{\log(R_{i,t})}, \widehat{\sigma_{i,t}^2} \right).
@@ -234,7 +234,7 @@ expected $\log(R_{i,t})$ is modelled as:
   \beta_3 D_{i,t} -
   \beta_4 S_{i,t} D_{i,t} I_{i,t} +
   \beta_5 S_{i,t} D_{i,t} I_{i,t} +
-  \log(R_{i,t-1})
+  \log(R_{i,t-1}),
 \end{equation}
 
 \noindent
@@ -285,7 +285,7 @@ are then allowed to vary by strategy with estimated means:
 
 \begin{align}
 \beta_{1,j} &\sim \mathrm{N} \left(\beta_1, \sigma^2_{\beta_1}\right),\\
-\beta_{2,j} &\sim \mathrm{N} \left(\beta_1, \sigma^2_{\beta_2}\right).
+\beta_{2,j} &\sim \mathrm{N} \left(\beta_2, \sigma^2_{\beta_2}\right).
 \end{align}
 
 \noindent
@@ -457,11 +457,6 @@ Dots and line segments represent medians and
 \clearpage
 
 # Notes
-
-Fishing can be big $ but is risky, for example, Alaska
-
-
-What's been done
 
 ## @kasperski2013
 - vessel-level CFEC data
