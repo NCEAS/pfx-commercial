@@ -477,11 +477,11 @@ associated with increased uncertainty in revenue.
 
 - What's novel
     - Huge dataset
-    - Permit level data
+    - Permit level data (on individuals, not vessels)
     - Account for covariates
     - Accounting for strategies
     - Keeping annual data (not condensing to mean and cv)
-    - Joint modelling
+    - Joint modelling of mean and variance
     - look at different mechanisms of diversification
 - Suggests it's mostly an across strategy/permit effect (lowering variability),
   which isn't always a possibility because of regulations and cost 
@@ -495,8 +495,11 @@ associated with increased uncertainty in revenue.
 ### Reconciling the effects at different levels of species diversity 
 
 - How fit in with K and H?
+
+EW: part of the difference is individuals vs vessels. For example, K&H suggested that diversity declined following IFQs for halibut sablefish vessels. The reason for the decline was that the vessels were allowed to fish halibut for more days (because people were sharing boats). At the level of people, we wouldn't expect the diversity of someone who only had halibut/sablefish permit to be affected by IFQs. The person, not the vessel holds the quota share: https://alaskafisheries.noaa.gov/fisheries/ifq
+
 - Year to year risky... But maybe evens out/better over time
-- diversity within permit - often bycatch, limited room for intentional diversification
+- diversity within permit - often bycatch, limited room for intentional diversification (unless you have a M or salmon permit)
 - Risk results not really risk, but unpredictability given our covariates ...
 don't change anything and it's most predictable how well you'll do
 - What's unpredictable in our model, might be more predictable on a year to
