@@ -135,7 +135,8 @@ key questions remain on the relationship between species diversity and
 fishing revenue variability.
 First, the effect of changing species diversity
 for individual permit holders on a year-by-year basis is unknown ---
-existing approaches have worked at the vessel or community level
+existing approaches have worked at the vessel [@kasperski2013],
+fleet [@sethi2012b], or community level [@sethi2014],
 and condensed time series into single metrics of variability or risk.
 Second, the effect of changing species diversity
 on revenue itself is unknown ---
@@ -143,7 +144,7 @@ existing approaches have focused solely on variability or risk.
 Third, it is unknown if the approach to
 diversifying species fished affects the relationship between
 species diversity and revenue variability ---
-a fisheries permit holder can purchase
+a fishery permit holder can purchase
 an additional permit to target other species,
 pick a permit that inherently targets many species,
 or increase species diversity
@@ -153,10 +154,10 @@ given that the first two may be costly and limited by regulations,
 but it is unclear if the benefits and costs are the same.
 Here, we address these questions by
 simultaneously estimating the effects of
-these three approaches to species diversification
-for Alaskan fishery permit holders on
-annual revenue and revenue variability.
-Our model makes use of the entire time series,
+these three species diversification approaches
+on annual revenue and revenue variability
+for Alaskan fishery permit holders.
+Our model makes use of entire time series,
 controls for effort and latent time effects,
 and allows the effect of species diversity
 to vary by fishing strategy (sets of similar permits)
@@ -171,7 +172,7 @@ in a hierarchical model.
 
 # Methods
 
-- overview
+Overview paragraph here.
 
 ## Data
 
@@ -317,8 +318,8 @@ The slopes $\beta_{1,j}$ and $\beta_{1,j}$
 are then allowed to vary by strategy with estimated means:
 
 \begin{align}
-\beta_{1,j} &\sim \mathrm{N} \left(\beta_1, \sigma^2_{\beta_1}\right),\\
-\beta_{2,j} &\sim \mathrm{N} \left(\beta_2, \sigma^2_{\beta_2}\right).
+\beta_{1,j} &\sim \mathrm{N} \left(\mu_{\beta_1}, \sigma^2_{\beta_1}\right),\\
+\beta_{2,j} &\sim \mathrm{N} \left(\mu_{\beta_2}, \sigma^2_{\beta_2}\right).
 \end{align}
 
 \noindent
@@ -356,9 +357,9 @@ are positive. The $\gamma$'s are estimated coefficients, three of which
 are allowed to vary by strategy, constrained by normal distributions:
 
 \begin{align}
-\gamma_{0,j}  &\sim \mathrm{N} \left(\gamma_0 + \eta_1 M_j + \eta_2 E_j, \sigma^2_{\gamma_0}\right),\\
-\gamma_{1,j}  &\sim \mathrm{N} \left(\gamma_1, \sigma^2_{\gamma_1}\right),\\
-\gamma_{2,j}  &\sim \mathrm{N} \left(\gamma_2, \sigma^2_{\gamma_2}\right).
+\gamma_{0,j}  &\sim \mathrm{N} \left(\eta_0 + \eta_1 M_j + \eta_2 E_j, \sigma^2_{\gamma_0}\right),\\
+\gamma_{1,j}  &\sim \mathrm{N} \left(\mu_{\gamma_1}, \sigma^2_{\gamma_1}\right),\\
+\gamma_{2,j}  &\sim \mathrm{N} \left(\mu_{\gamma_2}, \sigma^2_{\gamma_2}\right).
 \end{align}
 
 \noindent
@@ -395,7 +396,7 @@ We verified that our model returned sensible estimates by
 comparing our estimates to an ad-hoc two-stage
 model fit with the lme4 R package [@bates2015],
 and by fitting our model to simulated data
-and recovering the true values.
+and recovering the true values (Supporting Information).
 Code to reproduce our results (with a simulated data set)
 is available at <https://github.com/NCEAS/pfx-commercial>.
 
