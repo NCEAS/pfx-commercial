@@ -261,7 +261,7 @@ relating mean species diversity and mean days fished
 within a strategy
 (both centered by their means and divided by
 two times their standard deivations)
-to the magnitude of residual error.}
+to the magnitude of residual error. (TODO symbols need to be updated)}
 \label{fig:fe}
 \end{center}
 \end{figure}
