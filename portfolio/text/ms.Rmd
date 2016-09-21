@@ -119,8 +119,7 @@ and human-caused environmental disasters
 generate high levels of income variability and risk
 for these individuals.
 For example, drought and flooding are major sources of risk 
-to agricultural food security 
-(http://rstb.royalsocietypublishing.org/content/360/1463/2139.short),
+to agricultural food security [@gregory2005],
 And EVOS example
 
 \bigskip
@@ -131,17 +130,16 @@ Give examples from other sectors
 
 - crop rotation has been proposed as metric for buffering against short term
   variation and long term trends (like climate change)
-- BUT in some situations, external forces (prices, demand) may discourage the
-  adoption of these diverse strategies and help promote specialization, 
-http://link.springer.com/article/10.1007/s10584-004-0710-z
+- but in some situations, external forces (prices, demand) may discourage the
+  adoption of these diverse strategies and 
+  help promote specialization [@bradshaw2004]
 
 \bigskip
 
 This effect has been identified for fisheries.
 At community level, ... [@sethi2014]
 At vessel level, ... [@kasperski2013] ...
-- Eric: Most papers on fisheries have adopted the approach similar to Kasperski et
-al. and used data reported to the level of vessels or higher. This analysis
+- Eric: Most papers on fisheries have adopted the approach similar to @kasperski2013 and used data reported to the level of vessels or higher. This analysis
 is unique in that we're able to separate individual people from vessels
 (enabling us to track people that switch fishery sectors over time, or
 change strategies and utilize multiple vessels)
@@ -240,13 +238,14 @@ the Supporting Information.
 Our models focused on species diversity
 as a possible predictor of revenue and revenue variability
 while controlling for effort.
-We calculated effective species diversity for
+For consistency with previous analyses [e.g. @kasperski2013],
+we calculated effective species diversity for
 permit holder $i$ and time (year) $t$ as the inverse of
-Simpson's diversity index 
-(TODO - Jost 2006; also referred to in economics as the Herfindahl-Hirschman Index) 
-$\lambda$ [@simpson1949]
-weighted by revenue $R$ ('species diversity') 
-*Eric: (also say we did this for consistency with previous analyses,e.g. Kasperski and Holland):*
+Simpson's diversity index $\lambda$
+(\citeauthor{simpson1949} \citeyear{simpson1949},
+\citeauthor{jost2006} \citeyear{jost2006};
+also referred to in economics as the Herfindahl-Hirschman Index)
+weighted by revenue $R$:
 
 \begin{equation}
 1/\lambda_{i,t} = 1 / \left(\sum\limits_{s=1}^{n_{i,t}}
@@ -271,9 +270,7 @@ would be 70 days.
 
 The general framework of our model is known as a variance function
 regression model, which separately models change in the mean and variance as
-a function of covariates (TODO - Davidian and Carrol 1987
-http://amstat.tandfonline.com/doi/abs/10.1080/01621459.1987.10478543; Hall
-and Carrol 1989, http://www.jstor.org/stable/2345837). Where traditional
+a function of covariates [e.g. @davidian1987; @hall1989]. Where traditional
 linear models or hierarchical linear models generally assume constant
 variance, the variance function regression model allows variance to be
 heteroskedastic. For application to economic data on individual fishing
