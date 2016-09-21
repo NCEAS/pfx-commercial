@@ -27,19 +27,19 @@ term_lu <- data.frame(
   variable = c("b_j_1", "b_j_2", "b_j_3", "b_j_4", "b_j_5", "g_k_1", "g_k_2",
     "g_k_3", "g_k_4", "g_k_5", "g0", "h1", "h2"),
   term_clean = c(
-    "β1 (specializing)",
-    "β2 (generalizing)",
+    "μβ1 (specializing)",
+    "μβ2 (generalizing)",
     "β3 (days fished % change)",
     "β4 (days fished %:specializing)",
     "β5 (days fished %:generalizing)",
 
-    "γ1 (specializing, variability)",
-    "γ2 (generalizing, variability)",
+    "μγ1 (specializing, variability)",
+    "μγ2 (generalizing, variability)",
     "γ3 (days fished % change, variability)",
     "γ4 (days fished %:specializing, variability)",
     "γ5 (days fished %:generalizing, variability)",
 
-    "γ0 (global intercept, variability)",
+    "η0 (global intercept, variability)",
     "η1 (strategy-level diversity effect, variability)",
     "η2 (strategy-level days-fished effect, variability)"
   )
