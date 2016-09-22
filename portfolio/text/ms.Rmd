@@ -1,3 +1,6 @@
+---
+output: html_document
+---
 ```{r set-knitr-options, cache=FALSE, echo=FALSE}
 library("knitr")
 opts_chunk$set(cache=TRUE, echo=FALSE, message=FALSE, autodep=TRUE,
@@ -13,10 +16,65 @@ g2_dens <- readRDS("../data-generated/g2_prob_dens_above_zero.rds")
 n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 ```
 
-# Abstract
+
+
+<!-- Ole likes the first or fourth title best, "
+Benefit of diversification are unavailable to many fishermen
+" -->
+
+
+# Ole Abstract
 
 <!-- Fishing is inherently risky and we have long-sought regulations and fishing behaviors that reduce this risk. -->
 <!-- The increasing the diversity of species fished has been proposed to reduce risk for fishermen -->
+
+
+A fundamental challenge for individuals who rely on the extraction of natural resource for their livelihood is income variability.  
+Fishers, loggers, farmers, miners, and other  all face uncertainty in income driven by a mix of environmental, biological, and economic (e.g. price) varibility.
+A key component underlying the sustainability of these industries is identifying both regulatory actions and individual behavior affect income variability and by extension the economic stability and sustainable use of natural resources.   
+
+For commercial fisheries, recent work has identified that targeting a diversity of species can reduce income variability.
+However, any diversity-variability relationship is embedded in a regulatory framework that restricts individual ability to unilaterally change fishing behavior.  
+Here we identify three primary axes by which fishers in Alaska, one of the world's most productive fishery regions, can potentailly diversify fishing activities and understand how individual actions along each diversity axis affect both revenue and revenue variability. 
+We construct a novel statistical model to simultaneously assess the value to individuals fishers of choosing to 1) own permits that allow fishers that target a diverse fish species assemblage, 2) diversify by owning multiple permits, or 3) catch a greater species within the constraints of a given permit.  
+
+Thus, we present a unique approach to understanding important aspects of diversity relevant to individaul fishers' decisions. 
+We show contrastings effects of diversity on revenue and revenue variability along the three axes. First, we show (results for choosing a permit). Next we show (results for owning multiple permits).  Finally we show (results for individual permit diversification).
+
+Thus, while there are clear benefits to some flavors of diversification, others don't do much.  Importantly, the most effective measure for increasing revenue and decreasing risk - purchasing additional permits to participate in additional fisheries - was also the most costly
+
+
+We find that
+fishing an additional permit is associated with higher revenue
+and lower variability (e.g.,
+`r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR] lower
+expected standard deviation
+for halibut plus another permit vs. single halibut permits);
+fishing permits with higher species diversity reduces variability
+(`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit
+increase in mean effective species diversity);
+but that increasing species diversity within
+the constraints of a permit set has a fishery-dependent effect on revenue and
+is usually (`r g2_dens`% probability)
+associated with increased uncertainty in revenue.
+At the same time, Alaskan commercial fisheries
+have been increasingly focussed on
+single-permit (often salmon) fishing strategies
+with single-permit fishers earning
+more than multiple-permit fishers
+for the first time in 2013.
+Our results suggest that the benefit of species diversity
+for revenue variability
+is mostly an across-permit effect, not
+a benefit that can be easily harnessed by an individual permit holder.
+Effective methods of diversification ---
+purchasing additional permits or switching permits ---
+are costly and often limited by regulations such as limited entry
+programs and individual transferable quotas (ITQs).
+Take home ...
+
+
+# Original Abstract
 
 Individuals relying on natural resources as their primary source of income
 often experience high levels of income variability
@@ -124,12 +182,12 @@ And EVOS example
 
 \bigskip
 
-Targeting a higher diversity of species
-has been proposed as a risk-buffering mechanism...
+Increasing diversity has been proposed as a risk-buffering mechanism...
 Give examples from other sectors
 
-- crop rotation has been proposed as metric for buffering against short term
+- Farming: crop rotation has been proposed as metric for buffering against short term
   variation and long term trends (like climate change)
+- Logging: Maintaining a diverse mix of tree species, age structure, and space to buffer against things like wildfires and price varition. 
 - but in some situations, external forces (prices, demand) may discourage the
   adoption of these diverse strategies and 
   help promote specialization [@bradshaw2004]
@@ -139,17 +197,31 @@ Give examples from other sectors
 This effect has been identified for fisheries.
 At community level, ... [@sethi2014]
 At vessel level, ... [@kasperski2013] ...
+However, these papers look at aggregates across individuals and largely ignore how existing fisheries regulations limit the ability of individual fishers to diversify. Key uncertainties remain about the fundamental relationship between diversity, fishing revenue, and fishing revenue variability at the level of the individual.  
+While the days of open, unregulated fisheries in most developed countries have passed - fishers must own a license to participate in virtually all fisheries - fishers retain several options for increasing diversity. For example, fishers can do thing X, thing Y, or thing Z. But uncertainty remains about the value of adopting different diversification strategies for improving revenue and reducing revenue variability. Furthermore, theory and empirical studies both suggest there can be substantial benefits to specialization (REFS?) 
+
+
 - Eric: Most papers on fisheries have adopted the approach similar to @kasperski2013 and used data reported to the level of vessels or higher. This analysis
 is unique in that we're able to separate individual people from vessels
 (enabling us to track people that switch fishery sectors over time, or
-change strategies and utilize multiple vessels)
+change strategies and utilize multiple vessels) 
 
 \bigskip
 
-Despite this existing work,
-key questions remain on the relationship between 
-diversity of fish catches and
-fishing revenue variability.
+-Ole: I think this is the spot for intro to AK.  I moved some of Eric's stuff up here and added to it.[*Eric: I think we need a little here on the AK data and why that's both important and generalizable to fisheries around the world.]
+
+Fisheries in Alaska are the highest valued fisheries in N. America
+with landings valued at XX $ billion annually representing harvests from YY species.  Alaska fisheries support a diverse fishing fleets ranging from small, open, single operator vessels to multi-million dollar state of the art ships with large crews. Similar diversity in fishing strategies can be found within the Alaska fleet with different individuals adopting fishing strategies that range from highly specialized (e.g. fishing only one species with one gear type or in one area) to highly diverse (e.g. fishing multiple species with multiple gear types in multiple areas). This broad range of fishing types provide an unique opportunity for understanding the role diversity plays in determining both revenue and risk for individual fishers.  
+
+We develop a novel statistical approach for understanding the effect of diveristy on both revenue and risk that builds on results from the vessel [@kasperski2013], fleet [@sethi2012b], and community levels [@sethi2014]. First, we  summarize trends in diversification across fishing fleets in Alaska. Next, we identified three main axes by which fishers may diversify: 1), 2), 3). Finally, we constructed a model to simultaneously estimate the relationship between each of these three axes of diversity and both annual revenue and risk for individual fishers over nearly ZZ years. Our hierachical model makes use of entire time series,
+controls for effort and latent time effects,
+and allows the effect of species diversity
+to vary by fishing strategy (sets of similar permits).  It is the first model that jointly explores the effect of diversity on revenue and risk at the individual level and the first considers the multiple axes of diversity simultaneously.  
+
+
+strategies where both specialization and diversification are extremely profitable. There's a number of fishing permits that constrain the potential diversity of species landed (e.g. herring, halibut, sablefish, or crab permits that allow the user to only land that species) versus broader 'finfish' permits that allow users to land a wide variety of groundfish spp.* 
+*perhaps we also need to have a sentence or two on the implicit constraints of geography and gear / vessel size on species diversification*
+
 First, the effect of changing species diversity
 for individual permit holders on a year-by-year basis is unknown ---
 existing approaches have worked at the vessel [@kasperski2013],
@@ -268,11 +340,11 @@ would be 70 days.
 
 ## Hierarchical model
 
-The general framework of our model is known as a variance function
-regression model, which separately models change in the mean and variance as
+-Ole: I'd start with a little reminder of what the purpose of the model is for. Like:
+To jointly model revenue and revenue variability as a function of individual-level covariates, we use a variance function regression model, which separately models change in the mean and variance as
 a function of covariates [e.g. @davidian1987; @hall1989]. Where traditional
 linear models or hierarchical linear models generally assume constant
-variance, the variance function regression model allows variance to be
+variance [across what? covariates?], the variance function regression model allows variance to be
 heteroskedastic. For application to economic data on individual fishing
 portfolios, this type of model allows certain strategies and levels of
 diversification to be more or less variable than others. 
@@ -291,6 +363,8 @@ Each year $t$ of revenue for fisher $i$
 is assigned a strategy indexed by $j$ 
 (Supporting Information, Table \ref{tab:strategies})
 and expected $\log(R_{i,t})$ is modelled as:
+OLE: I might swap out log(R)-hat for something like mu(or your favorit greek letter) just to avoid 
+potential confusion like using the term “expected log(R)”.  I also just don't like hats... but that's my problem.
 
 \begin{equation}
 \label{eq:mean}
@@ -317,22 +391,24 @@ $\mathrm{div}_{i,t} < \mathrm{div}_{i,t-1}$
 coefficient for the effect of increasing diversity and decreasing
 diversity allows the costs and benefits of these changes to be asymmetric.
 
-The term $\log(R_{i,t-1}$) is treated as an offset,
-to essentially model percent change in revenue,
+We use $\log(R_{i,t-1}$) as an offset, and thus
+our model describes the percent change in revenue,
 i.e., $\log(R_{i,t}) - \log(R_{i,t-1}) = \log(R_{i,t}/R_{i,t-1})$.
-This formulation is necessary because of the non-stationary trends in 
-revenue (resulting from experience or other unmodeled factors). While this approach required filtering the data
-to remove person-year combinations without a subsequent year of revenue,
-it has a number of advantages:
+We model change in revenue because preliminary analysis revealed non-stationary trends in 
+revenue (resulting from experience or other unmodeled factors). This approach required filtering the data
+to remove person-year combinations without a subsequent year of revenue, but
+presents a number of advantages:
 it eliminates having to deal with the non-stationary
 time series and eliminates having to
-estimate thousands of people-specific intercepts.
+estimate thousands of intercepts associated individual fishers. 
 
 The $\beta$'s represent estimated coefficients, some of which are allowed to
 vary as 'random effect' terms.
 The intercepts $\beta_{0,j,t}$ are allowed to vary by
 strategy-year combinations,
 are centered on zero, and are constrained by a normal distribution:
+
+Ole: I'd use tau (or something) for the variances here so that people don't have to look at the subscripts to differentiate between variances at different hierarchical levels.
 
 \begin{equation}
 \beta_{0,j,t} \sim \mathrm{N} \left(0, \sigma^2_{\beta_{j,t}} \right).
