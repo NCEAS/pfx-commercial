@@ -345,7 +345,7 @@ weighted by revenue $R$:
 \noindent
 where $s$ indexes species from $1$ through $n$.
 We calculated effort or effective season length as
-the sum the season lengths for each permit each year.
+the sum of the season lengths for each permit each year.
 Season length for a given permit
 was calculated as the the number of days between
 the first instance of fishing a permit
@@ -417,13 +417,14 @@ diversity allows the costs and benefits of these changes to be asymmetric.
 We use $\log(R_{i,t-1}$) as an offset, and thus
 our model describes the percent change in revenue,
 i.e., $\log(R_{i,t}) - \log(R_{i,t-1}) = \log(R_{i,t}/R_{i,t-1})$.
-We model change in revenue because preliminary analysis revealed non-stationary trends in
-revenue (resulting from experience or other unmodeled factors). This approach required filtering the data
-to remove person-year combinations without a subsequent year of revenue, but
-presents a number of advantages:
-it eliminates having to deal with the non-stationary
+We model change in revenue because preliminary analysis 
+revealed non-stationary trends in
+revenue (resulting from experience or other unmodeled factors). 
+This approach eliminates having to deal with the non-stationary
 time series and eliminates having to
-estimate thousands of intercepts associated individual fishers.
+estimate thousands of mean-revenue intercepts 
+associated with individual fishers.
+We removed person-year combinations without a subsequent year of revenue.
 
 The $\beta$ terms represent estimated coefficients, some of which are allowed to
 vary as 'random effect' terms.
@@ -696,8 +697,7 @@ indicate median, 50\%, and 95\% credible intervals
 of strategy-level regression built into the hierarchical model.
 Estimated variability represents expected standard deviation
 for a permit holder who does not change
-species diversity or days fished from year to year
-with the strategy-level effect of mean days fished removed.
+species diversity or days fished from year to year.
 }
 \label{fig:across}
 \end{center}
