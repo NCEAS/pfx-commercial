@@ -393,7 +393,7 @@ it eliminates having to deal with the non-stationary
 time series and eliminates having to
 estimate thousands of intercepts associated individual fishers.
 
-The $\beta$'s represent estimated coefficients, some of which are allowed to
+The $\beta$ terms represent estimated coefficients, some of which are allowed to
 vary as 'random effect' terms.
 The intercepts $\beta_{0,j,t}$ are allowed to vary by
 strategy-year combinations,
@@ -424,7 +424,7 @@ are then allowed to vary by strategy with estimated means:
 \end{align}
 
 \noindent
-The $\beta_{1,j}$'s represent how much an X\% decrease in species
+The $\beta_{1,j}$'s represent how much a X\% decrease in species
 diversity within a strategy translates to a Y\% change in revenue.
 The $\beta_{2,j}$'s represent how much an X\% increase in species
 diversity within a strategy translates to a Y\% change in revenue.
