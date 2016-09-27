@@ -62,6 +62,7 @@ dat <- readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
   nstrat$top_permits <- nrow(top_permits)
   print("n permits raw:")
   print(nrow(top_permits))
+  readr::write_csv(top_permits, "portfolio/data-generated/top_permits.csv")
 
   # 4. of these top permits, we proceeded to group permits that were targeting a single species
   # and other than area, were otherwise the same. In other words, someone fishing herring roe
