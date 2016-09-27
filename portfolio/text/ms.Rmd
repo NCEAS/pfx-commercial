@@ -522,6 +522,15 @@ everyone in that strategy tended to do better or worse ---
 this accounts for that and therefore compares everything to
 the expected revenue for that year
 
+### Fig. \ref{fig:across} - across strategies
+
+- clear exponential decline in standardized variability with strategies that are inherently more species diverse
+- not a clear effect of days fished at this level
+- fishing permits with higher species diversity reduces variability
+(`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit
+increase in mean effective species diversity);
+
+
 ### Fig. \ref{fig:spokes} - add permits
 
 - nearly universal reduction in variability (Fig. S\ref{fig:spoke-all})
@@ -530,14 +539,6 @@ lower expected standard deviation
 for halibut plus another permit vs. single halibut permits);
 - usually associated with higher median revenue
 - but can be very expensive (provide some examples from website)
-
-### Fig. \ref{fig:across} - across strategies
-
-- clear exponential decline in standardized variability with strategies that are inherently more species diverse
-- not a clear effect of days fished at this level
-- fishing permits with higher species diversity reduces variability
-(`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit
-increase in mean effective species diversity);
 
 ### Fig. \ref{fig:within} - within strategies
 
@@ -560,7 +561,12 @@ associated with increased uncertainty in revenue.
 
 ### Take homes / summary
 
-- What's novel
+- Suggests it's mostly an across strategy/permit effect (lowering variability),
+  which isn't always a possibility because of regulations and cost
+- Adjusting within current permit constraints is risky... Not clearly risk
+  reducing to generalize from one year to the next
+- not as simple as increase diversity (within permit) and reduce risk
+- What's methodologically novel
     - Huge dataset
     - Permit level data (on individuals, not vessels)
     - Account for covariates
@@ -568,11 +574,6 @@ associated with increased uncertainty in revenue.
     - Keeping annual data (not condensing to mean and cv)
     - Joint modelling of mean and variance
     - look at different mechanisms of diversification
-- Suggests it's mostly an across strategy/permit effect (lowering variability),
-  which isn't always a possibility because of regulations and cost
-- Adjusting within current permit constraints is risky... Not clearly risk
-  reducing to generalize from one year to the next
-- not as simple as increase diversity (within permit) and reduce risk
 - 2 dimensions to think about (revenue and variability); and the trade-off is fishery specific
     - effects within a permit strategy are permit specific
     - Importantly it's a tradeoff - 2 dimensions - sometimes make more money by specializing... Some highly variable single species permits make a ton of money... which preferable?
@@ -604,6 +605,7 @@ year, species by species basis for individual permit holder
 - Spatial variation
 - Nonlinear effects
 - Response to specific events like EVOS and ITQs
+
 
 ### Implications for limited entry, ITQs, and catch shares
 
@@ -645,23 +647,6 @@ and with permit holders omitted each year who fished any of the
 \end{center}
 \end{figure}
 
-\clearpage
-
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[width=0.9\textwidth]{../figs/stan-gg-spoke2.pdf}
-\caption{Diversifying permits reduces risk and usually increases revenue.
-Two examples of expected revenue variability
-and median revenue for
-owners of (A) individual halibut and (B) gillnet herring roe permits
-(dark blue)
-compared with owners of the same permit plus one more (medium blue)
-or two more permits (light blue).
-On the y-axis, dots and lines represent posterior median and 95\%
-credible intervals of expected standard deviation.}
-\label{fig:spokes}
-\end{center}
-\end{figure}
 
 \clearpage
 
@@ -683,6 +668,25 @@ species diversity or days fished from year to year
 with the strategy-level effect of mean days fished removed.
 }
 \label{fig:across}
+\end{center}
+\end{figure}
+
+
+\clearpage
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.9\textwidth]{../figs/stan-gg-spoke2.pdf}
+\caption{Diversifying permits reduces risk and usually increases revenue.
+Two examples of expected revenue variability
+and median revenue for
+owners of (A) individual halibut and (B) gillnet herring roe permits
+(dark blue)
+compared with owners of the same permit plus one more (medium blue)
+or two more permits (light blue).
+On the y-axis, dots and lines represent posterior median and 95\%
+credible intervals of expected standard deviation.}
+\label{fig:spokes}
 \end{center}
 \end{figure}
 
