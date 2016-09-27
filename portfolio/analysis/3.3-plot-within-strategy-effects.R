@@ -37,7 +37,7 @@ ns <- dat %>% group_by(strategy) %>%
 res <- inner_join(res, ns)
 
 p1 <- res %>%
-  mutate(strategy_label = ifelse(nn > 150, str_label, NA)) %>%
+  mutate(strategy_label = ifelse(nn > 350, str_label, NA)) %>%
   mutate(inc = inc) %>%
   ggplot(aes(x = inc_rev, y = inc)) +
   geom_hline(yintercept = 0, lty = 2, col = "grey65") +
@@ -47,7 +47,7 @@ p1 <- res %>%
   geom_segment(aes(x = inc_rev, xend = inc_rev, y = inc.l, yend = inc.u),
     alpha = 0.1, lwd = 0.4) +
   geom_text_repel(aes(label = strategy_label, x = inc_rev, y = inc),
-    size = 2.8, colour = "grey60", segment.color = "grey80",
+    size = 2.8, colour = "grey60", #segment.color = "grey80",
     point.padding = unit(0.3, "lines"), max.iter = 6e3, segment.size = 0.3) +
   geom_point(aes(color = strategy_mean_div, size = nn)) +
   xlab("Effect of generalizing on revenue") +
@@ -66,7 +66,7 @@ p2 <- res %>%
   mutate(dec = -dec, dec_rev = -dec_rev) %>%
   mutate(dec.l = -dec.l, dec_rev.l = -dec_rev.l) %>%
   mutate(dec.u = -dec.u, dec_rev.u = -dec_rev.u) %>%
-  mutate(strategy_label = ifelse(nn > 150, str_label, NA)) %>%
+  mutate(strategy_label = ifelse(nn > 350, str_label, NA)) %>%
   ggplot(aes(x = dec_rev, y = dec)) +
   geom_hline(yintercept = 0, lty = 2, col = "grey65") +
   geom_vline(xintercept = 0, lty = 2, col = "grey65") +
@@ -75,7 +75,7 @@ p2 <- res %>%
   geom_segment(aes(x = dec_rev, xend = dec_rev, y = dec.l, yend = dec.u),
     alpha = 0.1, lwd = 0.4) +
   geom_text_repel(aes(label = strategy_label, x = dec_rev, y = dec),
-    size = 2.8, colour = "grey60", segment.color = "grey80",
+    size = 2.8, colour = "grey60", #segment.color = "grey80",
     point.padding = unit(0.3, "lines"), max.iter = 6e3, segment.size = 0.3) +
   geom_point(aes(color = strategy_mean_div, size = nn)) +
   xlab("Effect of specializing on revenue") +
