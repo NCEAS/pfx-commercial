@@ -21,7 +21,7 @@ library(date)
 cfec <- feather::read_feather("../../portfolio/data-generated/cfec.feather")
 cfec$year <- as.numeric(cfec$year)
 
-herring = cfec[substr(cfec$p_fshy,1,1) %in% c("L","G"),]
+herring = cfec[substr(cfec$p_fshy,1,1) %in% c("L","G","H"),]
 
 herring_summary = group_by(herring, p_fshy, year) %>%
   summarize(g = sum(g_earn), p = mean(g_price,na.rm=T), lbs = sum(g_pounds), people = length(unique(p_holder))) %>%
@@ -29,6 +29,36 @@ herring_summary = group_by(herring, p_fshy, year) %>%
   mutate(n = length(unique(year)), maxpeople = max(people,na.rm=T)) %>%
   filter(n > 9) %>%
   filter(maxpeople > 25)
+
+quitters = group_by(herring, p_holder, p_fshy) %>%
+  summarize(lastYear = max(year))
+
+group_by(quitters[quitters$lastYear<2014,],lastYear,p_fshy) %>% 
+  summarize(n = n()) %>% 
+  ggplot(aes(lastYear,n)) + geom_line() + facet_wrap(~p_fshy, scale="free_y") + xlab("Year") + ylab("People leaving the fishery (last year fished)")
+
+# look at what these people did after leaving
+cfec_quitters = cfec[which(cfec$p_holder%in%unique(quitters$p_holder)),]
+cfec_quitters = left_join(cfec_quitters, quitters[,c("p_holder","lastYear")])
+
+fates = as.data.frame(group_by(cfec_quitters, p_holder, p_fshy) %>% 
+  summarize(n = length(which(year > lastYear[1]))) %>% 
+  group_by(p_fshy) %>% 
+  summarize(n0 = length(which(n==0)), nOther = length(which(n>0))))
+
+
+trackQuitters = function(permit) {
+cfec2= cfec_quitters[which(cfec_quitters$p_holder %in% unique(quitters[quitters$p_fshy==permit,]$p_holder)),]
+cfec2 = cfec2[which(cfec2$year > cfec2$lastYear),]
+cfec2$SPEC = substr(cfec2$p_fshy,1,1)
+totalpermit = group_by(cfec2,SPEC) %>% 
+  summarize(g = sum(g_earn))
+totalpermit$g = totalpermit$g/sum(totalpermit$g)
+return(as.data.frame(arrange(totalpermit,-g)))
+
+}
+
+#trackQuitters("L 21C")
 ```
 
 ## Overview  
