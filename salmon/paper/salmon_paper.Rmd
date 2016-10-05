@@ -120,9 +120,92 @@ Figure 4 shows that temporal trends, by permit, in going from 1 to 2 species fis
 
 - One pontential exogenous driver related to management that can be ruled out as being responsible for increased specialization of salmon fishermen is changes in the timing or length of fishing seasons. Shifting seasons to later in the year may reduce catch of early run fish for example. However, we found no significant trend in either the season length or average season date for any fishery (Fig. A15).
 
-```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying intercepts on estimated mean revenue, by permit."}
-library(rstan)
+\break  
 
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying species composition and diversity, by permit. Species are colored as follows: yellow (chum), pink (sockeye), red (Chinook), green (coho), blue (pink salmon).", fig.height=3.2}
+cfec <- feather::read_feather("../../portfolio/data-generated/salmon.feather")
+cfec$year = as.numeric(substr(cfec$landdate, 1, 4))
+
+library(dplyr)
+# plot proportion of species landed by salmon permit
+g1 = group_by(cfec[cfec$p_fshy=="S 01A" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
+  ylab("Species %") + xlab("") + ggtitle("S01A") + theme(legend.position="none")
+
+g2 = group_by(cfec[cfec$p_fshy=="S 01E" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
+  ylab("Species %") + xlab("") + ggtitle("S01E") + theme(legend.position="none")
+
+g3 = group_by(cfec[cfec$p_fshy=="S 01K" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
+  ylab("Species %") + xlab("") + ggtitle("S01K") + theme(legend.position="none")
+
+g4 = group_by(cfec[cfec$p_fshy=="S 01M" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
+  ylab("Species %") + xlab("") + ggtitle("S01M") + theme(legend.position="none")
+
+g5 = group_by(cfec[cfec$p_fshy=="S 03A" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
+  ylab("Species %") + xlab("") + ggtitle("S03A") + theme(legend.position="none")
+
+g6 = group_by(cfec[cfec$p_fshy=="S 03E" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
+  ylab("Species %") + xlab("") + ggtitle("S03E") + theme(legend.position="none")
+
+dat.diff = readRDS(file="../../portfolio/data-generated/cfec-diff-for-modeling.rds")
+dat.diff = dat.diff[which(dat.diff$revenue >= 10000 & dat.diff$revenue.prev >= 10000), ]
+dat.salmon = dat.diff[dat.diff$strategy_permit%in%c("S01A", "S01E", "S01K", "S03A", "S03E","S01M"),]
+
+h1 = group_by(dat.salmon[dat.salmon$strategy_permit=="S01A",], year, strategy_permit) %>%
+  summarize(meanDiv = mean(specDiv), low = quantile(specDiv,0.25), upp = quantile(specDiv,0.75)) %>%
+  ggplot(aes(year, meanDiv)) + geom_line() + 
+  geom_ribbon(aes(ymin= (low), ymax= (upp)), alpha=0.4) + ylab("Diversity") + xlab("") + theme(legend.position="none")
+
+h2 = group_by(dat.salmon[dat.salmon$strategy_permit=="S01E",], year, strategy_permit) %>%
+  summarize(meanDiv = mean(specDiv), low = quantile(specDiv,0.25), upp = quantile(specDiv,0.75)) %>%
+  ggplot(aes(year, meanDiv)) + geom_line() + 
+  geom_ribbon(aes(ymin= (low), ymax= (upp)), alpha=0.4) + ylab("Diversity") + xlab("") + theme(legend.position="none")
+
+h3 = group_by(dat.salmon[dat.salmon$strategy_permit=="S01K",], year, strategy_permit) %>%
+  summarize(meanDiv = mean(specDiv), low = quantile(specDiv,0.25), upp = quantile(specDiv,0.75)) %>%
+  ggplot(aes(year, meanDiv)) + geom_line() + 
+  geom_ribbon(aes(ymin= (low), ymax= (upp)), alpha=0.4) + ylab("Diversity") + xlab("") + theme(legend.position="none")
+
+h4 = group_by(dat.salmon[dat.salmon$strategy_permit=="S01M",], year, strategy_permit) %>%
+  summarize(meanDiv = mean(specDiv), low = quantile(specDiv,0.25), upp = quantile(specDiv,0.75)) %>%
+  ggplot(aes(year, meanDiv)) + geom_line() + 
+  geom_ribbon(aes(ymin= (low), ymax= (upp)), alpha=0.4) + ylab("Diversity") + xlab("") + theme(legend.position="none")
+
+h5 = group_by(dat.salmon[dat.salmon$strategy_permit=="S03A",], year, strategy_permit) %>%
+  summarize(meanDiv = mean(specDiv), low = quantile(specDiv,0.25), upp = quantile(specDiv,0.75)) %>%
+  ggplot(aes(year, meanDiv)) + geom_line() + 
+  geom_ribbon(aes(ymin= (low), ymax= (upp)), alpha=0.4) + ylab("Diversity") + xlab("") + theme(legend.position="none")
+
+h6 = group_by(dat.salmon[dat.salmon$strategy_permit=="S03E",], year, strategy_permit) %>%
+  summarize(meanDiv = mean(specDiv), low = quantile(specDiv,0.25), upp = quantile(specDiv,0.75)) %>%
+  ggplot(aes(year, meanDiv)) + geom_line() + 
+  geom_ribbon(aes(ymin= (low), ymax= (upp)), alpha=0.4) + ylab("Diversity") + xlab("") + theme(legend.position="none")
+
+gridExtra::grid.arrange(g1, g2, g3, h1, h2, h3, nrow=2)
+```
+
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying species composition and diversity, by permit.", fig.height=3.2} 
+gridExtra::grid.arrange(g4, g5, g6, h4, h5, h6, nrow=2)
+```
+  
+\break  
+  
+```{r, echo=FALSE}
+library(rstan)
+```
+
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying intercepts on estimated mean revenue, by permit.", eval=FALSE}
 # grab original data to look at permit names
 diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
@@ -144,7 +227,6 @@ ggplot(data=yearpermit) +
   geom_ribbon(aes(x=year,ymin=b0_low,ymax=b0_hi),alpha=0.3) +
   geom_line(aes(x=year,y=b0)) + 
   facet_wrap(~permit) + xlab("Year") + ylab("Intercepts on mean")
-
 ```
   
 \break  
@@ -280,7 +362,7 @@ df$low = 0
 df$high = 0
 
 for(i in 1:nrow(df)) {
-  tmp = est$g0_strategy[,df$permit[i]] + x1[df$diversity[i]] * (est$g_1[,df$year[i], df$permit[i]]+est$g1_str_yr_mu) +
+  tmp = est$g0 + est$g0_strategy[,df$permit[i]] + x1[df$diversity[i]] * (est$g_1[,df$year[i], df$permit[i]]+est$g1_str_yr_mu) +
     x2[df$diversity[i]] * (est$g_2[,df$year[i], df$permit[i]]+est$g2_str_yr_mu)# +
   #x3[df$diversity[i]] * (est$b_3[,df$year[i], df$permit[i]]+est$b3_str_yr_mu)
   df$pred[i] = median(tmp)
