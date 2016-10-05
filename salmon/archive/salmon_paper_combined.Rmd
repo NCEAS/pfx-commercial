@@ -1,0 +1,616 @@
+---
+title: "Reduced diversity and increased specialzation of Alaska salmon fishermen: effects on variation in individual revenues"
+author: ''
+date: ''
+output:
+  pdf_document:
+    fig_caption: yes
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(date)
+library(ggtern)
+library(reshape2)
+library(mgcv)
+library(fpc)
+library(gridExtra)
+library(glmmTMB)
+library(zoo)
+```
+
+## Abstract
+\setlength\parindent{24pt}
+
+On a large scale, individual fishers may experience positive outcomes from diversifying their catches; examples include reduced year-to-year variability in annual revenue, and increases in average revenue. Fishers can increase their species diversity by owning a permit that allows multiple species to be targeted, or by owning multiple permits. External forces such as management regulations (limited entry,  catch shares) or market forces (permit prices) may disincentive individuals to hold multiple permits. Thus, individuals with a single permit may increase species diversity within the confines of their permit (longer fishing seasons, broader spatial area). Using a long-term dataset of individual salmon fishers in the Alaska, we develop new models for understanding how the effects of diversification have changed through time. These changes allow us to compare patterns across regions and gear, as well as better understand how external forces have changed incentives for diversifying (hatchery production and price trends, EVOS?). 
+
+## Introduction
+
+[broader paragraph on diversification with extensions to terrestrial agriculture etc, ]
+
+Previous analyses have largely focused on patterns of diversification across ecosystems and the benefits to adopt more or less diverse fishing strategies (Kasperski and Holland 2013; Anderson et al. in review). Fisheries in Alaska have been studied extensively, because they are one of the most productive regions in North America (both by landed weight, and revenue cite) and they allow individuals to adopt a wide range of fishing strategies. Anderson et al. (in review) defined strategies as a permit of collection of permits held by single individuals. While adding new permits allows fishers to increase species diveristy, few individual permits allow individuals to harvest more than one species (examples include halibut, sablefish, herring, crab, shellfish, shrimp, sea cucumber). Exceptions to these single species permits incldue participants in federally managed groundfish fisheries (CFEC 'M' permits) and participants in state managed salmon fisheries (CFEC 'S' permits).  
+  
+Understanding the effects of species diversification on salmon fishers is particularly important, as the number of salmon specialists (defined as fishers holding a single salmon permit) has increased over the last 30 years as a fraction of the total (Anderson et al. in review). For these limited entry salmon fisheries, general trends that have emerged are that more people are participating since the early 2000s (Fig. A1), median revenue is increasing (across individuals, Fig. A2), and landed species diversity declining over time (averaged across indivduals, Fig. A6). Across different salmon fisheries, other than a slight negative effect of diversification on variability (similar to Anderson et al. in review), there appears to be little correlation between diversity and revenue (Fig. A4). In terrestrial agriculture, there are numerous examples where diversification may affect the mean or CV but not both (Purdy, Barry M; Langemeier, Michael R; Featherstone, Allen M. Journal of Agricultural and Applied Economics29.1 (Jul 1, 1997): 149.), and the same result may be true for salmon fishers. Further, these impacts of diversification may be variable over time.    
+  
+Five species of salmon are encountered in Alaska waters (Chinook, chum, pink, sockeye, coho), and the ability of individual salmon fishers to diversify across species is in part a function of geography and gears. For example, salmon may be caught with purse seine gear (n = 6 areas), drift gillnets (5 areas), and set gillnets (12 areas). Other gears include beach seine and troll gears (though these are generally restricted to Kodiak and Southeast Alaska, respectively). While some of these combinations of gears and areas allow fishers to diversify, there are many examples of permits where the catch is dominated by a single species. Perhaps the best examples include fisheries that target sockeye salmon (e.g. Bristol Bay set and drift gillnet fisheries). For these fisheries, specialization is associated with higher revenue and reduced CV in annual revenue (Anderson et al. in review).
+
+A secondary motivation for focusing on the effects of diversification for salmon fishers is to better understand the long term consequences of hatchery salmon production on the revenue and variability in revenue of individuals. Following low returns and declining productivity in the mid 1980s, many hatchery programs in the state rapidly increased hatchery releases (Mahnken et al. 1998). Many of these hatchery programs increased production to stabilize the variability of fishers catch (and revenue), though these programs may also have costs to wild production (Ruggerone et al. 2015). [Other history here?]
+
+In addition to the changing species composition of fish avaialble to be harvested, the benefits (or costs) of diversification are likely affected by a number of exogenous drivers, including marketing, prices, new processing technology, etc (cite Gunnar Knapp + others). [Break out as own paragraph+add more examples?] Following price crashes in the early 2000s, many of these factors have been positive for salmon fishermen (increasing trends in prices and catches, Fig. A3, A12). In contrast, the late 1980s - early 1990s experienced high abundance and low prices (in part due to collapses of foreign currencies). Combined with the increased trend in hatchery production and resulting change species compositon of adult salmon, these external factors may have also altered incentives for diversification. If there's an incentive to substitute high value species (Chinook, sockeye) with abundant low value species (pink, chum), the analog in the terrrestrial framring world would be crop substitution of low-volume high value crops (spices) with high-volume low value crops (cereals) (other examples in literature = cocoa, tobacco).  
+
+The objective of our analysis is to better understand the effects of diversification on single-permit salmon holders by extending the methods used by Anderson et al. (in review) to include time-varying effects. These time-varying effects will allow us to compare temporal trends across regions, identify periods when having a diverse catch portfolio was most beneficial, and allow us to evaluate support for effects of longer term drivers in the region. 
+
+## Methods
+
+### Data  
+
+We obtained fisheries landings and revenue data for all permit holders in Alaska from 1985 - 2014 from the Alaskan Commercial Fisheries Entry Commission (CFEC). We adjusted for inflation by setting all revenues in 2009 USD. Because were were only interested in single permit fisheries, we adopted a simplified version of the filtering steps described in  Anderson et al. (in review). After aggregating individual fish tickets to annual data, we retained individuals who only fished one of the six salmon permits included in a year (Table 1, Fig. A5). Like Anderson et al. (in review) we also worked with a log-differenced dataset to remove non-stationary individuals; to avoid complications of individuals switching strategies, we only included pairs of years for a given person where they did not change strategies. 
+
+```{r, echo=FALSE}
+m = matrix("", 6, 3)
+m[1,] = c("S01A", "Purse Seine", "Southeast Alaska")
+m[2,] = c("S01E", "Purse Seine", "Prince William Sound")
+m[3,] = c("S01K", "Purse Seine", "Kodiak")
+m[4,] = c("S01M", "Purse Seine", "Alaska Peninsula")
+m[5,] = c("S03A", "Gillnet", "Southeast Alaska")
+m[6,] = c("S03E", "Gillnet", "Prince William Sound")
+colnames(m) = c("Permit", "Gear", "Region")
+kable(m)
+```
+
+### As hatchery programs have increased production, have individual salmon fishermen experienced reduced variability?  
+
+Hatchery release trends for some regions included in our data have been summarized previously (e.g. Ward et al. in review summarized the trends for Prince William Sound). Release patterns have been dominated by pink and chum salmon (for PWS, these species represent 80% and 18% of total releases for 2012-2014 respectively, Ward et al. in review) and production has increased since the late 1970s (217 million juvenile pink salmon in PWS in 1985 versus 672 million in 2014). Though our analysis doesn't include , as a contrast we can do coarse comparisons across regions and species to examine potential effects of hatchery fish on variability. For example, we can compare the variation in pink salmon returns (earnings or weight) from Prince William Sound (largely hatchery) to those from Southeast Alaska (largely wild). Similarly, we can compare the variability in earnings from species dominated by hatchery returns (pink, chum) to those with less hatchery influence (Chinook, sockeye). To make these comparisons, we aggregated the earnings and landings by species and permit, then calculated 3-year rolling CVs. As a second comparison, we examined whether long-term participants in any of the fisheries had experienced a change in variability. Similar to Kasperski and Holland (2013) who calculated CVs of vessels before and after significant managment events, we identified individuals who fished the same permit for at least three years in the first decade of our data (1985-1995) and at least three years in the last decade of the data (2004-2014). 
+
+### Robustness of strategies to changing environments [stash in appendix?]
+
+One of the challenges in modeling the effects of species diversification for individual fishers is that between two years, both the species composition of the catch and the species composition of the fish available to be caught may change (making it hard to disentangle the selectivity of fishermen versus portfolio of fish available). To isolate the effects of a changing environment from changing strategies, we used a subset of the data from fishery permits where discrete strategies were emergent.  
+
+Using purse seine permit holders in Prince William Sound as an example, we first calculated the species composition (weighted by revenue) for each active permit holder in each year. For each pair of years that an individual fished, we calculated the squared Euclidian distance between the species compositions of those years, $$\Delta { p }_{ ind,t }=\sum _{ sp=1 }^{ 5 }{ { \left| { p }_{ ind,sp,t }-{ p }_{ ind,sp,t-1 } \right|  }^{ 2 } } $$.  
+
+Larger values of $\Delta { p }_{ ind,t }$ indicate greater year-to-year discrepancy in species composition. To focus on individuals who had more constant strategies in adjacent years, we ommitted data corresponding to the upper third of this distribution (retaining $\Delta { p }_{ ind,t }$ < 0.334). Next, we used the species composition from each individual and pair of years to cluster individuals into strategies. Clustering was performed using the partitioning around medoids (pam) algorithm in R with an estimated number of clusters (using 'pamk' in fpc library), and selected 2 groups of individual strategies: pink salmon specialization (medoid proportion of pink salmon = 0.95), and a strategy focused on pink salmon and chum (medoid proportions of 0.64 and 0.31 respectively). For each group, we then calculated the mean and CV of revenue; we calculated the log difference of revenue for each individual, $\Delta { R }_{ i }=log\left( { R }_{ i,t+1 }/{ R }_{ i,t } \right)$ and then calculated the CV as the standard deviation over people, $sd(\Delta { R }_{ i=1:n })$.  
+
+### Analysis 3: [Core of paper] Does effect of diversification change over time?
+
+Anderson et al. (in review) implemented a hierarchical Bayesian model that allowed group level predictors and covariates (diversity of catch, days fished) to simultaneously affect the mean and the variance of revenue for individual fishers. This model also included random intercepts by strategy and year; these terms allowed all permit holders in a given year to experience common fluctuations (external drivers including price changes, fluctuations in fish population abundance, or environmental disasters such as EVOS). 
+
+To ask whether how benefits of diversification may have changed over time, we extend the model of Anderson et al. (in review) to also include time-varying random effects in the slope coefficients of diversification. We define the variables $\Delta { S }_{ t }=log\left( { S }_{ t }/{ S }_{ t-1 } \right)$ to represent the percent change in species diversity of the catch between years and $\Delta { D }_{ t }=log\left( { D }_{ t }/{ D }_{ t-1 } \right)$ to represent the percent change in fishing effort (days fished) between years. The model for the the expected log revenue of individual *i* in year *t*, $log({ R }_{ i,t })$, can be written as $$\widehat { log\left( { R }_{ i,t } \right)  } ={ B }_{ 0,j,t }+{ B }_{ 1,j,t }\cdot \Delta S_{ t }+{ B }_{ 2,j,t }\cdot \left( \Delta S_{ t }\cdot { S }_{ t-1 } \right) +{ B }_{ 3,j,t }^{ 2 }\cdot \left( \Delta S_{ t }\cdot { S }_{ t-1 }^{ 2 } \right) +{ B }_{ 4,j }\cdot \Delta D_{ t }+log\left( { R }_{ i,t-1 } \right) $$, where *j* subscripts the salmon permit (Table 1). We model the time varying permit specific intercepts as random and exchangeable across years, ${ B }_{ 0,j,t }\sim Normal\left( { u }_{ { B }_{ 0 } },{ \sigma  }_{ { B }_{ 0 } } \right)$. The term ${ B }_{ 1,j,t }$ represents the permit level random effect of diversifying species. Our model extendeds that of Anderson et al. (in review) to include the interaction terms $\Delta S_{ t }\cdot { S }_{ t-1 }$ which allow the effect of diversification to be dependent on the previous level of diversification. The squared term allows this interaction to be quadratic, and the coefficients ${ B }_{ 2,j,t }$ and ${ B }_{ 3,j,t }$, allow this to vary by permit and through time. The flexibility in these terms allows the benefit of increasing species diversity to be positive in some years (generalizing benefits revenue), negative in other years (specializing benefits revenue) and neutral in other years (revenue is independent alterations to catch composition). We constrain the random effects associated with diversification to be modeled as autoregressive processes with shared variances across strategies, for example: ${ B }_{ 1,j,t }\sim Normal\left( { B }_{ 1,j,t-1 },{ \sigma  }_{ { B }_{ 1 } } \right)$. Like Anderson et al. (in review) we also allow changing effort (measured as percent change in days fished) ${ B }_{ 4,j }$ to vary by strategy, but we do not allow this effect to vary through time. Finally, the term $log\left( { R }_{ i,t-1 } \right)$ is included as an offset (Anderson et al. in review). 
+
+- Fit models from Sean's paper, but include time varying interactions on species diversity.  GLMM code below
+
+Specific things that could be looked at: 
+- EVOS (closure for Kodiak)  
+- PWS pink salmon crash in 1992/1993: Pacific Salmon & their Ecosystems: Status and Future Options
+
+Does diversification exist within permits and if so, do we see similar advantages of diversification on revenue + CV?  
+  
+## Results
+
+Our summaries of changing variability (aggregate for each fishery, across individuals, or within individuals) was not consistent with the hypothesis that variability in revenue or landings has decreased over time (Fig. A9-A10). For pink and chum salmon, fisheries in PWS generally experience higher year to year variability compared to SEAK. In looking at the changing CV of individuals, we see a slight increase in the CV of revenue for people fishing in the recent decade who were also fishing 1985-1995 (with the exception being S01A). 
+
+
+## Discussion
+
+- Revenue is going up since 2000 -- but each permit holder is fishing more (more days, more total pounds) and the trend in weight is faster than the trend in price. 
+
+- Ability to specialize primarily driven by many forces beyond control of fishermen. But in some situations, diversification is possible by extending fishing season to exploit additional spp (fishing earlier for chum in PWS S01E). Or fishing different areas to exploit more spp in S03 (SEAK). 
+
+- Prices are generally synchronous for all spp (especially coho/chum/pink), and have increased at a faster rate compared to chum and pink salmons since 2000 (Fig A8-A9). We're also seeing a trend toward greater synchrony between species (Fig A11-A12, A14). Projecting future prices are complex -- Gunnar Knapp has a good presentation on this http://www.adfg.alaska.gov/static/fishing/PDFs/commercial/gk_trends_4-12-12.pdf. Synchrony in prices may largely be function of marketing, improved product, freezing, etc. 
+
+- We're seeing increased specialization within permits. People in PWS are trending toward increased specialization on pink salmon. People in SEAK trending toward increased specialization on chum. Both of these are switches from higher value species (sockeye, chum) to lower value species. Both pink and chum have higher variability in year to year returns than sockeye. 
+
+- One pontential exogenous driver related to management that can be ruled out as being responsible for increased specialization of salmon fishermen is changes in the timing or length of fishing seasons. Shifting seasons to later in the year may reduce catch of early run fish for example. However, we found no significant trend in either the season length or average season date for any fishery (Fig. A15).  
+  
+\break  
+  
+```{r, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
+revenueThreshold = 10000
+
+dat.annual = readRDS(file="../../portfolio/data-generated/cfec-annual-for-modeling.rds")
+
+# single permit holders, salmon permits
+dat.annual  = filter(dat.annual ,npermit==1 & substr(strategy_permit,1,1)=="S") %>%
+  group_by(strategy_permit) %>% 
+  mutate(nPeople = length(unique(p_holder))) %>% 
+  filter(nPeople > 200) %>% 
+  dplyr::select(-nPeople)
+# drop troll
+dat.annual = dat.annual[dat.annual$strategy_permit%in%c("S05B","S15B")==FALSE,]
+# drop S04X, Y, Z because low participation (< 20) in many years
+# S04W deleted because low median earnings
+dat.annual = dat.annual[dat.annual$strategy_permit%in%c("S04W", "S04X","S04Y","S04Z")==FALSE,]
+
+agg.annual = group_by(dat.annual, strategy_permit, year) %>% 
+  summarize(people = length(unique(p_holder)),
+    specDiv = mean(specDiv),
+    meanrev = median(revenue),
+    low = quantile(revenue,0.25),
+    upp = quantile(revenue,0.75))
+
+dat.diff = readRDS(file="../../portfolio/data-generated/cfec-diff-for-modeling.rds")
+dat.diff = dat.diff[which(dat.diff$revenue >= revenueThreshold & dat.diff$revenue.prev >= revenueThreshold), ]
+dat.diff = dat.diff[dat.diff$strategy_permit%in%c("S01A","S01E","S01K","S01L","S01M",
+  "S03A","S03E","S03H","S03M","S03T","S04D","S04H","S04K","S04M","S04T"),]
+
+agg.diff = group_by(dat.diff, strategy_permit) %>% 
+  summarize(specDiv = mean(specDiv), meanrev = mean(revenue),
+    cv = sd(log(revenue/revenue.prev)))
+
+# Also load in raw CFEC data for plots
+cfec <- feather::read_feather("../../portfolio/data-generated/cfec.feather")
+cfec = cfec[cfec$p_fshy%in%c("S 01A", "S 01E", "S 01K", "S 03A", "S 03E", "S 01M"),]
+cfec$year = as.numeric(substr(cfec$landdate, 1, 4))
+
+# only use people who are using just that permit - diversification within permit
+cfec.raw = cfec
+dat.salmon = dat.diff[dat.diff$strategy_permit%in%c("S01A", "S01E", "S01K", "S03A", "S03E","S01M"),]
+
+# Restrict analysis to people who keep same strategy - complicates days, etc
+dat.salmon = dat.salmon[which(dat.salmon$strategy_permit==dat.salmon$strategy_permit.prev),]
+
+dat.salmon$days.change = log((dat.salmon$days_permit+1) / (dat.salmon$days_permit.prev+1))
+dat.salmon$year_permit = as.factor(paste(dat.salmon$year, dat.salmon$strategy_permit))
+
+cfec = cfec[which(paste(cfec$p_holder,cfec$year) %in% paste(dat.salmon$p_holder,dat.salmon$year)),]
+
+# Make come plots for the appendix of (1) median fishing dates over time, (2) length of fishing season over time (calculated as width of 95% intervals)
+cfec.raw$month = as.numeric(substr(cfec.raw$day, 1,2))
+cfec.raw$day = as.numeric(substr(cfec.raw$day, 4,5))
+cfec.raw$jday = mdy.date(cfec.raw$month, cfec.raw$day, cfec.raw$year) - mdy.date(1, 1, cfec.raw$year)
+# summarize the temporal distribution of the catches
+seasons = group_by(cfec.raw, p_fshy, year) %>% 
+  summarize(q = mean(sample(jday, size = 10000, replace=T, prob=g_earn)),
+    lower = quantile(sample(jday, size = 10000, replace=T, prob=g_earn),0.025),
+    upper = quantile(sample(jday, size = 10000, replace=T, prob=g_earn),0.975),
+    length = upper - lower)
+seasons = rename(seasons, permit = p_fshy)
+appendixPlot0_p1 = ggplot(seasons, aes(year, q, color = permit, group=permit)) + geom_line() + xlab("Year") + ylab("Mean julian day")
+appendixPlot0_p2 = ggplot(seasons, aes(year, length, color = permit, group=permit)) + geom_line() + xlab("Year") + ylab("Season length")
+```
+
+```{r, echo = FALSE, eval=FALSE}
+dat = dat.salmon
+# create other category, lumping coho/chinook
+dat$salm = dat$coho+dat$chnk
+dat$salm.prev = dat$coho.prev+dat$chnk.prev
+
+dat$totsalm = dat$salm + dat$chum + dat$sock + dat$pink
+dat$totsalm.prev = dat$salm.prev + dat$chum.prev + dat$sock.prev + dat$pink.prev
+
+dat$salm = dat$salm/dat$totsalm
+dat$sock = dat$sock/dat$totsalm
+dat$pink = dat$pink/dat$totsalm
+dat$chum = dat$chum/dat$totsalm
+dat$chnk = dat$chnk/dat$totsalm
+dat$coho = dat$coho/dat$totsalm
+dat$salm.prev = dat$salm.prev/dat$totsalm.prev
+dat$sock.prev = dat$sock.prev/dat$totsalm.prev
+dat$pink.prev = dat$pink.prev/dat$totsalm.prev
+dat$chum.prev = dat$chum.prev/dat$totsalm.prev
+dat$chnk.prev = dat$chnk.prev/dat$totsalm.prev
+dat$coho.prev = dat$coho.prev/dat$totsalm.prev
+
+dat = dat[-which(is.na(dat$salm+dat$sock+dat$pink+dat$chum)),]
+dat$logdiff = log(dat$revenue/dat$revenue.prev)
+
+dat_old = dat
+dat$sumP2 = abs(dat$salm - dat$salm.prev) + 
+  abs(dat$pink-dat$pink.prev) + 
+  abs(dat$chum-dat$chum.prev) + 
+  abs(dat$sock-dat$sock.prev)
+dat = dat[which(dat$sumP2 < 0.3),]
+```
+
+```{r, echo = FALSE, eval=FALSE, fig.cap="Results for PWS Purse seine fishery", fig.pos="placeHere", cache=TRUE}
+
+df = dat[which(dat$strategy_permit=="S01E"),]
+pamk_s01e <- pamk(df[,c("chum","pink","sock","salm")])
+df$group = c("Pink-chum","Pink")[pamk_s01e$pamobject$clustering]
+
+p3 = ggtern(data=df[,c("chum","pink","sock","group")], aes(x=chum,y=pink,sock,color=as.factor(group))) +
+  geom_point(alpha=0.3) +
+  labs(x="CHUM",y="PINK",z="SOCK") + theme(
+        axis.title=element_text(size=8)) + theme(legend.position = "none")
+
+p0 = group_by(df, year, group) %>% 
+  summarize(n = length(unique(p_holder))) %>% 
+ggplot(aes(x = year, y = n, group=group, col = group)) + geom_line() + ylab("People") + ggtitle("S01E")
+
+p1 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = meanrev, group=group, col = group)) + geom_line() + ylab("Mean revenue") + ggtitle("S01E")
+
+p2 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = cv, group=group, col = group)) + geom_line() + ylab("CV revenue") + ggtitle("S01E")
+
+g = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T))
+    
+gridExtra::grid.arrange(p3,p0,p1,p2,ncol=2)
+```
+
+\break  
+  
+```{r makePlots, echo = FALSE}
+appendixPlot1 = ggplot(agg.annual, aes(year, people, colour = specDiv)) + geom_line() + facet_wrap(~ strategy_permit, scale="free") + ylab("Participation") + xlab("Year")
+
+appendixPlot2_p1 = ggplot(agg.diff, aes(specDiv, log(meanrev), colour = cv, label=strategy_permit)) + xlab("Species diversity") +ylab("Ln (mean revenue)") + geom_text(size=2)
+appendixPlot2_p2 = ggplot(agg.diff, aes(specDiv, cv, colour = log(meanrev), label=strategy_permit)) + xlab("Species diversity") +ylab("CV") + geom_text(size=2)
+appendixPlot2_p3 = ggplot(agg.diff, aes(log(meanrev), cv, colour = specDiv, label=strategy_permit)) + ylab("CV") + xlab("Ln (mean revenue)") + geom_text(size=2)
+```
+
+\break 
+  
+```{r, fig.cap="Species composition for 1988 and 2014 (each dot is a person) in the S03E fishery", fig.pos="placeHere", echo=FALSE, fig.height = 2, eval=FALSE}
+### One way to visualize the change is with ternary plots over the 3 axes (chum / sockeye / pink)
+  
+daty = group_by(cfec[cfec$p_fshy=="S 03E" & cfec$spec %in% c("CHUM","PINK","SOCK","COHO","CHNK"),], spec, p_holder, year) %>%
+  summarize(p = sum(g_earn)) %>%
+  group_by(p_holder, year) %>% mutate(p = p/sum(p))
+daty <- melt(daty, id.vars = c("spec", "p_holder", "year"))
+daty <- dcast(daty, p_holder + year ~ spec + variable)[,-1]
+daty[is.na(daty)]=0
+ggtern(data=daty[which(daty$year%in%c(1988,2014)),c("year", "CHUM_p","PINK_p","SOCK_p")], aes(x=CHUM_p,y=PINK_p,SOCK_p,color=as.factor(year))) +
+  geom_point(alpha=0.3,size=1) +
+  labs(x="CHUM",y="PINK",z="SOCK",title="Proportion of annual revenue (S03E)")
+```
+  
+\break  
+
+```{r, echo=FALSE, eval=FALSE}
+
+mu.mod = glmmTMB(log(revenue) ~ specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2) + days.change + (1+days.change|strategy_permit) + (-1+specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2)|year_permit), offset = log(revenue.prev), dat.salmon)
+
+cv.mod = glmmTMB(log(abs(residuals(mu.mod))) ~ specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2) + days.change + (1+days.change|strategy_permit) + (-1+specDiv.change + specDiv.change:specdiv.prev + specDiv.change:I(specdiv.prev^2)|year_permit), dat.salmon)
+# to ask whether benefit of diversificaiton is changing via strategy, we want to summarize (1) direction of 
+# benefit (e.g. is the effect negative or positive), and (2) the magnitude (how steep / shallow it is). With the
+# quadratic model, 
+# 'squared term' indicates concave up/down
+# derivative is magnitude, 2a * x + b
+
+df = ranef(mu.mod)$cond$year_permit
+colnames(df) = c("c","b","a")
+df$year = as.numeric(substr(rownames(df), 1, 4))
+df$strategy = substr(rownames(df), 6, 9)
+df$deriv = 2*df$a + df$b
+# also calculate change of going from 1 to 2 spp
+df$pred1 = df$a*(1^2) + df$b*1 + df$c + fixef(mu.mod)$cond["specDiv.change"] + fixef(mu.mod)$cond["specDiv.change:specdiv.prev"]*1
+# add fixed effects into predictions
+
+# We can demonstrate the quadratic curves by year for a single strategy / set of years
+df.s01e = df[df$strategy=="S01E",]
+demo = expand.grid("speciesDiversity" = seq(1,4,length.out=100), "year" = 1986:2014)
+demo = left_join(demo, df.s01e)
+demo$effect = demo$a * (demo$speciesDiversity^2) + demo$b * (demo$speciesDiversity) + demo$c
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE, results='hide', eval=FALSE}
+pdf("../../salmon/Salmon_residuals.pdf")
+# Residuals for mean model
+dat.salmon$mu.resid = residuals(mu.mod)
+dat.salmon$mu.fitted = fitted(mu.mod)
+
+ggplot(dat.salmon, aes(mu.fitted, mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Fitted") + ylab("Residuals") + ggtitle("Mean model")
+ggplot(dat.salmon, aes(specDiv.change, mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specdiv.prev, mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), mu.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Average revenue") + ylab("Residuals") + ggtitle("Mean model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specDiv.change, log(abs(mu.resid)), group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Ln abs(residuals)") + ggtitle("Mean model")
+ggplot(dat.salmon, aes(specdiv.prev, log(abs(mu.resid)), group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Ln abs(residuals)") + ggtitle("Mean model")
+ggplot(dat.salmon, aes(specdiv.prev, log(abs(mu.resid)), group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Ln abs(residuals)") + ggtitle("Mean model")
+
+# Residuals for CV model
+dat.salmon$cv.resid = residuals(cv.mod)
+dat.salmon$cv.fitted = fitted(cv.mod)
+
+ggplot(dat.salmon, aes(cv.fitted, cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Fitted") + ylab("Residuals") + ggtitle("CV model")
+ggplot(dat.salmon, aes(specDiv.change, cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Change in species diversification") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(specdiv.prev, cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Previous species diversity") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+ggplot(dat.salmon, aes(log((revenue+revenue.prev)/2), cv.resid, group = strategy_permit)) + geom_point(alpha=0.05,size=1) + facet_wrap(~strategy_permit) + xlab("Average revenue") + ylab("Residuals") + ggtitle("CV model") + geom_hline(aes(yintercept=0),color="salmon1")
+dev.off()
+```
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Variation in effects of diversification by year for the S01E (PWS purse seine) permit holders. ", eval=FALSE}
+###We can make quadratic plots of these effects by year and strategy. These plots represent the effect of increasing diversity (as relative change) on mean revenue. For example, in 1986 if you were fishing 3-4 species there would be little effect of adding more spp; but if you were fishing 1 species, there would be a slight negative effect of adding more. In 1991, there would be a huge benefit of increasing diversity, and that effect would taper off as more were added.  
+
+ggplot(demo, aes(speciesDiversity, effect, group = year)) + geom_line() + facet_wrap(~ year) + xlab("Species Diversity") + ylab("Effect of increasing diversity (relative change)")
+```
+
+\break  
+  
+
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Time series of benefits of diversification by permit / strategy.", fig.height = 3, eval=FALSE}
+###This plot shows the time series of becoming increasingly diversified from 1 species on mean revenue. For S01E for example, there's huge benefits of diversifying in 1991, and huge costs in 2010. 2010 was a huge pink salmon year for PWS (with high prices specialization was good) and 1991 was the start of pink salmon stock + price collapse. Across permits, perhaps slight declines in some of these in recent years?  
+  
+ggplot(df, aes(year, pred1, group = strategy, colour = as.factor(strategy))) + geom_line() + xlab("Year") + ylab("Benefit of increasing species diversity from 1 species") + ggtitle("Effect on Mean")
+```
+
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Time series of benefits of diversification split out by permit / strategy.", fig.height = 3, eval=FALSE}
+ggplot(df, aes(year, pred1, group = strategy, colour = as.factor(strategy))) + geom_line() + xlab("Year") + ylab("Benefit of increasing species diversity from 1 species") + facet_wrap(~ strategy, scale="free") + geom_smooth() + geom_hline(aes(yintercept=0))
+```
+  
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Time series of effects of diversification on mean and CV by permit.", eval=FALSE}
+df.cv = ranef(cv.mod)$cond$year_permit
+colnames(df.cv) = c("c.cv","b.cv","a.cv")
+df.cv$year = as.numeric(substr(rownames(df.cv), 1, 4))
+df.cv$strategy = substr(rownames(df.cv), 6, 9)
+# also calculate change of going from 1 to 2 spp
+df.cv$pred1.cv = df.cv$a.cv*(1^2) + df.cv$b.cv*1 + df.cv$c.cv + fixef(cv.mod)$cond["specDiv.change"] + fixef(cv.mod)$cond["specDiv.change:specdiv.prev"]*1
+
+ggplot(df.cv, aes(year, pred1.cv, group = strategy, colour = as.factor(strategy))) + geom_line(linetype="dashed") + geom_line(data=df, aes(year, pred1, group = strategy, colour = as.factor(strategy))) + xlab("Year") + ylab("Effect of increasing species diversity from 1 species") + facet_wrap(~ strategy, scale="free") + ggtitle("Effects on mean (solid) and CV (dashed)") + geom_hline(aes(yintercept=0), color="grey30")
+
+```
+  
+\break  
+
+```{r, echo=FALSE, eval = FALSE}
+# These are the run  timing plots per Milo's questions
+
+# for 2008, create cumulative density plots of salmon landings by calday
+pinkchum = cfec.raw[cfec.raw$p_fshy=="S 01E" & cfec.raw$spec%in%c("PINK","CHUM","SOCK"),]
+#pinkchum = cfec.raw[cfec.raw$p_fshy=="S 03T" & cfec.raw$spec%in%c("PINK","SOCK","CHNK"),]
+
+# aggregate by calendar day
+pinkchum$month = as.numeric(substr(pinkchum$day, 1, 2))
+pinkchum$day = as.numeric(substr(pinkchum$day, 4, 5))
+pinkchum$jday = date::mdy.date(pinkchum$month, pinkchum$day, pinkchum$year) - date::mdy.date(1,1,pinkchum$year)
+
+group_by(pinkchum, jday, year) %>% 
+  summarize(pink = sum(g_earn[spec=="PINK"]), 
+    chum = sum(g_earn[spec=="CHUM"]),
+    sock = sum(g_earn[spec=="SOCK"])) %>% 
+  group_by(year) %>% 
+  mutate(tot = sum(pink) + sum(chum) + sum(sock), pink = pink/tot, chum = chum/tot, sock = sock/tot) %>% 
+ggplot(aes(jday, pink)) + geom_line(color="pink") + geom_line(aes(jday, chum), color="darkgreen") + geom_line(aes(jday, sock), color="lightblue") + facet_wrap(~ year, scale="free")
+
+# make plot of all earnings or weight by jday
+salm = cfec.raw[cfec.raw$p_fshy=="S 01E",]
+salm$month = as.numeric(substr(salm$day, 1, 2))
+salm$day = as.numeric(substr(salm$day, 4, 5))
+salm$jday = date::mdy.date(salm$month, salm$day, salm$year) - date::mdy.date(1,1,salm$year)
+
+g = group_by(salm, jday, year) %>% 
+  summarize(earn = sum(g_earn), 
+    lbs = sum(g_pounds), 
+    pink = sum(g_earn[spec=="PINK"])/earn,
+    sock = sum(g_earn[spec=="SOCK"])/earn,
+    chum = sum(g_earn[spec=="CHUM"])/earn,
+    coho = sum(g_earn[spec=="COHO"])/earn,
+    chnk = sum(g_earn[spec=="CHNK"])/earn) %>% 
+ggplot(g, aes(jday, (earn))) + geom_line(colour = rgb(g$sock+g$coho+g$chnk, g$chum, g$pink)) + facet_wrap(~ year, scale="free_y")
+
+```
+
+```{r, echo = FALSE, fig.cap="SEAK purse seine fishery", cache=TRUE, fig.pos="placeHere", eval=FALSE}
+
+df = dat[which(dat$strategy_permit=="S01A"),]
+pamk_s01a <- pamk(df[,c("chum","pink","sock","salm")])
+df$group = pamk_s01a$pamobject$clustering
+
+p3 = ggtern(data=df[,c("chum","pink","sock","group")], aes(x=chum,y=pink,sock,color=as.factor(group))) +
+  geom_point(alpha=0.3) +
+  labs(x="CHUM",y="PINK",z="SOCK") + theme(
+        axis.title=element_text(size=8)) + theme(legend.position = "none")
+
+p0 = group_by(df, year, group) %>% 
+  summarize(n = length(unique(p_holder))) %>% 
+ggplot(aes(x = year, y = n, group=group, col = as.factor(group))) + geom_line() + ylab("People") + ggtitle("S01A")
+
+p1 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = meanrev, group=group, col = as.factor(group))) + geom_line() + ylab("Mean revenue") + ggtitle("S01A")
+
+p2 = group_by(df, year, group) %>% 
+  summarize(meanrev = log(mean(revenue + revenue.prev)/2), 
+    cv = sd(logdiff,na.rm=T)) %>% 
+ggplot(aes(x = year, y = cv, group=group, col = as.factor(group))) + geom_line() + ylab("CV revenue") + ggtitle("S01A")
+    
+gridExtra::grid.arrange(p3, p0, p1, p2, ncol=2)
+```
+  
+\pagebreak
+
+# Appendix  
+
+## Overall trends in participation across permits  
+  
+```{r, fig.cap="Participation (unique people)", fig.pos="placeHere", echo=FALSE}
+appendixPlot1
+```
+
+\break  
+  
+```{r, fig.cap="Trends in revenue and variability across people", fig.pos="placeHere", echo=FALSE, fig.height = 3.1}
+group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], p_holder, year, p_fshy) %>%
+  summarize(gearn = sum(g_earn)) %>%
+  group_by(year, p_fshy) %>%
+  summarize(med = median(gearn), low = quantile(gearn, 0.25),
+    upp = quantile(gearn,0.75)) %>%
+  ggplot(aes(year, log(med))) + geom_line() + facet_wrap(~p_fshy,scale="free") + 
+  geom_ribbon(aes(ymin= log(low), ymax= log(upp)), alpha=0.4) + ylab("Ln quartiles of revenue (across people)") + ggtitle("Trends in revenue") + xlab("Year")
+```
+  
+  
+```{r, echo=FALSE, fig.height = 3.1, fig.cap="Trends in average landed weight per person", fig.pos="placeHere"}
+group_by(cfec, p_fshy, year, p_holder) %>% 
+  summarize(meanW = mean(g_pounds/2000, na.rm=T)) %>% 
+  group_by(p_fshy, year) %>% 
+  summarize(meanW = mean(meanW, na.rm=T)) %>% 
+  ggplot(aes(year, meanW)) + geom_line() + facet_wrap(~ p_fshy, scale="free") + ylab("Mean total tons / person") + xlab("Year") + ggtitle("Trends in landed weight")
+```
+  
+\break  
+
+```{r, fig.cap="Diversity, mean revenue and CV (aggregated across years)", fig.pos="placeHere", echo=FALSE}
+gridExtra::grid.arrange(appendixPlot2_p1,appendixPlot2_p2,appendixPlot2_p3, ncol=2)
+```
+
+\break  
+
+## Species composition
+  
+```{r, fig.cap="Proportion of species landed, weighted by earnings", fig.pos="placeHere", echo=FALSE, fig.height = 3.3}
+# plot proportion of species landed by salmon permit
+group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  ggplot(aes(year, p, group=spec, color = spec)) + geom_line() + facet_wrap(~p_fshy) + 
+  ylab("Species % (total) ") + xlab("")
+```
+  
+```{r, fig.cap="Effective species diversity across people", fig.pos="placeHere", echo=FALSE, fig.height = 3.3}
+group_by(dat.salmon, year, strategy_permit) %>%
+  summarize(meanDiv = mean(specDiv), low = quantile(specDiv,0.25), upp = quantile(specDiv,0.75)) %>%
+  ggplot(aes(year, meanDiv)) + geom_line() + facet_wrap(~strategy_permit, scale="free") + 
+  geom_ribbon(aes(ymin= (low), ymax= (upp)), alpha=0.4) + ylab("Effective diversity (across people)") + xlab("")
+```
+  
+```{r, fig.cap="Proportion of total returns to Prince William Sound (hatchery + wild, catch + escapement). Years before 1980 and after 2011 aren't included because not all species have data.", fig.pos="placeHere", echo=FALSE, fig.height = 3.3}
+returns = readxl::read_excel("salmon_returns_PWS.xlsx")
+returns = returns[,c("Year","Sockeye_total","Pink_total","Chum_total","Coho","Chinook")]
+
+returns = as.data.frame(returns[which(returns$Year%in%c(1980:2011)),])
+for(i in 1:ncol(returns)) returns[,i] = as.numeric(returns[,i])
+for(i in 1:nrow(returns)) {
+    # normalize
+    returns[i,-1] = returns[i,-1] / sum(returns[i,-1])
+}
+
+melted = reshape2::melt(returns,id.vars="Year")
+names(melted)[which(names(melted)=="variable")]="species"
+ggplot(melted,aes(Year,value, group = species, color=species)) + geom_line() + ylab("Proportion of total returns (by #)")
+```
+
+\break  
+  
+## Trends in revenue and prices  
+  
+Across regions, we see lots of synchrony in prices between coho, chum, and pink salmon, with them increasing more quickly than sockeye/Chinook. Sockeye/Chinook have been the highest priced historically, with coho > chum > pink.  For most permit types, median revenue / person has generally increased, especially since early 2000s. For some permits, variability appears to have changed through time (quartile range getting smaller).  
+  
+```{r, fig.cap="Total revenue by area (across people and permits within each)", fig.pos="placeHere", echo=FALSE, fig.height=3.5}
+# plot prices of species landed by salmon permit
+cfec.raw$area = NA
+cfec.raw$area[cfec.raw$p_fshy%in%c("S 01A", "S 03A")] = "Southeast"
+cfec.raw$area[cfec.raw$p_fshy%in%c("S 01E", "S 03E")] = "PWS"
+cfec.raw$area[cfec.raw$p_fshy%in%c("S 01K", "S 04K")] = "Kodiak"
+cfec.raw$area[cfec.raw$p_fshy%in%c("S 01M")] = "Alaska Peninsula"
+
+group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, area) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, area) %>%
+  ggplot(aes(year, (p)/1e6, group=spec, color = spec)) + geom_line() + facet_wrap(~area, scale="free") +
+  ylab("Revenue (millions) ") + xlab("Year")
+```
+
+\break  
+
+## Trends in variability   
+
+```{r, fig.cap="Trends in annual variability by fishery", fig.pos="placeHere", echo=FALSE,  fig.height=3.3}
+summary = group_by(cfec.raw[cfec.raw$spec%in%c("CHUM","COHO","CHNK","SOCK","PINK"),], year, p_fshy, spec) %>% 
+  summarize(sumg = log(sum(g_earn)), sumw = log(sum(g_pounds))) %>% 
+  arrange(p_fshy, spec, year) %>% group_by(p_fshy, spec) %>% 
+  mutate(logdiffg = rollapply(c(NA, diff(sumg)), 3, sd, fill=c(NA, NULL, NA)), 
+    logdiffw = rollapply(c(NA, diff(sumw)), 3, sd, fill=c(NA, NULL, NA)))
+
+ggplot(summary, aes(year, logdiffg, color=spec)) + geom_line() + facet_wrap(~ p_fshy, scale="free") + ylab("3 year rolling CV (revenue)") + xlab("Year")
+```
+  
+```{r, fig.cap="Trends in annual variability by fishery and species", fig.pos="placeHere",  echo=FALSE, fig.height=3.3}
+g1 = ggplot(summary[which(summary$spec=="PINK" & summary$p_fshy%in%c("S 01A", "S 01E", "S 03A", "S 03E")),], aes(year, logdiffg, color=p_fshy)) + geom_line() + ylab("3 year rolling CV (revenue)") + xlab("Year") + ggtitle("Pink salmon")
+
+g2 = ggplot(summary[which(summary$spec=="CHUM" & summary$p_fshy%in%c("S 01A", "S 01E", "S 03A", "S 03E")),], aes(year, logdiffg, color=p_fshy)) + geom_line() + ylab("3 year rolling CV (revenue)") + xlab("Year") + ggtitle("Chum salmon") 
+
+gridExtra::grid.arrange(g1,g2, ncol=1)
+```
+
+```{r, fig.cap="Trends in annual variability by fishery and species", fig.pos="placeHere", echo=FALSE, eval=FALSE}
+g1 = ggplot(summary[which(summary$spec=="PINK" & summary$p_fshy%in%c("S 01A", "S 01E", "S 03A", "S 03E")),], aes(year, logdiffw, color=p_fshy)) + geom_line() + ylab("3 year rolling CV (weight)") + xlab("Year") + ggtitle("Pink salmon")
+
+g2 = ggplot(summary[which(summary$spec=="CHUM" & summary$p_fshy%in%c("S 01A", "S 01E", "S 03A", "S 03E")),], aes(year, logdiffw, color=p_fshy)) + geom_line() + ylab("3 year rolling CV (weight)") + xlab("Year") + ggtitle("Chum salmon") 
+
+gridExtra::grid.arrange(g1,g2, ncol=1)
+```  
+  
+```{r, fig.cap="Trends in variability across people", fig.pos="placeHere", echo=FALSE, fig.height=3.5, eval=FALSE}
+summary = group_by(cfec.raw[cfec.raw$spec%in%c("CHUM","COHO","CHNK","SOCK","PINK"),], year, p_fshy, p_holder) %>% 
+  summarize(sumg = sum(g_earn), sumw = sum(g_pounds)) %>% 
+  group_by(p_fshy, year) %>% 
+  summarize(cvg = sd(sumg,na.rm=T)/mean(sumg,na.rm=T),
+    cvw = sd(sumw,na.rm=T)/mean(sumw,na.rm=T))
+ggplot(summary, aes(year, cvg )) + geom_line(color ="green" ) + facet_wrap(~ p_fshy, scale="free") + geom_line(aes(year, cvw), color = "blue") + ylab("3 year rolling CV") + xlab("Year") + ggtitle("Variability across people: total revenue (green) and weight (blue)")
+```
+  
+```{r, fig.cap="Change in CV for individual people", fig.pos="placeHere", echo=FALSE, fig.height=3.5}
+summary = group_by(cfec.raw[cfec.raw$spec%in%c("CHUM","COHO","CHNK","SOCK","PINK"),], year, p_fshy, p_holder) %>% 
+  summarize(sumg = sum(g_earn)) %>% 
+  group_by(p_fshy, p_holder) %>% 
+  mutate(nPre = length(which(year%in%seq(1985,1995))),
+    nPost = length(which(year%in%seq(2005,2014)))) %>% 
+  filter(nPre > 3 & nPost > 3) %>% select(-nPre, -nPost) %>% 
+  summarize(cv.pre = mean(sumg[which(year <= 1995)],na.rm=T)/sd(sumg[which(year <= 1995)],na.rm=T),
+    cv.post = mean(sumg[which(year >= 2005)],na.rm=T)/sd(sumg[which(year >= 2005)],na.rm=T))
+
+ggplot(summary, aes(log(cv.post/cv.pre))) + geom_histogram(bins=100) + facet_wrap(~ p_fshy) + geom_vline(aes(xintercept = 0)) + ylab("Count") + xlab("% Change in CV for individual people (2005-2014 / 1985-1995)") + ggtitle("Change in variability for individual people")
+#summary = left_join(expand.grid(year = unique(summary$year), p_holder = unique(summary$p_holder)), summary)
+
+# add rolling CV for each person
+#summary = group_by(summary, p_holder) %>% 
+#  mutate(logdiffg = rollapply(c(NA, diff(sumg)), 3, sd, fill=c(NA, NULL, NA))) %>%
+#  do(fit = lm(logdiffg ~ year, data = .))
+```  
+  
+\break  
+  
+```{r, fig.cap="Inflation adjusted prices / species by area, relative to 2002 (the year corresponding to the lowest average prices).", fig.pos="placeHere", echo=FALSE, fig.height = 3.1}
+  
+g = group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, area) %>%
+  summarize(p = mean(g_price))
+p1 = group_by(g, spec, area) %>% 
+  mutate(p = p/p[which(year==2002)]) %>% 
+  group_by(year, area) %>%
+  ggplot(aes(year, log(p), group=spec, color = spec)) + geom_line() + facet_wrap(~area) +
+  ylab("Ln avg price relative to 2002") + ggtitle("Synchrony in prices: relative change") + xlab("")
+p1
+
+```
+  
+```{r, fig.cap="Percent change (log-difference) in inflation adjusted prices / species by area", fig.pos="placeHere", echo=FALSE, fig.height = 3.1}  
+
+g = group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, area) %>%
+  summarize(p = mean(g_price))
+# do log-diff of prices -- get price year before
+g$p_t1 = g$p[match(paste(g$year, g$spec, g$area), 
+  paste(g$year+1, g$spec, g$area))]
+
+p2 = group_by(g, spec, area) %>% 
+  ggplot(aes(year, log(p/p_t1), group=spec, color = spec)) + geom_line() + facet_wrap(~area) +
+  ylab("Ln price (t/t-1)") + ggtitle("Synchrony in prices: percent change") + xlab("")
+p2
+
+g$logdiff = log(g$p/g$p_t1)
+p3 = group_by(g, year, area) %>% 
+summarize(sd = sd(logdiff,na.rm=TRUE)) %>% ggplot(aes(year, sd, color=area)) + geom_line() + xlab("Year") + ylab("SD of price changes across species") + ggtitle("Synchrony in price fluctuations across species")
+
+```
+
+```{r, fig.pos="placeHere", fig.cap = "Standard deviation (across species, by area) for fluctuations in prices. Fluctuations are calculated as the log difference price data between sequential years. The standard deviation of log differenced data is interpreted as the coefficient of variation (CV)."}
+p3
+```
+
+
+\break  
+
+### Season length  
+
+There appears to be no significant trend in season length (defined as the difference between 95% CIs) or mean julian day for any fishery. In all cases, the dates are weighted by the earnings associated with landed catch.  
+
+```{r, fig.cap="Trends in mean julian day and season length by fishery", fig.pos="placeHere", echo=FALSE, fig.height=3.5}
+gridExtra::grid.arrange(appendixPlot0_p1, appendixPlot0_p2, ncol = 1)
+```
