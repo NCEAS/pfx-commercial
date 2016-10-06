@@ -44,8 +44,8 @@ X_sigma_ik = dat[,c("days.change")] #"specDiv.change","specdiv.prev",
 if(class(X_sigma_ik)=="numeric") X_sigma_ik = matrix(X_sigma_ik,ncol=1)
 K = ncol(X_sigma_ik) # number of covariates on variance
 
-offset = dat$revenue.prev
-y_i = dat$revenue
+offset = log(dat$revenue.prev)
+y_i = log(dat$revenue)
 n_strategy = length(unique(dat$group))
 strategy_i = as.numeric(as.factor(dat$group))
 n_yr = length(unique(dat$year))

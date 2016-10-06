@@ -205,7 +205,29 @@ gridExtra::grid.arrange(g4, g5, g6, h4, h5, h6, nrow=2)
 library(rstan)
 ```
 
-```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying intercepts on estimated mean revenue, by permit.", eval=FALSE}
+```{r, eval=FALSE,echo=FALSE}
+load("../../salmon/analysis/cv-model-simple.Rdata")
+# groups here are 80% pink vs 97% pink
+
+yrs = 1986:2014
+
+hist(extract(mod)[["g_offset"]], 40, col="grey", xlab="Effect of specializing on pink (sd)")
+
+xx = exp(extract(mod)[["sd_yr"]])
+df.gen = data.frame("year"=yrs, "mean" = apply(xx, 2, mean), "low" = apply(xx, 2, quantile, 0.025),
+  "hi" = apply(xx, 2, quantile, 0.975), "strategy"="pink:chum")
+
+offset = matrix(extract(mod)[["g_offset"]],ncol=1) %*% matrix(rep(1,length(yrs)), nrow=1)
+xx = exp(extract(mod)[["sd_yr"]] + offset)
+df.spec = data.frame("year"=yrs, "mean" = apply(xx, 2, mean), "low" = apply(xx, 2, quantile, 0.025),
+  "hi" = apply(xx, 2, quantile, 0.975), "strategy"="pink")
+
+ggplot(data=rbind(df.gen,df.spec), aes(year, mean, group=strategy, fill=strategy)) + geom_ribbon(aes(ymin=low,ymax=hi), alpha=0.5)
+
+```
+
+
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying intercepts on estimated mean revenue, by permit. These are interpreted as the mean change in revenue for each permit holder in each year (positive equates to increasing revenue, etc), after accounting for effects of catch diversification and days fished."}
 # grab original data to look at permit names
 diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
 years = seq(min(diffdat$year), max(diffdat$year))

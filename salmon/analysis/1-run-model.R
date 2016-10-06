@@ -3,15 +3,15 @@ diffdat = readRDS(file="salmon/data-generated/salmon.rds")
 
 # prep data for stan
 N = nrow(diffdat) # number of rows of data
-#X_ij = diffdat[,c("days.change")] #"specDiv.change","specdiv.prev",
+X_ij = diffdat[,c("days.change")] #"specDiv.change","specdiv.prev",
 #if(class(X_ij)=="numeric") X_ij = matrix(X_ij,ncol=1)
 J = ncol(X_ij) # number of covariates on mean
 X_sigma_ik = diffdat[,c("days.change")] #"specDiv.change","specdiv.prev",
-if(class(X_sigma_ik)=="numeric") X_sigma_ik = matrix(X_sigma_ik,ncol=1)
+#if(class(X_sigma_ik)=="numeric") X_sigma_ik = matrix(X_sigma_ik,ncol=1)
 K = ncol(X_sigma_ik) # number of covariates on variance
 
-offset = diffdat$revenue.prev
-y_i = diffdat$revenue
+offset = log(diffdat$revenue.prev)
+y_i = log(diffdat$revenue)
 n_strategy = length(unique(diffdat$permit))
 strategy_i = as.numeric(as.factor(diffdat$permit))
 n_str_yr = length(unique(diffdat$year_permit))
