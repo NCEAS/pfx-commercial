@@ -35,12 +35,14 @@ parameters {
   real<lower=0> b1_str_yr_tau;
   vector[n_strategy] b_2[n_yr];
   real<lower=0> b2_str_yr_tau;
+  vector[n_strategy] b_3[n_yr];
+  real<lower=0> b3_str_yr_tau;
   vector[n_strategy] b_4;
   real<lower=0> b4_str_yr_tau;
 
   real b1_str_yr_mu;
   real b2_str_yr_mu;
-  #real<lower=0> b3_str_yr_mu;
+  real b3_str_yr_mu;
   real b4_str_yr_mu;
 
   real g0;
@@ -52,14 +54,14 @@ parameters {
   real<lower=0> g1_str_yr_tau;
   vector[n_strategy] g_2[n_yr];
   real<lower=0> g2_str_yr_tau;
-  #vector[n_strategy] g_3[n_yr];
-  #real<lower=0> g3_str_yr_tau;
+  vector[n_strategy] g_3[n_yr];
+  real<lower=0> g3_str_yr_tau;
   vector[n_strategy] g_4;
   real g4_str_yr_tau;
 
   real g1_str_yr_mu;
   real g2_str_yr_mu;
-  #real<lower=0> g3_str_yr_mu;
+  real g3_str_yr_mu;
   real g4_str_yr_mu;
 }
 transformed parameters {
@@ -73,13 +75,13 @@ transformed parameters {
             b0_str_yr[str_yr_i[i]] +
             b1_cov_i[i] * b_1[year_i[i], strategy_i[i]] +
             b2_cov_i[i] * b_2[year_i[i], strategy_i[i]] +
-            #b3_cov_i[i] * b_3[year_i[i], strategy_i[i]] +
+            b3_cov_i[i] * b_3[year_i[i], strategy_i[i]] +
             b4_cov_i[i] * b_4[strategy_i[i]];
     sigma[i] = g0 +
             g0_strategy[strategy_i[i]] +
             g1_cov_i[i] * g_1[year_i[i], strategy_i[i]] +
             g2_cov_i[i] * g_2[year_i[i], strategy_i[i]] +
-            #g3_cov_i[i] * g_3[year_i[i], strategy_i[i]] +
+            g3_cov_i[i] * g_3[year_i[i], strategy_i[i]] +
             g4_cov_i[i] * g_4[strategy_i[i]];
   }
 
@@ -88,6 +90,7 @@ transformed parameters {
 model {
   b0_str_yr ~ normal(0, b0_str_yr_tau); # strategy-year intercept
   b0_str_yr_tau ~ student_t(3, 0, 2);
+
   b_4 ~ normal(b4_str_yr_mu, b4_str_yr_tau); # strategy-year intercept
   b4_str_yr_mu ~ student_t(3, 0, 2);
   b4_str_yr_tau ~ student_t(3, 0, 2);
@@ -113,6 +116,7 @@ model {
   g0 ~ normal(0, 2);
   g0_strategy ~ normal(0, g0_strategy_tau);
   g0_strategy_tau ~ student_t(3, 0, 2);
+
   g_4 ~ normal(g4_str_yr_mu, g4_str_yr_tau); # strategy-year intercept
   g4_str_yr_mu ~ student_t(3, 0, 2);
   g4_str_yr_tau ~ student_t(3, 0, 2);

@@ -1,7 +1,7 @@
 ---
-title: 'Reduced diversity and increased specialzation of Alaska salmon fishermen:
+title: 'Reduced diversity and increased specialization of Alaska salmon fishermen:
   effects on variation in individual revenues'
-author: "Eric, Sean, Ole, Rich, Milo, Jordan, others?"
+author: "Eric, Sean, Ole, Rich, Milo, Jordan, Jen, others"
 date: ''
 output:
   pdf_document:
@@ -24,6 +24,7 @@ library(fpc)
 library(gridExtra)
 library(glmmTMB)
 library(zoo)
+modelname = "model-linear" # model-linear-nointeractions
 ```
 
 ## Abstract
@@ -83,9 +84,9 @@ Larger values of $\Delta { p }_{ ind,t }$ indicate greater year-to-year discrepa
 
 [@anderson_benefits] implemented a hierarchical Bayesian model that allowed group level predictors and covariates (diversity of catch, days fished) to simultaneously affect the mean and the variance of revenue for individual fishers. This model also included random intercepts by strategy and year; these terms allowed all permit holders in a given year to experience common fluctuations (external drivers including price changes, fluctuations in fish population abundance, or environmental disasters such as EVOS). 
 
-To ask how benefits of diversification may have changed over time, we extend the model of [@anderson_benefits] to also include time-varying random effects in the slope coefficients of diversification. We define the variables $\Delta { S }_{ t }=log\left( { S }_{ t }/{ S }_{ t-1 } \right)$ to represent the percent change in species diversity of the catch between years and $\Delta { D }_{ t }=log\left( { D }_{ t }/{ D }_{ t-1 } \right)$ to represent the percent change in fishing effort (days fished) between years. The model for the expected log revenue of individual *i* in year *t*, $$\widehat { log\left( { R }_{ i,t } \right)  } ={ B }_{ 0,j,t }+{ B }_{ 1,j,t }\cdot \Delta S_{ t }+{ B }_{ 2,j,t }\cdot \left( \Delta S_{ t }\cdot { S }_{ t-1 } \right) +{ B }_{ 3,j }\cdot \Delta D_{ t }+log\left( { R }_{ i,t-1 } \right) $$, where *j* subscripts the salmon permit (Table 1). We model the time-varying permit specific intercepts as random and exchangeable across years, ${ B }_{ 0,j,t }\sim Normal\left( { u }_{ { B }_{ 0 } },{ \sigma  }_{ { B }_{ 0 } } \right)$. The term ${ B }_{ 1,j,t }$ represents the permit level random effect of diversifying species. Our model extends that of [@anderson_benefits] to include the interaction terms $\Delta S_{ t }\cdot { S }_{ t-1 }$ which allow the effect of diversification to be dependent on the previous level of diversification. We assume this relationship is linear, and the coefficients ${ B }_{ 1,j,t }$ and ${ B }_{ 2,j,t }$ allow this to vary by permit and through time. The flexibility in these terms allows the benefit of increasing species diversity to be positive in some years (generalizing benefits revenue), negative in other years (specializing benefits revenue) and neutral in other years (revenue is independent of alterations to catch composition). We constrain the random effects associated with diversification to be modeled as autoregressive processes with shared variances across strategies, for example: ${ B }_{ 1,j,t }\sim Normal\left( { B }_{ 1,j,t-1 },{ \sigma  }_{ { B }_{ 1 } } \right)$. Like [@anderson_benefits] we also allow changing effort (measured as percent change in days fished) ${ B }_{ 4,j }$ to vary by strategy, but we do not allow this effect to vary through time. Finally, the term $log\left( { R }_{ i,t-1 } \right)$ is included as an offset [@anderson_benefits]. 
+To ask how benefits of diversification may have changed over time, we extend the model of [@anderson_benefits] to also include time-varying random effects in the slope coefficients of diversification. We define the variables $\Delta { S }_{ t }=log\left( { S }_{ t }/{ S }_{ t-1 } \right)$ to represent the percent change in species diversity of the catch between years and $\Delta { D }_{ t }=log\left( { D }_{ t }/{ D }_{ t-1 } \right)$ to represent the percent change in fishing effort (days fished) between years. The model for the expected log revenue of individual *i* in year *t*, $$\widehat { log\left( { R }_{ i,t } \right)  } ={ B }_{ 0,j,t }+{ B }_{ 1,j,t }\cdot \Delta S_{ i,t }+{ B }_{ 2,j,t }\cdot \left( \Delta S_{ i,t }\cdot { S }_{ i,t-1 } \right) +{ B }_{ 3,j }\cdot \Delta D_{ i,t }+log\left( { R }_{ i,t-1 } \right) $$, where *j* subscripts the salmon permit (Table 1). We model the time-varying permit specific intercepts as random and exchangeable across years, ${ B }_{ 0,j,t }\sim Normal\left( { u }_{ { B }_{ 0 } },{ \sigma  }_{ { B }_{ 0 } } \right)$. The term ${ B }_{ 1,j,t }$ represents the permit level random effect of diversifying species. Our model extends that of [@anderson_benefits] to include the interaction terms $\Delta S_{ t }\cdot { S }_{ t-1 }$ which allow the effect of diversification to be dependent on the previous level of diversification. We assume this relationship is linear, and the coefficients ${ B }_{ 1,j,t }$ and ${ B }_{ 2,j,t }$ allow this to vary by permit and through time. The flexibility in these terms allows the benefit of increasing species diversity to be positive in some years (generalizing benefits revenue), negative in other years (specializing benefits revenue) and neutral in other years (revenue is independent of alterations to catch composition). We constrain the random effects associated with diversification to be modeled as autoregressive processes with shared variances across strategies, for example: ${ B }_{ 1,j,t }\sim Normal\left( { B }_{ 1,j,t-1 },{ \sigma  }_{ { B }_{ 1 } } \right)$. Like [@anderson_benefits] we also allow changing effort (measured as percent change in days fished) ${ B }_{ 4,j }$ to vary by strategy, but we do not allow this effect to vary through time. Finally, the term $log\left( { R }_{ i,t-1 } \right)$ is included as an offset [@anderson_benefits]. 
+  Like [@anderson_benefits], we also included all of the above covariates in the variance model. We assumed the residuals from the mean model described above to be normally distributed, $$log\left( { R }_{ i,t } \right) \sim Normal\left( \widehat { log\left( { R }_{ i,t } \right)  } ,\widehat { { \sigma  }_{ i,t } }  \right) $$. While conventional hierarchcial linear regression assumes variances to be constant or shared by grouping variables, we also included fixed and random covariates, making the model akin to variance function regression or stochastic volatility models (CITE). Using the same notation as for the mean, we can express the log standard deviation as $$\widehat { log\left( { \sigma  }_{ i,t } \right)  } ={ G }_{ 0,j }+{ G }_{ 1,j,t }\cdot \Delta S_{ i,t }+{ G }_{ 2,j,t }\cdot \left( \Delta S_{ i,t }\cdot { S }_{ i,t-1 } \right) +G_{ 3,j }\cdot \Delta D_{ i,t }$$. Unlike the linear model for the mean, we did not include an offset term. Further, we constrained the variance intercepts ${ G }_{ 0,j }$ to be temporally constant by strategy, instead of the dynamic nature of the intercepts in the mean model. Like the mean model, the random effects were constrained to be autoregressive, ${ G }_{ 1,j,t }\sim Normal\left( { G }_{ 1,j,t-1 },{ \sigma  }_{ { G }_{ 1 } } \right)$, and covariates associated with days fished and species diversity were included as predictors. 
 
-- Fit models from Sean's paper, but include time varying interactions on species diversity.
 All done in STAN [@stan_development_team_stan_2015] using the NUTS algorithm [@hoffman_no-u-turn_2014].
 
 Specific things that could be looked at: 
@@ -99,14 +100,12 @@ Does diversification exist within permits and if so, do we see similar advantage
 
 Our summaries of changing variability (aggregate for each fishery, across individuals, or within individuals) was not consistent with the hypothesis that variability in revenue or landings has decreased over time (Fig. A9-A10). For pink and chum salmon, fisheries in PWS generally experience higher year to year variability compared to SEAK. In looking at the changing CV of individuals, we see a slight increase in the CV of revenue for people fishing in the recent decade who were also fishing 1985-1995 (with the exception being S01A). 
 
-Figure 1 shows that the time varying intercepts on the mean, also in [@anderson_benefits] are basically flat. These represent common fluctuations in revenue experienced by all permit holders.  
-  
-Figure 2 is largley illustrative, but shows the benefit of including time varying coefficients.  
-  
-Figure 3 shows the temporal trends, by permit, in going from 1 to 2 species fished, and how those effects have changed through time. S01A, S01E, S03A appear to be decreasing. S01K and S01M increasing. S03E pretty flat?
+Figure 1 and 2 shows the time series of species composition and effective spp diversity. Interesting patterns are (1) overall low diversity of S01E (pinks), (2) increasing chum in S03A
 
-Figure 4 shows that temporal trends, by permit, in going from 1 to 2 species fished on the variance. From [@anderson_benefits] we'd expect diversification to redudce variance -- that seems to be the biggest signal for S01K and S01M in the years of low sockeye prices.  
-  
+Figure 3: One component of variability is the year-to-year variation that individuals experience as a result of external forces (stock abundance, prices, etc). Or common fluctuations in revenue experienced by all permit holders [@anderson_benefits]. This shows the time varying intercepts on the mean -- negative equals losing revenue, positive = increasing revenue. This shows big differences between permit types (gillnets tend to have lower year-to-year variation). Some permits have extreme variation - S01E (PWS seine) has fluctuations between exp(-1) and exp(+1), corresponding to year-to-year changes of 36-270%.  
+Figure 4 shows the time varying nature of of the model for all permits. These are the time series of benefits of changing from effective species diversity of 1 to 2, and here we're basically isolating year-to-year differences in revenue (the intercepts) from diversification benefits. In some cases the effect is positive (fishing more spp = more revenue). But in many cases it's not, and the trend is negative (indicating that specialization is more profitable over time). In several cases, these time series mirror the aggregate diversity in the raw time series (Fig. 1).
+
+Figure 5 shows that temporal trends, by permit, in going from 1 to 2 species fished on the variance (again removing the overall intercepts). From [@anderson_benefits] we'd expect diversification to redudce variance. A few examples of how to read this: S01A is slightly positve for most of the time series, but rapidly increases in the last 10 years -- this means generalists with diverse portfolios have had increases in year-to-year variability. For S01E, the start and end of the time series are associated with these 'costs' to diversification. For S03E, we see a more gradual trend (cost of diversification increases).  
 
 ## Discussion
 
@@ -237,7 +236,7 @@ yearpermit = data.frame("yrpermit"=levels(diffdat$year_permit))
 yearpermit$year = as.numeric(substr(yearpermit$yrpermit,1,4))
 yearpermit$permit = substr(yearpermit$yrpermit,6,9)
 
-load("../../salmon/analysis/model-linear.Rdata")
+load(paste0("../../salmon/analysis/",modelname,".Rdata"))
 
 est = extract(mod, permute="TRUE")
 
@@ -255,13 +254,13 @@ ggplot(data=yearpermit) +
   
 \break  
   
-```{r, fig.pos="placeHere", fig.cap="Time varying effects of adding 1 species on revenue (measured in ln dollars) for purse seine permit in Prince William Sound (S01E). This figure illustrates two things: (1) the benefit of adding more species diminishes as a function of past diversity, and (2) the economic benefit to adding more species has been reduced through time.", echo=FALSE}
+```{r, fig.pos="placeHere", fig.cap="Time varying effects of adding 1 species on revenue (measured in ln dollars) for purse seine permit in Prince William Sound (S01E). This figure illustrates two things: (1) the benefit of adding more species diminishes as a function of past diversity, and (2) the economic benefit to adding more species has been reduced through time.", echo=FALSE, eval=FALSE}
 # grab original data to look at permit names
 diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
 permits = levels(as.factor(diffdat$permit))
 
-load("../../salmon/analysis/model-linear.Rdata")
+load(paste0("../../salmon/analysis/",modelname,".Rdata"))
 
 est = extract(mod, permute="TRUE")
 
@@ -286,29 +285,28 @@ df$high = 0
 b0_indx = match(paste(as.character(df$years), as.character(df$permits)), as.character(yearpermit$yrpermit)) 
 
 for(i in 1:nrow(df)) {
-  tmp = x1[df$diversity[i]] * (est$b_1[,df$year[i], df$permit[i]]+est$b1_str_yr_mu) + x2[df$diversity[i]] * (est$b_2[,df$year[i], df$permit[i]]+est$b2_str_yr_mu)
-  
+  tmp = x1[df$diversity[i]] * (est$b_1[,df$year[i], df$permit[i]])# + x2[df$diversity[i]] * (est$b_2[,df$year[i], df$permit[i]]+est$b2_str_yr_mu)
   df$pred[i] = median(tmp)
   df$low[i] = quantile(tmp,0.025)
   df$high[i] = quantile(tmp,0.975)
 }
-
+df_s01e_b1 = df
 ggplot(df[df$permits=="S01E",], aes(x=x,y=pred,group=years)) +
   #geom_ribbon(aes(ymin=low,ymax=high), alpha=0.4) +
   geom_line() +
-  facet_wrap(~years) + xlab("Previous species diversity") + ylab("Predicted benefit of adding +1 spp (ln $)") + geom_hline(yintercept=0, color="red")
+  facet_wrap(~years) + xlab("Previous species diversity") + ylab("Predicted benefit of adding +1 spp (ln $)")
 
 ```
   
 \break  
 
-```{r, fig.pos="placeHere", fig.cap="Time varying effects of adding 1 species on revenue (measured in ln dollars) for hypothetical individuals with species diversity ~ 1. This shows declining benefits of diversification for S01A, S01E, S03A, increasing (but more uncertain) benefits for sockeye oriented fisheries S01M and S01K.", echo=FALSE}
+```{r, fig.pos="placeHere", fig.cap="Time varying effects of adding 1 species on revenue (measured in ln dollars) for hypothetical individuals with species diversity ~ 1. This shows declining benefits of diversification for most fisheries, S01M.", echo=FALSE}
 # grab original data to look at permit names
 diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
 permits = levels(as.factor(diffdat$permit))
 
-load("../../salmon/analysis/model-linear.Rdata")
+load(paste0("../../salmon/analysis/",modelname,".Rdata"))
 
 est = extract(mod, permute="TRUE")
 
@@ -334,11 +332,12 @@ df$high = 0
 b0_indx = match(paste(as.character(df$years), as.character(df$permits)), as.character(yearpermit$yrpermit)) 
 
 for(i in 1:nrow(df)) {
-  tmp = est$b0_str_yr[,b0_indx[i]] + 
-    x1[df$diversity[i]] * (est$b_1[,df$year[i], df$permit[i]]+est$b1_str_yr_mu) +
-    x2[df$diversity[i]] * (est$b_2[,df$year[i], df$permit[i]]+est$b2_str_yr_mu)# +
+  #tmp = est$b0_str_yr[,b0_indx[i]] + 
+  tmp = 
+    x1[df$diversity[i]] * (est$b_1[,df$year[i], df$permit[i]])# +
+    #x2[df$diversity[i]] * (est$b_2[,df$year[i], df$permit[i]]+est$b2_str_yr_mu)# +
     #x3[df$diversity[i]] * (est$b_3[,df$year[i], df$permit[i]]+est$b3_str_yr_mu)
-  df$pred[i] = median(tmp)
+  df$pred[i] = mean(tmp)
   df$low[i] = quantile(tmp,0.025)
   df$high[i] = quantile(tmp,0.975)
 }
@@ -358,7 +357,7 @@ diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
 permits = levels(as.factor(diffdat$permit))
 
-load("../../salmon/analysis/model-linear.Rdata")
+load(paste0("../../salmon/analysis/",modelname,".Rdata"))
 
 est = extract(mod, permute="TRUE")
 
@@ -383,9 +382,10 @@ df$low = 0
 df$high = 0
 
 for(i in 1:nrow(df)) {
-  tmp = est$g0 + est$g0_strategy[,df$permit[i]] + x1[df$diversity[i]] * (est$g_1[,df$year[i], df$permit[i]]+est$g1_str_yr_mu) +
-    x2[df$diversity[i]] * (est$g_2[,df$year[i], df$permit[i]]+est$g2_str_yr_mu)# +
-  #x3[df$diversity[i]] * (est$b_3[,df$year[i], df$permit[i]]+est$b3_str_yr_mu)
+  #tmp = est$g0 + est$g0_strategy[,df$permit[i]] + 
+  tmp = 
+    x1[df$diversity[i]] * (est$g_1[,df$year[i], df$permit[i]])# +
+    #x2[df$diversity[i]] * (est$g_2[,df$year[i], df$permit[i]]+est$g2_str_yr_mu)
   df$pred[i] = median(tmp)
   df$low[i] = quantile(tmp,0.025)
   df$high[i] = quantile(tmp,0.975)
@@ -394,9 +394,55 @@ for(i in 1:nrow(df)) {
 ggplot(df[df$diversity==1,], aes(x=years,y=pred,group=permits)) +
   geom_line() +
   geom_ribbon(aes(ymin=low,ymax=high), alpha=0.4) +
-  facet_wrap(~permits) + xlab("Year") + ylab("Predicted marginal benefit of adding +1 spp (ln $)")
+  facet_wrap(~permits) + xlab("Year") + ylab("Predicted marginal benefit of adding +1 spp (ln $)") + geom_hline(yintercept=0, color="red")
 
 ``` 
+  
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "As model validation, we can compare the estimated intercepts for PWS S01E (purse seine) representing average year to year change in revenue versus the change year over year in ln(pink salmon returns). Correlation between them is ~ 0.8. This suggests (as expected) people on average make a lot more money in years when pink salmon returns are high."}
+
+S01E = yearpermit[yearpermit$permit=="S01E",]
+names(S01E)[which(names(S01E)=="year")]="Year"
+
+returns = readxl::read_excel("../../salmon/paper/salmon_returns_PWS.xlsx")
+pinkPWS = returns[,c("Year", "Pink_total", "Chum_total")]
+pinkPWS = pinkPWS[which(pinkPWS$Year >= 1985),]
+pinkPWS$diff = c(NA, diff(log(pinkPWS$Pink_total)))
+
+pinkPWS = dplyr::left_join(pinkPWS, S01E)
+
+# bring in slopes from above
+slopes = df_s01e_b1[df_s01e_b1$permits=="S01E" & df_s01e_b1$diversity==1,]
+slopes = slopes[,c("years","pred")]
+names(slopes)[which(names(slopes)=="years")] = "Year"
+names(slopes)[which(names(slopes)=="pred")] = "B1"
+pinkPWS = dplyr::left_join(pinkPWS, slopes)
+
+ggplot(data=pinkPWS, aes(b0, diff)) + geom_point() + stat_smooth(method=lm) + xlab("Estimated intercept from model") + ylab("Change in total pink salmon returns")
+
+pinkPWS$diffchum = c(NA, diff(log(pinkPWS$Chum_total)))
+
+prices = group_by(cfec[which(cfec$p_fshy%in%c("S 01E","S 03E") & cfec$spec%in%c("PINK","CHUM","SOCK")),], year, spec) %>% 
+  summarize(meanPrice = mean(g_price)) %>%
+  arrange(year)
+prices <- dcast(melt(prices, id.vars = c("spec", "year")), year ~ variable+spec)
+names(prices)[which(names(prices)=="year")]="Year"
+
+pinkPWS = dplyr::left_join(pinkPWS, prices)
+pinkPWS$pricediffchum = c(NA, diff(pinkPWS$meanPrice_CHUM))
+pinkPWS$pricediffpink = c(NA, diff(pinkPWS$meanPrice_PINK))
+pinkPWS$pricediffsock = c(NA, diff(pinkPWS$meanPrice_SOCK))
+
+#cor(pinkPWS[,-c(5,6)], use="pairwise.complete.obs")
+
+#ggplot(data=pinkPWS, aes(b0, B1)) + geom_point() + stat_smooth(method=lm) + xlab("Estimated intercept from model") + ylab("Change in total pink salmon returns")
+
+#diversity = dplyr::group_by(dat.salmon[dat.salmon$strategy_permit=="S01E",], year) %>%
+#  summarize(meanDiv = mean(specDiv))
+#names(diversity)[which(names(diversity)=="year")] = "Year"
+#pinkPWS = dplyr::left_join(pinkPWS, diversity)
+
+```
+  
   
 \break  
   

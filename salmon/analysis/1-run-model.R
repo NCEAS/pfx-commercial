@@ -29,19 +29,76 @@ stan_data = list("N"=N, "y_i"=y_i, "offset"=offset, "n_strategy"=n_strategy,
   "n_str_yr"=n_str_yr,"str_yr_i"=str_yr_i, "n_yr"=n_yr, "year_i"=year_i,
   "b1_cov_i"=b1_cov_i, "b2_cov_i"=b2_cov_i, "b3_cov_i"=b3_cov_i, "b4_cov_i"=b4_cov_i,
   "g1_cov_i"=b1_cov_i, "g2_cov_i"=b2_cov_i, "g3_cov_i"=b3_cov_i, "g4_cov_i"=b4_cov_i)
-stan_pars = c("b0_str_yr", "b0_str_yr_tau", "g0_strategy", "g0_strategy_tau",
-  "b_1", "b_2", "b_3", "b_4", "b1_str_yr_tau", "b2_str_yr_tau",
-  "b3_str_yr_tau", "b4_str_yr_tau", "b1_str_yr_mu", "b2_str_yr_mu", "b3_str_yr_mu",
-  "b4_str_yr_mu", "g0", "g_1", "g_2", "g_3", "g_4", "g1_str_yr_tau", "g2_str_yr_tau",
-  "g3_str_yr_tau", "g4_str_yr_tau", "g1_str_yr_mu", "g2_str_yr_mu", "g3_str_yr_mu",
-  "g4_str_yr_mu")
 
+if(modelname=="quadratic") {
+
+  stan_pars = c("b0_str_yr", "b0_str_yr_tau", "g0_strategy", "g0_strategy_tau",
+    "b_1", "b_2", "b_3", "b_4", "b1_str_yr_tau", "b2_str_yr_tau", "b3_str_yr_tau",
+    "b4_str_yr_tau", "b1_str_yr_mu", "b2_str_yr_mu", "b3_str_yr_mu",
+    "b4_str_yr_mu", "g0", "g_1", "g_2", "g_3", "g_4", "g1_str_yr_tau", "g2_str_yr_tau",
+    "g3_str_yr_tau", "g4_str_yr_tau", "g1_str_yr_mu", "g2_str_yr_mu", "g3_str_yr_mu",
+    "g4_str_yr_mu")
+
+  library(rstan)
+  rstan_options(auto_write = TRUE)
+  options(mc.cores = parallel::detectCores())
+
+  # estimate model. This model is modified from the simulation model by (1) including indices to allow NAs in the inputted data, and (2) including estimated year effects (intercepts)
+  mod = stan(file = 'salmon/analysis/portfolio-offset-quadratic.stan',data = stan_data,
+    verbose = TRUE, chains = 3, thin = 1, warmup = 1000, iter = 2000, pars = stan_pars)
+
+  save.image("salmon/analysis/model-quadratic.Rdata")
+
+}
+
+if(modelname=="linear") {
+  stan_pars = c("b0_str_yr", "b0_str_yr_tau", "g0_strategy", "g0_strategy_tau",
+    "b_1", "b_2", "b_4", "b1_str_yr_tau", "b2_str_yr_tau",
+    "b4_str_yr_tau", "b1_str_yr_mu", "b2_str_yr_mu",
+    "b4_str_yr_mu", "g0", "g_1", "g_2", "g_4", "g1_str_yr_tau", "g2_str_yr_tau",
+    "g4_str_yr_tau", "g1_str_yr_mu", "g2_str_yr_mu",
+    "g4_str_yr_mu")
+
+  library(rstan)
+  rstan_options(auto_write = TRUE)
+  options(mc.cores = parallel::detectCores())
+
+  # estimate model. This model is modified from the simulation model by (1) including indices to allow NAs in the inputted data, and (2) including estimated year effects (intercepts)
+  mod = stan(file = 'salmon/analysis/portfolio-offset-linear.stan',data = stan_data,
+    verbose = TRUE, chains = 3, thin = 1, warmup = 1000, iter = 2000, pars = stan_pars)
+
+  save.image("salmon/analysis/model-linear.Rdata")
+}
+
+if(modelname=="interceptonly") {
+stan_pars = c("b0_str_yr", "b0_str_yr_tau", "g0_strategy", "g0_strategy_tau",
+  "b_1", "b_4", "b1_str_yr_tau", "b4_str_yr_tau",
+  "b4_str_yr_mu", "g0", "g_1", "g_4", "g1_str_yr_tau",
+  "g4_str_yr_tau", "g4_str_yr_mu")
+
+library(rstan)
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+
+# estimate model. This model is modified from the simulation model by (1) including indices to allow NAs in the inputted data, and (2) including estimated year effects (intercepts)
+mod = stan(file = 'salmon/analysis/portfolio-offset-linear-nointeraction.stan',data = stan_data,
+  verbose = TRUE, chains = 3, thin = 1, warmup = 1000, iter = 2000, pars = stan_pars)
+
+save.image("salmon/analysis/model-linear-nointeractions.Rdata")
+
+}
+
+
+#############################################################
+# Fit model with interactions
+#############################################################
 stan_pars = c("b0_str_yr", "b0_str_yr_tau", "g0_strategy", "g0_strategy_tau",
   "b_1", "b_2", "b_4", "b1_str_yr_tau", "b2_str_yr_tau",
   "b4_str_yr_tau", "b1_str_yr_mu", "b2_str_yr_mu",
   "b4_str_yr_mu", "g0", "g_1", "g_2", "g_4", "g1_str_yr_tau", "g2_str_yr_tau",
   "g4_str_yr_tau", "g1_str_yr_mu", "g2_str_yr_mu",
   "g4_str_yr_mu")
+
 library(rstan)
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
@@ -51,5 +108,4 @@ mod = stan(file = 'salmon/analysis/portfolio-offset-linear.stan',data = stan_dat
   verbose = TRUE, chains = 3, thin = 1, warmup = 1000, iter = 2000, pars = stan_pars)
 
 save.image("salmon/analysis/model-linear.Rdata")
-
 
