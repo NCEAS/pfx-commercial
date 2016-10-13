@@ -1,7 +1,7 @@
 library(dplyr)
 revenueThreshold = 10000
 
-dat.diff = readRDS(file="portfolio/data-generated/cfec-diff-for-modeling.rds")
+dat.diff = readRDS(file="portfolio/data-generated/salmon-diff-for-modeling.rds")
 
 length(unique(dat.diff$p_holder))
 
@@ -11,6 +11,7 @@ dat.diff = group_by(dat.diff, p_holder) %>%
   select(-medRev)
 
 length(unique(dat.diff$p_holder))
+# 3483 people of 3592
 
 dat.salmon = dat.diff[dat.diff$strategy_permit%in%c("S01A", "S01E", "S01K", "S03A", "S03E","S01M"),]
 length(unique(dat.salmon$p_holder))

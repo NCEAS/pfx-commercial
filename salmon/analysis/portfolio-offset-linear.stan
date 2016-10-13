@@ -95,18 +95,18 @@ model {
   # b_1 is array nYear x nPermit
   b1_str_yr_tau ~ student_t(3, 0, 2);
   b2_str_yr_tau ~ student_t(3, 0, 2);
-  b3_str_yr_tau ~ student_t(3, 0, 2);
+  #b3_str_yr_tau ~ student_t(3, 0, 2);
   b1_str_yr_mu ~ student_t(3, 0, 2);
   b2_str_yr_mu ~ student_t(3, 0, 2);
-  b3_str_yr_mu ~ student_t(3, 0, 2);
+  #b3_str_yr_mu ~ student_t(3, 0, 2);
   for(i in 1:n_strategy) {
     b_1[1,i] ~ normal(0, 2);# year 1
     b_2[1,i] ~ normal(0, 2);# year 1
-    b_3[1,i] ~ normal(0, 2);# year 1
+    #b_3[1,i] ~ normal(0, 2);# year 1
     for(t in 2:n_yr) {
       b_1[t,i] ~ normal(b_1[t-1,i], b1_str_yr_tau);
       b_2[t,i] ~ normal(b_2[t-1,i], b2_str_yr_tau);
-      b_3[t,i] ~ normal(b_3[t-1,i], b3_str_yr_tau);
+      #b_3[t,i] ~ normal(b_3[t-1,i], b3_str_yr_tau);
     }
   }
 
@@ -120,18 +120,18 @@ model {
   # b_1 is array nYear x nPermit
   g1_str_yr_tau ~ student_t(3, 0, 2);
   g2_str_yr_tau ~ student_t(3, 0, 2);
-  g3_str_yr_tau ~ student_t(3, 0, 2);
+  #g3_str_yr_tau ~ student_t(3, 0, 2);
   g1_str_yr_mu ~ student_t(3, 0, 2);
   g2_str_yr_mu ~ student_t(3, 0, 2);
-  g3_str_yr_mu ~ student_t(3, 0, 2);
+  #g3_str_yr_mu ~ student_t(3, 0, 2);
   for(i in 1:n_strategy) {
     g_1[1,i] ~ normal(0, 2);# year 1
     g_2[1,i] ~ normal(0, 2);# year 1
-    g_3[1,i] ~ normal(0, 2);# year 1
+    #g_3[1,i] ~ normal(0, 2);# year 1
     for(t in 2:n_yr) {
       g_1[t,i] ~ normal(g_1[t-1,i], g1_str_yr_tau);
       g_2[t,i] ~ normal(g_2[t-1,i], g2_str_yr_tau);
-      g_3[t,i] ~ normal(g_3[t-1,i], g3_str_yr_tau);
+      #g_3[t,i] ~ normal(g_3[t-1,i], g3_str_yr_tau);
     }
   }
 

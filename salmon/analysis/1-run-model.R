@@ -1,6 +1,8 @@
 
 diffdat = readRDS(file="salmon/data-generated/salmon.rds")
 
+diffdat = diffdat[-which(is.na(diffdat$days.change)),]
+
 # prep data for stan
 N = nrow(diffdat) # number of rows of data
 X_ij = diffdat[,c("days.change")] #"specDiv.change","specdiv.prev",
