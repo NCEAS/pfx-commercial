@@ -2,8 +2,6 @@ library(dplyr)
 library(ggplot2)
 library(reshape2)
 
-pdf(paste0("diversity/generalPlots_multipanel",".pdf"))
-
 cfec = feather::read_feather("portfolio/data-generated/cfec.feather")
 cfec$year <- as.numeric(cfec$year)
 simp.div = function(x) {
@@ -45,6 +43,7 @@ coarse_df$GHL = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("G","H","L"))
 coarse_df$KTD = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("K","T","D"))],1,sum)
 coarse_df$M = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("M"))],1,sum)
 coarse_df$P = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("P"))],1,sum)
+#coarse_df$Q = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("Q"))],1,sum)
 coarse_df$OTHER = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("S","B","G","H","L","K","T","D","M","P")==FALSE)],1,sum)
 coarse_df = coarse_df[,c("S","B","GHL","KTD","M","P","OTHER")]
 
@@ -67,8 +66,6 @@ p1.totals = group_by(totals, year, group) %>%
   summarize(n = sum(n))
 
 #p1 = ggplot(totals, aes(year, n)) + geom_area(aes(fill = group), position = "stack", colour = 1) + xlab("Year") + ylab("People")
-
-
 
 yourfishery <- c("S 01E")
 mydat <- cfec[which(cfec$p_fshy%in%yourfishery),]
@@ -104,8 +101,9 @@ coarse_df$GHL = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("G","H","L"))
 coarse_df$KTD = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("K","T","D"))],1,sum)
 coarse_df$M = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("M"))],1,sum)
 coarse_df$P = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("P"))],1,sum)
-coarse_df$OTHER = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("S","B","G","H","L","K","T","D","M","P")==FALSE)],1,sum)
-coarse_df = coarse_df[,c("S","B","GHL","KTD","M","P","OTHER")]
+coarse_df$Q = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("Q"))],1,sum)
+coarse_df$OTHER = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("S","B","G","H","L","K","T","D","M","P","Q")==FALSE)],1,sum)
+coarse_df = coarse_df[,c("S","B","GHL","KTD","M","P","OTHER","Q")]
 
 clust = fpc::pamk(coarse_df[sample(seq(1,nrow(aqw)),size=1000,replace=F),])# cluster based on subset to pick medoids
 medoids = clust$pamobject$medoids
@@ -162,8 +160,9 @@ coarse_df$GHL = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("G","H","L"))
 coarse_df$KTD = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("K","T","D"))],1,sum)
 coarse_df$M = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("M"))],1,sum)
 coarse_df$P = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("P"))],1,sum)
-coarse_df$OTHER = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("S","B","G","H","L","K","T","D","M","P")==FALSE)],1,sum)
-coarse_df = coarse_df[,c("S","B","GHL","KTD","M","P","OTHER")]
+coarse_df$Q = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("Q"))],1,sum)
+coarse_df$OTHER = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("S","B","G","H","L","K","T","D","M","P","Q")==FALSE)],1,sum)
+coarse_df = coarse_df[,c("S","B","GHL","KTD","M","P","OTHER","Q")]
 
 clust = fpc::pamk(coarse_df[sample(seq(1,nrow(aqw)),size=1000,replace=F),])# cluster based on subset to pick medoids
 medoids = clust$pamobject$medoids
@@ -221,8 +220,10 @@ coarse_df$GHL = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("G","H","L"))
 coarse_df$KTD = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("K","T","D"))],1,sum)
 coarse_df$M = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("M"))],1,sum)
 coarse_df$P = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("P"))],1,sum)
-coarse_df$OTHER = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("S","B","G","H","L","K","T","D","M","P")==FALSE)],1,sum)
-coarse_df = coarse_df[,c("S","B","GHL","KTD","M","P","OTHER")]
+coarse_df$Q = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("Q"))],1,sum)
+#coarse_df$U = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("U"))],1,sum)
+coarse_df$OTHER = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("S","B","G","H","L","K","T","D","M","P","Q")==FALSE)],1,sum)
+coarse_df = coarse_df[,c("S","B","GHL","KTD","M","P","OTHER","Q")]
 
 clust = fpc::pamk(coarse_df[sample(seq(1,nrow(aqw)),size=1000,replace=F),])# cluster based on subset to pick medoids
 medoids = clust$pamobject$medoids

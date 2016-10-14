@@ -91,3 +91,5 @@ diversity/analysis/people_v_boat.R
 .DS_Store
 
 totPounds.csv
+
+salmon/analysis/model-linear.RdataTmp

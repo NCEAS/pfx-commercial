@@ -110,6 +110,8 @@ Figure 5 shows that temporal trends, by permit, in going from 1 to 2 species fis
 
 ## Discussion
 
+- In terms of participation, why did people drop out in 2000 in SEAK and Alaska Peninsula, but not in PWS? PWS largely seems like a boutique fishery on the Copper River -- which includes a qualtiy component (Copper River at forefront) and a timing issue relative to the rest of the Gulf of Alaska populations (buffers against market impacts)
+
 - Revenue is going up since 2000 -- but each permit holder is fishing more (more days, more total pounds) and the trend in weight is faster than the trend in price. 
 
 - Ability to specialize primarily driven by many forces beyond control of fishermen. But in some situations, diversification is possible by extending fishing season to exploit additional spp (fishing earlier for chum in PWS S01E). Or fishing different areas to exploit more spp in S03 (SEAK). 
@@ -229,11 +231,11 @@ ggplot(data=rbind(df.gen,df.spec), aes(year, mean, group=strategy, fill=strategy
 
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying intercepts on estimated mean revenue, by permit. These are interpreted as the mean change in revenue for each permit holder in each year (positive equates to increasing revenue, etc), after accounting for effects of catch diversification and days fished."}
 # grab original data to look at permit names
-diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
+diffdat = readRDS(file="../../portfolio/data-generated/salmon-diff-for-modeling.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
 permits = levels(as.factor(diffdat$permit))
 
-yearpermit = data.frame("yrpermit"=levels(diffdat$year_permit))
+yearpermit = data.frame("yrpermit"=unique(diffdat$year_permit))
 yearpermit$year = as.numeric(substr(yearpermit$yrpermit,1,4))
 yearpermit$permit = substr(yearpermit$yrpermit,6,9)
 
@@ -303,7 +305,7 @@ ggplot(df[df$permits=="S01E",], aes(x=x,y=pred,group=years)) +
 
 ```{r, fig.pos="placeHere", fig.cap="Time varying effects of adding 1 species on revenue (measured in ln dollars) for hypothetical individuals with species diversity ~ 1. This shows declining benefits of diversification for most fisheries, S01M.", echo=FALSE}
 # grab original data to look at permit names
-diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
+diffdat = readRDS(file="../../portfolio/data-generated/salmon-diff-for-modeling.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
 permits = levels(as.factor(diffdat$permit))
 
@@ -354,7 +356,7 @@ ggplot(df[df$diversity==1,], aes(x=years,y=pred,group=permits)) +
   
 ```{r, fig.pos="placeHere", fig.cap="Time varying effects of adding 1 species on log standard deviation of revenue for hypothetical individuals with species diversity ~ 1.", echo=FALSE}
 # grab original data to look at permit names
-diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
+diffdat = readRDS(file="../../portfolio/data-generated/salmon-diff-for-modeling.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
 permits = levels(as.factor(diffdat$permit))
 
