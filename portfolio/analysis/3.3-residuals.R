@@ -137,3 +137,28 @@ ggsave("portfolio/figs/strategy-year-effects.pdf", width = 10, height = 9)
 #   facet_wrap(~strategy) + geom_hline(yintercept = 5000) + xlim(1986, 2015)
 # length(unique(dat$strategy))
 
+# ifq
+
+ifq <- filter(dat_res, str_label %in% c("Hal ll + Sab", "Fin otter", "King C + Tan C")) %>%
+  mutate(ifq0 = year >= 1995 & str_label == "Hal ll + Sab") %>%
+  mutate(ifq1 = year >= 2000 & str_label == "Fin otter") %>%
+  mutate(ifq2 = year >= 2005 & str_label == "King C + Tan C") %>%
+  group_by(str_label, year) %>%
+  mutate(ifq = any(ifq0, ifq1, ifq2))
+
+ggplot(ifq,
+  aes(spec_change, log(abs(log(revenue) - eta)), group = inc)) +
+  geom_point(alpha = 0.2) +
+  facet_grid(str_label~ifq) +
+  geom_smooth(se=F, colour = "red", method = "lm") +
+  theme_bw() + ylim(-10, 2) +
+  ylab("log(|residual|)") + xlab("Change in species diversity") +
+  theme(
+    panel.grid.major = element_line(colour = "grey92", size = 0.2),
+    panel.grid.minor = element_blank(),
+    strip.text.x = element_text(size = 6.5))
+# ggsave("portfolio/figs/stan-offset-panel-mean-resid.png", dpi = 150,
+  # width = 8, height = 7)
+
+m <- lm(log(abs(log(revenue) - eta)) ~ spec_change * inc * ifq - 1, data = ifq)
+arm::display(m)
