@@ -37,7 +37,7 @@ ns <- dat %>% group_by(strategy) %>%
 res <- inner_join(res, ns)
 
 p1 <- res %>%
-  mutate(strategy_label = ifelse(nn > 350, str_label, NA)) %>%
+  mutate(strategy_label = ifelse(nn > 10, str_label, NA)) %>%
   mutate(inc = inc) %>%
   ggplot(aes(x = inc_rev, y = inc)) +
   geom_hline(yintercept = 0, lty = 2, col = "grey65") +
@@ -66,7 +66,7 @@ p2 <- res %>%
   mutate(dec = -dec, dec_rev = -dec_rev) %>%
   mutate(dec.l = -dec.l, dec_rev.l = -dec_rev.l) %>%
   mutate(dec.u = -dec.u, dec_rev.u = -dec_rev.u) %>%
-  mutate(strategy_label = ifelse(nn > 350, str_label, NA)) %>%
+  mutate(strategy_label = ifelse(nn > 10, str_label, NA)) %>%
   ggplot(aes(x = dec_rev, y = dec)) +
   geom_hline(yintercept = 0, lty = 2, col = "grey65") +
   geom_vline(xintercept = 0, lty = 2, col = "grey65") +
@@ -89,3 +89,15 @@ p2 <- res %>%
 pdf("portfolio/figs/stan-offset-break-anti-spaghetti.pdf", width = 10, height = 4)
 grid_arrange_shared_legend(p1, p2, ncol = 2, nrow = 1, position = "right")
 dev.off()
+
+# ifq
+
+ifq <- readr::read_csv("data/ifq_pfshy_year.csv")
+ifq <- ifq %>% filter(!is.na(year_catch_share))
+ifq
+
+ifq2 <- c("B61B", "B61B C61B", "B61B C61B S15B", "B61B S01", "B61B S03",
+  "B61B S03A", "B61B S03E", "B61B S15B", "C61B", "K91", "K91 T09",
+    "M7HB")
+
+res <- res %>% mutate(ifq = strategy %in% ifq2)
