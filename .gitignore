@@ -89,3 +89,5 @@ salmon/paper/salmon_paper_appendix_cache/latex/__packages
 diversity/analysis/people_v_boat.R
 
 .DS_Store
+
+totPounds.csv
