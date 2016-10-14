@@ -16,14 +16,15 @@ knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), 
 library(dplyr)
 library(knitr)
 library(ggplot2)
+library(reshape2)
 library(date)
 library(ggtern)
-library(reshape2)
 library(mgcv)
 library(fpc)
 library(gridExtra)
 library(glmmTMB)
 library(zoo)
+library(rstan)
 modelname = "model-linear" # model-linear-nointeractions
 ```
 
@@ -124,11 +125,43 @@ Figure 5 shows that temporal trends, by permit, in going from 1 to 2 species fis
 
 \break  
 
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Harvest of hatchery produced salmon through time and by area.", fig.height=3.2}
+
+seak = read.csv("salmon/data-generated/stopha_table32.csv")
+pws = read.csv("salmon/data-generated/stopha_table33.csv")
+kodiak = read.csv("salmon/data-generated/stopha_table35.csv")
+
+seak = melt(seak, id.vars = c("Year"))
+pws = melt(pws, id.vars = c("Year"))
+kodiak = melt(kodiak, id.vars = c("Year"))
+
+seak$region = "Southeast"
+pws$region = "Prince William Sound"
+kodiak$region = "Kodiak"
+
+seak$value[which(is.na(seak$value))] = 0
+pws$value[which(is.na(pws$value))] = 0
+kodiak$value[which(is.na(kodiak$value))] = 0
+
+dat = bind_rows(seak, pws)
+dat = bind_rows(dat, kodiak)
+
+names(dat)[which(names(dat)=="variable")]="species"
+dat$value = dat$value / 1000000
+
+ggplot(dat, aes(Year, value)) +
+  geom_area(aes(fill = species), position = "stack", colour = 1) +
+  xlab("Year") + ylab("Harvest of hatchery produced salmon (millions)") +
+  facet_wrap(~region, scale="free_y")
+
+```
+
+
+
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying species composition and diversity, by permit. Species are colored as follows: yellow (chum), pink (sockeye), red (Chinook), green (coho), blue (pink salmon).", fig.height=3.2}
 cfec <- feather::read_feather("../../portfolio/data-generated/salmon.feather")
 cfec$year = as.numeric(substr(cfec$landdate, 1, 4))
 
-library(dplyr)
 # plot proportion of species landed by salmon permit
 g1 = group_by(cfec[cfec$p_fshy=="S 01A" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
@@ -202,10 +235,6 @@ gridExtra::grid.arrange(g4, g5, g6, h4, h5, h6, nrow=2)
 ```
   
 \break  
-  
-```{r, echo=FALSE}
-library(rstan)
-```
 
 ```{r, eval=FALSE,echo=FALSE}
 load("../../salmon/analysis/cv-model-simple.Rdata")
