@@ -252,6 +252,9 @@ cfecAnnual = group_by(cfecnew, p_holder, year) %>%
     region = region[1],
     nregion = length(unique(region)))
 
+# for the synthesis paper :
+saveRDS(cfecnew, file = "portfolio/data-generated/cfec-cleaned.rds")
+
 cfecAnnual = left_join(cfecAnnual, permit_days)
 # also calculate weighted simpson diversity of species
 cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, specn) %>%
