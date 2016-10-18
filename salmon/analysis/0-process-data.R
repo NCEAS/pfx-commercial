@@ -1,7 +1,14 @@
 library(dplyr)
 revenueThreshold = 10000
 
+#dat.diff = readRDS(file="portfolio/data-generated/cfec-diff-for-modeling.rds")
+
 dat.diff = readRDS(file="portfolio/data-generated/salmon-diff-for-modeling.rds")
+
+#group_by(cfec.diff[cfec.diff$permit=="S01E",], year) %>%
+#  summarize(g = sum(revenue))
+#group_by(dat.diff[dat.diff$permit=="S01E",], year) %>%
+#  summarize(g = sum(revenue))
 
 length(unique(dat.diff$p_holder))
 

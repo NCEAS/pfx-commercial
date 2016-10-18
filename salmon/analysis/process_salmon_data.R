@@ -51,7 +51,13 @@ early = rename(early, year=ADFG_B_BATCH_YEAR,
 
 early$g_price=ifelse(early$g_pounds>0,early$g_earn/early$g_pounds,0)
 
-early = early[early$p_fshy%in%c("S 01E", "S 03A", "S 01A", "S 03E", "S 01K", "S 01M"),]
+#early = early[early$p_fshy%in%c("S 01E", "S 03A", "S 01A", "S 03E", "S 01K", "S 01M"),]
+
+#early = group_by(early, p_holder) %>%
+#  mutate(npermit = length(unique(p_fshy))) %>%
+#  filter(npermit == 1) %>%
+#  select(-npermit) %>%
+#  filter(p_fshy %in% c("S 01E", "S 03A", "S 01A", "S 03E", "S 01K", "S 01M"))
 
 saveRDS(early, paste0("processed",y,".rds"))
 
@@ -67,12 +73,34 @@ for(y in 1976:1984) {
 saveRDS(dat, paste0("processed","_allYears",".rds"))
 
 # merge in the 1985+ data
-recent = readRDS("salmon_data.rds")
-recent = recent[,-1]
-recent$startdt = as.character(recent$startdt)
-recent$landdate = as.character(recent$landdate)
-dat = dat[,which(names(dat)%in%names(recent))]
-dat$f_ticket = as.character(dat$f_ticket)
+setwd("/users/eric.ward/downloads/cfec_early")
+older = readRDS("processed_allYears.rds")
 
-cfec = bind_rows(dat, recent)
+setwd("/users/eric.ward/documents/pfx-commercial/data")
+load("cfec_w_IDs")
+#cfecnew = group_by(cfecnew, p_holder, year) %>%
+#  mutate(npermit = length(unique(p_fshy))) %>%
+#  filter(npermit == 1) %>%
+#  select(-npermit) %>%
+#  ungroup() %>%
+#  filter(p_fshy %in% c("S 01E", "S 03A", "S 01A", "S 03E", "S 01K", "S 01M"))
+#cfecnew = cfecnew[which(cfecnew$p_fshy%in%c("S 01K", "S 01M", "S 01E", "S 01A","S 03E","S 03A")),]
+#saveRDS(cfecnew, "recent_salmon.rds")
+cfec = readRDS("recent_salmon.rds")
+
+# run process_raw_cfec_data header here
+
+cfec = cfec[,-1]
+cfec$startdt = as.character(cfec$startdt)
+cfec$landdate = as.character(cfec$landdate)
+
+older = older[,which(names(older)%in%names(cfec))]
+older$f_ticket = as.character(older$f_ticket)
+
+cfec = bind_rows(older, cfec)
+
+
+
+
+
 

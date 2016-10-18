@@ -354,7 +354,7 @@ cfec$spec[cfec$specn==23045] = "POUND"
 cfec$spec[cfec$spec==""] <- NA
 
 # drop records with no spp
-cfec = cfec[-which(is.na(cfec$spec)),]
+cfec = filter(cfec, !is.na(spec))
 rm(spec.tbl)
 ```
 
@@ -507,6 +507,8 @@ cfec$INDEX <- 1:nrow(cfec)
 Just for safety (because 'p_holder' is technically traceable to a person), we're going to convert 'p_holder', 'cadfg', 'p_serial' to a non-traceable identifier. We'll also re-number fish tickets 1:n, so there's no information here that could be used to identify individuals and/or vessels.
 
 ```{r}
+cfec$p_holder_id = cfec$p_holder
+  
 cfec$p_holder = as.numeric(as.factor(cfec$p_holder))
 cfec$cadfg = as.numeric(as.factor(cfec$cadfg))
 cfec$p_serial = as.numeric(as.factor(cfec$p_serial))

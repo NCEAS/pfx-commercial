@@ -127,9 +127,9 @@ Figure 5 shows that temporal trends, by permit, in going from 1 to 2 species fis
 
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Harvest of hatchery produced salmon through time and by area.", fig.height=3.2}
 
-seak = read.csv("salmon/data-generated/stopha_table32.csv")
-pws = read.csv("salmon/data-generated/stopha_table33.csv")
-kodiak = read.csv("salmon/data-generated/stopha_table35.csv")
+seak = read.csv("../../salmon/data-generated/stopha_table32.csv")
+pws = read.csv("../../salmon/data-generated/stopha_table33.csv")
+kodiak = read.csv("../../salmon/data-generated/stopha_table35.csv")
 
 seak = melt(seak, id.vars = c("Year"))
 pws = melt(pws, id.vars = c("Year"))
@@ -188,7 +188,7 @@ g5 = group_by(cfec[cfec$p_fshy=="S 03A" & cfec$spec %in% c("CHUM","COHO","SOCK",
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
   ylab("Species %") + xlab("") + ggtitle("S03A") + theme(legend.position="none")
 
-g6 = group_by(cfec[cfec$p_fshy=="S 03E" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
+g6 = group_by(cfec[cfec$p_fshy=="S 03E" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK") & cfec$year > 0,], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
   ylab("Species %") + xlab("") + ggtitle("S03E") + theme(legend.position="none")
@@ -260,16 +260,20 @@ ggplot(data=rbind(df.gen,df.spec), aes(year, mean, group=strategy, fill=strategy
 
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying intercepts on estimated mean revenue, by permit. These are interpreted as the mean change in revenue for each permit holder in each year (positive equates to increasing revenue, etc), after accounting for effects of catch diversification and days fished."}
 # grab original data to look at permit names
-diffdat = readRDS(file="../../portfolio/data-generated/salmon-diff-for-modeling.rds")
+diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
+
 years = seq(min(diffdat$year), max(diffdat$year))
 permits = levels(as.factor(diffdat$permit))
 
-yearpermit = data.frame("yrpermit"=unique(diffdat$year_permit))
+# note that we have to use factor() here instead of unique() because
+# that's the same as the ordering in the estimation code
+yearpermit = data.frame("yrpermit"=levels(as.factor(diffdat$year_permit)))
 yearpermit$year = as.numeric(substr(yearpermit$yrpermit,1,4))
 yearpermit$permit = substr(yearpermit$yrpermit,6,9)
 
-load(paste0("../../salmon/analysis/",modelname,".Rdata"))
-
+yearpermitold=yearpermit
+load("../../salmon/analysis/model-linear.Rdata")
+yearpermit=yearpermitold
 est = extract(mod, permute="TRUE")
 
 yearpermit$b0 = apply(est$b0_str_yr,2,median)
@@ -286,13 +290,15 @@ ggplot(data=yearpermit) +
   
 \break  
   
-```{r, fig.pos="placeHere", fig.cap="Time varying effects of adding 1 species on revenue (measured in ln dollars) for purse seine permit in Prince William Sound (S01E). This figure illustrates two things: (1) the benefit of adding more species diminishes as a function of past diversity, and (2) the economic benefit to adding more species has been reduced through time.", echo=FALSE, eval=FALSE}
+```{r, echo=FALSE}
+# fig.pos="placeHere", fig.cap="Time varying effects of adding 1 species on revenue (measured in ln dollars) for purse seine permit in Prince William Sound (S01E). This figure illustrates two things: (1) the benefit of adding more species diminishes as a function of past diversity, and (2) the economic benefit to adding more species has been reduced through time."
 # grab original data to look at permit names
 diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
-permits = levels(as.factor(diffdat$permit))
+#permits = levels(as.factor(diffdat$permit))
 
-load(paste0("../../salmon/analysis/",modelname,".Rdata"))
+load("../../salmon/analysis/model-linear.Rdata")
+yearpermit=yearpermitold
 
 est = extract(mod, permute="TRUE")
 
@@ -323,10 +329,10 @@ for(i in 1:nrow(df)) {
   df$high[i] = quantile(tmp,0.975)
 }
 df_s01e_b1 = df
-ggplot(df[df$permits=="S01E",], aes(x=x,y=pred,group=years)) +
-  #geom_ribbon(aes(ymin=low,ymax=high), alpha=0.4) +
-  geom_line() +
-  facet_wrap(~years) + xlab("Previous species diversity") + ylab("Predicted benefit of adding +1 spp (ln $)")
+#ggplot(df[df$permits=="S01E",], aes(x=x,y=pred,group=years)) +
+#  #geom_ribbon(aes(ymin=low,ymax=high), alpha=0.4) +
+#  geom_line() +
+#  facet_wrap(~years) + xlab("Previous species diversity") + ylab("Predicted #benefit of adding +1 spp (ln $)")
 
 ```
   
@@ -336,9 +342,11 @@ ggplot(df[df$permits=="S01E",], aes(x=x,y=pred,group=years)) +
 # grab original data to look at permit names
 diffdat = readRDS(file="../../portfolio/data-generated/salmon-diff-for-modeling.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
-permits = levels(as.factor(diffdat$permit))
+#permits = levels(as.factor(diffdat$permit))
 
-load(paste0("../../salmon/analysis/",modelname,".Rdata"))
+yearpermitold=yearpermit
+load("../../salmon/analysis/model-linear.Rdata")
+yearpermit=yearpermitold
 
 est = extract(mod, permute="TRUE")
 
@@ -354,7 +362,7 @@ x1 = log(specdiv/specdiv.prev)
 x2 = log(specdiv/specdiv.prev) * specdiv.prev
 x3 = log(specdiv/specdiv.prev) * specdiv.prev^2
 
-df = expand.grid("year"=1:29, "diversity" = seq(1,length(x1)), "permit"=1:6)
+df = expand.grid("year"=1:length(years), "diversity" = seq(1,length(x1)), "permit"=1:6)
 df$permits = permits[df$permit]
 df$years = years[df$year]
 df$x = specdiv.prev[df$diversity]
@@ -387,9 +395,10 @@ ggplot(df[df$diversity==1,], aes(x=years,y=pred,group=permits)) +
 # grab original data to look at permit names
 diffdat = readRDS(file="../../portfolio/data-generated/salmon-diff-for-modeling.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
-permits = levels(as.factor(diffdat$permit))
+#permits = levels(as.factor(diffdat$permit))
 
-load(paste0("../../salmon/analysis/",modelname,".Rdata"))
+load("../../salmon/analysis/model-linear.Rdata")
+yearpermit=yearpermitold
 
 est = extract(mod, permute="TRUE")
 
@@ -405,7 +414,7 @@ x1 = log(specdiv/specdiv.prev)
 x2 = log(specdiv/specdiv.prev) * specdiv.prev
 x3 = log(specdiv/specdiv.prev) * specdiv.prev^2
 
-df = expand.grid("year"=1:29, "diversity" = seq(1,length(x1)), "permit"=1:6)
+df = expand.grid("year"=1:length(years), "diversity" = seq(1,length(x1)), "permit"=1:6)
 df$permits = permits[df$permit]
 df$years = years[df$year]
 df$x = specdiv.prev[df$diversity]
@@ -432,37 +441,41 @@ ggplot(df[df$diversity==1,], aes(x=years,y=pred,group=permits)) +
   
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "As model validation, we can compare the estimated intercepts for PWS S01E (purse seine) representing average year to year change in revenue versus the change year over year in ln(pink salmon returns). Correlation between them is ~ 0.8. This suggests (as expected) people on average make a lot more money in years when pink salmon returns are high."}
 
+yearpermit$b0 = apply(est$b0_str_yr,2,median)
+yearpermit$b0_low = apply(est$b0_str_yr,2,quantile,0.025)
+yearpermit$b0_hi = apply(est$b0_str_yr,2,quantile,0.975)
+
 S01E = yearpermit[yearpermit$permit=="S01E",]
 names(S01E)[which(names(S01E)=="year")]="Year"
 
 returns = readxl::read_excel("../../salmon/paper/salmon_returns_PWS.xlsx")
 pinkPWS = returns[,c("Year", "Pink_total", "Chum_total")]
-pinkPWS = pinkPWS[which(pinkPWS$Year >= 1985),]
+pinkPWS = pinkPWS[which(pinkPWS$Year >= 1975),]
 pinkPWS$diff = c(NA, diff(log(pinkPWS$Pink_total)))
 
 pinkPWS = dplyr::left_join(pinkPWS, S01E)
 
+ggplot(data=pinkPWS, aes(b0, diff,color=Year)) + geom_point() + stat_smooth(method=lm) + xlab("Estimated intercept from model") + ylab("Change in total pink salmon returns")
+
 # bring in slopes from above
-slopes = df_s01e_b1[df_s01e_b1$permits=="S01E" & df_s01e_b1$diversity==1,]
-slopes = slopes[,c("years","pred")]
-names(slopes)[which(names(slopes)=="years")] = "Year"
-names(slopes)[which(names(slopes)=="pred")] = "B1"
-pinkPWS = dplyr::left_join(pinkPWS, slopes)
+#slopes = df_s01e_b1[df_s01e_b1$permits=="S01E" & df_s01e_b1$diversity==1,]
+#slopes = slopes[,c("years","pred")]
+#names(slopes)[which(names(slopes)=="years")] = "Year"
+#names(slopes)[which(names(slopes)=="pred")] = "B1"
+#pinkPWS = dplyr::left_join(pinkPWS, slopes)
 
-ggplot(data=pinkPWS, aes(b0, diff)) + geom_point() + stat_smooth(method=lm) + xlab("Estimated intercept from model") + ylab("Change in total pink salmon returns")
+#pinkPWS$diffchum = c(NA, diff(log(pinkPWS$Chum_total)))
 
-pinkPWS$diffchum = c(NA, diff(log(pinkPWS$Chum_total)))
+#prices = group_by(cfec[which(cfec$p_fshy%in%c("S 01E","S 03E") & #cfec$spec%in%c("PINK","CHUM","SOCK")),], year, spec) %>% 
+#  summarize(meanPrice = mean(g_price)) %>%
+#  arrange(year)
+#prices <- dcast(melt(prices, id.vars = c("spec", "year")), year ~ #variable+spec)
+#names(prices)[which(names(prices)=="year")]="Year"
 
-prices = group_by(cfec[which(cfec$p_fshy%in%c("S 01E","S 03E") & cfec$spec%in%c("PINK","CHUM","SOCK")),], year, spec) %>% 
-  summarize(meanPrice = mean(g_price)) %>%
-  arrange(year)
-prices <- dcast(melt(prices, id.vars = c("spec", "year")), year ~ variable+spec)
-names(prices)[which(names(prices)=="year")]="Year"
-
-pinkPWS = dplyr::left_join(pinkPWS, prices)
-pinkPWS$pricediffchum = c(NA, diff(pinkPWS$meanPrice_CHUM))
-pinkPWS$pricediffpink = c(NA, diff(pinkPWS$meanPrice_PINK))
-pinkPWS$pricediffsock = c(NA, diff(pinkPWS$meanPrice_SOCK))
+#pinkPWS = dplyr::left_join(pinkPWS, prices)
+#pinkPWS$pricediffchum = c(NA, diff(pinkPWS$meanPrice_CHUM))
+#pinkPWS$pricediffpink = c(NA, diff(pinkPWS$meanPrice_PINK))
+#pinkPWS$pricediffsock = c(NA, diff(pinkPWS$meanPrice_SOCK))
 
 #cor(pinkPWS[,-c(5,6)], use="pairwise.complete.obs")
 

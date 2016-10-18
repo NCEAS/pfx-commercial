@@ -8,6 +8,10 @@ simp.div = function(x) {
   1/sum((x/sum(x))^2)
 }
 
+# Seak Inside / Outside
+
+#
+
 # sum up halibut landings by region and permit
 pdf("small_vs_large_halibut.pdf")
 group_by(cfec[cfec$region%in%c("PWS","Kodiak","Cook Inlet","SEAK Outside"), ], year, region) %>%

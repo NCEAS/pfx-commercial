@@ -2,7 +2,7 @@ library(dplyr)
 library(ggplot2)
 library(reshape2)
 
-cfec = feather::read_feather("portfolio/data-generated/cfec.feather")
+cfec = readRDS("portfolio/data-generated/cfec-diff-for-modeling.rds")
 cfec$year <- as.numeric(cfec$year)
 simp.div = function(x) {
   1/sum((x/sum(x))^2)
@@ -247,13 +247,12 @@ p4.totals = group_by(totals, year, group) %>%
 #p4 = ggplot(totals, aes(year, n)) + geom_area(aes(fill = group), position = "stack", colour = 1) + xlab("Year") + ylab("People")
 
 # Ole's halibut example
-#yourfishery <- c("SEAK Inside","SEAK Outside","PWS","Cook Inlet",
-#  "Kodiak","Yakutat","Alaska Peninsula")
-#yourfishery <- c("SEAK Inside","SEAK Outside")
+yourfishery <- c("SEAK Inside","SEAK Outside","PWS","Cook Inlet",
+  "Kodiak","Yakutat","Alaska Peninsula")
 #mydat <- cfec[which(cfec$region%in%yourfishery),]
 # Identify dominant strategies associated with this permit
 g2 = group_by(cfec, p_holder) %>%
-  mutate(pws = ifelse(length(which(p_fshy%in%c("B 06B","B 61B")))>0, 1, 0)) %>%
+  mutate(pws = ifelse(length(which(cfec$region%in%yourfishery & p_fshy%in%c("B 06B","B 61B")))>0, 1, 0)) %>%
   filter(pws>0) %>%
   select(-pws) %>%
   group_by(p_holder, year, p_fshy) %>%
@@ -272,7 +271,7 @@ for(i in 1:ncol(aqw)) {
   aqw[which(is.na(aqw[,i])),i] = 0
 }
 
-indx = sample(seq(1,nrow(aqw)),size=5000,replace=F)
+indx = sample(seq(1,nrow(aqw)),size=1000,replace=F)
 sub = aqw[indx,-c(1,2)]
 
 sub = aqw[,-c(1,2)]
@@ -288,7 +287,7 @@ coarse_df$Q = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("Q"))],1,sum)
 coarse_df$OTHER = apply(coarse_df[,which(substr(names(sub),1,1)%in%c("S","B","G","H","L","K","T","D","M","P","Q")==FALSE)],1,sum)
 coarse_df = coarse_df[,c("S","B","GHL","KTD","M","P","OTHER","Q")]
 
-clust = fpc::pamk(coarse_df[sample(seq(1,nrow(aqw)),size=20000,replace=F),])# cluster based on subset to pick medoids
+clust = fpc::pamk(coarse_df[sample(seq(1,nrow(aqw)),size=1000,replace=F),])# cluster based on subset to pick medoids
 medoids = clust$pamobject$medoids
 
 names_medoids = ""
