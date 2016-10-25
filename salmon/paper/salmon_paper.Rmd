@@ -47,7 +47,9 @@ A secondary motivation for focusing on the effects of diversification for salmon
 
 [Jordan: Maybe a paragraph or notes about the importance of the role that salmon are serving in buffering or stabilizing fishing revenues in the state and how subsequently, understanding the responses of salmon to climate dynamics is especially critical (Mueter et al. 2002, and maybe Schindler et al., 2010)]
 
-In addition to the changing species composition of fish available to be harvested, the benefits (or costs) of diversification are affected by a number of exogenous drivers, including the influx of farmed salmon, consolidation of salmon buyers, marketing, prices, new processing technology [@knapp_trends]. [Break out as own paragraph+add more examples?] Following price crashes in the 1990s and early 2000s (cite CFEC), many of these factors have been positive for salmon fishermen (increasing trends in prices and catches, Fig. A3, A12). In contrast, the late 1980s - early 1990s experienced high abundance and low prices (in part due to collapses of foreign currencies). Combined with the increased trend in hatchery production and resulting changes in species composition of adult salmon, these external factors may have also altered incentives for diversification. If there's an incentive to substitute high value species (Chinook, sockeye) with more abundant low value species (pink, chum), the analog in the terrestrial farming world would be crop substitution of low-volume high value crops (spices) with high-volume low value crops (cereals) (other examples in literature = cocoa, tobacco).  
+In addition to the changing species composition of fish available to be harvested, the benefits (or costs) of diversification are affected by a number of exogenous drivers, including the influx of farmed salmon, consolidation of salmon buyers, marketing, prices, new processing technology [@knapp_trends]. [Break out as own paragraph+add more examples?] Following price crashes in the 1990s and early 2000s (cite CFEC), many of these factors have been positive for salmon fishermen (increasing trends in prices and catches, Fig. A3, A12). In contrast, the late 1980s - early 1990s experienced high abundance and low prices (in part due to collapses of foreign currencies). Combined with the increased trend in hatchery production and resulting changes in species composition of adult salmon, these external factors may have also altered incentives for diversification. 
+
+Tradeoffs between specialization and diversification may also be found in case studies of terrestrial agriculture. For small scale farmers, increasing crop diversity may increase revenue and stabilize year-to-year income variability [@di_falco_crop_2003]. At larger scales or in the developed world, however, the incentives for diversification may be different. In the United States and Canada for example, crop diversity has declined since the late-1970s [@aguilar_crop_2015; @bradshaw_farm-level_2004]; some of the factors responsible include changing national policies, technology, and increased demand from other parts of the world (e.g. increased U.S. production of soybeans to meet demand from Asia). Shifts to from diverse of high value cash-crops to specializing on high-volume low-value crops such as cereals may have analogs for salmon fishermen in low value species with rapid life histories (pink and chum salmon).  
 
 The objective of our analysis is to better understand the effects of diversification on single-permit salmon holders by extending the methods used by [@anderson_benefits] to include time-varying effects. These time-varying effects will allow us to compare temporal trends across regions, identify periods when having diverse catch portfolio was most beneficial, and allow us to evaluate support for effects of longer term drivers in the region. 
 
@@ -161,49 +163,61 @@ dat = bind_rows(dat, kodiak)
 names(dat)[which(names(dat)=="variable")]="species"
 dat$value = dat$value / 1000000
 
+# chinook chum coho pink sock
+cbPalette <- c("#009E73", "#4B2E83", "#999999", "#CC79A7", "#D55E00")
+
+dat$col = as.numeric(as.factor(dat$species))
 ggplot(dat, aes(Year, value)) +
-  geom_area(aes(fill = species), position = "stack", colour = 1) +
+  geom_area(aes(fill = cbPalette[col]), position = "stack") +
   xlab("Year") + ylab("Harvest of hatchery produced salmon (millions)") +
+  scale_fill_manual(values = cbPalette) + theme(legend.position="none") + 
   facet_wrap(~region, scale="free_y")
 
 ```
 
 
 
-```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying species composition and diversity, by permit. Species are colored as follows: yellow (chum), pink (sockeye), red (Chinook), green (coho), blue (pink salmon).", fig.height=3.2}
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying species composition and diversity, by permit. Species are colored as follows: green (Chinook), purple (chum), silver  (coho), pink (pink), red (sockeye).", fig.height=3.2}
 cfec <- feather::read_feather("../../portfolio/data-generated/salmon.feather")
 cfec$year = as.numeric(substr(cfec$landdate, 1, 4))
 
 # plot proportion of species landed by salmon permit
+
 g1 = group_by(cfec[cfec$p_fshy=="S 01A" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
-  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S01A") + theme(legend.position="none")
+  ylab("Species %") + xlab("") + ggtitle("S01A")+ theme(legend.position="none") + 
+scale_colour_manual(values=cbPalette)
 
 g2 = group_by(cfec[cfec$p_fshy=="S 01E" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
-  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S01E") + theme(legend.position="none")
+  ylab("Species %") + xlab("") + ggtitle("S01E") + theme(legend.position="none") + 
+scale_colour_manual(values=cbPalette)
 
 g3 = group_by(cfec[cfec$p_fshy=="S 01K" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
-  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S01K") + theme(legend.position="none")
+  ylab("Species %") + xlab("") + ggtitle("S01K") + theme(legend.position="none") + 
+scale_colour_manual(values=cbPalette)
 
 g4 = group_by(cfec[cfec$p_fshy=="S 01M" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
-  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S01M") + theme(legend.position="none")
+  ylab("Species %") + xlab("") + ggtitle("S01M") + theme(legend.position="none") + 
+scale_colour_manual(values=cbPalette)
 
 g5 = group_by(cfec[cfec$p_fshy=="S 03A" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
-  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S03A") + theme(legend.position="none")
+  ylab("Species %") + xlab("") + ggtitle("S03A") + theme(legend.position="none") + 
+scale_colour_manual(values=cbPalette)
 
 g6 = group_by(cfec[cfec$p_fshy=="S 03E" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK") & cfec$year > 0,], year, spec, p_fshy) %>%
-  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
+  summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S03E") + theme(legend.position="none")
+  ylab("Species %") + xlab("") + ggtitle("S03E") + theme(legend.position="none") + 
+scale_colour_manual(values=cbPalette)
 
 dat.diff = readRDS(file="../../portfolio/data-generated/cfec-diff-for-modeling.rds")
 dat.diff = dat.diff[which(dat.diff$revenue >= 10000 & dat.diff$revenue.prev >= 10000), ]
