@@ -153,9 +153,9 @@ seak$region = "Southeast"
 pws$region = "Prince William Sound"
 kodiak$region = "Kodiak"
 
-seak$value[which(is.na(seak$value))] = 0
-pws$value[which(is.na(pws$value))] = 0
-kodiak$value[which(is.na(kodiak$value))] = 0
+seak$value[is.na(seak$value)] = 0
+pws$value[is.na(pws$value)] = 0
+kodiak$value[is.na(kodiak$value)] = 0
 
 dat = bind_rows(seak, pws)
 dat = bind_rows(dat, kodiak)
@@ -168,10 +168,13 @@ cbPalette <- c("#009E73", "#4B2E83", "#999999", "#CC79A7", "#D55E00")
 
 dat$col = as.numeric(as.factor(dat$species))
 ggplot(dat, aes(Year, value)) +
-  geom_area(aes(fill = cbPalette[col]), position = "stack") +
+  geom_area(aes(fill = species), position = "stack") +
   xlab("Year") + ylab("Harvest of hatchery produced salmon (millions)") +
-  scale_fill_manual(values = cbPalette) + theme(legend.position="none") + 
+  scale_fill_manual(values = c('Chinook'=cbPalette[1], 'Chum'=cbPalette[2], 
+    'Coho'=cbPalette[3], 'Pink'=cbPalette[4], 'Sockeye'=cbPalette[5]), name="Species",
+    labels =c("Chinook","Sockeye","Coho","Pink","Chum")) + 
   facet_wrap(~region, scale="free_y")
+
 
 ```
 
