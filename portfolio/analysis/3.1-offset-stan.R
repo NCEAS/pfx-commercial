@@ -65,7 +65,7 @@ init_fun <- function() {
 }
 
 m <- stan("portfolio/analysis/portfolio-offset.stan",
-  data = standat, iter = 500, chains = 4,
+  data = standat, iter = 2000, chains = 4,
   pars = c("mu", "sigma"), include = FALSE, init = init_fun)
 save(m, standat, file = "portfolio/data-generated/m.rda")
 
