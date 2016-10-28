@@ -143,24 +143,24 @@ Larger values of $\Delta { p }_{ ind,t }$ indicate greater year-to-year discrepa
 
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Harvest of hatchery produced salmon through time and by area.", fig.height=3.2}
 
-seak = read.csv("../../salmon/data-generated/stopha_table32.csv")
-pws = read.csv("../../salmon/data-generated/stopha_table33.csv")
-kodiak = read.csv("../../salmon/data-generated/stopha_table35.csv")
+seak_hatch = read.csv("../../salmon/data-generated/seak_hatcheryHarvest.csv")
+pws_hatch = read.csv("../../salmon/data-generated/pws_hatcheryHarvest.csv")
+kodiak_hatch = read.csv("../../salmon/data-generated/kodiak_hatcheryHarvest.csv")
 
-seak = melt(seak, id.vars = c("Year"))
-pws = melt(pws, id.vars = c("Year"))
-kodiak = melt(kodiak, id.vars = c("Year"))
+seak_hatch = melt(seak_hatch, id.vars = c("Year"))
+pws_hatch = melt(pws_hatch, id.vars = c("Year"))
+kodiak_hatch = melt(kodiak_hatch, id.vars = c("Year"))
 
-seak$region = "Southeast"
-pws$region = "Prince William Sound"
-kodiak$region = "Kodiak"
+seak_hatch$region = "Southeast"
+pws_hatch$region = "Prince William Sound"
+kodiak_hatch$region = "Kodiak"
 
-seak$value[is.na(seak$value)] = 0
-pws$value[is.na(pws$value)] = 0
-kodiak$value[is.na(kodiak$value)] = 0
+seak_hatch$value[is.na(seak_hatch$value)] = 0
+pws_hatch$value[is.na(pws_hatch$value)] = 0
+kodiak_hatch$value[is.na(kodiak_hatch$value)] = 0
 
-dat = bind_rows(seak, pws)
-dat = bind_rows(dat, kodiak)
+dat = bind_rows(seak_hatch, pws_hatch)
+dat = bind_rows(dat, kodiak_hatch)
 
 names(dat)[which(names(dat)=="variable")]="species"
 dat$value = dat$value / 1000000
@@ -176,6 +176,40 @@ ggplot(dat, aes(Year, value)) +
     'Coho'=cbPalette[3], 'Pink'=cbPalette[4], 'Sockeye'=cbPalette[5]), name="Species",
     labels =c("Chinook","Sockeye","Coho","Pink","Chum")) + 
   facet_wrap(~region, scale="free_y")
+
+# bring in total harvest data (hatchery + wild)
+#seak = read.csv("../../salmon/data-generated/stopha_table32.csv")
+pws = read.csv("../../salmon/data-generated/pws_totalHarvest.csv")
+kodiak = read.csv("../../salmon/data-generated/kodiak_totalHarvest.csv")
+
+pws = melt(pws[,c("Year","Chinook","Sockeye","Coho","Pink","Chum")], id.vars = c("Year"))
+kodiak = melt(kodiak[,c("Year","Chinook","Sockeye","Coho","Pink","Chum")], id.vars = c("Year"))
+pws$region = "Prince William Sound"
+kodiak$region = "Kodiak"
+datall = bind_rows(pws,kodiak)
+names(datall)[which(names(datall)=="variable")]="species"
+datall$value = datall$value / 1000000
+names(datall)[which(names(datall)=="value")]="totalharvest"
+
+# join in hatchery harvest with total harvest
+dat = left_join(dat, datall)
+
+dat$percent_hatch = dat$value/dat$totalharvest
+dat$percent_hatch[is.na(dat$percent_hatch)] = 0
+dat$percent_hatch[dat$percent_hatch>1] = 1
+# chinook chum coho pink sock
+#cbPalette <- c("#009E73", "#4B2E83", "#999999", "#CC79A7", "#D55E00")
+
+ggplot(dat[dat$region%in%c("Kodiak", "Prince William Sound") & dat$Year < 2015,], aes(Year, percent_hatch, color=species)) +
+  geom_line() +
+  xlab("Year") + 
+  ylab("Proportion of hatchery harvest") +
+  facet_wrap(~region, scale="free_y")
+#  
+#  scale_fill_manual(values = c('Chinook'=cbPalette[1], 'Chum'=cbPalette[2], 
+#    'Coho'=cbPalette[3], 'Pink'=cbPalette[4], 'Sockeye'=cbPalette[5]), name="Species",
+#    labels =c("Chinook","Sockeye","Coho","Pink","Chum")) + 
+  
 ```
 
 
