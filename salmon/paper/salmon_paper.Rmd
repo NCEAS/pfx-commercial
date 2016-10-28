@@ -8,14 +8,13 @@ output:
     fig_caption: yes
   html_document: default
   word_document: default
-bibliography: salmon.bib
+bibliography: CatchPortfolios_salmon.bib
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
-library(dplyr)
 library(knitr)
-library(ggplot2)
+library(tidyverse)
 library(reshape2)
 library(date)
 library(ggtern)
@@ -26,6 +25,7 @@ library(glmmTMB)
 library(zoo)
 library(rstan)
 modelname = "model-linear" # model-linear-nointeractions
+
 ```
 
 ## Abstract
@@ -75,14 +75,6 @@ kable(m)
 
 Hatchery release trends for some regions included in our data have been summarized previously (e.g. [@ward_evaluating] summarized the trends for Prince William Sound). Release patterns have been dominated by pink and chum salmon ([@ward_evaluating], cite more specific #?) and production has increased since the late 1970s (217 million juvenile pink salmon in PWS in 1985 versus 672 million in 2014). Though our analysis with CFEC data doesn't separate hatchery versus wild fish, as a contrast we can make coarse comparisons across regions and species to examine potential effects of hatchery fish on variability. For example, we can compare the variation in the largely hatchery pink salmon returns (earnings and weight) from Prince William Sound to the largely wild pink salmon returns from Southeast Alaska. Similarly, we can compare the variability in earnings from species dominated by hatchery returns (pink, chum) to those with less hatchery influence (Chinook, sockeye). To make these comparisons, we aggregated the earnings and landings by species and permit, then calculated 3-year rolling CVs. As a second comparison, we examined whether long-term participants in any of the fisheries had experienced a change in variability. Similar to [@kasperski_income_2013] who calculated CVs of vessels before and after significant management events, we identified individuals who fished the same permit for at least three years in the first decade of our data (1985-1995) and at least three years in the last decade of the data (2004-2014). 
 
-### Robustness of strategies to changing environments [stash in appendix?]
-
-One of the challenges in modeling the effects of species diversification for individual fishers is that between two years, both the species composition of the catch and the species composition of the fish available to be caught change (making it hard to disentangle the selectivity of fishermen versus portfolio of fish available). To isolate the effects of a changing environment from changing strategies, we used a subset of the data from fishery permits where discrete strategies were emergent. For details see Appendix. 
-
-Using purse seine permit holders in Prince William Sound as an example, we first calculated the species composition (weighted by revenue) for each active permit holder in each year. For each pair of years that an individual fished, we calculated the squared Euclidian distance between the species compositions of those years, $$\Delta { p }_{ ind,t }=\sum _{ sp=1 }^{ 5 }{ { \left| { p }_{ ind,sp,t }-{ p }_{ ind,sp,t-1 } \right|  }^{ 2 } } $$.  
-
-Larger values of $\Delta { p }_{ ind,t }$ indicate greater year-to-year discrepancy in species composition. To focus on individuals who had more constant strategies in adjacent years, we ommitted data corresponding to the upper third of this distribution (retaining $\Delta { p }_{ ind,t }$ < 0.334). Next, we used the species composition from each individual and pair of years to cluster individuals into strategies. Clustering was performed using the partitioning around medoids (pam) algorithm in R with an estimated number of clusters (using 'pamk' in fpc library), and selected 2 groups of individual strategies: pink salmon specialization (medoid proportion of pink salmon = 0.95), and a strategy focused on pink salmon and chum (medoid proportions of 0.64 and 0.31 respectively). For each group, we then calculated the mean and CV of revenue; we calculated the log difference of revenue for each individual, $\Delta { R }_{ i }=\log\left( { R }_{ i,t+1 }/{ R }_{ i,t } \right)$ and then calculated the CV as the standard deviation over people, $sd(\Delta { R }_{ i=1:n })$.  
-
 ### Analysis 3: [Core of paper] Does effect of diversification change over time?
 
 [@anderson_benefits] implemented a hierarchical Bayesian model that allowed group level predictors and covariates (diversity of catch, days fished) to simultaneously affect the mean and the variance of revenue for individual fishers. This model also included random intercepts by strategy and year; these terms allowed all permit holders in a given year to experience common fluctuations (external drivers including price changes, fluctuations in fish population abundance, or environmental disasters such as EVOS). 
@@ -106,7 +98,6 @@ PWS chum and sockeye (increasing hatchery % over time) vs. Bristol Bay (all wild
 CV of variability for high value species (sockeye, Chinook) vs. low value species (pink and chum). Coho fall somewhere in the middle. In other words, how have choices of species to produce by hatcheries affected the CV of revenue for individual permits? % hatchery fish of the harvest could be used as a continuous variable in the model.  
   
 Similar to above, do life-history characteristics influence the variability of revenue? For example, sockeye and chum have substantially more complicated life-history traits (1-5 ocean years) than pink salmon (1 ocean year only). For high-volume hatcheries such as pink salmon: do annual returns affect price and revenue the following year more than for high-value fisheries?  
-  
 ## Results
 
 Our summaries of changing variability (aggregate for each fishery, across individuals, or within individuals) was not consistent with the hypothesis that variability in revenue or landings has decreased over time (Fig. A9-A10). For pink and chum salmon, fisheries in PWS generally experience higher year-to-year variability compared to SEAK. In looking at the changing CV of individuals, we see a slight increase in the CV of revenue for people fishing in the recent decade who were also fishing 1985-1995 (with the exception being S01A). 
@@ -136,6 +127,17 @@ Figure 5 shows that temporal trends, by permit, in going from 1 to 2 species fis
 - The decisions to implement a hatchery program for a given species has economic consequences for overall revenue and the variability of that revenue to fishers and other participants. Salmon that have complex life histories in the ocean phase of their life cycle (sockeye and possibly chum salmon) may have an inherent portfolio that buffers against large annual swings in abundance compared to pink and coho salmon. Also, high-value species may experience less annual fluctuation than lower value species.  
 
 - The potential to diversify may be limited for areas with a limited number of available species or by managements actions that prohibit fishing in certain areas (e.g., PWS where seiners are generally confined to areas/times with pink and chum salmon whereas gillnet fishers are able to fish in areas with sockeye, chum, Chinook, coho, and pink salmon). Rich can provide a citation for the PWS management plan.  
+
+- One of the outputs that can be calculated from the raw data is variability of revenue over time (e.g. year to year, at the level of individual & permit). This gets at more of the social impacts of changing opportunities, but long term trends in rising income variability have been documented in the US (Hacker 2006). Understanding trends in revenue of individuals whose incomes are dependent on natural resources are interesting because they tend to be more variable than that of the larger population [@mishra_income_2002]. Are there specific attributes that correlate with rising variability (for example the CBO has suggested variability in year to year income is negatively correlated with income [@cbo_recent_2008]) 
+
+### Robustness of strategies to changing environments [stash in appendix?]
+
+One of the challenges in modeling the effects of species diversification for individual fishers is that between two years, both the species composition of the catch and the species composition of the fish available to be caught change (making it hard to disentangle the selectivity of fishermen versus portfolio of fish available). To isolate the effects of a changing environment from changing strategies, we used a subset of the data from fishery permits where discrete strategies were emergent. For details see Appendix. 
+
+Using purse seine permit holders in Prince William Sound as an example, we first calculated the species composition (weighted by revenue) for each active permit holder in each year. For each pair of years that an individual fished, we calculated the squared Euclidian distance between the species compositions of those years, $$\Delta { p }_{ ind,t }=\sum _{ sp=1 }^{ 5 }{ { \left| { p }_{ ind,sp,t }-{ p }_{ ind,sp,t-1 } \right|  }^{ 2 } } $$.  
+
+Larger values of $\Delta { p }_{ ind,t }$ indicate greater year-to-year discrepancy in species composition. To focus on individuals who had more constant strategies in adjacent years, we ommitted data corresponding to the upper third of this distribution (retaining $\Delta { p }_{ ind,t }$ < 0.334). Next, we used the species composition from each individual and pair of years to cluster individuals into strategies. Clustering was performed using the partitioning around medoids (pam) algorithm in R with an estimated number of clusters (using 'pamk' in fpc library), and selected 2 groups of individual strategies: pink salmon specialization (medoid proportion of pink salmon = 0.95), and a strategy focused on pink salmon and chum (medoid proportions of 0.64 and 0.31 respectively). For each group, we then calculated the mean and CV of revenue; we calculated the log difference of revenue for each individual, $\Delta { R }_{ i }=\log\left( { R }_{ i,t+1 }/{ R }_{ i,t } \right)$ and then calculated the CV as the standard deviation over people, $sd(\Delta { R }_{ i=1:n })$.  
+
 
 \break  
 
@@ -174,14 +176,14 @@ ggplot(dat, aes(Year, value)) +
     'Coho'=cbPalette[3], 'Pink'=cbPalette[4], 'Sockeye'=cbPalette[5]), name="Species",
     labels =c("Chinook","Sockeye","Coho","Pink","Chum")) + 
   facet_wrap(~region, scale="free_y")
-
-
 ```
 
 
 
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Time varying species composition and diversity, by permit. Species are colored as follows: green (Chinook), purple (chum), silver  (coho), pink (pink), red (sockeye).", fig.height=3.2}
-cfec <- feather::read_feather("../../portfolio/data-generated/salmon.feather")
+#cfec <- feather::read_feather("../../portfolio/data-generated/salmon.feather")
+#saveRDS(cfec, "portfolio/data-generated/salmon_data_for_paper.rds")
+cfec = readRDS("../../portfolio/data-generated/salmon_data_for_paper.rds")
 cfec$year = as.numeric(substr(cfec$landdate, 1, 4))
 
 # plot proportion of species landed by salmon permit
@@ -189,38 +191,45 @@ cfec$year = as.numeric(substr(cfec$landdate, 1, 4))
 g1 = group_by(cfec[cfec$p_fshy=="S 01A" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S01A")+ theme(legend.position="none") + 
-scale_colour_manual(values=cbPalette)
+  ylab("Species %") + xlab("") + ggtitle("S01A") + 
+scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
+    'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]), name="Species",
+    labels =c("Chinook","Chum","Coho","Pink","Sockeye")) + theme(legend.position="none")
 
 g2 = group_by(cfec[cfec$p_fshy=="S 01E" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
   ylab("Species %") + xlab("") + ggtitle("S01E") + theme(legend.position="none") + 
-scale_colour_manual(values=cbPalette)
+scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
+    'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]))
 
 g3 = group_by(cfec[cfec$p_fshy=="S 01K" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
   ylab("Species %") + xlab("") + ggtitle("S01K") + theme(legend.position="none") + 
-scale_colour_manual(values=cbPalette)
+scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
+    'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]))
 
 g4 = group_by(cfec[cfec$p_fshy=="S 01M" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
   ylab("Species %") + xlab("") + ggtitle("S01M") + theme(legend.position="none") + 
-scale_colour_manual(values=cbPalette)
+scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
+    'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]), name = "Species", labels =c("Chinook","Chum","Coho","Pink","Sockeye")) + theme(legend.position="none")
 
 g5 = group_by(cfec[cfec$p_fshy=="S 03A" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
   ylab("Species %") + xlab("") + ggtitle("S03A") + theme(legend.position="none") + 
-scale_colour_manual(values=cbPalette)
+scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
+    'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]))
 
 g6 = group_by(cfec[cfec$p_fshy=="S 03E" & cfec$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK") & cfec$year > 0,], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
   ylab("Species %") + xlab("") + ggtitle("S03E") + theme(legend.position="none") + 
-scale_colour_manual(values=cbPalette)
+scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
+    'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]))
 
 dat.diff = readRDS(file="../../portfolio/data-generated/cfec-diff-for-modeling.rds")
 dat.diff = dat.diff[which(dat.diff$revenue >= 10000 & dat.diff$revenue.prev >= 10000), ]
