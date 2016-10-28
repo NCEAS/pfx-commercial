@@ -177,7 +177,7 @@ g1 = ggplot(dat, aes(Year, value)) +
   facet_wrap(~region, scale="free_y")
 
 # bring in total harvest data (hatchery + wild)
-hatch = read.csv("salmon/data-generated/commonPropertyCommercialCatch.csv")
+hatch = read.csv("../../salmon/data-generated/commonPropertyCommercialCatch.csv")
 hatch = hatch[,c("Year","Chinook","Sockeye","Coho","Pink","Chum","Region")]
 hatch$Region = as.character(hatch$Region)
 hatch$Region[which(hatch$Region=="PWS")] = "Prince William Sound"
