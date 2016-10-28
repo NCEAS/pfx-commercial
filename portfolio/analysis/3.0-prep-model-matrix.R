@@ -48,6 +48,11 @@ md <- select(dat,
   unique %>%
   arrange(strategy_id)
 
+md_ifq <- select(dat,
+  strategy_ifq_id, strategy_ifq_mean_div, strategy_ifq_mean_days, strategy_ifq) %>%
+  unique %>%
+  arrange(strategy_ifq_id)
+
 labels <- readr::read_csv("data/strategies-labels.csv")
 md$str_label <- NULL
 md <- left_join(md, select(labels, strategy, str_label))
@@ -68,7 +73,9 @@ scale_2d = function(x) {
 md <- mutate(md, scaled_strategy_mean_div = scale_2d(strategy_mean_div),
   scaled_strategy_mean_days = scale_2d(strategy_mean_days))
 
-save(dat, mm, mm2, md, file = "portfolio/data-generated/diff-dat-stan.rda")
+md_ifq <- mutate(md_ifq, scaled_strategy_mean_div = scale_2d(strategy_ifq_mean_div),
+  scaled_strategy_mean_days = scale_2d(strategy_ifq_mean_days))
+save(dat, mm, md_ifq, mm2, md, file = "portfolio/data-generated/diff-dat-stan.rda")
 
 # library(ggplot2)
 # ggplot(dat, aes(year, log(revenue))) + geom_point(alpha = 0.1) + facet_wrap(~strategy)
