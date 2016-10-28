@@ -27,6 +27,13 @@ dat <- dat %>% group_by(strategy) %>%
     strategy_mean_days = mean(days_permit)) %>%
   as_data_frame
 
+dat$strategy_ifq_year <- paste(dat$strategy_ifq, dat$year, sep = ":")
+dat$strategy_ifq_id <- as.numeric(as.factor(as.character(dat$strategy_ifq)))
+dat$str_ifq_yr_id <- as.numeric(as.factor(as.character(dat$strategy_ifq_year)))
+dat <- dat %>% group_by(strategy_ifq) %>%
+  mutate(strategy_ifq_mean_div = mean(specDiv),
+    strategy_ifq_mean_days = mean(days_permit)) %>%
+  as_data_frame
 b1 <- function(x, bp = 0) ifelse(x < bp, x, 0)
 b2 <- function(x, bp = 0) ifelse(x < bp, 0, x)
 
