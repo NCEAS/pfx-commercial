@@ -138,7 +138,6 @@ Using purse seine permit holders in Prince William Sound as an example, we first
 
 Larger values of $\Delta { p }_{ ind,t }$ indicate greater year-to-year discrepancy in species composition. To focus on individuals who had more constant strategies in adjacent years, we ommitted data corresponding to the upper third of this distribution (retaining $\Delta { p }_{ ind,t }$ < 0.334). Next, we used the species composition from each individual and pair of years to cluster individuals into strategies. Clustering was performed using the partitioning around medoids (pam) algorithm in R with an estimated number of clusters (using 'pamk' in fpc library), and selected 2 groups of individual strategies: pink salmon specialization (medoid proportion of pink salmon = 0.95), and a strategy focused on pink salmon and chum (medoid proportions of 0.64 and 0.31 respectively). For each group, we then calculated the mean and CV of revenue; we calculated the log difference of revenue for each individual, $\Delta { R }_{ i }=\log\left( { R }_{ i,t+1 }/{ R }_{ i,t } \right)$ and then calculated the CV as the standard deviation over people, $sd(\Delta { R }_{ i=1:n })$.  
 
-
 \break  
 
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Harvest of hatchery produced salmon through time and by area.", fig.height=3.2}
@@ -169,7 +168,7 @@ dat$value = dat$value / 1000000
 cbPalette <- c("#009E73", "#4B2E83", "#999999", "#CC79A7", "#D55E00")
 
 dat$col = as.numeric(as.factor(dat$species))
-ggplot(dat, aes(Year, value)) +
+g1 = ggplot(dat, aes(Year, value)) +
   geom_area(aes(fill = species), position = "stack") +
   xlab("Year") + ylab("Harvest of hatchery produced salmon (millions)") +
   scale_fill_manual(values = c('Chinook'=cbPalette[1], 'Chum'=cbPalette[2], 
@@ -178,38 +177,22 @@ ggplot(dat, aes(Year, value)) +
   facet_wrap(~region, scale="free_y")
 
 # bring in total harvest data (hatchery + wild)
-#seak = read.csv("../../salmon/data-generated/stopha_table32.csv")
-pws = read.csv("../../salmon/data-generated/pws_totalHarvest.csv")
-kodiak = read.csv("../../salmon/data-generated/kodiak_totalHarvest.csv")
+hatch = read.csv("salmon/data-generated/commonPropertyCommercialCatch.csv")
+hatch = hatch[,c("Year","Chinook","Sockeye","Coho","Pink","Chum","Region")]
+hatch$Region = as.character(hatch$Region)
+hatch$Region[which(hatch$Region=="PWS")] = "Prince William Sound"
+hatch = melt(hatch, id.vars = c("Year","Region"))
+names(hatch)[which(names(hatch)=="variable")]="Species"
 
-pws = melt(pws[,c("Year","Chinook","Sockeye","Coho","Pink","Chum")], id.vars = c("Year"))
-kodiak = melt(kodiak[,c("Year","Chinook","Sockeye","Coho","Pink","Chum")], id.vars = c("Year"))
-pws$region = "Prince William Sound"
-kodiak$region = "Kodiak"
-datall = bind_rows(pws,kodiak)
-names(datall)[which(names(datall)=="variable")]="species"
-datall$value = datall$value / 1000000
-names(datall)[which(names(datall)=="value")]="totalharvest"
+g2 = ggplot(hatch, aes(Year, value, color=Species)) + 
+  geom_line() + facet_wrap(~Region) + 
+  xlab("Year") + ylab("Hatchery contribution to catch (%)") + 
+  scale_color_manual(values = c('Chinook'=cbPalette[1], 'Chum'=cbPalette[2], 
+    'Coho'=cbPalette[3], 'Pink'=cbPalette[4], 'Sockeye'=cbPalette[5]), name="Species",
+    labels =c("Chinook","Sockeye","Coho","Pink","Chum"))
 
-# join in hatchery harvest with total harvest
-dat = left_join(dat, datall)
+gridExtra::grid.arrange(g1, g2)
 
-dat$percent_hatch = dat$value/dat$totalharvest
-dat$percent_hatch[is.na(dat$percent_hatch)] = 0
-dat$percent_hatch[dat$percent_hatch>1] = 1
-# chinook chum coho pink sock
-#cbPalette <- c("#009E73", "#4B2E83", "#999999", "#CC79A7", "#D55E00")
-
-ggplot(dat[dat$region%in%c("Kodiak", "Prince William Sound") & dat$Year < 2015,], aes(Year, percent_hatch, color=species)) +
-  geom_line() +
-  xlab("Year") + 
-  ylab("Proportion of hatchery harvest") +
-  facet_wrap(~region, scale="free_y")
-#  
-#  scale_fill_manual(values = c('Chinook'=cbPalette[1], 'Chum'=cbPalette[2], 
-#    'Coho'=cbPalette[3], 'Pink'=cbPalette[4], 'Sockeye'=cbPalette[5]), name="Species",
-#    labels =c("Chinook","Sockeye","Coho","Pink","Chum")) + 
-  
 ```
 
 
