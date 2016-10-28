@@ -321,7 +321,7 @@ within each person-year combination
 to form permit strategies.
 For example, if someone fished halibut
 and sablefish in the same year,
-their strategy for that year would be `halibut-sablefish'.
+their strategy for that year would be "halibut-sablefish".
 Specific details on our strategy definitions are available in
 the Supporting Information.
 
@@ -347,7 +347,7 @@ where $s$ indexes species from $1$ through $n$.
 We calculated effort or effective season length as
 the sum of the season lengths for each permit each year.
 Season length for a given permit
-was calculated as the the number of days between
+was calculated as the number of days between
 the first instance of fishing a permit
 and the last instance of fishing a permit each year.
 For example, if someone fished for 30 days
@@ -366,13 +366,13 @@ Whereas traditional linear models or
 hierarchical linear models generally assume
 homoscedasticity --- that the residual variance 
 is the same for all values of the predictor variables ---
-the variance function regression model allows variance to be heteroskedastic. 
+the variance-function regression model allows the variance to be heteroscedastic. 
 For application to economic data on individual fishing
 portfolios, this type of model allows certain strategies and levels of
 diversification to be more or less variable than others.
 
-We extended the basic variance function regression to a hierarchical
-Bayesian variance function regression model with Gaussian errors
+We extended the basic variance-function regression to a hierarchical
+Bayesian variance-function regression model with Gaussian errors
 predicting $\log$ revenue, $\log(R_{i,t})$, for
 each fisher $i$ and time $t$:
 
@@ -517,14 +517,14 @@ $N(0, 2^2)$ priors on all
 $\beta$, $\gamma$, and $\eta$ parameters,
 and half-$t(3, 0, 2)$ priors
 (i.e. degrees of freedom of 3 and scale of 2)
-on all $\sigma$ parameters.
+on all $\sigma$ parameters to allow for heavier tails.
 We ran four chains and 2,000 iterations and discarded
 the first 1,000 iterations of each chain
 as warm up (i.e. 4,000 final samples).
 We checked for chain convergence visually with trace plots.
 We also ensured that $\hat{R}<1.05$ (the potential scale reduction factor)
 and that the effective sample size,
-as calculated by the rstan package,
+as calculated by the rstan R package [@standevelopmentteam2015],
 was greater than 200 for all parameters [@gelman2014].
 We verified that our model returned sensible estimates by
 comparing our estimates to an ad-hoc two-stage
