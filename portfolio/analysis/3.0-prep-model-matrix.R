@@ -27,6 +27,13 @@ dat <- dat %>% group_by(strategy) %>%
     strategy_mean_days = mean(days_permit)) %>%
   as_data_frame
 
+dat$strategy_ifq_year <- paste(dat$strategy_ifq, dat$year, sep = ":")
+dat$strategy_ifq_id <- as.numeric(as.factor(as.character(dat$strategy_ifq)))
+dat$str_ifq_yr_id <- as.numeric(as.factor(as.character(dat$strategy_ifq_year)))
+dat <- dat %>% group_by(strategy_ifq) %>%
+  mutate(strategy_ifq_mean_div = mean(specDiv),
+    strategy_ifq_mean_days = mean(days_permit)) %>%
+  as_data_frame
 b1 <- function(x, bp = 0) ifelse(x < bp, x, 0)
 b2 <- function(x, bp = 0) ifelse(x < bp, 0, x)
 
@@ -40,6 +47,11 @@ md <- select(dat,
   strategy_id, strategy_mean_div, strategy_mean_days, strategy) %>%
   unique %>%
   arrange(strategy_id)
+
+md_ifq <- select(dat,
+  strategy_ifq_id, strategy_ifq_mean_div, strategy_ifq_mean_days, strategy_ifq) %>%
+  unique %>%
+  arrange(strategy_ifq_id)
 
 labels <- readr::read_csv("data/strategies-labels.csv")
 md$str_label <- NULL
@@ -61,7 +73,9 @@ scale_2d = function(x) {
 md <- mutate(md, scaled_strategy_mean_div = scale_2d(strategy_mean_div),
   scaled_strategy_mean_days = scale_2d(strategy_mean_days))
 
-save(dat, mm, mm2, md, file = "portfolio/data-generated/diff-dat-stan.rda")
+md_ifq <- mutate(md_ifq, scaled_strategy_mean_div = scale_2d(strategy_ifq_mean_div),
+  scaled_strategy_mean_days = scale_2d(strategy_ifq_mean_days))
+save(dat, mm, md_ifq, mm2, md, file = "portfolio/data-generated/diff-dat-stan.rda")
 
 # library(ggplot2)
 # ggplot(dat, aes(year, log(revenue))) + geom_point(alpha = 0.1) + facet_wrap(~strategy)

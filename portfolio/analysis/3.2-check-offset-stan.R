@@ -4,6 +4,7 @@ library(rstan)
 
 load("portfolio/data-generated/diff-dat-stan.rda")
 load("portfolio/data-generated/m.rda")
+load("portfolio/data-generated/m_ifq.rda")
 
 # ------------------------
 b <- broom::tidy(m, conf.int = T, estimate.method = "median", rhat = T, ess = T)
@@ -14,6 +15,16 @@ filter(b, grepl("^g0", term))
 filter(b, grepl("^g_k", term))
 filter(b, grepl("^b_j", term))
 filter(b, grepl("*_tau$", term))
+
+b2 <- broom::tidy(m_ifq, conf.int = T, estimate.method = "median", rhat = T, ess = T)
+if(nrow(filter(b2, rhat > 1.05)) > 0) warning("all rhat not <= 1.05")
+if(nrow(filter(b2, ess < 100)) > 0) warning("all ess not >= 100")
+filter(b2, ess < 100)
+filter(b2, grepl("^h1|^h2", term))
+filter(b2, grepl("^g0", term))
+filter(b2, grepl("^g_k", term))
+filter(b2, grepl("^b_j", term))
+filter(b2, grepl("*_tau$", term))
 
 # check mixing:
 pdf("portfolio/figs/stan-traces.pdf", width = 10, height = 8)

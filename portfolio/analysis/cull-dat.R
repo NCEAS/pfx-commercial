@@ -200,12 +200,22 @@ dat_diff <- group_by(dat_diff, strategy) %>%
   mutate(n0 = sum(spec_change == 0)/n()*100) %>%
   filter(!(n0 > 99 & spec_change != 0))
 
+# Make a separate strategy that is ifq specific for halibut and sable fish 
+dat_diff <- mutate(dat_diff, strategy_ifq = strategy) %>% 
+  mutate(
+    strategy_ifq = 
+      ifelse(grepl("B61B", strategy) & year >= 1995, paste(strategy, "IFQ"), strategy),
+    strategy_ifq = 
+      ifelse(grepl("C61B", strategy) & year >= 1995, paste(strategy, "IFQ"), strategy_ifq))
+# unique(dat_diff$strategy_ifq) %>% sort()
+
 # clean up:
 dat_diff <- as_data_frame(dat_diff) %>%
   select(p_holder, year, days_permit, days_permit.prev, revenue, revenue.prev,
-    length, strategy, specDiv, specdiv.prev, npermit)
+    length, strategy, strategy_ifq, specDiv, specdiv.prev, npermit)
 
 nstrat$final <- length(unique(dat_diff$strategy))
+nstrat$final_ifq <- length(unique(dat_diff$strategy_ifq))
 
 saveRDS(ndat, file = "portfolio/data-generated/ndat-cull.rds")
 saveRDS(nstrat, file = "portfolio/data-generated/nstrat-cull.rds")

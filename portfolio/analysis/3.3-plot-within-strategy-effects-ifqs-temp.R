@@ -3,10 +3,10 @@ library(ggplot2)
 library(viridis)
 library(ggrepel)
 load("portfolio/data-generated/diff-dat-stan.rda")
-load("portfolio/data-generated/m.rda")
+load("portfolio/data-generated/m_ifq.rda")
 devtools::load_all("pfxr")
 
-b <- broom::tidyMCMC(m, conf.int = T, estimate.method = "median",
+b <- broom::tidyMCMC(m_ifq, conf.int = T, estimate.method = "median",
   conf.level = 0.5, conf.method = "quantile")
 
 g1 <- b[grepl("coef_g1", b$term), ]
@@ -14,9 +14,9 @@ b1 <- b[grepl("coef_b1", b$term), ]
 g2 <- b[grepl("coef_g2", b$term), ]
 b2 <- b[grepl("coef_b1", b$term), ]
 
-res <- data.frame(strategy_id = 1:nrow(g1)) %>%
-  inner_join(md) %>%
-  mutate(strategy = as.character(strategy))
+res <- data.frame(strategy_ifq_id = 1:nrow(g1)) %>%
+  inner_join(md_ifq) %>%
+  mutate(strategy = as.character(strategy_ifq))
 res$inc <- g2$estimate
 res$dec <- g1$estimate
 res$inc_rev <- b2$estimate
@@ -32,12 +32,13 @@ res$dec.u <- g1$conf.high
 res$inc_rev.u <- b2$conf.high
 res$dec_rev.u <- b1$conf.high
 
-ns <- dat %>% group_by(strategy) %>%
-  summarise(nn = length(unique(p_holder)))
+ns <- dat %>% group_by(strategy_ifq) %>%
+  summarise(nn = length(unique(p_holder))) %>%
+  rename(strategy = strategy_ifq)
 res <- inner_join(res, ns)
 
 p1 <- res %>%
-  mutate(strategy_label = ifelse(nn > 10, str_label, NA)) %>%
+  mutate(strategy_label = ifelse(nn > 30, strategy_ifq, NA)) %>%
   mutate(inc = inc) %>%
   ggplot(aes(x = inc_rev, y = inc)) +
   geom_hline(yintercept = 0, lty = 2, col = "grey65") +
@@ -49,7 +50,7 @@ p1 <- res %>%
   geom_text_repel(aes(label = strategy_label, x = inc_rev, y = inc),
     size = 2.8, colour = "grey60", #segment.color = "grey80",
     point.padding = unit(0.3, "lines"), max.iter = 6e3, segment.size = 0.3) +
-  geom_point(aes(color = strategy_mean_div, size = nn)) +
+  geom_point(aes(color = strategy_ifq_mean_div, size = nn)) +
   xlab("Effect of generalizing on revenue") +
   ylab("Effect of generalizing on variability") +
   scale_color_viridis() +
@@ -66,7 +67,7 @@ p2 <- res %>%
   mutate(dec = -dec, dec_rev = -dec_rev) %>%
   mutate(dec.l = -dec.l, dec_rev.l = -dec_rev.l) %>%
   mutate(dec.u = -dec.u, dec_rev.u = -dec_rev.u) %>%
-  mutate(strategy_label = ifelse(nn > 10, str_label, NA)) %>%
+  mutate(strategy_label = ifelse(nn > 30, strategy_ifq, NA)) %>%
   ggplot(aes(x = dec_rev, y = dec)) +
   geom_hline(yintercept = 0, lty = 2, col = "grey65") +
   geom_vline(xintercept = 0, lty = 2, col = "grey65") +

@@ -24,10 +24,10 @@ library(glmmTMB)
 library(zoo)
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 revenueThreshold = 10000
 
-dat.annual = readRDS(file="../../portfolio/data-generated/cfec-annual-for-modeling.rds")
+dat.annual = readRDS(file="../../portfolio/data-generated/salmon-annual-for-modeling.rds")
 
 # single permit holders, salmon permits
 dat.annual  = filter(dat.annual ,npermit==1 & substr(strategy_permit,1,1)=="S") %>%
@@ -48,23 +48,60 @@ agg.annual = group_by(dat.annual, strategy_permit, year) %>%
     low = quantile(revenue,0.25),
     upp = quantile(revenue,0.75))
 
-dat.diff = readRDS(file="../../portfolio/data-generated/cfec-diff-for-modeling.rds")
+dat.diff = readRDS(file="../../portfolio/data-generated/salmon-diff-for-modeling.rds")
 dat.diff = dat.diff[which(dat.diff$revenue >= revenueThreshold & dat.diff$revenue.prev >= revenueThreshold), ]
-dat.diff = dat.diff[dat.diff$strategy_permit%in%c("S01A","S01E","S01K","S01L","S01M",
-  "S03A","S03E","S03H","S03M","S03T","S04D","S04H","S04K","S04M","S04T"),]
+dat.diff = dat.diff[dat.diff$strategy_permit%in%c("S01A","S01E","S01K","S01M",
+  "S03A","S03E"),]
 
 agg.diff = group_by(dat.diff, strategy_permit) %>% 
   summarize(specDiv = mean(specDiv), meanrev = mean(revenue),
     cv = sd(log(revenue/revenue.prev)))
 
 # Also load in raw CFEC data for plots
-cfec <- feather::read_feather("../../portfolio/data-generated/cfec.feather")
+#cfec <- feather::read_feather("../../portfolio/data-generated/salmon.feather")
+cfec = readRDS("../../portfolio/data-generated/salmon_data_for_paper.rds")
 cfec = cfec[cfec$p_fshy%in%c("S 01A", "S 01E", "S 01K", "S 03A", "S 03E", "S 01M"),]
 cfec$year = as.numeric(substr(cfec$landdate, 1, 4))
 
 # only use people who are using just that permit - diversification within permit
 cfec.raw = cfec
 dat.salmon = dat.diff[dat.diff$strategy_permit%in%c("S01A", "S01E", "S01K", "S03A", "S03E","S01M"),]
+
+# summarize annual data - total revenue and CV (3-year rolling)
+annual_summary = group_by(cfec[which(cfec$year>0),], year, p_fshy) %>% 
+  summarize(tot = sum(g_earn)) %>% arrange(p_fshy) %>% 
+  group_by(p_fshy) %>% mutate(rollmean = c(NA,rollmean(tot,k=3),NA),
+    rollsd = c(NA,rollapply(tot,width=3,sd),NA), rollcv = rollsd/rollmean)
+#ggplot(annual_summary, aes(year, rollcv,color=p_fshy)) + geom_line()
+#ggplot(annual_summary, aes(log(rollmean), rollcv, color=p_fshy)) + geom_point()
+
+# calculate total earnings by person / permit / year
+indiv_summary = group_by(cfec[which(cfec$year>0),], year, p_holder) %>% 
+  mutate(n = length(unique(p_fshy))) %>% filter(n == 1) %>% 
+  group_by(year, p_holder) %>% 
+  summarize(g = sum(g_earn), p_fshy = p_fshy[1])
+# add in missing data
+people_year = expand.grid("year"=unique(cfec$year[cfec$year>0]), "p_holder"=unique(indiv_summary$p_holder))
+indiv_summary = left_join(people_year, indiv_summary)
+# apply rolling mean / sd to data
+indiv_summary = group_by(indiv_summary, p_holder) %>% 
+  mutate(rollmean = c(NA,rollapply(g,width=3,mean),NA),
+    rollsd = c(NA,rollapply(g,width=3,sd),NA),
+    rollcv = rollsd/rollmean)
+# calculate averages across individuals over time
+indiv_summary = group_by(indiv_summary, p_fshy, year) %>% 
+  summarize(ind_mean = mean(rollmean,na.rm=T), 
+    ind_cv = mean(rollcv,na.rm=T))
+
+alldat = left_join(annual_summary, indiv_summary)
+# this shows cvs that individuals experience are same as cvs of aggregate
+#ggplot(alldat, aes(rollcv, ind_cv,color=p_fshy)) + geom_point()
+#ggplot(alldat, aes(log(rollmean), ind_cv,color=p_fshy)) + geom_point()
+#ggplot(alldat, aes(log(rollmean),log(ind_mean), color=p_fshy)) + geom_point(aes(alpha=year))
+#ggplot(alldat, aes(year, log(rollmean))) + facet_wrap(~p_fshy) + geom_line()
+#ggplot(alldat, aes(year, rollcv)) + facet_wrap(~p_fshy) + geom_line() + geom_line(aes(year, ind_cv, color="red"))
+#ggplot(alldat, aes(year, log(ind_cv/rollcv), col=p_fshy)) + geom_line()
+#ggplot(alldat, aes(log(rollcv), log(ind_cv),color=p_fshy)) + geom_point()
 
 # Restrict analysis to people who keep same strategy - complicates days, etc
 dat.salmon = dat.salmon[which(dat.salmon$strategy_permit==dat.salmon$strategy_permit.prev),]
@@ -79,6 +116,7 @@ cfec.raw$month = as.numeric(substr(cfec.raw$day, 1,2))
 cfec.raw$day = as.numeric(substr(cfec.raw$day, 4,5))
 cfec.raw$jday = mdy.date(cfec.raw$month, cfec.raw$day, cfec.raw$year) - mdy.date(1, 1, cfec.raw$year)
 # summarize the temporal distribution of the catches
+cfec.raw = cfec.raw[which(is.na(cfec.raw$jday)==FALSE),]
 seasons = group_by(cfec.raw, p_fshy, year) %>% 
   summarize(q = mean(sample(jday, size = 10000, replace=T, prob=g_earn)),
     lower = quantile(sample(jday, size = 10000, replace=T, prob=g_earn),0.025),
@@ -88,6 +126,9 @@ seasons = rename(seasons, permit = p_fshy)
 appendixPlot0_p1 = ggplot(seasons, aes(year, q, color = permit, group=permit)) + geom_line() + xlab("Year") + ylab("Mean julian day")
 appendixPlot0_p2 = ggplot(seasons, aes(year, length, color = permit, group=permit)) + geom_line() + xlab("Year") + ylab("Season length")
 ```
+
+
+
 
 ```{r, echo = FALSE, eval=FALSE}
 dat = dat.salmon
@@ -122,7 +163,7 @@ dat$sumP2 = abs(dat$salm - dat$salm.prev) +
 dat = dat[which(dat$sumP2 < 0.3),]
 ```
 
-```{r, echo = FALSE, eval=FALSE, fig.cap="Results for PWS Purse seine fishery", fig.pos="placeHere", cache=TRUE}
+```{r, echo = FALSE, eval=FALSE, fig.cap="Results for PWS Purse seine fishery", fig.pos="placeHere"}
 
 df = dat[which(dat$strategy_permit=="S01E"),]
 pamk_s01e <- pamk(df[,c("chum","pink","sock","salm")])
@@ -304,7 +345,7 @@ ggplot(g, aes(jday, (earn))) + geom_line(colour = rgb(g$sock+g$coho+g$chnk, g$ch
 
 ```
 
-```{r, echo = FALSE, fig.cap="SEAK purse seine fishery", cache=TRUE, fig.pos="placeHere", eval=FALSE}
+```{r, echo = FALSE, fig.cap="SEAK purse seine fishery", fig.pos="placeHere", eval=FALSE}
 
 df = dat[which(dat$strategy_permit=="S01A"),]
 pamk_s01a <- pamk(df[,c("chum","pink","sock","salm")])
@@ -371,9 +412,10 @@ gridExtra::grid.arrange(appendixPlot2_p1,appendixPlot2_p2,appendixPlot2_p3, ncol
 
 \break  
 
-## Species composition
+## Species diversity  
   
-```{r, fig.cap="Proportion of species landed, weighted by earnings", fig.pos="placeHere", echo=FALSE, fig.height = 3.3}
+```{r, fig.cap="Proportion of species landed, weighted by earnings", fig.pos="placeHere", echo=FALSE, fig.height = 3.3, eval=FALSE}
+## Species composition
 # plot proportion of species landed by salmon permit
 group_by(cfec.raw[cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p)) %>%
