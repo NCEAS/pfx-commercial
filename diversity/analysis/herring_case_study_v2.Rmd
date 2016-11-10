@@ -1,0 +1,115 @@
+---
+title: 'Herring Case Study'
+author: ''
+date: ''
+output:
+  word_document: default
+  pdf_document:
+    fig_caption: yes
+  html_document: default
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(date)
+library(reshape2)
+library(cluster)
+library(feather)
+```
+
+### The Boom and Bust of Pacific Herring  
+
+Pacific herring (*Clupea pallasii*) have been one of the focal species associated with the Exxon Valdez Oil Spill (EVOS) (Carls et al. 2002, Thorne and Thomas 2008, )
+
+have been one of the most important commercial and subsistence resources in the history of Alaska, with commercial fisheries established in 1878 (Woodby et al. 2005). Herring were initially harvested for oil in the 1880s at Killisnoo (U.S. Department of Interior 1893; Skud et al. 1960). For much of the next 50 years, the herring reduction fishery continued to expand, producing both bait and oil. Statewide, the herring reduction harvest was highest in 1937 and declined to the mid-1960s (Reid 1971). Prince William Sound experienced similar dynamics, with commercial harvest beginning as a bait fishery in 1913 (Rounsefell and Dahlgren 1935), and the reduction fishery peaking in 1937 (Funk 1994). Unlike more recent herring fisheries, these bait and reduction fisheries generally targeted schools of herring in the ocean. Over time, their size-selectivity became smaller, and they started targeting smaller fish for reduction (Funk 1994). In the 1950s, less than 10 boats were participating in the reduction fishery, and the continued decline in herring abundance, combined with cheaper altenratives from foreign markets (Peruvian anchovetta) led to the closure of the fishery in the late 1960s (Funk 1994).  
+
+### Shifting demand: the graying of the palate
+
+In the early 1970s, new herring fisheries targeting a new herring product once again emerged in Prince William Sound. Declines of herring in Russia and Japan (Carlson 2005; Woodby et al. 2005) prompted increased demand for salted herring roe (and more recently, luxury products like spawned herring eggs on kelp). Unlike the reduction fisheries, herring roe fisheries targeted herring near shore immediately before they spawned (spring), using a variety of gears, including gillnets, beach seines, and purse seines. 
+
+Trends in revenue, biomass, and landings in Prince William Sound fisheries largely mirror those of the rest of the state, with peaks in 1988 (Pearson et al. 2012; Carlson 2005). Coincident with EVOS in 1989, prices and harvest declined through much of the 1990s, with limited fisheries openings, and fisheries have remained closed since 1999 because estimated biomass has remained lower than that required for reopening the fishery (20000 short tons). Though not affected by EVOS, harvest of herring roe in other Alaska fisheries have also declined since the late 1980s; these include fisheries in Norton Sound, Bristol Bay, and Togiak (Woodby et al. 2005). Perhaps the exception to this declining trend is roe harvest is in Sitka Sound (Thynes et al. 2016;  Woodby et al. 2005). The timing of herring spawn and harvest typically follows a latitudinal gradient from south to north (Carlson 2005), so more southern fisheries and processors may have an advantage on fisheries in other areas. 
+
+In addition to being susceptible to changing demand, a related pressure on Alaskan sac roe fisheries has been external markets. Over the period 1994-2003 for example, roe from Alaska represented a small fraction of the total supplied to Japan, especially compared to roe from Canada and China (Carlson 2005). Though roe from Pacific herring are considered to be of the highest quality, there may also be competition from other roe fisheries offering substitutes (e.g. Atlantic herring). Finally, because the salted roe is preserved, supply and demand may be affected by surplus in previous years (Carlson 2005). 
+
+\break  
+  
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap = "Active permits for herring in Prince William Sound. L12E and L21E permits are combined for spawn on kelp, H01E and H34E are combined for food and bait, and G01E and G34E are combined for sac roe fisheries."}
+
+cfec <- read_feather("../../portfolio/data-generated/cfec.feather")
+cfec$year <- as.numeric(cfec$year)
+
+simp.div = function(x) {
+  1/sum((x/sum(x))^2)
+}
+
+pws = dplyr::filter(cfec, p_fshy%in%c("L 12E", "L 21E", "G 01E", "G 34E", "H 01E", "H 34E"))
+pws$p_fshy[pws$p_fshy%in%c("L 12E","L 21E")] = "Spawn on kelp" 
+pws$p_fshy[pws$p_fshy%in%c("H 01E","H 34E")] = "Food and bait"
+pws$p_fshy[pws$p_fshy%in%c("G 01E","G 34E")] = "Roe"
+
+names(pws)[which(names(pws)=="p_fshy")]="Fishery"
+g1 = group_by(pws[pws$year<=1998,], Fishery, year) %>% 
+  summarize(w = sum(g_pounds)) %>% 
+  ggplot(aes(year, w, group=Fishery, color=Fishery)) + geom_line() + 
+  xlab("Year") + ylab("Pounds")
+
+g2 = group_by(pws[pws$year<=1998,], Fishery, year) %>% 
+  summarize(w = length(unique(p_holder))) %>% 
+  ggplot(aes(year, w, group=Fishery, color=Fishery)) + geom_line() + 
+  xlab("Year") + ylab("Active permits")
+print(g2)
+#gridExtra::grid.arrange(g1, g2)
+```
+  
+### Changing Participation 
+
+Declines in herring abundance, demand (and prices) and ex-vessel values in Prince William Sound have been well documented (Carlson 2005). Following peak biomass in the late 1980s, the number of active permit holders declined significantly until the fisheries closed in the late 1990s. Permits for herring roe fisherines in Prince William Sound may be unique to other case studies in that although the fishery remains closed, the permits continue to hold value (and are bought and sold). Because of the closure, permit values have declined substantially to approximately 10% of the value 20 years ago (from 127000 dollars in February 1997 or 327000 in 2016 dollars to 31000 in February 2016) (CFEC Permit Value Report 2016). 
+
+### Changing diversification: the salmon safety net
+
+With herring fisheries in PWS closed, permit holders had two options: stop fishing entirely, or fish other non-herring permits that remained open. The fate of herring permit holders in PWS was evaluated using the CFEC database, 1985-2014. We defined this 'population' of permit holders as being anyone who ever held one of the six herring permits in PWS. In each year, we summarized the number of active fishers (on any permit, including non-herring fisheries). As a proxy for individual permit holders leaving fishing entirely, we also calculated the last year that each permit holder was active (again, on any permit). These summaries show a long-term decline in the number of individuals in this population (an expected result, as many of the herring permit holders had herring contribute a large fraction of their revenue). We also see fishery closures as catalysts for people stopping participation in the fishery. 
+
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Histogram of last year individual permit holders holding Prince William Sound herring permits were active in any fishery throughout the state. The last years that herring fishing was permitted in Prince William Sound was 1997-1998."}
+pws = dplyr::filter(cfec, p_fshy%in%c("G 01E", "G 34E", "H 01E", "H 34E", "L 12E", "L 21E"))
+pws2 = cfec[which(cfec$p_holder%in%unique(pws$p_holder)),]
+
+g = group_by(pws2, p_holder) %>% 
+  summarize(maxY = max(year))
+
+g2 = group_by(pws2, year) %>% 
+  summarize(n = length(unique(p_holder)))
+par(mfrow=c(2,1), mgp=c(2,1,0),mai=c(0.7,0.7,0.1,0.2))
+plot(g2$year, g2$n, type="b", xlab="Year", ylab="Active permit holders", lwd=2, ylim=c(0,600))
+plot(table(g$maxY)[1:29], xlab="Last year fished", ylab="Permit holders")
+```
+
+For the population of fishers who ever held a PWS herring permit, we summarized the revenue by year (revenue summed in dollars, using deflation corrected earnings). Individual permits were grouped to coarse taxonomic levels by the first character of their CFEC permit code (e.g. all 'G', 'H', and 'L' permits combined as herring, all 'S' permits combined for salmon, all 'B' permits combined for halibut; Figure XX). These aggregate groups indicate that as expected, herring make up a smaller fraction of the total revenue over time (particularly following fisheries closures). Herring continue to make up a small fraction of revenue for this population, because several fishers continue to be active in other areas throughout the state. Few of these individuals remain herring specialists however; a more common strategy is for fishers to actively fish both herring and salmon (Figure XX). For the majority of individuals in this population, the CFEC data indicate that the majority of active fishers abandonded herring entirely. The most common non-herring strategy for these fishers was to target salmon exclusively. A smaller number of fishers became specialized on halibut, or targeted both salmon and halibut in the same year. Unlike halibut, groundfish, or crab fisheries, where the ability to participate is more restrictive (permit holders must buy quota), limited entry salmon fisheries in the state may provide a safety net for fishers affected by the decline or closure of other fisheries in the state.  
+  
+### References  
+
+Carls, M.G., G.D. Marty, and J.E. Hose. 2002. Synthesis of the toxicological impacts of the Exxon Valdez oil spill on Pacific herring (Clupea pallasi) in Prince William Sound, Alaska, U.S.A. Canadian Journal of Fisheries and Aquatic Sciences, 2002, 59(1): 153-172.  
+
+Carlson, S. 2005. Changes in roe herring markets: a review of available evidence. CFEC report number 05-5N. Commercial Fisheries Entry Commission, Juneau, AK.  
+
+Funk, F. 1994. Forecast of the Pacific herring biomass in Prince William Sound, Alaska, 1993. Regional Information Report, 5J94-04. ADFG, Commercial Fisheries and Managmenet Division.  
+
+Pearson, W.H., R.B. Deriso, R.A. Elston, S.E. Hook, K.R. Parker, and J.W. Anderson. 2012. Hypotheses concerning the decline and poor recovery of Pacific herring in Prince William Sound, Alaska. Reviews in Fish Biology and Fisheries, 22(1): 95–135.  
+
+Reid, G.M. 1971. Age composition, weight, length, and sex of herring, Clupea pallasii, used for 
+reduction in Alaska, 1929-1966.  
+
+Rounsefell, G.A. and E.H. Dahlgren. 1935. Fluctuations in the supply of herring, Clupea pallasii, in Prince William Sound, Alaska. Bulletin of the U.S. Bureau of Fisheries 47:263-291.  
+
+Skud, B.E., H.M. Sakuda, and G.M Reid. 1960. Statistics of the Alaska herring fishery, 1878-1956. U.S. Fish and Wildlife Service, Statistical Digest 48, 21 p.  
+
+Thorne, R. E., and Thomas, G. L. 2008. Herring and the "Exxon Valdez" oil spill: an investigation into historical data conflicts. – ICES Journal of Marine Science, 65: 44–50.  
+
+Thynes, T., D. Gordon, D. Harris, and S. Walker. 2016. 2016 Southeast Alaska Sac Roe Herring Fishery Management Plan. Regional Information Report 1J16-02. ADFG, Division of Commercial Fisheries.
+
+U.S. Department of Interior 1893. Population and Resources of Alaska at the Eleventh Census: 1890. U.S. Department of Interior, Census Office.  
+
+Woodby, D., D. Carlile, S. Siddeek, F. Funk, J.H. Clark, and L. Hulbert. 2005. Commercial Fisheries in Alaska. ADFG special publication 05-09.  http://www.sf.adfg.state.ak.us/FedAidPDFs/sp05-09.pdf
+
