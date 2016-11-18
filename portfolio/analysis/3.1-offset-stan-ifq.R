@@ -34,37 +34,7 @@ standat_ifq <- list(
   mean_day_str = md_ifq$scaled_strategy_mean_days
 )
 
-# custom tighter inits:
-beta_init <- function() rnorm(standat_ifq$J)
-sigma_init <- function() rnorm(standat_ifq$K)
-dev_str_init <- function() rnorm(standat_ifq$n_strategy, 0, 0.1)
-dev_yr_init <- function() rnorm(standat_ifq$n_str_yr, 0, 0.1)
-tau_init <- function() runif(1, 0.05, 0.5)
-init_fun <- function() {
-  list(
-    b0 = beta_init()[1],
-    b0_strategy = dev_str_init(),
-    b0_str_yr = dev_yr_init(),
-    b0_strategy_tau = tau_init(),
-    b0_str_yr_tau = tau_init(),
-    b_j = beta_init(),
-    h1 = beta_init()[1],
-    h2 = beta_init()[1],
-    b1_strategy = dev_str_init(),
-    b1_strategy_tau = tau_init(),
-    b2_strategy = dev_str_init(),
-    b2_strategy_tau = tau_init(),
-    g0 = sigma_init()[1],
-    g0_strategy = dev_str_init(),
-    g0_strategy_tau = tau_init(),
-    g_k = sigma_init(),
-    g1_strategy = dev_str_init(),
-    g1_strategy_tau = tau_init(),
-    g2_strategy = dev_str_init(),
-    g2_strategy_tau = tau_init())
-}
-
 m_ifq <- stan("portfolio/analysis/portfolio-offset.stan",
   data = standat_ifq, iter = 2000, chains = 4,
-  pars = c("mu", "sigma"), include = FALSE, init = init_fun)
+  pars = c("mu", "sigma"), include = FALSE)
 save(m_ifq, standat_ifq, file = "portfolio/data-generated/m_ifq.rda")
