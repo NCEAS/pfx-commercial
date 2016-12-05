@@ -20,10 +20,10 @@ all: $(TEXT).pdf $(SOM).pdf
 	perl -p -i -e "s/Figs\. /Figs.~/g" $@
 
 $(TEXT).pdf: $(MS).tex $(TEXT).tex $(REFS).bib
-	latexmk $(TEXT)
+	latexmk -pdf $(TEXT)
 
 $(SOM).pdf: $(SOM).tex $(REFS).bib
-	latexmk $(SOM)
+	latexmk -pdf $(SOM)
 
 dropbox: $(TEXT).pdf $(SOM).pdf
 	cp $(TEXT).pdf ~/Dropbox/Public/$(TEXT).pdf

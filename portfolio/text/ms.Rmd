@@ -28,21 +28,15 @@ sustainable use of natural resources.
 For commercial fisheries, recent work has identified that
 targeting a diversity of species can reduce income variability.
 However, any diversity-variability relationship
-is embedded in a regulatory framework that restricts individual ability
-to unilaterally change fishing behaviour.
-
-
-Here we identify three primary axes by which fishers in Alaska,
-one of the world's most productive fishery regions, can
-potentially diversify fishing activities and
-investigate how individual actions along each diversity axis affect
-both revenue and revenue variability.
-We construct a novel statistical model to simultaneously
-assess the value to individual fishers of choosing to
-(1) own permits that allow targeting a diverse fish species assemblage,
-(2) diversify by owning multiple permits, or
-(3) catch a greater species diversity within the constraints of a given permit.
-
+is embedded in a regulatory framework that restricts individual ability to
+change fishing behaviour. Here we identify three primary axes by which fishers
+in Alaska, one of the world's most productive fishery regions, can potentially
+diversify fishing activities and investigate how individual actions along each
+diversity axis affect both revenue and revenue variability. We construct a novel
+statistical model to simultaneously assess the value to individual fishers of
+choosing to (1) own permits that allow targeting a diverse fish species
+assemblage, (2) diversify by owning multiple permits, or (3) catch a greater
+species diversity within the constraints of a given permit.
 We show contrasting effects of diversity on
 revenue and revenue variability along the three axes.
 First, we show that fishing permits with
@@ -59,7 +53,6 @@ Finally, we show that increasing species diversity within
 the constraints of a permit set has a fishery-dependent effect on revenue and
 is usually (`r g2_dens`% probability)
 associated with increased uncertainty in revenue the following year.
-
 Thus, while there are clear benefits
 to some axes of diversification, others are less effective.
 Importantly, the most effective measure for
@@ -87,20 +80,20 @@ Take home ...
 
 \clearpage
 
-Extra:
+<!-- Extra: -->
 
-- there is often limited room for intentional diversification within a permit
-- in fact, specializing can be profitable within some fisheries
-- Eric: analog here in farming literature is that diversification
-  for small scale farmers generally good, except when they
-  specialize on high demand/high value crops (tobacco, cocoa).
-  Seems like benefits of diversification are also smaller for
-  large-scale industrial farmers.
+<!-- - there is often limited room for intentional diversification within a permit -->
+<!-- - in fact, specializing can be profitable within some fisheries -->
+<!-- - Eric: analog here in farming literature is that diversification -->
+<!--   for small scale farmers generally good, except when they -->
+<!--   specialize on high demand/high value crops (tobacco, cocoa). -->
+<!--   Seems like benefits of diversification are also smaller for -->
+<!--   large-scale industrial farmers. -->
 
-\noindent
-Main message:
-Diversified portfolios of fishing permits and species reduce risk for fishermen,
-but changing species diversity can be risky, costly, and limited by regulations.
+<!-- \noindent -->
+<!-- Main message: -->
+<!-- Diversified portfolios of fishing permits and species reduce risk for fishermen, -->
+<!-- but changing species diversity can be risky, costly, and limited by regulations. -->
 
 <!-- , which is concerning  -->
 <!-- given that some fishing regulations and market forces -->
@@ -118,67 +111,83 @@ but changing species diversity can be risky, costly, and limited by regulations.
 <!-- - The effect of species diversification on revenue and risk for fishermen -->
 <!-- depends on the type of diversification and the fishery. -->
 
-<!-- Introduction, Methods, Results, Discussion, Conclusion:
+<!-- Goal: Introduction, Methods, Results, Discussion, Conclusion:
 <!-- 600, 900, 500, 800, 200, -->
-
-<!-- write out each paragraph’s main message in 15 words or less -->
-<!-- circulate skeleton ... this is the time to fix problems with flow, -->
-<!-- ideas/content, main message -->
-
-
 
 # Introduction
 
-Managing natural resources and sustaining the livelihoods of those that depend on their extraction is difficult. These professions tend to have high year-to-year variability in income [@mishra2002; @sethi2012b]. In addition to economic risk, such as changes in prices or demand, individuals dependent on natural resources are also subject to biological and environmental variability. For example, drought and flooding are a major source of risk to agricultural food security and farmers' incomes [@gregory2005], and catastrophic disease outbreaks or wildfires increase risk for the logging industry [@kirilenko2007].
+<!-- Papers to cite [@smith1986] -->
 
-Individuals who rely on natural resources for income develop strategies to reduce this variability in income. For example, farmers may rotate their crops to buffer short-term climate variation and long-term environmental trends [@zentner1988]. Similarly, loggers maintain a diverse mix of tree species, age structure, and harvest in geographical areas to buffer against disease outbreak, wildfires, and price variation REF. 
+Managing natural resources and sustaining the livelihoods of those that depend
+on their extraction is difficult. These professions tend to have high
+year-to-year variability in income [@mishra2002; @sethi2012b]. In addition to
+economic risk, such as changes in demand, individuals dependent on natural
+resources are also subject to biological and environmental variability. For
+example, drought and flooding are a major source of risk to agricultural food
+security and farmers' incomes [@gregory2005], and catastrophic disease outbreaks
+and wildfires increase risk for the logging industry [@kirilenko2007].
 
-In many of these socio-ecological systems, otherwise well-intentioned regulations can limit the actions available to individuals to reduce income variability, or incentivize against diversification. For example, in terrestrial agriculture, crop subsidies in the US may incentivize some farms to specialize [e.g. dairy, grains, soybeans;  @mishra2002]. In other instances, external market forces (prices, demand) may discourage the adoption of diverse strategies and help promote specialization [@bradshaw2004]. In fisheries, a series of sequential changes around the world have generally limited participation and led to increased specialization [@hilborn2003a].
+Individuals who rely on natural resources for income develop strategies to
+reduce income variability. For example, farmers may rotate their crops to buffer
+short-term climate variation and long-term environmental trends [@zentner1988].
+Similarly, loggers maintain a diverse mix of tree species, age structure, and
+harvest in geographical areas to buffer against disease outbreak, wildfires, and
+price variation REF. However, otherwise well-intentioned regulations can limit
+the actions available to individuals to reduce income variability, or
+incentivize against diversification. For example, in terrestrial agriculture,
+crop subsidies in the US may incentivize some farms to specialize [e.g. dairy,
+grains, soybeans; @mishra2002]. In other instances, external market forces
+(prices, demand) may discourage the adoption of diverse strategies and help
+promote specialization [@bradshaw2004]. 
 
-Commercial fishers present an interesting example of diversification, given the extreme risk that some individuals experience, particularly relative to terrestrial agriculture (@sethi2012b). First, the majority of insurance programs available to terrestrial farmers are not available to commercial fishermen [e.g. crop insurance programs; @kasperski2013]. Second, as both fish and fishers are spatially mobile, equating fishers to farmers would be possible if the farmers’ field became an amorphous blob that changed shape and moved unpredictably day to day. Fishermen still have the ability to lower risk, however. While the days of open, unregulated fisheries in most developed countries have passed (fishers must own a license to participate in virtually all fisheries), fishers can fish multiple species as permitted by a license, own multiple licenses, or diversify spatially and fish in multiple regions. 
-  
-Despite these ways fishers can diversify, the effect of adopting various diversification strategies for improving revenue and reducing revenue variability remains uncertain. Furthermore, theory and empirical studies both suggest there can be substantial benefits to specialization (REFS). The majority of papers that examine effects of diversification on revenue do so at aggregate levels (e.g. households, counties, communities; REFS), rather than focus on individuals. Because of this, key uncertainties remain about the fundamental relationship between diversity, fishing revenue, and fishing revenue variability at the level of the individual.
+Commercial fishers present an interesting example of diversification, given the
+extreme risk that some individuals experience, particularly relative to
+terrestrial agriculture (@sethi2012b). The majority of insurance programs
+available to terrestrial farmers (e.g. crop insurance programs) are not
+available to commercial fishers [@kasperski2013] and both fish and fishers are
+spatially mobile. However, fishers still have the ability to lower risk. They
+can, for example, target multiple species as permitted by a license, own
+multiple licenses, or diversify spatially and fish in multiple regions. The
+effectiveness of these diversification strategies for improving revenue and
+reducing revenue variability remains uncertain. Furthermore, theory and
+empirical studies both suggest there can be substantial benefits to
+specialization (REFS). The majority of papers that examine effects of
+diversification on revenue do so at aggregate levels (e.g. households, counties,
+communities; REFS), rather than focus on individuals. Because of this, key
+uncertainties remain about the fundamental relationship between diversity,
+fishing revenue, and fishing revenue variability at the level of the individual.
 
-One of the most well-studied examples of diversification are the state and federal fisheries in Alaska. These provide a unique opportunity to understand the role of individuals' strategies in determining income and income variability for those whose livelihood depends on the extraction of natural resources. Fisheries in Alaska are among the highest-valued fisheries in the world with 6 billion landed pounds [TODO kg] valued at nearly 2 billion USD annually [@nmfs2016]. The industry supports a range of fishing fleets ranging from small, open, single-operator vessels to multi-million-dollar state-of-the-art ships with large crews. Like much of the rest of the world [@hilborn2003a], the days of open, unregulated fisheries in most developed countries have passed --- fishers must own a license to participate in virtually all fisheries. And while such regulations have proven helpful in reducing or eliminating overfishing, they do limit the available strategies to reduce income variability. 
+The state and federal fisheries of Alaska, provide a unique opportunity to
+understand the role of individuals' strategies in determining income and income
+variability for those whose livelihood depends on the extraction of natural
+resources. Fisheries in Alaska are among the highest-valued fisheries in the
+world with 2.7 billion kg landed biomass valued at nearly 2 billion USD annually
+[@nmfs2016]. The industry supports a range of fishing fleets ranging from small,
+open, single-operator vessels to multi-million-dollar state-of-the-art ships
+with large crews. Like much of the rest of the world [@hilborn2003a], the days
+of open, unregulated fisheries in most developed countries have passed ---
+fishers must own a license to participate in virtually all fisheries. And while
+such regulations have proven helpful in reducing or eliminating overfishing,
+they limit the available strategies to reduce income variability. For example,
+most permits limit fishing to a single species, diversifying by purchasing
+additional fishing permits can be expensive (e.g. ~\$XX for king crab), and some
+fisheries limit the entry of new participants through individual fishing quotas
+(IFQs) (REF). 
 
-Using a unique dataset collected over 30 years (1985--2014) collected on individuals, rather than fleets or vessels, we examine how revenue variability of individuals changes through time, and is affected by diversification. The benefit of using individuals rather than vessels is that we are able to track fishers that switch fishery sectors over time, or alter strategies and use multiple vessels. We develop and apply a novel statistical approach for understanding the effect of diversity on both revenue and risk that builds on results from the vessel [@kasperski2013], fleet [@sethi2012b], and community level variability [@sethi2014]. To our knowledge, this is the first application of this type of model in any natural resource field that jointly explores the effect of diversity on revenue and risk at the individual level and the first considers the multiple axes of diversity simultaneously.
-
-First, we summarize trends in diversification across fishing fleets in Alaska. Next, we identify three main axes by which individuals may diversify the species they target [Eric: I think these kind of bleed together, perhaps make more clear or reduce to 2]:
-(1) owning permits that allow targeting a diversity of fish species (e.g. miscellaneous groundfish or salmon permits),
-(2) purchasing additional permits (the majority of permits in Alaska are single species – halibut, herring, etc),
-or (3) catching a greater species diversity within the constraints of a given permit.
-*perhaps we also need to have a sentence or two on the implicit constraints of
-geography and gear / vessel size on species diversification*
-
-First, the effect of changing species diversity
-for individual permit holders on a year-by-year basis is unknown ---
-existing approaches have worked at the vessel [@kasperski2013],
-fleet [@sethi2012b], or community level [@sethi2014],
-and condensed time series into single metrics of variability or risk.
-Second, the effect of changing species diversity
-on revenue itself is unknown ---
-existing approaches have focused solely on variability or risk.
-Third, it is unknown if the approach to
-diversifying species fished affects the relationship between
-species diversity and revenue variability ---
-a fishery permit holder can purchase
-an additional permit to target other species,
-pick a permit that inherently targets many species,
-or increase species diversity
-within the constraints of his or her existing permits.
-Many permit holders may be limited to the last approach
-given that the first two may be costly and limited by regulations,
-but it is unclear if the benefits and costs are the same.
-Here, we address these questions by
-simultaneously estimating the effects of
-these three approaches to species diversification
-for Alaskan fishery permit holders on
-annual revenue and revenue variability.
-Our model makes use of entire time series,
-controls for effort and latent time effects,
-and allows the effect of species diversity
-to vary by fishing strategy (sets of similar permits)
-in a hierarchical model.
+Using a unique dataset collected over 30 years (1985--2014) on individuals,
+rather than fleets or vessels, we examine how revenue and revenue variability of
+individuals is affected by diversification. By tracking individuals rather than
+vessels we can track people that switch fishery sectors over time, or alter
+strategies and use multiple vessels. We develop and apply a novel statistical
+approach for understanding the effect of diversity on both revenue and revenue
+variability that builds on results from vessel [@kasperski2013], fleet
+[@sethi2012b], and community-level variability [@sethi2014]. Our model controls
+for fishing effort and latent time effects (e.g. changing environmental
+conditions), simultaneously estimates the effect of species diversity on
+individual revenue and revenue variability, and estimates effects both within
+and across fishing strategies (sets of similar licenses or permits). To our
+knowledge, this is the first application of this type of model in any natural
+resource field.
 
 \clearpage
 
@@ -442,7 +451,8 @@ is available at <https://github.com/NCEAS/pfx-commercial>.
 
 # Results
 
-### Fig. \ref{fig:ts} - limited entry + movement towards salmon and specialization in Alaska
+**Fig. \ref{fig:ts} - limited entry + movement towards salmon and specialization
+in Alaska**
 
 - move towards specialization, salmon fig 1D (overall declining trend disappears if you exclude salmon)
 - halibut most often combined with other permits (exclude permit holders that hold any halibut and about ninety percent of the remaining permit holders hold only one permit) fig 1c
@@ -461,7 +471,7 @@ everyone in that strategy tended to do better or worse ---
 this accounts for that and therefore compares everything to
 the expected revenue for that year
 
-### Fig. \ref{fig:across} - across strategies
+**Fig. \ref{fig:across} - across strategies**
 
 - clear exponential decline in standardized variability with strategies that are inherently more species diverse
 - not a clear effect of days fished at this level
@@ -470,7 +480,7 @@ the expected revenue for that year
 increase in mean effective species diversity);
 
 
-### Fig. \ref{fig:spokes} - add permits
+**Fig. \ref{fig:spokes} - add permits**
 
 - nearly universal reduction in variability (Fig. S\ref{fig:spoke-all})
 - e.g., `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR]
@@ -479,7 +489,7 @@ for halibut plus another permit vs. single halibut permits);
 - usually associated with higher median revenue
 - but can be very expensive (provide some examples from website)
 
-### Fig. \ref{fig:within} - within strategies
+**Fig. \ref{fig:within} - within strategies**
 
 - fish more days, make more money (Fig. S\ref{fig:fe})
 - after accounting for days fished, most commonly,
@@ -652,42 +662,42 @@ Dots and line segments represent medians and
 
 \clearpage
 
-# Notes
+<!-- # Notes -->
 
-## @kasperski2013
-- vessel-level CFEC data
-- dome-shaped result
-- Herfindahl-Hirschman Index/HHI (Simpson)
-- diversity decreasing for those still fishing in 2010, but not otherwise
+<!-- ## @kasperski2013 -->
+<!-- - vessel-level CFEC data -->
+<!-- - dome-shaped result -->
+<!-- - Herfindahl-Hirschman Index/HHI (Simpson) -->
+<!-- - diversity decreasing for those still fishing in 2010, but not otherwise -->
 
-## @sethi2012b
-- risk measures to 90 Alaskan fishing fishery/fleets
-- revenue more variable than catch (+ price = extra variability)
-- large catches, big fleets = lower risk
+<!-- ## @sethi2012b -->
+<!-- - risk measures to 90 Alaskan fishing fishery/fleets -->
+<!-- - revenue more variable than catch (+ price = extra variability) -->
+<!-- - large catches, big fleets = lower risk -->
 
-## @sethi2010b
-- risk management for fisheries review
+<!-- ## @sethi2010b -->
+<!-- - risk management for fisheries review -->
 
-## @sethi2012
-- equal-share catch-pooling cooperatives in king and snow crab
-- "variability reduction depends on the degree of correlation amongst
-  participants’ catches"
+<!-- ## @sethi2012 -->
+<!-- - equal-share catch-pooling cooperatives in king and snow crab -->
+<!-- - "variability reduction depends on the degree of correlation amongst -->
+<!--   participants’ catches" -->
 
-## @sethi2014
-- community-level CFEC data
-- number of fisheries strongest predictor of (lower) CV/CVaR
-- also simpson index
-- suggest barriers to commercial entry increase community risk by restricting
-  access to 'variety of fisheries'
-- some communities have limited ability to diversify; may need to diversify
-  outside of fishing
+<!-- ## @sethi2014 -->
+<!-- - community-level CFEC data -->
+<!-- - number of fisheries strongest predictor of (lower) CV/CVaR -->
+<!-- - also simpson index -->
+<!-- - suggest barriers to commercial entry increase community risk by restricting -->
+<!--   access to 'variety of fisheries' -->
+<!-- - some communities have limited ability to diversify; may need to diversify -->
+<!--   outside of fishing -->
 
-[@perruso2005]
-[@hilborn2001]
-[@edwards2004]
-[@trenkel2013]
-[@mumford2009]
-[@oostenbrugge2002]
-[@baldursson1997]
-[@jardine2015]
-[@sanchirico2008]
+<!-- [@perruso2005] -->
+<!-- [@hilborn2001] -->
+<!-- [@edwards2004] -->
+<!-- [@trenkel2013] -->
+<!-- [@mumford2009] -->
+<!-- [@oostenbrugge2002] -->
+<!-- [@baldursson1997] -->
+<!-- [@jardine2015] -->
+<!-- [@sanchirico2008] -->
