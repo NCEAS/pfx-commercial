@@ -157,7 +157,7 @@ communities; REFS), rather than focus on individuals. Because of this, key
 uncertainties remain about the fundamental relationship between diversity,
 fishing revenue, and fishing revenue variability at the level of the individual.
 
-The state and federal fisheries of Alaska, provide a unique opportunity to
+The state and federal fisheries of Alaska provide a unique opportunity to
 understand the role of individuals' strategies in determining income and income
 variability for those whose livelihood depends on the extraction of natural
 resources. Fisheries in Alaska are among the highest-valued fisheries in the
@@ -451,13 +451,21 @@ is available at <https://github.com/NCEAS/pfx-commercial>.
 
 # Results
 
-**Fig. \ref{fig:ts} - limited entry + movement towards salmon and specialization
-in Alaska**
-
-- move towards specialization, salmon fig 1D (overall declining trend disappears if you exclude salmon)
-- halibut most often combined with other permits (exclude permit holders that hold any halibut and about ninety percent of the remaining permit holders hold only one permit) fig 1c
-- Salmon the most often on its own (exclude salmon and the proportioned single permit decreases to about 70%) fig 1c
-- majority are single permit holders (70-90%) fig 1C, but the single permit holders make up only about half of the overall revenue (and surpassed half for the first time in 2013 and stayed that way) fig 1B
+Trends in fishing revenue and diversification over time for individuals fishing
+commercially in Alaska (Fig. \ref{fig:ts}A) reveal some movement toward
+specialization, and in particular specialization on salmon. The majority
+(70--90%) of fishers hold single permits, with a slight increase in single
+permit holders since around 2000 (Fig. \ref{fig:ts}C). This overall trend is
+most sensitive to individuals with halibut or salmon licenses --- halibut permit
+owners most often have multiple permits whereas salmon permit holders tend to be
+single permit holders more than individuals with permits for other fisheries
+(Fig. \ref{fig:ts}C). Although the majority of individuals hold single permits,
+multiple permit holders make approximately half of the overall revenue (Fig.
+\ref{fig:ts}B). Switching focus from permits owned to species landed, mean
+fished species diversity declined somewhat from 1980--2000 but has since
+remained steady (Fig. \ref{fig:ts}D). However, this trend appears to be driven
+by an increase in salmon specialists in the 1980s and 1990s --- the trend
+disappears if salmon license holders are excluded (Fig. \ref{fig:ts}D).
 
 ### Something about overall model fit
 
@@ -471,23 +479,29 @@ everyone in that strategy tended to do better or worse ---
 this accounts for that and therefore compares everything to
 the expected revenue for that year
 
-**Fig. \ref{fig:across} - across strategies**
+We observed a clear exponential decrease in revenue variability for strategies
+(groups of permits) with higher mean fished species diversity (Fig.
+\ref{fig:across}). Strategies with one unit higher mean species diversity had
+on average
+`r h1[[2]]`% (`r h1[[1]]`--`r h1[[3]]`% 95% CI) 
+lower standardized variability. This pattern looks qualitatively similar with or
+without individuals fishing salmon. The gillnet fishery for herring roe and the
+king crab fishery had the highest estimated revenue variability. Most of the
+strategies with the lowest estimated revenue variability combined halibut and
+salmon permits and had high levels of fished species diversity (Fig.
+\ref{fig:across}).
 
-- clear exponential decline in standardized variability with strategies that are inherently more species diverse
-- not a clear effect of days fished at this level
-- fishing permits with higher species diversity reduces variability
-(`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction per unit
-increase in mean effective species diversity);
-
-
-**Fig. \ref{fig:spokes} - add permits**
-
-- nearly universal reduction in variability (Fig. S\ref{fig:spoke-all})
-- e.g., `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR]
-lower expected standard deviation
-for halibut plus another permit vs. single halibut permits);
-- usually associated with higher median revenue
-- but can be very expensive (provide some examples from website)
+Comparing single permit holders to other individuals holding that same permit
+plus one or more other permits illustrates the expected reduction in revenue
+variability from perching additional permits (Fig. \ref{fig:spokes},
+Fig. S\ref{fig:spoke-all}). For example, individuals fishing on a halibut longline
+permit plus an additional permit always had lower expected revenue variability
+compared to individuals fishing only a halibut longline permit 
+(median reduction of `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR], Fig.
+\ref{fig:spokes}A). Likewise, adding a permit to a herring roe gillnet permit
+substantially reduced expected revenue variability. Adding permits also usually
+resulted in higher expected revenue, although the permits themselves represent
+a significant expense (e.g. XX).
 
 **Fig. \ref{fig:within} - within strategies**
 
