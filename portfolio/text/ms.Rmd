@@ -473,84 +473,82 @@ that vary by permit set (Fig. S\ref{fig:re}).
 # Results
 
 Trends in fishing revenue and diversification over time for individuals fishing
-commercially in Alaska (Fig. \ref{fig:ts}A) reveal some movement toward
-specialization, and in particular specialization on salmon. The majority
-(70--90%) of fishers hold single permits, with a slight increase in single
-permit holders since around 2000 (Fig. \ref{fig:ts}C). This overall trend is
-most sensitive to individuals with halibut or salmon licenses --- halibut permit
-owners most often have multiple permits whereas salmon permit holders tend to be
-single permit holders more than individuals with permits for other fisheries
-(Fig. \ref{fig:ts}C). Although the majority of individuals hold single permits,
-multiple permit holders make approximately half of the overall revenue (Fig.
-\ref{fig:ts}B). Switching focus from permits owned to species landed, mean
-fished species diversity declined somewhat from 1980--2000 but has since
-remained steady (Fig. \ref{fig:ts}D). However, this trend appears to be driven
-by an increase in salmon specialists in the 1980s and 1990s --- the trend
-disappears if salmon license holders are excluded (Fig. \ref{fig:ts}D).
+commercially in Alaska (Fig. \ref{fig:ts}A) reveal a transition toward
+specialization, and in particular specialization on fishing salmon. The majority
+(70--90%) of fishers hold single permits, with a slight increase in
+single-permit holders since ~2000 (Fig. \ref{fig:ts}C). This overall trend is
+most sensitive to halibut or salmon permit holders --- compared to other
+fisheries, halibut permit holders are more likely to hold multiple permits
+whereas salmon permit holders are more likely to be single permit holders (Fig.
+\ref{fig:ts}C). Despite making up only 10--30% of the individuals, multiple
+permit holders make approximately half the overall revenue (Fig. \ref{fig:ts}B).
+The mean fished species diversity of this revenue declined somewhat from
+1980--2000 but has since remained steady (Fig. \ref{fig:ts}D). However, this
+trend appears to be driven by an increase in salmon specialists in the 1980s and
+1990s --- the trend disappears if salmon license holders are excluded (Fig.
+\ref{fig:ts}D).
 
-We observed a clear exponential decrease in revenue variability for strategies
+We observe a clear exponential decrease in revenue variability for strategies
 (groups of permits) with higher mean fished species diversity (Fig.
-\ref{fig:across}). Strategies with one unit higher mean species diversity had
-on average
-`r h1[[2]]`% (`r h1[[1]]`--`r h1[[3]]`% 95% CI) 
-lower standardized variability. This pattern looks qualitatively similar with or
-without individuals fishing salmon. The gillnet fishery for herring roe and the
-king crab fishery had the highest estimated revenue variability. Most of the
-strategies with the lowest estimated revenue variability combined halibut and
-salmon permits and had high levels of fished species diversity (Fig.
+\ref{fig:across}). Strategies with one unit higher mean effective species
+diversity had on average `r h1[[2]]`% (`r h1[[1]]`--`r h1[[3]]`% 95% CI) lower
+standardized variability. This pattern looks qualitatively similar with or
+without individuals targeting salmon. The gillnet fishery for herring roe and
+the king crab fishery had the highest estimated revenue variability. Most of the
+strategies with the lowest estimated revenue variability combined halibut with
+a salmon permit and had high levels of fished species diversity (Fig.
 \ref{fig:across}).
 
 Comparing single permit holders to other individuals holding that same permit
 plus one or more other permits illustrates the expected reduction in revenue
-variability from perching additional permits (Fig. \ref{fig:spokes},
-Fig. S\ref{fig:spoke-all}). For example, individuals fishing on a halibut longline
-permit plus an additional permit always had lower expected revenue variability
-compared to individuals fishing only a halibut longline permit 
-(median reduction of `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR], Fig.
-\ref{fig:spokes}A). Likewise, adding a permit to a herring roe gillnet permit
-substantially reduced expected revenue variability. Adding permits also usually
-resulted in higher expected revenue, although the permits themselves represent
-a significant expense (e.g. XX).
+variability from purchasing additional permits (Fig. \ref{fig:spokes}, Fig.
+S\ref{fig:spoke-all}). For example, individuals fishing a halibut longline
+permit plus one additional permit always had lower expected revenue variability
+compared to individuals fishing only a halibut longline permit (median reduction
+of `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR], Fig.
+\ref{fig:spokes}A). Likewise, adding a permit to a herring roe gillnet strategy
+substantially reduced expected revenue variability (Fig. \ref{fig:spokes}B).
+Adding permits also usually resulted in higher expected revenue, although the
+permits themselves represent a significant expense (e.g. XX).
 
-In contrast to the clear effect of species diversity on revenue variability when
-comparing across fishing strategies, the effect of changing fished species
-diversity for an individual *within* the constraints of a given permit set is
-more variable (Fig. \ref{fig:within}). After accounting for fishing effort (Fig.
-S\ref{fig:fe}), specializing (decreasing species diversity) tends to be
-associated with increased revenue (`r g2_dens`% probability; Fig.
-\ref{fig:within}). This was particularly clear for permits where individuals
-tend to specialize on sockeye salmon: individuals with setnet permits for salmon
-in Prince William Sound, Cook Inlet, Kodiak, Bristol Bay, or the Alaska
-Peninsula experienced a ~1.5% increase in revenue for a 1% decrease in fished
-species diversity (Fig. \ref{fig:within}B). The converse was usually true ---
-generalizing tends to be associated with lower expected revenue after accounting
-for fishing effort (i.e. Fig. \ref{fig:within}A and \ref{fig:within}B are nearly
-mirror images left to right). This specializing benefit on revenue is only
-apparent after accounting for fishing effort. Given that fishing for more
-species tends to be associated with increased fishing effort, generalizing tends
-to be associated with higher revenue when not standardizing for fishing effort
-(Fig. S-TODO). 
+In contrast to the clear across-strategy effects of species diversity on revenue
+and revenue variability, the effect of changing fished species diversity for an
+individual *within* the constraints of a given permit set is more variable (Fig.
+\ref{fig:within}). After accounting for fishing effort (Fig. S\ref{fig:fe}),
+specializing (decreasing species diversity) tends to be associated with
+increased revenue (`r g2_dens`% probability; Fig. \ref{fig:within}). This is
+particularly clear for permits where individuals tend to specialize on sockeye
+salmon: individuals with setnet permits for salmon in Prince William Sound, Cook
+Inlet, Kodiak, Bristol Bay, or the Alaska Peninsula experience a ~1.5% increase
+in revenue for a 1% decrease in fished species diversity (Fig.
+\ref{fig:within}B). The converse is also usually true --- generalizing tends to
+be associated with lower expected revenue after accounting for fishing effort
+(i.e. Fig. \ref{fig:within}A and \ref{fig:within}B are near mirror images left
+to right). This specializing benefit for revenue is only apparent *after*
+accounting for fishing effort. Given that fishing for more species tends to be
+associated with increased fishing effort, generalizing tends to be associated
+with higher revenue when not standardizing for fishing effort (Fig. S-TODO). 
 
-After accounting for fishing effort, adjusting (increasing or decreasing) one's
-fished species diversity within the constraints of a permit set tends to be
-associated with greater expected variability or uncertainty in year-to-year
-revenue (Fig. \ref{fig:within} strategies above 0, Fig. S\ref{fig:fe}). This
-effect was strongest for individuals with a halibut longline permit or halibut
-and sablefish longline permits. Individuals with these strategies experienced
-~2% increase in standardized variability for a 1% change in fished species
-diversity. Fished species diversity for these permits is primarily in the form
-of bycatch. 
+After accounting for fishing effort, adjusting (increasing or decreasing) an
+individual's fished species diversity within the constraints of a permit set
+tends to be associated with greater expected variability or uncertainty in
+year-to-year revenue (Fig. \ref{fig:within} strategies above 0; Fig.
+S\ref{fig:fe}). This effect was strongest for individuals with a halibut
+longline permit or halibut and sablefish longline permits. Individuals with
+these strategies experienced ~2% increase in standardized variability for a 1%
+change in fished species diversity (Fig. \ref{fig:within}). Fished species
+diversity levels above one for these permits is primarily due to bycatch. 
 
-The Alaskan halibut and sablefish fisheries were rationalized in 199X --- they
-switched from XX to a individual fishery quota (IFQ) system. We refit our
-models allowing all effects to vary separately before and after 19XX for
+The Alaskan halibut and sablefish fisheries were "rationalized" in 199X --- they
+switched from XX to an individual fishery quota (IFQ) system. We refit our
+models allowing all effects to vary separately before and after 1995 for
 strategies involving these permits (i.e. treating them as separate strategies).
-Variability was reduced by ~25% (XX--XX 95% CI) after the introduction of these
-IFQs compared to before for individuals with only a halibut or sablefish permit
-(Fig. S\ref{fig:ifq}A). The cost of changing fished species diversity for an
-individual in terms of the effect on revenue variability increased after the
-introduction of IFQs for most strategies, and especially for individuals fishing
-only halibut and sablefish (Fig. S\ref{fig:ifq}B).
+The introduction of IFQs reduced variability by ~25% (XX--XX 95% CI) for
+individuals with only a halibut or sablefish permit (Fig. S\ref{fig:ifq}A). For
+most strategies, the effect of increased revenue variability associated with
+changing fished species diversity became stronger after the introduction of IFQs
+(Fig. S\ref{fig:ifq}B). This was especially true for individuals fishing only
+halibut or sablefish (Fig. S\ref{fig:ifq}B). 
 
 # Discussion
 
