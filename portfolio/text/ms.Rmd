@@ -178,42 +178,40 @@ models changes in the mean and variance of individual revenue as a function of
 covariates [@davidian1987; @hall1989]. Whereas traditional hierarchical linear
 models assume homoscedasticity --- that the residual variance does not vary
 systematically --- the variance-function regression model allows the variance to
-be heteroscedastic and vary as a function of covariates. For application to
-economic data on individual fishing portfolios, this model allows certain
-strategies and levels of diversification to be more or less variable than
-others. Our model includes the number of days fished to represent fishing
-effort, 
-                                                                             
+be heteroscedastic and vary as a function of covariates. Our specific model
+allows certain fishing strategies and levels of species diversification to
+generate more or less revenue and be more or less variable than others.
 
 ## Data
 
-We obtained fisheries landings and revenue data for all permit holders in Alaska
-from `r range_yrs[1]` to `r range_yrs[2]` from the Alaskan Commercial Fisheries
-Entry Commission (CFEC). These data represent a total of nearly `r 
-round(ndat$initial_tot_rev/1e9)` billion 2009 USD and a combined `r 
+We obtained commercial fisheries landings and revenue data for all permit
+holders in Alaska from `r range_yrs[1]` to `r range_yrs[2]` from the Alaskan
+Commercial Fisheries Entry Commission (CFEC). These data represent a total of
+nearly `r round(ndat$initial_tot_rev/1e9)` billion 2009 USD and a combined `r 
 round(ndat$initial/1e6,1)` million rows of data. We adjusted for inflation by
-setting all revenues in 2009 USD [@bea2016]. We implemented a number of
+setting all revenues to 2009 USD [@bea2016]. We implemented a number of
 filtering steps to focus on individuals actively engaged in commercial fishing
 (Supporting Information). In particular, we removed permit holders whose median
-revenue was less than \$10,000 2009 USD.
+revenue was less than \$10,000 2009 USD to focus on individuals for whom
+commercial fishing formed a substantial part of their income.
 
 We combined similar permits into permit groupings and identified sets of permit
-groupings held by an individual in a specific year as 'strategies' (Supporting
+groupings held by an individual in a specific year as "strategies" (Supporting
 Information). For example, we combined permits that were the same except for
 vessel size (e.g. a longliner fishing sablefish on a vessel under 60 ft was
 considered to have the same strategy as a longliner fishing sablefish on
 a vessel over 60 ft), and we combined a number of permits that were targeting
-a single species and differed only in region fished. Therefore, someone fishing
-herring roe in Kodiak and someone fishing herring roe in Alaska Peninsula were
-both considered to have a 'herring roe' permit group. For salmon permits, we
-grouped permits using the same gear type across regions for groups that shared
-similar species composition. After this process of combining permits, we were
-left with `r n_grouped_permits` unique fishing permit groups (Table
-S\ref{tab:strategies}), which we aggregated within each person-year combination
-to form permit strategies. For example, if someone fished halibut and sablefish
-in the same year, their strategy for that year would be "halibut-sablefish".
-Specific details on our strategy definitions are available in the Supporting
-Information.
+a single species and differed only in region fished. Therefore, for example,
+someone fishing herring roe in Kodiak and someone fishing herring roe in Alaska
+Peninsula were both considered to have a 'herring roe' permit group. For salmon
+permits, we grouped permits using the same gear type across regions for groups
+that shared similar species composition. After this process of combining
+permits, we were left with `r n_grouped_permits` unique fishing permit groups
+(Table S\ref{tab:strategies}), which we aggregated within each person-year
+combination to form permit strategies. For example, if someone fished halibut
+and sablefish in the same year, their strategy for that year would be
+"halibut-sablefish". Specific details on our strategy definitions are available
+in the Supporting Information.
 
 Our models focused on species diversity as a possible predictor of revenue and
 revenue variability while controlling for effort. For consistency with previous
@@ -287,7 +285,7 @@ mean-revenue intercepts associated with individual fishers. We removed
 person-year combinations without a subsequent year of revenue.
 
 The $\beta$ terms represent estimated coefficients, some of which are allowed to
-vary as 'random effect' terms. The intercepts $\beta_{0,j,t}$ are allowed to
+vary as "random effect" terms. The intercepts $\beta_{0,j,t}$ are allowed to
 vary by strategy-year combinations, are centered on zero, and are constrained by
 a normal distribution:
 
@@ -297,12 +295,12 @@ a normal distribution:
 \beta_{0,j,t} \sim \mathrm{N} \left(0, \sigma^2_{\beta_{j,t}} \right).
 \end{equation}
 
-\noindent This, combined with the lack of a global intercept, constrains the
-mean change in log revenue across all fishers and years to be zero. I.e., we
-assume that the data are stationary after accounting for all covariates and
-including an intercept that varies with strategy-year combinations. Initial
-versions of the model confirmed that the global intercept along with
-stragey-level intercepts would be estimated at almost exactly zero.
+\noindent This approach, combined with the lack of a global intercept,
+constrains the mean change in log revenue across all fishers and years to be
+zero. I.e., we assume that the data are stationary after accounting for all
+covariates and including an intercept that varies with strategy-year
+combinations. Initial versions of the model confirmed that the global intercept
+along with strategy-level intercepts would be estimated at almost exactly zero.
 
 The slopes $\beta_{1,j}$ and $\beta_{1,j}$ are then allowed to vary by strategy
 with estimated means:
@@ -312,9 +310,9 @@ with estimated means:
 \beta_{2,j} &\sim \mathrm{N} \left(\mu_{\beta_2}, \sigma^2_{\beta_2}\right).
 \end{align}
 
-\noindent The $\beta_{1,j}$'s represent how much a X\% decrease in species
+\noindent The $\beta_{1,j}$'s represent how much a 1\% decrease in species
 diversity within a strategy translates to a Y\% change in revenue. The
-$\beta_{2,j}$'s represent how much an X\% increase in species diversity within
+$\beta_{2,j}$'s represent how much a 1\% increase in species diversity within
 a strategy translates to a Y\% change in revenue. These are after controlling
 for percent change in days fished, $\beta_3$, and the interaction between days
 fished and percent change in species diversity, $\beta_4$ and $\beta_5$.
@@ -370,7 +368,6 @@ with the lme4 R package [@bates2015], and by fitting our model to simulated data
 and recovering the true values (Supporting Information). Code to reproduce our
 results (with a simulated data set) is available at
 <https://github.com/NCEAS/pfx-commercial>.
-
 
 *TODO: for the following into the results section or and the method section with
 this:*
