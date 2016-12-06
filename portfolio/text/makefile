@@ -6,6 +6,7 @@ REFS = refs
 all: $(TEXT).pdf $(SOM).pdf
 
 %.md: %.Rmd
+	perl -p -i -e "s/ \`r\n/ \`r \n/g" $< # add space at end for in-line R code 
 	Rscript -e "knitr::knit('$<')"
 
 %.tex: %.Rnw
@@ -18,6 +19,8 @@ all: $(TEXT).pdf $(SOM).pdf
 	perl -p -i -e "s/vs\. /vs.~/g" $@
 	perl -p -i -e "s/Table /Table~/g" $@
 	perl -p -i -e "s/Figs\. /Figs.~/g" $@
+	perl -p -i -e "s/\\\citep/\\\cite/g" $@
+	perl -p -i -e "s/\\\citet/\\\cite/g" $@
 
 $(TEXT).pdf: $(MS).tex $(TEXT).tex $(REFS).bib
 	latexmk -pdf $(TEXT)
