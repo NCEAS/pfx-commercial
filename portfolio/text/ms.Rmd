@@ -449,6 +449,27 @@ and recovering the true values (Supporting Information).
 Code to reproduce our results (with a simulated data set)
 is available at <https://github.com/NCEAS/pfx-commercial>.
 
+
+*TODO: for the following into the results section or and the method section with
+this:*
+
+Residuals from the mean component of our model clearly show the "V"-shaped
+pattern that the variance component of our model seeks to capture (Fig.
+S\ref{fig:resid}). Furthermore, the downside residuals (year-individual data
+points with lower than expected revenue) look qualitatively similar to the
+complete set of residuals (upside and downside) (Fig.
+S\ref{fig:resid-downside}). Therefore, it seemed appropriate to model the
+variability as a proxy for revenue risk. 
+
+The estimated year-permit intercepts represent years when people
+with a particular permit set in a given year tended to do better or worse than
+the long-term average for that permit set (Fig. S\ref{fig:str-yrs}). Therefore,
+an individual's expected revenue and variability is after accounting for the
+general trend in revenue for that permit set.
+
+Our model estimates overall average effects (Fig. S\ref{fig:fe}) and effects
+that vary by permit set (Fig. S\ref{fig:re}).
+
 # Results
 
 Trends in fishing revenue and diversification over time for individuals fishing
@@ -466,18 +487,6 @@ fished species diversity declined somewhat from 1980--2000 but has since
 remained steady (Fig. \ref{fig:ts}D). However, this trend appears to be driven
 by an increase in salmon specialists in the 1980s and 1990s --- the trend
 disappears if salmon license holders are excluded (Fig. \ref{fig:ts}D).
-
-### Something about overall model fit
-
-- Parameters from hierarchical model (main: Fig. S\ref{fig:fe}, varying: S\ref{fig:re})
-- Residuals clearly show pattern that we see in the parameter estimates (Fig. S\ref{fig:resid})
-- Downside residuals look very similar and justify using the full data set
-(upside and downside) (Fig. S\ref{fig:resid-downside})
-- Mention the year-permit varying intercepts and what they mean
-(Fig. S\ref{fig:str-yrs}) --- good and bad years where
-everyone in that strategy tended to do better or worse ---
-this accounts for that and therefore compares everything to
-the expected revenue for that year
 
 We observed a clear exponential decrease in revenue variability for strategies
 (groups of permits) with higher mean fished species diversity (Fig.
@@ -503,22 +512,45 @@ substantially reduced expected revenue variability. Adding permits also usually
 resulted in higher expected revenue, although the permits themselves represent
 a significant expense (e.g. XX).
 
-**Fig. \ref{fig:within} - within strategies**
+In contrast to the clear effect of species diversity on revenue variability when
+comparing across fishing strategies, the effect of changing fished species
+diversity for an individual *within* the constraints of a given permit set is
+more variable (Fig. \ref{fig:within}). After accounting for fishing effort (Fig.
+S\ref{fig:fe}), specializing (decreasing species diversity) tends to be
+associated with increased revenue (`r g2_dens`% probability; Fig.
+\ref{fig:within}). This was particularly clear for permits where individuals
+tend to specialize on sockeye salmon: individuals with setnet permits for salmon
+in Prince William Sound, Cook Inlet, Kodiak, Bristol Bay, or the Alaska
+Peninsula experienced a ~1.5% increase in revenue for a 1% decrease in fished
+species diversity (Fig. \ref{fig:within}B). The converse was usually true ---
+generalizing tends to be associated with lower expected revenue after accounting
+for fishing effort (i.e. Fig. \ref{fig:within}A and \ref{fig:within}B are nearly
+mirror images left to right). This specializing benefit on revenue is only
+apparent after accounting for fishing effort. Given that fishing for more
+species tends to be associated with increased fishing effort, generalizing tends
+to be associated with higher revenue when not standardizing for fishing effort
+(Fig. S-TODO). 
 
-- fish more days, make more money (Fig. S\ref{fig:fe})
-- after accounting for days fished, most commonly,
-specializing is associated with higher revenue,
-but sometimes the reverse (Fig. \ref{fig:within})
-- if we don't account for changes in effort, then higher species diversity
-means more money fairly consistently (TODO make figure)
-- changing species diversity (number of species fished or evenness of species
-fished) tends to be associated with greater variability / uncertainty
-year-to-year (Figs. \ref{fig:within}, S\ref{fig:fe})
-- increasing species diversity within
-the constraints of a permit set has a fishery-dependent effect on revenue and
-is usually (`r g2_dens`% probability)
-associated with increased uncertainty in revenue.
-(Fig. \ref{fig:within})
+After accounting for fishing effort, adjusting (increasing or decreasing) one's
+fished species diversity within the constraints of a permit set tends to be
+associated with greater expected variability or uncertainty in year-to-year
+revenue (Fig. \ref{fig:within} strategies above 0, Fig. S\ref{fig:fe}). This
+effect was strongest for individuals with a halibut longline permit or halibut
+and sablefish longline permits. Individuals with these strategies experienced
+~2% increase in standardized variability for a 1% change in fished species
+diversity. Fished species diversity for these permits is primarily in the form
+of bycatch. 
+
+The Alaskan halibut and sablefish fisheries were rationalized in 199X --- they
+switched from XX to a individual fishery quota (IFQ) system. We refit our models
+allowing all effects to vary separately before and after 19XX for strategies
+involving these permits (i.e. treating them as separate strategies). Variability
+was reduced by ~25% (XX--XX 95% CI) after the introduction of these IFQs
+compared to before for individuals with only a halibut or sablefish permit (Fig.
+SX). The cost of changing fished species diversity for an individual in terms of
+the effect on revenue variability increased after the introduction of IFQs for
+all strategies, and especially for individuals fishing only halibut and
+sablefish (Fig. SX).
 
 # Discussion
 
