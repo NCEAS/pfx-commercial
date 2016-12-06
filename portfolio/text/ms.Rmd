@@ -514,39 +514,43 @@ and revenue variability, the effect of changing fished species diversity for an
 individual *within* the constraints of a given permit set is more variable (Fig.
 \ref{fig:within}). After accounting for fishing effort (Fig. S\ref{fig:fe}),
 specializing (decreasing species diversity) tends to be associated with
-increased revenue (`r g2_dens`% probability; Fig. \ref{fig:within}). This is
+increased revenue (~0.5% increased revenue per 1% decrease in species diversity
+on average or TODO ... `r g2_dens`% probability; Fig. \ref{fig:within}). This is
 particularly clear for permits where individuals tend to specialize on sockeye
-salmon: individuals with setnet permits for salmon in Prince William Sound, Cook
-Inlet, Kodiak, Bristol Bay, or the Alaska Peninsula experience a ~1.5% increase
-in revenue for a 1% decrease in fished species diversity (Fig.
-\ref{fig:within}B). The converse is also usually true --- generalizing tends to
-be associated with lower expected revenue after accounting for fishing effort
-(i.e. Fig. \ref{fig:within}A and \ref{fig:within}B are near mirror images left
-to right). This specializing benefit for revenue is only apparent *after*
-accounting for fishing effort. Given that fishing for more species tends to be
-associated with increased fishing effort, generalizing tends to be associated
-with higher revenue when not standardizing for fishing effort (Fig. S-TODO). 
+salmon. For example, individuals with setnet permits for salmon in Prince
+William Sound, Cook Inlet, Kodiak, Bristol Bay, or the Alaska Peninsula target
+primarily sockeye salmon and experience a ~1.5% increase in revenue for a 1%
+decrease in fished species diversity (Fig. \ref{fig:within}B). The converse is
+also usually true --- generalizing tends to be associated with lower expected
+revenue after accounting for fishing effort (i.e. Fig. \ref{fig:within}A and
+\ref{fig:within}B are near mirror images left to right). This benefit of
+specializing is only apparent after accounting for fishing effort. Given that
+fishing for more species tends to be associated with increased fishing effort
+(fishing more days), generalizing tends to be associated with higher revenue
+when not standardizing for days finished (Fig. S-TODO). 
 
 After accounting for fishing effort, adjusting (increasing or decreasing) an
-individual's fished species diversity within the constraints of a permit set
-tends to be associated with greater expected variability or uncertainty in
-year-to-year revenue (Fig. \ref{fig:within} strategies above 0; Fig.
-S\ref{fig:fe}). This effect was strongest for individuals with a halibut
+individual's fished species diversity from year-to-year within the constraints
+of a permit set tends to be associated with greater expected variability or
+uncertainty in year-to-year revenue (Fig. \ref{fig:within} strategies above 0;
+Fig. S\ref{fig:fe}). This effect was strongest for individuals with a halibut
 longline permit or halibut and sablefish longline permits. Individuals with
 these strategies experienced ~2% increase in standardized variability for a 1%
-change in fished species diversity (Fig. \ref{fig:within}). Fished species
-diversity levels above one for these permits is primarily due to bycatch. 
+change in fished species diversity (Fig. \ref{fig:within}). Levels of fished
+species diversity levels above one for these permits are primarily due to
+bycatch. 
 
-The Alaskan halibut and sablefish fisheries were "rationalized" in 199X --- they
-switched from XX to an individual fishery quota (IFQ) system. We refit our
-models allowing all effects to vary separately before and after 1995 for
-strategies involving these permits (i.e. treating them as separate strategies).
+The Alaskan halibut and sablefish fisheries were converted to an individual
+fishery quota (IFQ) system in 1994. This catch share system... TODO. We refit
+our models allowing all permit-level effects to vary separately before and after
+the introduction of IFQs for strategies involving halibut and sablefish permits.
 The introduction of IFQs reduced variability by ~25% (XX--XX 95% CI) for
-individuals with only a halibut or sablefish permit (Fig. S\ref{fig:ifq}A). For
-most strategies, the effect of increased revenue variability associated with
-changing fished species diversity became stronger after the introduction of IFQs
-(Fig. S\ref{fig:ifq}B). This was especially true for individuals fishing only
-halibut or sablefish (Fig. S\ref{fig:ifq}B). 
+individuals with only halibut or sablefish permits (Fig. S\ref{fig:ifq}A).
+Furthermore, for most strategies, the effect of increased revenue variability
+associated with changing species diversity became stronger after the
+introduction of IFQs (Fig. S\ref{fig:ifq}B). This was especially true for
+individuals fishing only halibut or sablefish and less so for individuals
+combining halibut or sable fish with a salmon permit (Fig. S\ref{fig:ifq}B).
 
 # Discussion
 
