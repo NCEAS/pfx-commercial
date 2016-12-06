@@ -569,7 +569,7 @@ common permit strategies. Thick black line, and dark and light grey shaded
 regions indicate median, 50\%, and 95\% credible intervals of strategy-level
 regression built into the hierarchical model. Estimated variability represents
 expected standard deviation for a permit holder who does not change species
-diversity or days fished from year to year. }
+diversity or days fished from year-to-year. }
 
 \label{fig:across}
 \end{center}
@@ -599,14 +599,15 @@ credible intervals of expected standard deviation.}
 \begin{center}
 \includegraphics[width=1.1\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
 
-\caption{Effects of (A) generalizing and (B) specializing from year to year for
-individual permit holders across the `r nstr` most common strategies. Changing
-species diversity from year to year is associated with higher variability for
-individuals within the strategies above the zero line. Generalizing (A) or
-specializing (B) is associated with greater expected revenue to the right of the
-zero line and lower expected revenue to the left of the zero line. These effects
-are estimated holding fishing season length constant from year to year. Dots and
-line segments represent medians and 50\% credible intervals of posteriors. }
+\caption{Effects of (A) generalizing and (B) specializing from year-to-year for
+individual permit holders \emph{within} the `r nstr` most common strategies.
+Changing species diversity from year-to-year is associated with higher
+variability for individuals within the strategies above the zero line.
+Generalizing (A) or specializing (B) is associated with greater expected revenue
+to the right of the zero line and lower expected revenue to the left of the zero
+line. These effects are estimated holding fishing season length constant from
+year-to-year. Dots and line segments represent medians and 50\% credible
+intervals of posteriors. }
 
 \label{fig:within}
 \end{center}
