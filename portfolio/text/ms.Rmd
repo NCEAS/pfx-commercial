@@ -542,15 +542,15 @@ diversity. Fished species diversity for these permits is primarily in the form
 of bycatch. 
 
 The Alaskan halibut and sablefish fisheries were rationalized in 199X --- they
-switched from XX to a individual fishery quota (IFQ) system. We refit our models
-allowing all effects to vary separately before and after 19XX for strategies
-involving these permits (i.e. treating them as separate strategies). Variability
-was reduced by ~25% (XX--XX 95% CI) after the introduction of these IFQs
-compared to before for individuals with only a halibut or sablefish permit (Fig.
-SX). The cost of changing fished species diversity for an individual in terms of
-the effect on revenue variability increased after the introduction of IFQs for
-all strategies, and especially for individuals fishing only halibut and
-sablefish (Fig. SX).
+switched from XX to a individual fishery quota (IFQ) system. We refit our
+models allowing all effects to vary separately before and after 19XX for
+strategies involving these permits (i.e. treating them as separate strategies).
+Variability was reduced by ~25% (XX--XX 95% CI) after the introduction of these
+IFQs compared to before for individuals with only a halibut or sablefish permit
+(Fig. S\ref{fig:ifq}A). The cost of changing fished species diversity for an
+individual in terms of the effect on revenue variability increased after the
+introduction of IFQs for most strategies, and especially for individuals fishing
+only halibut and sablefish (Fig. S\ref{fig:ifq}B).
 
 # Discussion
 

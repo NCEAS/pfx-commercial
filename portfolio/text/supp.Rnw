@@ -324,6 +324,22 @@ Shown are 40 samples from the posterior distribution.}
 \end{center}
 \end{figure}
 
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=1\textwidth]{../figs/itq-combined.pdf}
+\caption{The effect of IFQs (individual fishing quotas) on model estimates. (A)
+  Posterior density of the ratio between strategy-level estimates of
+  standardized revenue variability ($\gamma_{0j}$'s) after the introduction of
+  IFQs vs.\ before the introduction of IFQs. (B) Estimates (medians) of the
+  effect of generalizing (increasing species diversity) on variability
+  ($\gamma_{1j}$'s) for the full model (``Grouped'') compared to a model where
+  separate effects are estimated before and after IFQs were introduced (``IFQ
+  split''). Pattern looks similar for the effect of specializing on variability
+  ($\gamma_{2j}$'s) and is not shown.}
+\label{fig:ifq}
+\end{center}
+\end{figure}
+
 % \begin{figure}[htbp]
 % \begin{center}
 % \includegraphics[width=0.9\textwidth]{../figs/lmer-vs-stan2.pdf}
