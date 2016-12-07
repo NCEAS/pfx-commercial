@@ -97,12 +97,14 @@ limited entry programs and individual transferable quotas (ITQs). Take home ...
 
 Managing natural resources and sustaining the livelihoods of those that depend
 on their extraction is difficult. These professions tend to have high
-year-to-year variability in income [@mishra2002; @sethi2012b]. In addition to
-economic risk, such as changes in demand, individuals dependent on natural
-resources are also subject to biological and environmental variability. For
-example, drought and flooding are a major source of risk to agricultural food
-security and farmers' incomes [@gregory2005], and catastrophic disease outbreaks
-and wildfires increase risk for the logging industry [@kirilenko2007].
+year-to-year variability in income relative to individuals who don't rely on
+natural resources as a source of income  [@mishra2002; @sethi2012b]. In
+addition to economic risk, such as changes in demand or prices, individuals
+dependent on natural resources are also subject to biological and environmental
+variability. For example, drought and flooding are a major source of risk to
+agricultural food security and farmers' incomes [@gregory2005], and
+catastrophic disease outbreaks and wildfires increase risk for the logging
+industry [@kirilenko2007].
 
 Individuals who rely on natural resources for income develop strategies to
 reduce income variability. For example, farmers may rotate their crops to buffer
