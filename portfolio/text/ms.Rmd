@@ -96,314 +96,94 @@ limited entry programs and individual transferable quotas (ITQs). Take home ...
 <!-- Papers to cite [@smith1986] -->
 
 Managing natural resources and sustaining the livelihoods of those that depend
-on their extraction is difficult. These professions tend to have high
-year-to-year variability in income relative to individuals who don't rely on
-natural resources as a source of income  [@mishra2002; @sethi2012b]. In
-addition to economic risk, such as changes in demand or prices, individuals
+on their extraction is hard. These professions tend to have high year-to-year
+variability in income relative to other professions [@mishra2002; @sethi2012b].
+In addition to economic risk, such as changes in demand or prices, individuals
 dependent on natural resources are also subject to biological and environmental
-variability. For example, drought and flooding are a major source of risk to
-agricultural food security and farmers' incomes [@gregory2005], and
-catastrophic disease outbreaks and wildfires increase risk for the logging
-industry [@kirilenko2007].
+variability. For example, drought and flooding are a major source of risk for
+agricultural food security and farmers' incomes [@gregory2005], and catastrophic
+disease outbreaks and wildfires increase risk for the logging industry
+[@kirilenko2007].
 
 Individuals who rely on natural resources for income develop strategies to
 reduce income variability. For example, farmers may rotate their crops to buffer
 short-term climate variation and long-term environmental trends [@zentner1988].
 Similarly, loggers maintain a diverse mix of tree species, age structure, and
 harvest in geographical areas to buffer against disease outbreak, wildfires, and
-price variation REF. However, external forces may restrict the options available
-to individuals to reduce variability. For example, otherwise well-intentioned
-regulations may limit how individuals diversify, or incentivize against
-diversification. For example, in terrestrial agriculture, crop subsidies in the
-US may incentivize some farms to specialize (e.g. dairy, grains, soybeans;
-@mishra2002). In other instances, external market forces (prices, demand) may
-discourage the adoption of diverse strategies and help promote specialization
-[@bradshaw2004]. 
+price variation (REF). However, external forces may restrict the available
+options to dampen income variability. Otherwise well-intentioned regulations may
+limit how individuals diversify, or incentivize against diversification. For
+example, in terrestrial agriculture, crop subsidies in the US may incentivize
+some farms to specialize (e.g. dairy, grains, soybeans; @mishra2002). In other
+instances, external market forces (e.g. prices or demand) may discourage the
+adoption of diverse strategies and help promote specialization [@bradshaw2004]. 
 
 Commercial fishers present an interesting example of diversification, given the
 extreme risk that some individuals experience, particularly relative to
 terrestrial agriculture [@sethi2012b]. The majority of risk insurance programs
-available to terrestrial farmers (e.g. crop insurance programs) have not been
+available to terrestrial farmers (e.g. crop insurance programs) are not
 obtainable by commercial fishers [@kasperski2013], possibly because both fish
 and fishers are spatially mobile. However, fishers still have the ability to
 lower risk. They can, for example, target as many species as permitted by
-a license, they may own multiple licenses, or diversify spatially and fish in
-multiple regions (increasing their total catch, or numbers of species caught).
-The effectiveness of these diversification strategies for improving revenue and
-reducing revenue variability remains uncertain. Furthermore, theory and
-empirical studies both suggest there can be substantial benefits to
-specialization for both farmers and fishers [@abdulai2000; @arnason2005]. The
-majority of papers that examine effects of diversification on revenue do so at
-aggregate levels that combine individuals (e.g. households, counties,
-communities; @sethi2014; @kasperski2013). Because of this, key uncertainties
+a license, own multiple licenses, or diversify spatially and fish in multiple
+regions. 
+
+The effectiveness of these diversification strategies for increasing revenue and
+reducing revenue variability remains uncertain. For example, theory and
+empirical studies suggest there can be substantial benefits to specialization
+for both farmers and fishers [@abdulai2000; @arnason2005]. Furthermore, the
+majority of research examining the effects of diversification on revenue do so
+at aggregate levels that combine individuals (e.g. households, counties, or
+communities; [@kasperski2013; @sethi2014]). Because of this, key uncertainties
 remain about the fundamental relationship between diversity, fishing revenue,
 and fishing revenue variability at the level of the individual.
 
 The state and federal fisheries of Alaska provide a unique opportunity to
 understand the role of individuals' strategies in determining income and income
 variability. Fisheries in Alaska are among the highest-valued fisheries in the
-world with 2.7 billion kg landed biomass valued at nearly 2 billion USD annually
-[@nmfs2016]. The industry supports a range of fishing fleets ranging from small,
-open, single-operator vessels to multi-million-dollar state-of-the-art ships
-with large crews. Like much of the rest of the world [@hilborn2003a], the days
-of open, unregulated fisheries in most developed countries have passed ---
-fishers must own a license to participate in virtually all fisheries. And while
-such regulations have proven helpful in reducing or eliminating overfishing,
-they limit the available strategies to reduce income variability. For example,
-many permits limit fishing to a single species, diversifying by purchasing
-additional fishing permits can be expensive (e.g. ~\$192K USD for a king and
-tanner crab permit in Southeast Alaska in 2016;
-<https://www.cfec.state.ak.us/pmtvalue/X_K69A.HTM>), and some fisheries limit the
-entry of new participants through individual fishing quotas (IFQs) [@grimm2012]. 
+world with ~2.7 billion kg landed biomass valued at nearly 2 billion USD
+annually [@nmfs2016]. Like much of the rest of the world, the days of open,
+unregulated fisheries in most developed countries have passed --- fishers must
+own a license to participate in virtually all fisheries [@hilborn2003a]. And
+while such regulations have helped reduce overfishing, they limit the available
+strategies to reduce income variability. For example, many permits limit fishing
+to a single species, diversifying by purchasing additional fishing permits can
+be expensive (e.g. ~\$192K USD for a king and tanner crab permit in Southeast
+Alaska in 2016; <https://www.cfec.state.ak.us/pmtvalue/X_K69A.HTM>), and some
+fisheries limit the entry of new participants through individual fishing quotas
+(IFQs) [@grimm2012]. 
 
 Using a unique dataset collected over 30 years (1985--2014) on individuals,
 rather than fleets or vessels, we examine how revenue and revenue variability of
 individuals is affected by diversification. By tracking individuals rather than
-vessels we can track people that switch fishery sectors over time, or alter
-strategies and use multiple vessels. Similarly, we are able to disentagnle
-fishers that share the same vessel. We develop and apply a hierarchical Bayesian
-model to understand the effect of diversity on both individual revenue and
-revenue variability that builds on results from vessel [@kasperski2013], fleet
-[@sethi2012b], and community-level [@sethi2014] variability. Our model controls
-for fishing effort and latent time effects (e.g. changing environmental
-conditions), simultaneously estimates the effect of species diversity on
-individual revenue and revenue variability, and estimates effects both within
-and across fishing strategies (sets of similar licenses or permits). To our
-knowledge, this is the first application of this type of model in any natural
-resource field.
+vessels we can track people that switch fishery permits over time or use
+multiple vessels. Similarly, we are able to disentangle fishers that share the
+same vessel. We develop and apply a hierarchical Bayesian model to understand
+the effect of diversity on both individual revenue and revenue variability that
+builds on results from vessel [@kasperski2013], fleet [@sethi2012b], and
+community-level [@sethi2014] variability. Our model controls for fishing effort
+and latent time effects (e.g. changing environmental conditions), simultaneously
+estimates the effect of species diversity on individual revenue and revenue
+variability, and estimates effects both within and across fishing strategies
+(sets of similar licenses or permits). To our knowledge, this is the first
+application of this type of model in any natural resource field.
 
-\clearpage
-
-# Methods
-
-We developed a hierarchical variance-function regression model [@davidian1987;
-@hall1989], which separately but simultaneously models changes in the mean and variance of
-individual revenue as a function of covariates. Whereas traditional
-hierarchical linear models assume homoscedasticity --- that the residual
-variance does not vary systematically --- the variance-function regression model
-allows the variance to be heteroscedastic and vary as a function of predictors.
-Our specific model allows certain fishing strategies and levels of species
-diversification to generate more or less revenue and be more or less variable
-than others.
-
-## Data
-
-We obtained commercial fisheries landings and revenue data for all permit
-holders in Alaska from `r range_yrs[1]` to `r range_yrs[2]` from the Alaskan
-Commercial Fisheries Entry Commission (CFEC). These data represent a total of
-nearly `r round(ndat$initial_tot_rev/1e9)` billion 2009 USD and a combined `r 
-round(ndat$initial/1e6,1)` million rows of data. We adjusted for inflation by
-setting all revenues to 2009 USD [@bea2016]. We implemented a number of
-filtering steps to focus on individuals actively engaged in commercial fishing
-(Supporting Information). In particular, we removed permit holders whose median
-revenue was less than \$10,000 2009 USD to focus on individuals for whom
-commercial fishing formed a substantial part of their income.
-
-We used combinations of state and federal fishing permits held by an individual
-in in a specific year to define fishing "strategies", representing the species
-targeted (Supporting Information). For example, we combined permits that were
-otherwise the same except for vessel size (e.g. a longliner fishing sablefish
-on a vessel under 60 ft was considered to have the same strategy as a longliner
-fishing sablefish on a vessel over 60 ft), and we combined a number of permits
-that were targeting a single species and differed only in region fished.
-Therefore, for example, someone fishing herring roe in Kodiak and someone
-fishing herring roe in Alaska Peninsula were both considered to have a 'herring
-roe' permit group. For salmon permits, we formed salmon strategies based on
-similarities in gear type and species compositon (Supporting Information).
-
-After this process of combining
-permits, we were left with `r n_grouped_permits` unique fishing permit groups
-(Table S\ref{tab:strategies}), which we aggregated within each person-year
-combination to form permit strategies. For example, if someone fished halibut
-and sablefish in the same year, their strategy for that year would be
-"halibut-sablefish". Specific details on our strategy definitions are available
-in the Supporting Information.
-
-Our models focused on species diversity as a possible predictor of revenue and
-revenue variability while controlling for effort. For consistency with previous
-analyses [@kasperski2013], we calculated effective species diversity for
-permit holder $i$ and time (year) $t$ as the inverse of Simpson's diversity
-index $\lambda$ [@simpson1949; @jost2006] (also referred to in economics as the
-Herfindahl-Hirschman Index) weighted by revenue $R$:
-
-\begin{equation}
-1/\lambda_{i,t} = 1 / \left(\sum\limits_{s=1}^{n_{i,t}}
-  \left(R_{i,s,t}/ \sum\limits_{s=1}^{n_{i,t}} R_{i,s,t}\right)\right)^2,
-\end{equation}
-
-\noindent where $s$ indexes species from $1$ through $n$. We calculated effort
-or effective season length as the sum of the season lengths for each permit
-each year. Season length for a given permit was calculated as the number of
-days between the first instance of fishing a permit and the last instance of
-fishing a permit each year. For example, if someone fished for 30 days on a
-salmon drift gillnet permit in Southeast Alaska and 40 days on a statewide
-longline halibut permit, that individual's season length was calculated as 70
-days.
-
-## Hierarchical model
-
-To jointly model revenue and revenue variability as a function of
-individual-level covariates, we extended the basic variance-function regression
-to a hierarchical Bayesian variance-function regression model with Gaussian
-errors predicting $\log$ revenue, $\log(R_{i,t})$, for each fisher $i$ and time
-$t$:
-
-\begin{equation}
-\log(R_{i,t}) \sim \mathrm{N} \left(\widehat{\log(R_{i,t})}, \widehat{\sigma_{i,t}^2} \right).
-\end{equation}
-
-\noindent Each year $t$ of revenue for fisher $i$ is assigned a strategy indexed
-by $j$ (Supporting Information, Table \ref{tab:strategies}) and expected
-$\log(R_{i,t})$ is modelled as:
-
-<!-- Ole: I might swap out log(R)-hat for something like mu(or your favorit greek letter) just to avoid -->
-<!-- potential confusion like using the term "expected log(R)".   -->
-<!-- I also just don't like hats... but that's my problem. -->
-
-\begin{equation}
-\label{eq:mean}
-\widehat{\log(R_{i,t})} = \beta_{0,j,t} -
-  \beta_{1,j} S_{i,t} I_{i,t} +
-  \beta_{2,j} S_{i,t} I_{i,t} +
-  \beta_3 D_{i,t} -
-  \beta_4 S_{i,t} D_{i,t} I_{i,t} +
-  \beta_5 S_{i,t} D_{i,t} I_{i,t} +
-  \log(R_{i,t-1}),
-\end{equation}
-
-\noindent where $S_{i,t}$ is the percent change in species diversity, $\log
-\left(\mathrm{div}_{i,t}/\mathrm{div}_{i,t-1}\right)$, $D_{i,t}$ is the percent
-change in days fished, $\log
-\left(\mathrm{days}_{i,t}/\mathrm{days}_{i,t-1}\right)$, and $I_{i,t}$ is an
-indicator variable that takes a value $0$ if $\mathrm{div}_{i,t} \ge
-\mathrm{div}_{i,t-1}$ (species diversity increasing; generalizing) and takes
-a value $1$ if $\mathrm{div}_{i,t} < \mathrm{div}_{i,t-1}$ (species diversity
-decreasing; specializing). Estimating a separate coefficient for the effect of
-increasing diversity and decreasing diversity allows the costs and benefits of
-these changes to be asymmetric.
-
-We use $\log(R_{i,t-1}$) as an offset, and thus our model describes the percent
-change in revenue, i.e., $\log(R_{i,t}) - \log(R_{i,t-1})
-= \log(R_{i,t}/R_{i,t-1})$. We model change in revenue because preliminary
-analysis revealed non-stationary trends in revenue (resulting from experience or
-other unmodeled factors). This approach eliminates having to deal with the
-non-stationary time series and eliminates having to estimate thousands of
-mean-revenue intercepts associated with individual fishers. We removed
-person-year combinations without a subsequent year of revenue.
-
-The $\beta$ terms represent estimated coefficients, some of which are allowed to
-vary as "random effect" terms. The intercepts $\beta_{0,j,t}$ are allowed to
-vary by strategy-year combinations, are centered on zero, and are constrained by
-a normal distribution:
-
-<!-- Ole: I'd use tau (or something) for the variances here so that people don't have to look at the subscripts to differentiate between variances at different hierarchical levels. -->
-
-\begin{equation}
-\beta_{0,j,t} \sim \mathrm{N} \left(0, \sigma^2_{\beta_{j,t}} \right).
-\end{equation}
-
-\noindent This approach, combined with the lack of a global intercept,
-constrains the mean change in log revenue across all fishers and years to be
-zero. I.e., we assume that the data are stationary after accounting for all
-covariates and including an intercept that varies with strategy-year
-combinations. Initial versions of the model confirmed that the global intercept
-along with strategy-level intercepts would be estimated at almost exactly zero.
-
-The slopes $\beta_{1,j}$ and $\beta_{1,j}$ are then allowed to vary by strategy
-with estimated means:
-
-\begin{align}
-\beta_{1,j} &\sim \mathrm{N} \left(\mu_{\beta_1}, \sigma^2_{\beta_1}\right),\\
-\beta_{2,j} &\sim \mathrm{N} \left(\mu_{\beta_2}, \sigma^2_{\beta_2}\right).
-\end{align}
-
-\noindent The $\beta_{1,j}$'s represent how much a 1\% decrease in species
-diversity within a strategy translates to a Y\% change in revenue. The
-$\beta_{2,j}$'s represent how much a 1\% increase in species diversity within
-a strategy translates to a Y\% change in revenue. These are after controlling
-for percent change in days fished, $\beta_3$, and the interaction between days
-fished and percent change in species diversity, $\beta_4$ and $\beta_5$.
-
-Whereas a typical hierarchical linear regression model would estimate a single
-residual error scale term, $\sigma$, we model the scale of the residual error
-with another hierarchical model with a similar form:
-
-\begin{equation}
-\label{eq:cv}
-\widehat{\sigma_{i,t}} =
-\exp \left( \gamma_{0,j} -
-\gamma_{1,j} S_{i,t} I_{i,t} +
-\gamma_{2,j} S_{i,t} I_{i,t} +
-\gamma_3 D_{i,t} -
-\gamma_4 S_{i,t} D_{i,t} I_{i,t} +
-\gamma_5 S_{i,t} D_{i,t} I_{i,t}\right).
-\end{equation}
-
-\noindent Again, $S_{i,t}$ and $I_{i,t}$ represent, respectively, percent change
-in species diversity and an indicator variable for increasing or decreasing
-species diversity. We exponentiate the equation to ensure all scale parameters,
-$\sigma_{i,t}$, are positive. The $\gamma$'s are estimated coefficients, three
-of which are allowed to vary by strategy, constrained by normal distributions:
-
-\begin{align}
-\gamma_{0,j}  &\sim \mathrm{N} \left(\eta_0 + \eta_1 M_j + \eta_2 E_j, \sigma^2_{\gamma_0}\right),\\
-\gamma_{1,j}  &\sim \mathrm{N} \left(\mu_{\gamma_1}, \sigma^2_{\gamma_1}\right),\\
-\gamma_{2,j}  &\sim \mathrm{N} \left(\mu_{\gamma_2}, \sigma^2_{\gamma_2}\right).
-\end{align}
-
-\noindent The mean of the $\gamma_{0,j}$ coefficients is modelled with two
-strategy-level predictors. The symbols $M_j$ and $E_j$ represent the raw mean
-species diversity and mean combined fishing season length (effort) for strategy
-$j$. The coefficients $\eta_1$ and $\eta_2$ represent predictors in this
-strategy-level regression estimating effects across strategies.
-
-We fit our models with Stan 2.11.1 [@hoffman2014; @standevelopmentteam2015;
-@standevelopmentteam2015a; @carpenter2015] and R 3.3.1 [@rcoreteam2016]. Stan
-implements the No-U-Turn Hamiltonian Markov chain Monte Carlo algorithm
-[@hoffman2014] to perform Bayesian statistical inference. We assigned weakly
-informative priors on all parameters: $N(0, 2^2)$ priors on all $\beta$,
-$\gamma$, and $\eta$ parameters, and half-$t(3, 0, 2)$ priors (i.e. degrees of
-freedom of 3 and scale of 2) on all $\sigma$ parameters to allow for heavier
-tails. We ran four chains and 2,000 iterations and discarded the first 1,000
-iterations of each chain as warm up (i.e. 4,000 final samples). We checked for
-chain convergence visually with trace plots. We also ensured that
-$\hat{R}<1.05$ (the potential scale reduction factor) and that the effective
-sample size, as calculated by the rstan R package [@standevelopmentteam2015],
-was greater than 200 for all parameters [@gelman2014]. We verified that our
-model returned sensible estimates by comparing our estimates to an ad-hoc
-two-stage model fit with the lme4 R package [@bates2015], where we first fit a
-mixed effect regression model to the mean, and secondly modeled the absolute
-residuals from that first model in a second mixed effects model representing
-the variance component. We also validated the model with simulated data, and
-were able to recover the true values (Supporting Information). Code to
-reproduce our results (with a simulated data set) is available at
-<https://github.com/NCEAS/pfx-commercial>.
-
-*TODO: for the following into the results section or and the method section with
-this:*
-
-Residuals from the mean component of our model clearly show the "V"-shaped
-pattern that the variance component of our model seeks to capture (Fig.
-S\ref{fig:resid}). Furthermore, the downside residuals (year-individual data
-points with lower than expected revenue) look qualitatively similar to the
-complete set of residuals (upside and downside) (Fig.
-S\ref{fig:resid-downside}). Therefore, it seemed appropriate to model the
-variability as a proxy for revenue risk. 
-
-The estimated year-permit intercepts represent years when people with
-a particular permit set in a given year tended to do better or worse than the
-long-term average for that permit set (Fig. S\ref{fig:str-yrs}). Therefore, an
-individual's expected revenue and variability is after accounting for the
-general trend in revenue for that permit set.
-
-Our model estimates overall average effects (Fig. S\ref{fig:fe}) and effects
-that vary by permit set (Fig. S\ref{fig:re}).
+Our hierarchical variance-function regression model [@davidian1987; @hall1989]
+simultaneously models changes in the mean and variance of individual revenue as
+a function of covariates. Whereas traditional hierarchical linear models assume
+homoscedasticity --- that the residual variance does not vary systematically ---
+the variance-function regression model allows the variance to be heteroscedastic
+and vary as a function of predictors. Our specific model allows the revenue rate
+of return (log of the ratio of year-to-year revenue) and the revenue variability
+(the standard deviation of this revenue rate of return) to vary by fishing
+strategy (fishing permit sets), fishing effort (season length), and levels of
+species diversification.
 
 # Results
 
-We evaluated trends in revenue and diversification over time for individuals
-fishing commercially in Alaska from 1985--2014 (Fig. \ref{fig:ts}A). The
-majority (70--90%) of fishers hold single permits, with a slight increase in
+We first evaluated trends in revenue and diversification over time for
+individuals fishing commercially in Alaska from 1985--2014 (Fig. \ref{fig:ts}A).
+The majority (70--90%) of fishers hold single permits, with a slight increase in
 single-permit holders since 2000 (Fig. \ref{fig:ts}C). This overall trend is
 most sensitive to halibut or salmon permit holders --- compared to other
 fisheries, halibut permit holders are more likely to hold halibut plus other
@@ -436,45 +216,43 @@ of `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR], Fig.
 \ref{fig:spokes}A). Likewise, adding a permit to a herring roe gillnet strategy
 substantially reduced expected revenue variability (Fig. \ref{fig:spokes}B).
 Adding permits also usually increased expected revenue, although the permits
-themselves represent a significant expense (e.g. TODO).
+themselves represent a significant expense (e.g. ~\$192K USD for a king and
+tanner crab permit in Southeast Alaska in 2016;
+<https://www.cfec.state.ak.us/pmtvalue/X_K69A.HTM>).
 
 In contrast to the clear across-strategy effects of species diversity on revenue
 and revenue variability, the effect of changing fished species diversity for an
 individual *within* the constraints of a given permit set is more variable (Fig.
-\ref{fig:within}). After accounting for fishing effort (Fig. S\ref{fig:fe}),
-specializing (decreasing species diversity) tends to be associated with
-increased revenue (~0.5% increased revenue per 1% decrease in species diversity
-on average or TODO ... `r g2_dens`% probability; Fig. \ref{fig:within}). This is
-particularly clear for permits where individuals tend to specialize on sockeye
-salmon. For example, individuals with setnet permits for salmon in Prince
-William Sound, Cook Inlet, Kodiak, Bristol Bay, or the Alaska Peninsula target
-primarily sockeye salmon and experience a ~1.5% increase in revenue for a 1%
-decrease in fished species diversity (Fig. \ref{fig:within}B). The converse is
-also usually true --- generalizing tends to be associated with lower expected
-revenue after accounting for fishing effort (i.e. Fig. \ref{fig:within}A and
-\ref{fig:within}B are near mirror images left to right). This benefit of
-specializing is only apparent after accounting for fishing effort. Given that
-fishing for more species tends to be associated with increased fishing effort
-(fishing more days), generalizing tends to be associated with higher revenue
-when not standardizing for days finished (Fig. S-TODO). 
+\ref{fig:within}). After accounting for fishing effort, specializing tends to be
+associated with increased revenue (Fig. \ref{fig:within}; Fig. S\ref{fig:fe}).
+On average, there is a ~0.5% increase in the year-to-year revenue ratio per 1%
+decrease in species diversity, and across strategies, `r g2_dens`% of the
+probability density supports a positive relationship between specialization and
+revenue. The converse is also usually true --- generalizing tends to be
+associated with lower expected revenue after accounting for fishing effort (i.e.
+Fig. S\ref{fig:mirror}A and \ref{fig:mirror}B are near mirror images left to
+right). This benefit of specializing is only apparent after accounting for
+fishing effort. Given that fishing for more species tends to be associated with
+increased fishing effort (fishing more days), generalizing tends to be
+associated with higher revenue when not standardizing for days finished (Fig.
+S-TODO). 
 
 After accounting for fishing effort, adjusting (increasing or decreasing) an
-individual's fished species diversity from year-to-year within the constraints
-of a permit set tends to be associated with greater expected variability or
-uncertainty in year-to-year revenue (Fig. \ref{fig:within} strategies above 0;
-Fig. S\ref{fig:fe}). This effect was strongest for individuals with a halibut
-longline permit or halibut and sablefish longline permits. Individuals with
-these strategies experienced ~2% increase in standardized variability for a 1%
-change in fished species diversity (Fig. \ref{fig:within}). Levels of fished
-species diversity levels above one for these permits are primarily due to
-bycatch. 
+individual's fished species diversity within the constraints of a permit set
+tends to be associated with greater expected variability or uncertainty in
+year-to-year revenue (Fig. \ref{fig:within} strategies above 0; Fig.
+S\ref{fig:fe}). This effect was strongest for individuals with a halibut permit
+or halibut and sablefish permits. Individuals with these strategies experienced
+~2% increase in variability for a 1% change in the year-to-year ratio of species
+diversity (Fig. \ref{fig:within}). Levels of fished species diversity above one
+for these particular permits are primarily due to bycatch. 
 
-The Alaskan halibut and sablefish fisheries were converted to an individual
-fishery quota (IFQ) system in 1994. This catch share system... TODO. We refit
-our models allowing all permit-level effects to vary separately before and after
-the introduction of IFQs for strategies involving halibut and sablefish permits.
-The introduction of IFQs reduced variability by ~25% (XX--XX 95% CI) for
-individuals with only halibut or sablefish permits (Fig. S\ref{fig:ifq}A).
+The management of the Alaskan halibut and sablefish fisheries was converted to
+individual fishery quotas (IFQ) in 1994. This catch share system... TODO. We
+refit our models allowing all permit-level effects to vary separately before and
+after the introduction of IFQs for strategies involving halibut and sablefish
+permits. The introduction of IFQs reduced variability by ~25% (XX--XX 95% CI)
+for individuals with only halibut or sablefish permits (Fig. S\ref{fig:ifq}A).
 Furthermore, for most strategies, the effect of increased revenue variability
 associated with changing species diversity became stronger after the
 introduction of IFQs (Fig. S\ref{fig:ifq}B). This was especially true for
@@ -555,7 +333,7 @@ but not necessarily always
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../figs/fig1-jk.pdf}
 
-\caption{ Trends in revenue and diversification over time. (A) Map of fishing
+\caption{Trends in revenue and diversification over time. (A) Map of fishing
 regions in Alaska, USA. (B) Total revenue in billions of 2009 U.S. dollars from
 `r range_yrs[1]` to `r range_yrs[2]` for multiple (grey) and single (blue)
 permit holders. (C) Proportion of single permit holders for all fisheries (thick
@@ -595,9 +373,10 @@ diversity or days fished from year-to-year. }
 \caption{Diversifying permits reduces risk and usually increases revenue. Two
 examples of expected revenue variability and median revenue for owners of (A)
 individual halibut and (B) gillnet herring roe permits (dark blue) compared with
-owners of the same permit plus one more (medium blue) or two more permits (light
-blue). On the y-axis, dots and lines represent posterior median and 95\%
-credible intervals of expected standard deviation.}
+owners of the same permit plus one more (medium blue) or two more (light
+blue) permits. On the y-axis, dots and lines represent posterior median and 95\%
+credible intervals of expected standard deviations of year-to-year revenue rates
+of return.}
 
 \label{fig:spokes}
 \end{center}
@@ -607,23 +386,232 @@ credible intervals of expected standard deviation.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1.1\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
+\includegraphics[width=0.6\textwidth]{../figs/stan-offset-break-anti-spaghetti-specializing.pdf}
 
-\caption{Effects of (A) generalizing and (B) specializing from year-to-year for
-individual permit holders \emph{within} the `r nstr` most common strategies.
-Changing species diversity from year-to-year is associated with higher
-variability for individuals within the strategies above the zero line.
-Generalizing (A) or specializing (B) is associated with greater expected revenue
-to the right of the zero line and lower expected revenue to the left of the zero
-line. These effects are estimated holding fishing season length constant from
-year-to-year. Dots and line segments represent medians and 50\% credible
-intervals of posteriors. }
+\caption{Effect of specializing on year-to-year changes in revenue and revenue
+variability for individual permit holders \emph{within} the `r nstr` most common
+strategies. Changing species diversity from year-to-year is associated with
+higher variability for individuals within the strategies above the zero line.
+Specializing is associated with greater expected revenue to the right of the
+zero line and lower expected revenue to the left of the zero line. For example,
+individuals with setnet permits for salmon in Prince William Sound, Cook Inlet,
+Kodiak, Bristol Bay, or the Alaska Peninsula target primarily sockeye salmon and
+experience a $\sim$1.5\% increase in their year-to-year revenue ratio for a 1\%
+decrease in their year-to-year species diversity. These effects are estimated
+holding fishing season length constant from year-to-year. Dots and line segments
+represent medians and 50\% credible intervals of posteriors. The effect of
+generalizing (increasing species diversity) is similar (Fig. S\ref{fig:mirror})}.
 
 \label{fig:within}
 \end{center}
 \end{figure}
 
 \clearpage
+
+# Materials and methods
+
+We obtained commercial fisheries landings and revenue data for all permit
+holders in Alaska from `r range_yrs[1]` to `r range_yrs[2]` from the Alaskan
+Commercial Fisheries Entry Commission (CFEC). These data represent a total of
+nearly `r round(ndat$initial_tot_rev/1e9)` billion 2009 USD and a combined `r
+round(ndat$initial/1e6,1)` million rows of data. We adjusted for inflation by
+setting all revenues to 2009 USD [@bea2016]. We implemented a number of
+filtering steps to focus on individuals actively engaged in commercial fishing
+(Supporting Information). In particular, we removed permit holders whose median
+revenue was less than \$10,000 2009 USD to focus on individuals for whom
+commercial fishing formed a substantial part of their income.
+
+We used combinations of state and federal fishing permits held by an individual
+in in a specific year to define fishing "strategies", representing the species
+targeted (Supporting Information). For example, we combined permits that were
+otherwise the same except for vessel size (e.g. a longliner fishing sablefish
+on a vessel under 60 ft was considered to have the same strategy as a longliner
+fishing sablefish on a vessel over 60 ft), and we combined a number of permits
+that were targeting a single species and differed only in region fished.
+Therefore, for example, someone fishing herring roe in Kodiak and someone
+fishing herring roe in Alaska Peninsula were both considered to have a "herring
+roe" permit group. For salmon permits, we formed salmon strategies based on
+similarities in gear type and species compositon (Supporting Information).
+
+After this process of combining permits, we were left with `r n_grouped_permits`
+unique fishing permit groups (Table S\ref{tab:strategies}), which we aggregated
+within each person-year combination to form permit strategies. For example, if
+someone fished halibut and sablefish in the same year, their strategy for that
+year would be "halibut-sablefish". Specific details on our strategy definitions
+are available in the Supporting Information.
+
+Our models focused on species diversity as a possible predictor of revenue and
+revenue variability while controlling for effort. For consistency with previous
+analyses [@kasperski2013], we calculated effective species diversity for
+permit holder $i$ and time (year) $t$ as the inverse of Simpson's diversity
+index $\lambda$ [@simpson1949; @jost2006] (also referred to in economics as the
+Herfindahl-Hirschman Index) weighted by revenue $R$:
+
+\begin{equation}
+1/\lambda_{i,t} = 1 / \left(\sum\limits_{s=1}^{n_{i,t}}
+  \left(R_{i,s,t}/ \sum\limits_{s=1}^{n_{i,t}} R_{i,s,t}\right)\right)^2,
+\end{equation}
+
+\noindent where $s$ indexes species from $1$ through $n$. We calculated effort
+or effective season length as the sum of the season lengths for each permit
+each year. Season length for a given permit was calculated as the number of
+days between the first instance of fishing a permit and the last instance of
+fishing a permit each year. For example, if someone fished for 30 days on a
+salmon drift gillnet permit in Southeast Alaska and 40 days on a statewide
+longline halibut permit, that individual's season length was calculated as 70
+days.
+
+## Hierarchical model
+
+To jointly model revenue and revenue variability as a function of
+individual-level covariates, we extended the basic variance-function regression
+to a hierarchical Bayesian variance-function regression model with Gaussian
+errors predicting $\log$ revenue, $\log(R_{i,t})$, for each fisher $i$ and time
+$t$:
+
+\begin{equation}
+\log(R_{i,t}) \sim \mathrm{N} \left(\mu_{i,t}, \sigma_{i,t}^2 \right).
+\end{equation}
+
+\noindent Each year $t$ of revenue for fisher $i$ is assigned a strategy (permit
+set) indexed by $j$ (Supporting Information, Table \ref{tab:strategies}) and
+$\mu_{i,t}$ is modelled as:
+
+\begin{equation}
+\label{eq:mean}
+\mu_{i,t} = \beta_{0,j,t} -
+  \beta_{1,j} S_{i,t} I_{i,t} +
+  \beta_{2,j} S_{i,t} I_{i,t} +
+  \beta_3 D_{i,t} -
+  \beta_4 S_{i,t} D_{i,t} I_{i,t} +
+  \beta_5 S_{i,t} D_{i,t} I_{i,t} +
+  \log(R_{i,t-1}),
+\end{equation}
+
+\noindent where $S_{i,t}$ is the log ratio of species diversity from
+year-to-year, $\log \left(\mathrm{div}_{i,t}/\mathrm{div}_{i,t-1}\right)$,
+$D_{i,t}$ is the log ratio of days fished from year-to-year, $\log
+\left(\mathrm{days}_{i,t}/\mathrm{days}_{i,t-1}\right)$, and $I_{i,t}$ is an
+indicator variable that takes a value $0$ if $\mathrm{div}_{i,t} \ge
+\mathrm{div}_{i,t-1}$ (species diversity increasing; generalizing) and takes
+a value $1$ if $\mathrm{div}_{i,t} < \mathrm{div}_{i,t-1}$ (species diversity
+decreasing; specializing). Estimating a separate coefficient for the effect of
+increasing diversity and decreasing diversity allows the costs and benefits of
+these changes to be asymmetric.
+
+We use $\log(R_{i,t-1}$) as an offset, and thus our model describes the log
+ratio of revenue from year-to-year, i.e., $\log(R_{i,t}) - \log(R_{i,t-1})
+= \log(R_{i,t}/R_{i,t-1})$. We model change in revenue because preliminary
+analysis revealed non-stationary trends in revenue (resulting from experience or
+other unmodeled factors). This approach eliminates having to deal with the
+non-stationary time series and eliminates having to estimate thousands of
+mean-revenue intercepts associated with individual fishers. We removed
+person-year combinations without a subsequent year of revenue.
+
+The $\beta$ terms represent estimated coefficients, some of which are allowed to
+vary as "random effect" terms. The intercepts $\beta_{0,j,t}$ are allowed to
+vary by strategy-year combinations, are centred on zero, and are constrained by
+a normal distribution:
+
+<!-- Ole: I'd use tau (or something) for the variances here so that people don't have to look at the subscripts to differentiate between variances at different hierarchical levels. -->
+
+\begin{equation}
+\beta_{0,j,t} \sim \mathrm{N} \left(0, \sigma^2_{\beta_{j,t}} \right).
+\end{equation}
+
+\noindent This approach, combined with the lack of a global intercept,
+constrains the mean change in log revenue across all fishers and years to be
+zero. I.e., we assume that the data are stationary after accounting for all
+covariates and including an intercept that varies with strategy-year
+combinations. Initial versions of the model confirmed that the global intercept
+along with strategy-level intercepts would be estimated at almost exactly zero.
+
+The slopes $\beta_{1,j}$ and $\beta_{1,j}$ are then allowed to vary by strategy
+with estimated means:
+
+\begin{align}
+\beta_{1,j} &\sim \mathrm{N} \left(\mu_{\beta_1}, \tau^2_{\beta_1}\right),\\
+\beta_{2,j} &\sim \mathrm{N} \left(\mu_{\beta_2}, \tau^2_{\beta_2}\right).
+\end{align}
+
+\noindent The $\beta_{1,j}$'s represent how much a 1\% decrease in species
+diversity within a strategy translates to a Y\% change in revenue. The
+$\beta_{2,j}$'s represent how much a 1\% increase in species diversity within
+a strategy translates to a Y\% change in revenue. These are after controlling
+for changes in effort, $\beta_3$, and the interaction between changes in effort
+and changes in species diversity, $\beta_4$ and $\beta_5$.
+
+Whereas a typical hierarchical linear regression model would estimate a single
+residual error scale term, $\sigma$, we model the scale of the residual error
+with another hierarchical model with a similar form:
+
+\begin{equation}
+\label{eq:cv}
+\sigma_{i,t} =
+\exp \left( \gamma_{0,j} -
+\gamma_{1,j} S_{i,t} I_{i,t} +
+\gamma_{2,j} S_{i,t} I_{i,t} +
+\gamma_3 D_{i,t} -
+\gamma_4 S_{i,t} D_{i,t} I_{i,t} +
+\gamma_5 S_{i,t} D_{i,t} I_{i,t}\right).
+\end{equation}
+
+\noindent Again, $S_{i,t}$ and $I_{i,t}$ represent, respectively, percent change
+in species diversity and an indicator variable for increasing or decreasing
+species diversity. We exponentiate the equation to ensure all scale parameters,
+$\sigma_{i,t}$, are positive. The $\gamma$'s are estimated coefficients, three
+of which are allowed to vary by strategy, constrained by normal distributions:
+
+\begin{align}
+\gamma_{0,j}  &\sim \mathrm{N} \left(\eta_0 + \eta_1 M_j + \eta_2 E_j, \tau^2_{\gamma_0}\right),\\
+\gamma_{1,j}  &\sim \mathrm{N} \left(\mu_{\gamma_1}, \tau^2_{\gamma_1}\right),\\
+\gamma_{2,j}  &\sim \mathrm{N} \left(\mu_{\gamma_2}, \tau^2_{\gamma_2}\right).
+\end{align}
+
+\noindent The mean of the $\gamma_{0,j}$ coefficients is modelled with two
+strategy-level predictors. The symbols $M_j$ and $E_j$ represent the mean
+species diversity and mean combined fishing season length (effort) for strategy
+$j$. The coefficients $\eta_1$ and $\eta_2$ represent predictors in this
+strategy-level regression estimating effects across strategies.
+
+We fit our models with Stan 2.11.1 [@hoffman2014; @standevelopmentteam2015;
+@standevelopmentteam2015a; @carpenter2015] and R 3.3.1 [@rcoreteam2016]. Stan
+implements the No-U-Turn Hamiltonian Markov chain Monte Carlo algorithm
+[@hoffman2014] to perform Bayesian statistical inference. We assigned weakly
+informative priors on all parameters: $N(0, 2^2)$ priors on all $\beta$,
+$\gamma$, and $\eta$ parameters, and half-$t(3, 0, 2)$ priors (i.e. degrees of
+freedom of 3 and scale of 2) on all $\sigma$ and $\tau$. We ran four chains and
+2,000 iterations and discarded the first 1,000 iterations of each chain as warm
+up. We checked for chain convergence visually with trace plots, ensured that
+$\hat{R}<1.05$ (the potential scale reduction factor) and that the effective
+sample size, as calculated by the rstan R package [@standevelopmentteam2015],
+was greater than 200 for all parameters [@gelman2014]. We verified that our
+model returned sensible estimates by comparing our estimates to an ad-hoc
+two-stage model fit with the lme4 R package [@bates2015], where we first fit
+a mixed-effect regression model to the mean, and then modelled the absolute
+residuals from that first model in a second mixed effects model representing the
+variance component. We also validated the model with simulated data, and were
+able to recover the true values (Supporting Information). Code used in our
+analysis is available at <https://github.com/NCEAS/pfx-commercial/portfolios/>.
+
+*TODO: move the following into the results section or into the methods section:*
+
+Residuals from the mean component of our model clearly show the "V"-shaped
+pattern that the variance component of our model seeks to capture (Fig.
+S\ref{fig:resid}). Furthermore, the downside residuals (year-individual data
+points with lower than expected revenue) look qualitatively similar to the
+complete set of residuals (upside and downside) (Fig.
+S\ref{fig:resid-downside}). Therefore, it seemed appropriate to model the
+variability as a proxy for revenue risk. 
+
+The estimated year-permit intercepts represent years when people with
+a particular permit set in a given year tended to do better or worse than the
+long-term average for that permit set (Fig. S\ref{fig:str-yrs}). Therefore, an
+individual's expected revenue and variability is after accounting for the
+general trend in revenue for that permit set.
+
+Our model estimates overall average effects (Fig. S\ref{fig:fe}) and effects
+that vary by permit set (Fig. S\ref{fig:re}).
 
 <!-- # Notes -->
 
