@@ -90,6 +90,9 @@ opts_chunk$set(warning=FALSE, message=FALSE, cache.path="../cache/",
 
 <<get-values, cache=FALSE, echo=FALSE>>=
 load("../data-generated/output-values.rda")
+h1 <- readRDS("../data-generated/h1_effect.rds")
+spoke <- readRDS("../data-generated/spoke_fraction.rds")
+g2_dens <- readRDS("../data-generated/g2_prob_dens_above_zero.rds")
 n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 @
 
@@ -339,6 +342,24 @@ Shown are 40 samples from the posterior distribution.}
 \label{fig:ifq}
 \end{center}
 \end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=1.1\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
+\caption{Effects of (A) generalizing and (B) specializing from year-to-year for
+individual permit holders \emph{within} the `r nstr` most common strategies.
+Changing species diversity from year-to-year is associated with higher
+variability for individuals within the strategies above the zero line.
+Generalizing (A) or specializing (B) is associated with greater expected revenue
+to the right of the zero line and lower expected revenue to the left of the zero
+line. These effects are estimated holding fishing season length constant from
+year-to-year. Dots and line segments represent medians and 50\% credible
+intervals of posteriors. }
+\label{fig:mirror}
+\end{center}
+\end{figure}
+
+
 
 % \begin{figure}[htbp]
 % \begin{center}
