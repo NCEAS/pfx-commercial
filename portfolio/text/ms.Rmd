@@ -1,6 +1,6 @@
-```{r set-knitr-options, cache=FALSE, echo=FALSE}
+```{r set-knitr-options, echo=FALSE}
 library("knitr")
-opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, results='hide')
+opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, results="hide")
 ```
 ```{r get-dat}
 load("../data-generated/output-values.rda")
@@ -9,6 +9,11 @@ spoke <- readRDS("../data-generated/spoke_fraction.rds")
 g2_dens <- readRDS("../data-generated/g2_prob_dens_above_zero.rds")
 n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 ```
+
+<!-- Diversified portfolios of fishing permits and species reduce risk for fishermen, -->
+<!-- but changing species diversity can be risky, costly, and limited by regulations. -->
+<!-- Goal: Introduction, Methods, Results, Discussion, Conclusion:
+<!-- 600, 900, 500, 800, 200, -->
 
 # Abstract
 
@@ -52,44 +57,7 @@ holder. Effective methods of diversification --- purchasing additional permits
 or switching permits --- are costly and often limited by regulations such as
 limited entry programs and individual transferable quotas (ITQs). Take home ...
 
-\bigskip
-\noindent
-
 \clearpage
-
-<!-- Extra: -->
-
-<!-- - there is often limited room for intentional diversification within a permit -->
-<!-- - in fact, specializing can be profitable within some fisheries -->
-<!-- - Eric: analog here in farming literature is that diversification -->
-<!--   for small scale farmers generally good, except when they -->
-<!--   specialize on high demand/high value crops (tobacco, cocoa). -->
-<!--   Seems like benefits of diversification are also smaller for -->
-<!--   large-scale industrial farmers. -->
-
-<!-- \noindent -->
-<!-- Main message: -->
-<!-- Diversified portfolios of fishing permits and species reduce risk for fishermen, -->
-<!-- but changing species diversity can be risky, costly, and limited by regulations. -->
-
-<!-- , which is concerning  -->
-<!-- given that some fishing regulations and market forces -->
-<!-- may be increasingly promoting specialization. -->
-<!-- Main message in 25 words or less: -->
-
-<!-- Take 1: -->
-<!-- - There is a trend towards specializing on single salmon permits in Alaska -->
-<!-- - Diversified portfolios of fishing permits and species reduce risk, -->
-<!--   but changing species diversity for an individual permit holder can be risky -->
-<!-- - The types of diversity needed to reduce risk are often restricted by -->
-<!--   cost and regulations -->
-
-<!-- Take 2: -->
-<!-- - The effect of species diversification on revenue and risk for fishermen -->
-<!-- depends on the type of diversification and the fishery. -->
-
-<!-- Goal: Introduction, Methods, Results, Discussion, Conclusion:
-<!-- 600, 900, 500, 800, 200, -->
 
 # Introduction
 
@@ -258,63 +226,67 @@ a salmon permit (Fig. S\ref{fig:ifq}B).
 
 # Discussion
 
-### Take homes / summary
+### Summary
 
-- Suggests it's mostly an across strategy/permit effect (lowering variability),
+- suggests it's mostly an across strategy/permit effect (lowering variability),
   which isn't always a possibility because of regulations and cost
-- Adjusting within current permit constraints is risky... Not clearly risk
-  reducing to generalize from one year to the next
+- adjusting within current permit constraints is risky... Not clearly risk
+  reducing to generalize from one year to the next, and accounting for effort,
+  specializing can increase revenue
 - not as simple as increase diversity (within permit) and reduce risk
-- What's methodologically novel
-    - Huge dataset
-    - Permit level data (on individuals, not vessels)
-    - Account for covariates
-    - Accounting for strategies
-    - Keeping annual data (not condensing to mean and cv)
-    - Joint modelling of mean and variance
-    - look at different mechanisms of diversification
-- 2 dimensions to think about (revenue and variability); and the trade-off is fishery specific
-    - effects within a permit strategy are permit specific
-    - Importantly it's a tradeoff - 2 dimensions - sometimes make more money by specializing... Some highly variable single species permits make a ton of money... which preferable?
+- methodologically novel: individuals, huge dataset, account for covariates,
+  accounting for strategies, keeping annual data (not condensing to mean and
+  cv), joint modelling of mean and variance, evaluating within and across
+  strategies (different mechanisms of diversification)
+- 2 dimensions to think about (revenue and variability); and the trade-off is
+  fishery specific: effects within a permit strategy are permit specific;
+  sometimes make more money by specializing... some highly variable single
+  species permits make a ton of money
 
 ### Reconciling the effects at different levels of species diversity
 
-- How fit in with K and H?
+- why variability/uncertainty might increase with changes in diversity...
+- and how fit in with @kasperski2013, @sethi2012b, @sethi2014
+- part of the difference is individuals vs vessels. E.g. @kasperski2013
+  suggested that diversity declined following IFQs for halibut sablefish
+  vessels. The reason for the decline was that the vessels were allowed to fish
+  halibut for more days (because people were sharing boats). At the level of
+  people, we wouldn't expect the diversity of someone who only had
+  halibut/sablefish permit to be affected by IFQs. The person, not the vessel
+  holds the quota share: https://alaskafisheries.noaa.gov/fisheries/ifq
+- year to year risky... But maybe evens out/better over time
+- diversity within permit - often bycatch, limited room for intentional
+  diversification (unless you have a M or salmon permit)
+- risk results not really risk, but unpredictability given our covariates ...
+  don't change anything and it's most predictable how well you'll do. What's
+  unpredictable in our model, might be more predictable on a year to year,
+  species by species basis for individual permit holder
+- CV vs year-to-year effect for one person
 
-- EW: part of the difference is individuals vs vessels. For example, K&H
-suggested that diversity declined following IFQs for halibut sablefish
-vessels. The reason for the decline was that the vessels were allowed to
-fish halibut for more days (because people were sharing boats). At the level
-of people, we wouldn't expect the diversity of someone who only had
-halibut/sablefish permit to be affected by IFQs. The person, not the vessel
-holds the quota share: https://alaskafisheries.noaa.gov/fisheries/ifq
-- Year to year risky... But maybe evens out/better over time
-- diversity within permit - often bycatch, limited room for intentional diversification (unless you have a M or salmon permit)
-- Risk results not really risk, but unpredictability given our covariates ...
-don't change anything and it's most predictable how well you'll do
-- What's unpredictable in our model, might be more predictable on a year to
-year, species by species basis for individual permit holder
-- Equilibrium, average variability vs year to year effect for one person
+Other:
+
+- specializing can be profitable within some fisheries. Eric: analog here in
+  farming literature is that diversification for small scale farmers generally
+  good, except when they specialize on high demand/high value crops (tobacco,
+  cocoa). Seems like benefits of diversification are also smaller for
+  large-scale industrial farmers.
+
 
 ### Limitations + obvious extensions
 
-- limitations...
-- Vary by time
-- Vary by mean diversity
-- Spatial variation
-- Nonlinear effects
-- Response to specific events like EVOS and ITQs
-
+- could vary by time and vary by mean diversity
+- spatial/geographic variation
+- nonlinear effects
+- response to specific events like EVOS
 
 ### Implications for limited entry, ITQs, and catch shares
 
-- if this is true, this is concerning because in many areas of the world and
-fisheries, regulations and market forces have encouraged specialization
-- Permit diversity result: a privileged position - expensive to get to into
-(quote king crab license)
-- Locking into permits limits ability to pick lower risk strategies and is
-getting people locked into low diversity permits that may be doing well now,
-but not necessarily always
+- concerning because in many areas of the world and fisheries, regulations and
+  market forces have encouraged specialization
+- permit diversity result: a privileged position --- expensive to get into
+- locking into permits limits ability to pick lower risk strategies and is
+  getting people locked into low diversity permits that may be doing well now,
+  but not necessarily always
 
 ### Conclusions + recommendations
 
@@ -324,7 +296,6 @@ but not necessarily always
 \clearpage
 
 # Figures
-
 
 \begin{figure}[htbp]
 \begin{center}
@@ -509,8 +480,6 @@ The $\beta$ terms represent estimated coefficients, some of which are allowed to
 vary as "random effect" terms. The intercepts $\beta_{0,j,t}$ are allowed to
 vary by strategy-year combinations, are centred on zero, and are constrained by
 a normal distribution:
-
-<!-- Ole: I'd use tau (or something) for the variances here so that people don't have to look at the subscripts to differentiate between variances at different hierarchical levels. -->
 
 \begin{equation}
 \beta_{0,j,t} \sim \mathrm{N} \left(0, \sigma^2_{\beta_{j,t}} \right).
