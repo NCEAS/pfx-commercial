@@ -155,56 +155,53 @@ fisheries limit the entry of new participants through individual fishing quotas
 
 Using a unique dataset collected over 30 years (1985--2014) on individuals,
 rather than fleets or vessels, we examine how revenue and revenue variability of
-individuals is affected by diversification. By tracking individuals rather than
-vessels we can track people that switch fishery permits over time or use
-multiple vessels. Similarly, we are able to disentangle fishers that share the
-same vessel. We develop and apply a hierarchical Bayesian model to understand
-the effect of diversity on both individual revenue and revenue variability that
-builds on results from vessel [@kasperski2013], fleet [@sethi2012b], and
-community-level [@sethi2014] variability. Our model controls for fishing effort
-and latent time effects (e.g. changing environmental conditions), simultaneously
-estimates the effect of species diversity on individual revenue and revenue
-variability, and estimates effects both within and across fishing strategies
-(sets of similar licenses or permits). To our knowledge, this is the first
-application of this type of model in any natural resource field.
+individuals is affected by diversification. By tracking individuals we can track
+people that switch fishery permits over time or use multiple vessels. Similarly,
+we can disentangle fishers that share the same vessel. We develop and apply
+a hierarchical Bayesian model to understand the effect of fished species
+diversity on individual revenue and revenue variability that builds on results
+from vessel [@kasperski2013], fleet [@sethi2012b], and community-level
+[@sethi2014] variability. 
 
-Our hierarchical variance-function regression model [@davidian1987; @hall1989]
-simultaneously models changes in the mean and variance of individual revenue as
-a function of covariates. Whereas traditional hierarchical linear models assume
-homoscedasticity --- that the residual variance does not vary systematically ---
-the variance-function regression model allows the variance to be heteroscedastic
-and vary as a function of predictors. Our specific model allows the revenue rate
-of return (log of the ratio of year-to-year revenue) and the revenue variability
-(the standard deviation of this revenue rate of return) to vary by fishing
-strategy (fishing permit sets), fishing effort (season length), and levels of
-species diversification.
+Our model is a variance-function regression model [@davidian1987; @hall1989],
+which simultaneously models changes in the mean and variance of individual
+revenue as a function of covariates. Whereas traditional hierarchical linear
+models assume homoscedasticity --- that the residual variance does not vary
+systematically --- the variance-function regression model allows the variance to
+be heteroscedastic and vary as a function of predictors. Our specific model
+simultaneously estimates the effect of species diversity on individual revenue
+and revenue variability, and estimates effects both within and across fishing
+strategies (sets of similar licenses or permits). At the same time, it controls
+for fishing effort and latent time effects (e.g. changing environmental
+conditions). To our knowledge, this is the first application of this type of
+model in any natural resource field.
 
 # Results
 
-We first evaluated trends in revenue and diversification over time for
-individuals fishing commercially in Alaska from 1985--2014 (Fig. \ref{fig:ts}A).
-The majority (70--90%) of fishers hold single permits, with a slight increase in
+We evaluated trends in revenue and diversification over time for individuals
+fishing commercially in Alaska from 1985--2014 (Fig. \ref{fig:ts}A). The
+majority (70--90%) of fishers hold single permits, with a slight increase in
 single-permit holders since 2000 (Fig. \ref{fig:ts}C). This overall trend is
 most sensitive to halibut or salmon permit holders --- compared to other
 fisheries, halibut permit holders are more likely to hold halibut plus other
 permits, whereas salmon permit holders are more likely to hold only one permit
 (Fig. \ref{fig:ts}C). Despite making up only 10--30% of the individuals,
-multiple permit holders make approximately half of the overall revenue (Fig.
+multiple permit holders earn approximately half the overall revenue (Fig.
 \ref{fig:ts}B). The mean effective fished species diversity of this revenue
 declined somewhat from 1980--2000 but has since remained steady (Fig.
 \ref{fig:ts}D). However, this trend appears to be driven by an increase in
 salmon specialists in the 1980s and 1990s --- the trend disappears if salmon
 license holders are excluded (Fig. \ref{fig:ts}D).
 
-Revenue variability decreases exponentially with higher mean fished species
-diversity across permit sets (Fig. \ref{fig:across}). Controlling for effort,
-strategies with one unit higher mean effective species diversity had on average
-`r h1[[2]]`% (`r h1[[1]]`--`r h1[[3]]`% 95% CI) lower variability. This pattern
-looks qualitatively similar with or without individuals targeting salmon. As
-examples, variability was highest for the herring roe gillnet and king crab
-fisheries. Most of the strategies with the lowest estimated revenue variability
-combined halibut with a salmon permit and had high levels of fished species
-diversity (Fig. \ref{fig:across}).
+Individual revenue variability decreases exponentially with higher mean fished
+species diversity across permit sets (Fig. \ref{fig:across}). Controlling for
+effort, strategies with one unit higher mean effective species diversity had on
+average `r h1[[2]]`% (`r h1[[1]]`--`r h1[[3]]`% 95% CI) lower variability. This
+pattern looks qualitatively similar with or without individuals targeting
+salmon. As examples, variability was highest for the herring roe gillnet and
+king crab fisheries. Most of the strategies with the lowest estimated revenue
+variability combined halibut with a salmon permit and had high levels of fished
+species diversity (Fig. \ref{fig:across}).
 
 Comparing single permit holders to individuals holding that same permit plus
 additional permits illustrates the expected reduction in revenue variability
@@ -247,17 +244,17 @@ or halibut and sablefish permits. Individuals with these strategies experienced
 diversity (Fig. \ref{fig:within}). Levels of fished species diversity above one
 for these particular permits are primarily due to bycatch. 
 
-The management of the Alaskan halibut and sablefish fisheries was converted to
-individual fishery quotas (IFQ) in 1994. This catch share system... TODO. We
-refit our models allowing all permit-level effects to vary separately before and
-after the introduction of IFQs for strategies involving halibut and sablefish
-permits. The introduction of IFQs reduced variability by ~25% (XX--XX 95% CI)
-for individuals with only halibut or sablefish permits (Fig. S\ref{fig:ifq}A).
-Furthermore, for most strategies, the effect of increased revenue variability
-associated with changing species diversity became stronger after the
-introduction of IFQs (Fig. S\ref{fig:ifq}B). This was especially true for
-individuals fishing only halibut or sablefish and less so for individuals
-combining halibut or sable fish with a salmon permit (Fig. S\ref{fig:ifq}B).
+Alaskan halibut and sablefish fisheries were converted to individual fishery
+quota (IFQ) management in 1994. This catch share system... TODO. We refit our
+models allowing all permit-level effects to vary separately before and after the
+introduction of IFQs for strategies involving halibut and sablefish permits. The
+introduction of IFQs reduced variability by ~25% (XX--XX 95% CI) for individuals
+with only halibut or sablefish permits (Fig. S\ref{fig:ifq}A). Furthermore, for
+most strategies, the association changing species diversity with increased
+revenue variability became stronger after the introduction of IFQs (Fig.
+S\ref{fig:ifq}B). This was especially true for individuals fishing only halibut
+or sablefish and less so for individuals combining halibut or sablefish with
+a salmon permit (Fig. S\ref{fig:ifq}B).
 
 # Discussion
 
