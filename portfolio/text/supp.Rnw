@@ -345,16 +345,17 @@ Shown are 40 samples from the posterior distribution.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1.1\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
+\includegraphics[width=1.05\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
 \caption{Effects of (A) generalizing and (B) specializing from year-to-year for
-individual permit holders \emph{within} the `r nstr` most common strategies.
-Changing species diversity from year-to-year is associated with higher
-variability for individuals within the strategies above the zero line.
-Generalizing (A) or specializing (B) is associated with greater expected revenue
-to the right of the zero line and lower expected revenue to the left of the zero
-line. These effects are estimated holding fishing season length constant from
-year-to-year. Dots and line segments represent medians and 50\% credible
-intervals of posteriors. }
+  individual permit holders \emph{within} the \Sexpr{nstr} most common
+  strategies. Changing species diversity from year-to-year is associated with
+  higher variability for individuals within the strategies above the zero line.
+  Generalizing (A) or specializing (B) is associated with greater expected
+  revenue ratios to the right of the zero line and lower expected revenue ratios
+  to the left of the zero line. These effects are estimated holding fishing
+  season length constant from year-to-year. Dots and line segments represent
+  medians and 50\% credible intervals of posteriors. Panel B and Fig.~4 are the
+  same.}
 \label{fig:mirror}
 \end{center}
 \end{figure}
