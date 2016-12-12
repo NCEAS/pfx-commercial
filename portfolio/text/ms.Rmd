@@ -282,8 +282,8 @@ Other:
 ### Implications for limited entry, ITQs, and catch shares
 
 - concerning because in many areas of the world and fisheries, regulations and
-  market forces have encouraged specialization
-- permit diversity result: a privileged position --- expensive to get into
+  market forces have encouraged specialization / limited (effective)
+  diversification (e.g. multiple permits or diverse permits)
 - locking into permits limits ability to pick lower risk strategies and is
   getting people locked into low diversity permits that may be doing well now,
   but not necessarily always
@@ -377,6 +377,10 @@ generalizing (increasing species diversity) is similar (Fig. S\ref{fig:mirror})}
 \clearpage
 
 # Materials and methods
+
+<!-- TODO: get fig:re in results -->
+<!-- Our model estimates overall average effects (Fig. S\ref{fig:fe}) and effects -->
+<!-- that vary by permit set (Fig. S\ref{fig:re}). -->
 
 We obtained commercial fisheries landings and revenue data for all permit
 holders in Alaska from `r range_yrs[1]` to `r range_yrs[2]` from the Alaskan
@@ -491,6 +495,11 @@ zero. I.e., we assume that the data are stationary after accounting for all
 covariates and including an intercept that varies with strategy-year
 combinations. Initial versions of the model confirmed that the global intercept
 along with strategy-level intercepts would be estimated at almost exactly zero.
+The estimated $\beta_{j,t}$'s represent years when people with a particular
+permit set tended to do better or worse than the long-term average for that
+permit set (Fig. S\ref{fig:str-yrs}). Therefore, an individual's expected
+revenue (and variability) is after accounting for the general trend in revenue
+for that permit set.
 
 The slopes $\beta_{1,j}$ and $\beta_{1,j}$ are then allowed to vary by strategy
 with estimated means:
@@ -525,8 +534,16 @@ with another hierarchical model with a similar form:
 \noindent Again, $S_{i,t}$ and $I_{i,t}$ represent, respectively, percent change
 in species diversity and an indicator variable for increasing or decreasing
 species diversity. We exponentiate the equation to ensure all scale parameters,
-$\sigma_{i,t}$, are positive. The $\gamma$'s are estimated coefficients, three
-of which are allowed to vary by strategy, constrained by normal distributions:
+$\sigma_{i,t}$, are positive. Residuals from the mean component of our model
+clearly show a "V"-shaped pattern that the variance component of our model can
+capture (Fig. S\ref{fig:resid}). Furthermore, the downside residuals
+(year-individual data points with lower than expected revenue) look
+qualitatively similar to the complete set of residuals (upside and downside)
+(Fig. S\ref{fig:resid-downside}). Therefore, it seemed appropriate to model the
+variability as a proxy for revenue risk. 
+
+The $\gamma$'s are estimated coefficients, three of which are allowed to vary by
+strategy, constrained by normal distributions:
 
 \begin{align}
 \gamma_{0,j}  &\sim \mathrm{N} \left(\eta_0 + \eta_1 M_j + \eta_2 E_j, \tau^2_{\gamma_0}\right),\\
@@ -554,30 +571,11 @@ sample size, as calculated by the rstan R package [@standevelopmentteam2015],
 was greater than 200 for all parameters [@gelman2014]. We verified that our
 model returned sensible estimates by comparing our estimates to an ad-hoc
 two-stage model fit with the lme4 R package [@bates2015], where we first fit
-a mixed-effect regression model to the mean, and then modelled the absolute
-residuals from that first model in a second mixed effects model representing the
+a mixed-effects regression model to the mean, and then modelled the absolute
+residuals from that first model in a second mixed-effects model representing the
 variance component. We also validated the model with simulated data, and were
 able to recover the true values (Supporting Information). Code used in our
 analysis is available at <https://github.com/NCEAS/pfx-commercial/portfolios/>.
-
-*TODO: move the following into the results section or into the methods section:*
-
-Residuals from the mean component of our model clearly show the "V"-shaped
-pattern that the variance component of our model seeks to capture (Fig.
-S\ref{fig:resid}). Furthermore, the downside residuals (year-individual data
-points with lower than expected revenue) look qualitatively similar to the
-complete set of residuals (upside and downside) (Fig.
-S\ref{fig:resid-downside}). Therefore, it seemed appropriate to model the
-variability as a proxy for revenue risk. 
-
-The estimated year-permit intercepts represent years when people with
-a particular permit set in a given year tended to do better or worse than the
-long-term average for that permit set (Fig. S\ref{fig:str-yrs}). Therefore, an
-individual's expected revenue and variability is after accounting for the
-general trend in revenue for that permit set.
-
-Our model estimates overall average effects (Fig. S\ref{fig:fe}) and effects
-that vary by permit set (Fig. S\ref{fig:re}).
 
 <!-- # Notes -->
 
