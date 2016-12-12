@@ -496,10 +496,10 @@ covariates and including an intercept that varies with strategy-year
 combinations. Initial versions of the model confirmed that the global intercept
 along with strategy-level intercepts would be estimated at almost exactly zero.
 The estimated $\beta_{j,t}$'s represent years when people with a particular
-permit set tended to do better or worse than the long-term average for that
-permit set (Fig. S\ref{fig:str-yrs}). Therefore, an individual's expected
-revenue (and variability) is after accounting for the general trend in revenue
-for that permit set.
+permit set tended to collectively do better or worse than the long-term average
+(Fig. S\ref{fig:str-yrs}). Therefore, an individual's expected change in revenue
+(and variability) is after accounting for the general trend in revenue for that
+permit set.
 
 The slopes $\beta_{1,j}$ and $\beta_{1,j}$ are then allowed to vary by strategy
 with estimated means:
@@ -509,12 +509,12 @@ with estimated means:
 \beta_{2,j} &\sim \mathrm{N} \left(\mu_{\beta_2}, \tau^2_{\beta_2}\right).
 \end{align}
 
-\noindent The $\beta_{1,j}$'s represent how much a 1\% decrease in species
-diversity within a strategy translates to a Y\% change in revenue. The
-$\beta_{2,j}$'s represent how much a 1\% increase in species diversity within
-a strategy translates to a Y\% change in revenue. These are after controlling
-for changes in effort, $\beta_3$, and the interaction between changes in effort
-and changes in species diversity, $\beta_4$ and $\beta_5$.
+\noindent The $\beta_{1,j}$'s and $\beta_{2,j}$'s represent how much a 1\%
+decrease and 1\% increase, respectively, in the ratio of species diversity from
+year-to-year within a strategy translates to a given percent change in the ratio
+of revenue from year-to-year. These are after controlling for changes in effort,
+$\beta_3$, and the interaction between changes in effort and changes in species
+diversity, $\beta_4$ and $\beta_5$.
 
 Whereas a typical hierarchical linear regression model would estimate a single
 residual error scale term, $\sigma$, we model the scale of the residual error
