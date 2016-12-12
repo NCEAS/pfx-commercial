@@ -360,15 +360,17 @@ of return.}
 variability for individual permit holders \emph{within} the `r nstr` most common
 strategies. Changing species diversity from year-to-year is associated with
 higher variability for individuals within the strategies above the zero line.
-Specializing is associated with greater expected revenue to the right of the
-zero line and lower expected revenue to the left of the zero line. For example,
-individuals with setnet permits for salmon in Prince William Sound, Cook Inlet,
-Kodiak, Bristol Bay, or the Alaska Peninsula target primarily sockeye salmon and
-experience a $\sim$1.5\% increase in their year-to-year revenue ratio for a 1\%
-decrease in their year-to-year species diversity. These effects are estimated
-holding fishing season length constant from year-to-year. Dots and line segments
-represent medians and 50\% credible intervals of posteriors. The effect of
-generalizing (increasing species diversity) is similar (Fig. S\ref{fig:mirror})}.
+Specializing is associated with greater expected revenue ratios to the right of
+the zero line and lower expected revenue ratios to the left of the zero line.
+For example, individuals with setnet permits for salmon in Prince William Sound,
+Cook Inlet, Kodiak, Bristol Bay, or the Alaska Peninsula (second purple dot from
+right) target primarily sockeye salmon and experience a $\sim$1.5\% increase in
+their year-to-year revenue ratio (horizontal axis) and a $\sim$0.5\% increase in
+their revenue variability (vertical axis) for a 1\% decrease in their ratio of
+year-to-year species diversity. These effects are estimated holding fishing
+season length constant from year-to-year. Dots and line segments represent
+medians and 50\% credible intervals of posteriors. The effect of generalizing
+(increasing species diversity) is similar (Fig. S\ref{fig:mirror}).}
 
 \label{fig:within}
 \end{center}
