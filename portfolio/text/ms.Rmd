@@ -94,17 +94,15 @@ obtainable by commercial fishers [@kasperski2013], possibly because both fish
 and fishers are spatially mobile. However, fishers still have the ability to
 lower risk. They can, for example, target as many species as permitted by
 a license, own multiple licenses, or diversify spatially and fish in multiple
-regions. 
-
-The effectiveness of these diversification strategies for increasing revenue and
-reducing revenue variability remains uncertain. For example, theory and
-empirical studies suggest there can be substantial benefits to specialization
-for both farmers and fishers [@abdulai2000; @arnason2005]. Furthermore, the
-majority of research examining the effects of diversification on revenue do so
-at aggregate levels that combine individuals (e.g. households, counties, or
-communities; [@kasperski2013; @sethi2014]). Because of this, key uncertainties
-remain about the fundamental relationship between diversity, fishing revenue,
-and fishing revenue variability at the level of the individual.
+regions. The effectiveness of these diversification strategies for increasing
+revenue and reducing revenue variability remains uncertain. For example, theory
+and empirical studies suggest there can be substantial benefits to
+specialization for both farmers and fishers [@abdulai2000; @arnason2005].
+Furthermore, the majority of research examining the effects of diversification
+on revenue do so at aggregate levels that combine individuals (e.g. households,
+counties, or communities; [@kasperski2013; @sethi2014]). Because of this, key
+uncertainties remain about the fundamental relationship between diversity,
+fishing revenue, and fishing revenue variability at the level of the individual.
 
 The state and federal fisheries of Alaska provide a unique opportunity to
 understand the role of individuals' strategies in determining income and income
@@ -135,12 +133,13 @@ Our model is a variance-function regression model [@davidian1987; @hall1989],
 which simultaneously models changes in the mean and variance of individual
 revenue as a function of covariates. Whereas traditional hierarchical linear
 models assume homoscedasticity --- that the residual variance does not vary
-systematically --- the variance-function regression model allows the variance to
-be heteroscedastic and vary as a function of predictors. Our specific model
-simultaneously estimates the effect of species diversity on individual revenue
-and revenue variability, and estimates effects both within and across fishing
-strategies (sets of similar licenses or permits). At the same time, it controls
-for fishing effort and latent time effects (e.g. changing environmental
+systematically --- the variance-function regression model allows the residual
+variance to be heteroscedastic and vary as a function of predictors. Our
+specific model simultaneously estimates the effect of species diversity (the
+inverse of Simpson's diversity index [@simpson1949; @jost2006]) on individual
+revenue and revenue variability, and estimates effects both within and across
+fishing strategies (sets of similar licenses or permits). At the same time, it
+controls for fishing effort and latent time effects (e.g. changing environmental
 conditions). To our knowledge, this is the first application of this type of
 model in any natural resource field.
 
