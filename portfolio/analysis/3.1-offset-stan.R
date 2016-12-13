@@ -59,7 +59,7 @@ standat_noeffort$J <- ncol(standat_noeffort$X_ij)
 standat_noeffort$K <- ncol(standat_noeffort$X_sigma_ik)
 
 m_noeffort <- stan("portfolio/analysis/portfolio-offset.stan",
-  data = standat, iter = 2000, chains = 4,
+  data = standat_noeffort, iter = 1000, chains = 4,
   pars = c("mu", "sigma"), include = FALSE)
 save(m_noeffort, standat, file = "portfolio/data-generated/m_noeffort.rda")
 
