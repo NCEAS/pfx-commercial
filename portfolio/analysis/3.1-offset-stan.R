@@ -39,18 +39,11 @@ m <- stan("portfolio/analysis/portfolio-offset.stan",
   pars = c("mu", "sigma"), include = FALSE)
 save(m, standat, file = "portfolio/data-generated/m.rda")
 
-b <- broom::tidy(m1, conf.int = TRUE, estimate.method = "median", rhat = TRUE, ess = TRUE)
+b <- broom::tidy(m, conf.int = TRUE, estimate.method = "median", rhat = TRUE, ess = TRUE)
 filter(b, rhat > 1.05)
-filter(b, ess < 100)
-filter(b, grepl("^h1", term))
-filter(b, grepl("^b0", term))
-filter(b, grepl("^g0", term))
-filter(b, grepl("^g_k", term))
-filter(b, grepl("^b_j", term))
-filter(b, grepl("*_tau$", term))
+filter(b, ess < 200)
 
 # Fit the same model without the effort predictor
-
 standat_noeffort <- standat
 effort_columns <- grep("days", names(as.data.frame(standat_noeffort$X_ij)))
 standat_noeffort$X_ij <- standat_noeffort$X_ij[, -effort_columns]
@@ -62,6 +55,10 @@ m_noeffort <- stan("portfolio/analysis/portfolio-offset.stan",
   data = standat_noeffort, iter = 1000, chains = 4,
   pars = c("mu", "sigma"), include = FALSE)
 save(m_noeffort, standat, file = "portfolio/data-generated/m_noeffort.rda")
+
+b <- broom::tidy(m_noeffort, conf.int = TRUE, estimate.method = "median", rhat = TRUE, ess = TRUE)
+filter(b, rhat > 1.05)
+filter(b, ess < 200)
 
 ## m_ns <- stan("portfolio/analysis/portfolio-offset-nosigma.stan",
 ##   data = standat, iter = 120, chains = 2,
@@ -87,3 +84,40 @@ save(m_noeffort, standat, file = "portfolio/data-generated/m_noeffort.rda")
 ## arm::display(m_lmer)
 ## broom::tidy(m_ns, rhat = T, ess = T) %>% filter(grepl("b_j", term))
 ##
+
+## library(lme4)
+## m_lmer <- lmer(
+##   log(revenue) ~ -1 + b1(spec_change) + b2(spec_change) +
+##     days_change + b1(spec_change):days_change + b2(spec_change):days_change +
+##     (-1 + b1(spec_change) |strategy) +
+##     (-1 + b2(spec_change) |strategy)+
+##     (1|strategy_year),
+##   data = dat, offset = log(revenue.prev))
+##
+## m_lmer_ne <- lmer(
+##   log(revenue) ~ -1 + b1(spec_change) + b2(spec_change) +
+##     (-1 + b1(spec_change) |strategy) +
+##     (-1 + b2(spec_change) |strategy)+
+##     (1|strategy_year),
+##   data = dat, offset = log(revenue.prev))
+##
+## arm::display(m_lmer)
+## arm::display(m_lmer_ne)
+##
+## re <- coef(m_lmer)$strategy
+## re_ne <- coef(m_lmer_ne)$strategy
+##
+## re$strategy <- row.names(re)
+## re_ne$strategy <- row.names(re_ne)
+##
+## sjPlot::sjp.lmer(m_lmer, type = "fe", p.kr = FALSE)
+## sjPlot::sjp.lmer(m_lmer_ne, type = "fe", p.kr = FALSE)
+##
+## plot(re$`b1(spec_change)`, re_ne$`b1(spec_change)`);abline(v = 0, h = 0)
+## plot(re$`b2(spec_change)`, re_ne$`b2(spec_change)`);abline(v = 0, h = 0)
+##
+## ggplot(re, aes(`b1(spec_change)`, strategy)) + geom_point() +
+##   geom_point(data = re_ne, aes(`b1(spec_change)`, strategy), colour = "red")
+##
+## ggplot(re, aes(`b2(spec_change)`, strategy)) + geom_point() +
+##   geom_point(data = re_ne, aes(`b2(spec_change)`, strategy), colour = "red")
