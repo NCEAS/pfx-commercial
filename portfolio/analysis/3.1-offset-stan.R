@@ -58,12 +58,10 @@ standat_noeffort$X_sigma_ik <- standat_noeffort$X_sigma_ik[, -effort_columns]
 standat_noeffort$J <- ncol(standat_noeffort$X_ij)
 standat_noeffort$K <- ncol(standat_noeffort$X_sigma_ik)
 
-system.time({
 m_noeffort <- stan("portfolio/analysis/portfolio-offset.stan",
-  data = standat, iter = 400, chains = 2,
+  data = standat, iter = 2000, chains = 4,
   pars = c("mu", "sigma"), include = FALSE)
 save(m_noeffort, standat, file = "portfolio/data-generated/m_noeffort.rda")
-})
 
 ## m_ns <- stan("portfolio/analysis/portfolio-offset-nosigma.stan",
 ##   data = standat, iter = 120, chains = 2,
