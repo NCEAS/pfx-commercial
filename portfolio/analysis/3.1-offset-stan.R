@@ -39,7 +39,7 @@ m <- stan("portfolio/analysis/portfolio-offset.stan",
   pars = c("mu", "sigma"), include = FALSE)
 save(m, standat, file = "portfolio/data-generated/m.rda")
 
-b <- broom::tidy(m1, conf.int = T, estimate.method = "median", rhat = T, ess = T)
+b <- broom::tidy(m1, conf.int = TRUE, estimate.method = "median", rhat = TRUE, ess = TRUE)
 filter(b, rhat > 1.05)
 filter(b, ess < 100)
 filter(b, grepl("^h1", term))
@@ -48,6 +48,22 @@ filter(b, grepl("^g0", term))
 filter(b, grepl("^g_k", term))
 filter(b, grepl("^b_j", term))
 filter(b, grepl("*_tau$", term))
+
+# Fit the same model without the effort predictor
+
+standat_noeffort <- standat
+effort_columns <- grep("days", names(as.data.frame(standat_noeffort$X_ij)))
+standat_noeffort$X_ij <- standat_noeffort$X_ij[, -effort_columns]
+standat_noeffort$X_sigma_ik <- standat_noeffort$X_sigma_ik[, -effort_columns]
+standat_noeffort$J <- ncol(standat_noeffort$X_ij)
+standat_noeffort$K <- ncol(standat_noeffort$X_sigma_ik)
+
+system.time({
+m_noeffort <- stan("portfolio/analysis/portfolio-offset.stan",
+  data = standat, iter = 400, chains = 2,
+  pars = c("mu", "sigma"), include = FALSE)
+save(m_noeffort, standat, file = "portfolio/data-generated/m_noeffort.rda")
+})
 
 ## m_ns <- stan("portfolio/analysis/portfolio-offset-nosigma.stan",
 ##   data = standat, iter = 120, chains = 2,
