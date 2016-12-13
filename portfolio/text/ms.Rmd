@@ -64,7 +64,7 @@ limited entry programs and individual transferable quotas (ITQs). Take home ...
 <!-- Papers to cite [@smith1986] -->
 
 Managing natural resources and sustaining the livelihoods of those that depend
-on their extraction is hard. These professions tend to have high year-to-year
+on their extraction is hard. These livelihoods tend to have high year-to-year
 variability in income relative to other professions [@mishra2002; @sethi2012b].
 In addition to economic risk, such as changes in demand or prices, individuals
 dependent on natural resources are also subject to biological and environmental
@@ -194,7 +194,7 @@ revenue ratio per 1% decrease in species diversity, and across strategies, `r
 g2_dens`% of the probability density supports a positive relationship between
 specialization and revenue. The converse is also usually true --- generalizing
 tends to be associated with lower expected revenue after accounting for fishing
-effort (i.e. Fig. S\ref{fig:mirror}A and \ref{fig:mirror}B are near mirror
+effort (i.e. Fig. S\ref{fig:mirror}A and S\ref{fig:mirror}B are near mirror
 images left to right). This benefit of specializing is only apparent after
 accounting for fishing effort. Given that fishing for more species tends to be
 associated with increased fishing effort (fishing more days), generalizing tends
