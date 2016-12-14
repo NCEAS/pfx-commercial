@@ -195,11 +195,10 @@ g2_dens`% of the probability density supports a positive relationship between
 specialization and revenue. The converse is also usually true --- generalizing
 tends to be associated with lower expected revenue after accounting for fishing
 effort (i.e. Fig. S\ref{fig:mirror}A and S\ref{fig:mirror}B are near mirror
-images left to right). This benefit of specializing is only apparent after
+images left to right). This benefit of specializing is most apparent after
 accounting for fishing effort. Given that fishing for more species tends to be
-associated with increased fishing effort (fishing more days), generalizing tends
-to be associated with higher revenue when not standardizing for days finished
-(Fig. S-TODO). 
+associated with increased fishing effort (fishing more days), specializing tends
+to be ...TODO (Fig. S\ref{fig:noeffort}). 
 
 After accounting for fishing effort, adjusting (increasing or decreasing) an
 individual's fished species diversity within the constraints of a permit set

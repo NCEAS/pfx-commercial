@@ -360,7 +360,16 @@ Shown are 40 samples from the posterior distribution.}
 \end{center}
 \end{figure}
 
+\clearpage
 
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{../figs/stan-offset-break-anti-spaghetti-specializing-no-effort.pdf}
+\caption{Same as Fig.~4 but without the effort (days fished) predictor and
+  without its interaction with species diversity.}
+\label{fig:noeffort}
+\end{center}
+\end{figure}
 
 % \begin{figure}[htbp]
 % \begin{center}
