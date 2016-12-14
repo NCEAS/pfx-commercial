@@ -79,8 +79,8 @@ p2 <- res %>%
     size = 2.9, colour = "grey60", #segment.color = "grey80",
     point.padding = unit(0.3, "lines"), max.iter = 6e3, segment.size = 0.3) +
   geom_point(aes(color = strategy_mean_div, size = nn)) +
-  xlab("Effect of specializing on revenue variability") +
-  ylab("Effect of specializing on variability") +
+  xlab("Effect of specializing on revenue") +
+  ylab("Effect of specializing on revenue variability") +
   scale_color_viridis() +
   labs(colour = "Mean sp.\ndiversity", size = "Number of\npermit holders") +
   theme(legend.title = element_text(size = rel(0.85))) +
