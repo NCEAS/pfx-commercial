@@ -226,27 +226,26 @@ a salmon permit (Fig. S\ref{fig:ifq}B).
 
 # Discussion
 
-### Summary
-
-- suggests it's mostly an across strategy/permit effect (lowering variability),
-  which isn't always a possibility because of regulations and cost
-- adjusting within current permit constraints is risky... Not clearly risk
-  reducing to generalize from one year to the next, and accounting for effort,
-  specializing can increase revenue
-- not as simple as increase diversity (within permit) and reduce risk
-- methodologically novel: individuals, huge dataset, account for covariates,
-  accounting for strategies, keeping annual data (not condensing to mean and
-  cv), joint modelling of mean and variance, evaluating within and across
-  strategies (different mechanisms of diversification)
-- 2 dimensions to think about (revenue and variability); and the trade-off is
-  fishery specific: effects within a permit strategy are permit specific;
-  sometimes make more money by specializing... some highly variable single
-  species permits make a ton of money
+We fit a hierarchical variance-function regression model to 30 years of
+commercial fisheries revenue data in Alaska to simultaneously estimate the
+effect of changes in species diversity on individual's revenue and revenue
+variability. We find that individuals fishing permit sets that allow high levels
+of species diversity tend to have lower revenue variability. Adding an
+additional fisheries permit usually increases revenue and decreases revenue
+variability. However, within the constraints of a permit and accounting for
+effort, specializing (reducing species diversity) tends to increase revenue and
+specializing or generalizing tends to be associated with greater revenue
+variability, with considerable differences across fisheries. Thus, the most
+effective mechanism by which species diversity can lower revenue variability for
+individual fishers --- switching or adding fishing permits --- is often costly,
+limited by regulations, and unavailable to many individuals.
 
 ### Reconciling the effects at different levels of species diversity
 
 - why variability/uncertainty might increase with changes in diversity...
+
 - and how fit in with @kasperski2013, @sethi2012b, @sethi2014
+
 - part of the difference is individuals vs vessels. E.g. @kasperski2013
   suggested that diversity declined following IFQs for halibut sablefish
   vessels. The reason for the decline was that the vessels were allowed to fish
@@ -254,13 +253,17 @@ a salmon permit (Fig. S\ref{fig:ifq}B).
   people, we wouldn't expect the diversity of someone who only had
   halibut/sablefish permit to be affected by IFQs. The person, not the vessel
   holds the quota share: https://alaskafisheries.noaa.gov/fisheries/ifq
+
 - year to year risky... But maybe evens out/better over time
+
 - diversity within permit - often bycatch, limited room for intentional
   diversification (unless you have a M or salmon permit)
+
 - risk results not really risk, but unpredictability given our covariates ...
   don't change anything and it's most predictable how well you'll do. What's
   unpredictable in our model, might be more predictable on a year to year,
   species by species basis for individual permit holder
+
 - CV vs year-to-year effect for one person
 
 Other:
@@ -274,9 +277,15 @@ Other:
 
 ### Limitations + obvious extensions
 
+There are a number of limitations to our model and extensions that could further
+our understanding of the role of diversification...
+
 - could vary by time and vary by mean diversity
+
 - spatial/geographic variation
+
 - nonlinear effects
+
 - response to specific events like EVOS
 
 ### Implications for limited entry, ITQs, and catch shares
@@ -284,11 +293,33 @@ Other:
 - concerning because in many areas of the world and fisheries, regulations and
   market forces have encouraged specialization / limited (effective)
   diversification (e.g. multiple permits or diverse permits)
+
 - locking into permits limits ability to pick lower risk strategies and is
   getting people locked into low diversity permits that may be doing well now,
   but not necessarily always
 
 ### Conclusions + recommendations
+
+- bring it out to wider than fisheries (farming, timber industry, ...)
+
+- 2 dimensions to think about (revenue and variability); and the trade-off is
+  fishery specific: effects within a permit strategy are permit specific;
+  sometimes make more money by specializing... some highly variable single
+  species permits make a ton of money
+
+- broadly, diversification can provide a powerful form of protection from
+  multiple sources of risk to income for those that rely on extracting natural
+  resources, but not all forms of diversification are equal, and on an
+  individual level there can be economic benefits to specializing and risks to
+  adjusting ones strategy 
+
+- with increasing environmental variability and extremes due to climate change
+  those that rely on natural resources for their livelihoods need approaches to
+  buffer risk more than ever 
+
+- regulations that limit the ability to diversify can have other considerable
+  benefits but it's important to be aware of trade-offs inherent in these
+  regulations when making management decisions 
 
 \bibliographystyle{pnas2011}
 \bibliography{refs}
