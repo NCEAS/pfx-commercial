@@ -248,17 +248,53 @@ diversity can lower revenue variability for individual fishers --- switching or
 adding fishing permits --- is costly, limited by regulations, and consequently
 unavailable to many individuals in practice.
 
+Our findings across fishing strategies are in line with previous findings
+[@kasperski2013, @sethi2012b, @sethi2014], but we also found that within
+strategies, for individuals, specializing tended to be associated with increased
+revenue and altering species diversity tended to be associated with increased
+revenue variability. Specializing has been shown to be profitable in some
+circumstances for other natural resource sectors. For example, while
+diversification is generally helpful for small-scale farmers, farmers that
+specialize on high-demand and high-value crops such as tobacco or cocoa can
+benefit, at least in the short term, from specializing on these crops (REF). In
+terms of variance, there are number of reasons by annual revenue variability
+might be expected to increase with changes to individual fished species
+diversity. First, changes to fishing patterns will sometimes be associated with
+a learning or adaptation phase as individuals become accustomed to new
+locations, new gear, or new species. Secondly, changes in diversity might
+reflect years in which targeted species were less available and fishers were
+forced to target other species or landed more bycatch. Most importantly, this
+increased variability technically reflects an inability for our large-scale
+model to predict an individual's revenue in a subsequent year. There are many
+reasons, often unique to an individual permit holder and therefore not included
+in a large-scale model, that might make that specific individual's revenue less
+predictable given a change in species diversity compared to not changing species
+diversity from one year to the next. 
+
+Our analysis provides a synthetic view of the effects of species diversity on
+individuals over 30 years in one of the most productive fishing regions in the
+world. However, this large temporal and geographical scope potentially obscures
+time or regional-variation in the consequences of diversification on revenue and
+revenue variability. We expect future research examining diversification over
+finer scales will uncover additional interesting relationships. Furthermore, in
+addressing the overall pattern, we have averaged out several major discrete
+events (e.g. the Exxon Valdez oil spill in 1989) that had significant
+consequences for the ecosystem and social system in Alaska (REF). In addition to
+variability, ... it is important to understand the benefits of diversification
+in the context of rare and extreme disturbances which occur in marine systems
+worldwide. 
+
 TODO: cut apart and recombine the following couple chunks:
 
 Our results provide additional support for the idea that individual fishers can
 reduce their income variability by diversifying their catch portfolios. However,
-most individuals do not appear to change their catch diversity substantially
-from year to year [OLE: is there a supplemental figure or statistic that speaks
-to this point?], and most strategies adopted by Alaskan fishermen lie in
-a high-risk, high-reward quadrant in which reducing diversification increases
-both revenue variability and expected revenue. Previous work has suggested that
-changes to fisheries management such as limited entry or catch share programs
-may inadvertently act as barrier to diversification and promote specializing
+most individuals do not change their catch diversity substantially from year to
+year [OLE: is there a supplemental figure or statistic that speaks to this
+point?], and most strategies adopted by Alaskan fishermen lie in a high-risk,
+high-reward quadrant in which reducing diversification increases both revenue
+variability and expected revenue. Previous work has suggested that changes to
+fisheries management such as limited entry or catch share programs may
+inadvertently act as barrier to diversification and promote specializing
 (Hilborn et al. 2003; Kasperski and Holland 2013). While some of these
 specialized fishing strategies may be associated with increased revenue
 variability, the benefit may be that they are also associated with increased
@@ -308,29 +344,6 @@ US and global fisheries. Conservation Biology 20, 163–169. -->
 
 <!-- Reconciling the different levels of effects --> 
 
-Our findings across fishing strategies are in line with previous findings
-[@kasperski2013, @sethi2012b, @sethi2014], but we also found that, for
-individuals, specializing tended to be associated with increased revenue and
-altering species diversity tended to be associated with increased revenue
-variability. Specializing has been shown to be profitable in some circumstances
-for other natural resource sectors. For example, while diversification is
-generally helpful for small-scale farmers, farmers that specialize on
-high-demand and high-value crops such as tobacco or cocoa can benefit, at least
-in the short term, from specializing on these crops (REF). In terms of variance,
-there are number of reasons by annual revenue variability might be expected to
-increase with changes to individual fished species diversity. First, changes to
-fishing patterns will sometimes be associated with a learning or adaptation
-phase as individuals become accustomed to new locations, new gear, or new
-species. Secondly, changes in diversity might reflect years in which targeted
-species were less available and fishers were forced to target other species or
-landed more bycatch. Most importantly, this increased variability technically
-reflects an inability for our large-scale model to predict an individual's
-revenue in a subsequent year. There are many reasons, often unique to an
-individual permit holder and therefore not included in a large-scale model, that
-might make that specific individual's revenue less predictable given a change in
-species diversity compared to not changing species diversity from one year to
-the next. 
-
 <!--In terrestrial agriculture for instance, there are many instances of
 specializing being profitable; drivers include the ability to specialize on
 high-profit cash crops (tobacco, cocoa), the availability of government
@@ -338,21 +351,6 @@ agricultural subsidies (soybeans, corn in the USA), and farming on a large
 industrial scale (REF).-->
 
 <!-- Limitations + obvious extensions paragraph -->
-
-Our analysis provides a synthetic view of the effects of species diversity on
-individuals over 30 years in one of the most productive fishing regions in the
-world. However, our analysis simultaneously uses data from across the broad
-geography of Alaska and over 30 years, potentially obscuring regional or
-time-variation in the consequences of diversification on revenue and revenue
-variability. We expect future research examining diversification over finer
-spatial and temporal scales will uncover additional interesting relationships.
-Furthermore, in addressing the overall pattern, we have averaged out several
-major discrete events (e.g., the Exxon Valdez oil spill in 1989) that had
-significant consequences for the ecosystem and social system in Alaska (general
-EVOS consequences REF). We do not wish to minimize the important of such events,
-but note that it is important to understand the benefits of diversification in
-the context of rare and extreme disturbances which occur in marine systems
-worldwide. 
 
 ### Implications for limited entry, ITQs, and catch shares
 
