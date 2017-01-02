@@ -2,6 +2,12 @@
 
 ## @holland2016 - The impact of access restrictions on fishery income diversification of US West Coast fishermen
 
+vessels that entered West Coast fisheries less diversified than those that entered before IFQs (and of course cost is increased to get into these fisheries for those that were not already participants)
+
+diversification declined at a time following catch share programs on the West Coast
+
+catch share programs may reduce variability and offset the effects of lower diversity -- found that year-to-year vessel revenue decreased after catch shares (and average revenue increased for most)
+
 ## @dymond2014 - Diversifying managed forests to increase resilience
 
 diversity of planting in forestry can increase and stabilize revenue but especially if combined with removing high risk species (to pine beetle) initially 
@@ -31,8 +37,6 @@ Another example of a paper that uses the Simpson diversification index in a regr
 diversification here means into farm or other non-agricultural work 
 
 access to financial capital important to diversification 
-
-## @hilborn2007 - Moving to sustainability by learning from successful fisheries
 
 ## @hilborn1985 - Fleet dynamics and individual variation: why some people catch more fish than others
 
@@ -111,3 +115,11 @@ when cocoa prices were high, most cocoa farmers were highly specialized; now the
 ## Okoh, G., & Hilson, G. (2011). Poverty and Livelihood Diversification: Exploring the Linkages Between Smallholder Farming and Artisanal Mining in Rural Ghana. Journal of International Development, 23(8), 1100–1114. https://doi.org/10.1002/jid.1834
 
 in rural Ghana individuals often combine small-scale farming with mining to generate sufficient and stable livelihoods 
+
+## Hilborn, R., Maguire, J.-J., Parma, A. M., & Rosenberg, A. A. (2001). The precautionary approach and risk management: can they increase the probability of successes in fishery management? Canadian Journal of Fisheries and Aquatic Sciences, 58(1), 99–107.
+
+"Portfolio management, whereby fishing enterprises have the ability to choose among a diverse portfolio of harvestable resources, would mitigate against the risk of fluctuations in the abundance, availability, or price of individual species."
+
+"Portfolio management seems a logical choice given that the overall productivity of fishery systems is more stable than individual species are."
+
+"Other examples are numerous. While the crab fisheries of Alaska collapsed, the salmon and groundfish fisheries blossomed. While chinook and coho salmon in British Columbia collapsed, sockeye, pink, and chum salmon did well."
