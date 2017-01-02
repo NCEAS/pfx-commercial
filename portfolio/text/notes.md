@@ -1,0 +1,113 @@
+# Notes for introduction and discussion
+
+## @holland2016 - The impact of access restrictions on fishery income diversification of US West Coast fishermen
+
+## @dymond2014 - Diversifying managed forests to increase resilience
+
+diversity of planting in forestry can increase and stabilize revenue but especially if combined with removing high risk species (to pine beetle) initially 
+
+## @dymond2015 - Applying resilience concepts in forest management: a retrospective simulation approach
+
+increasing forest diversity through reforestation increased resiliency to climate change, improved the stability and volume of timber and revenue from the timber 
+
+## @vedeld2007 - Forest environmental incomes and the rural poor. Forest Policy and Economics
+
+a meta-analysis 
+
+"We found that high total [forest-related environmental income] income was associated with less income diversification, indicating that high-income communities specialize more."
+
+key reference of an example where wealthier communities were more specialized 
+
+Another example of a paper that uses the Simpson diversification index in a regression model 
+
+## @abdulai2001 *Determinants of income diversification amongst rural households in Southern Mali. Food Policy*
+
+"We find evidence that poorer households have fewer opportunities in non-cropping activities such as livestock rearing and non-farm work, and hence less diversified incomes. This appears to reflect their relative lack of capital, which makes it difficult for them to diversify away from subsistence agriculture...  The significance of entry-constraints in explaining portfolio diversification suggests that the role of government in making assets — as well as improved infrastructure — available to poorer households is still essential in promoting income diversification." -  cited by 255
+
+## @olale2012 - Determinants of income diversification among fishing communities in Western Kenya, Fisheries Research
+
+"the study analyzes the determinants of income diversification decisions among the fishing communities, with a focus on those living on the Kenyan shores of Lake Victoria. The results show that education level, access to credit and membership of associations are the key factors that explain income diversification behaviour among fish workers."
+
+diversification here means into farm or other non-agricultural work 
+
+access to financial capital important to diversification 
+
+## @hilborn2007 - Moving to sustainability by learning from successful fisheries
+
+## @hilborn1985 - Fleet dynamics and individual variation: why some people catch more fish than others
+
+many behavioral causes and consequences of individual efficiency and variation in catch; fleet dynamics an important part of understanding fisheries 
+
+## @debela2012 - Economic shocks, diversification, and forest use in Uganda. Land Economics,
+
+downwards economic shocks tend to be associated with increasing diversity for households relying on forests for income 
+
+poorer households tended to be more diversified (household relying on forests for income)
+
+they also use Simpsons diversification index in a regression model 
+
+## @ikerd1990 - Ikerd, J. E. (1990). Agriculture’s search for sustainability and profitability. Journal of Soil and Water Conservation, 45(1), 18–23.
+
+"Perhaps the most graphic, recent example of such risks was the reliance of U.S. crop producers on export markets for wheat, corn, and soybeans during the 1970s. Many farmers borrowed large sums of money to buy additional land and buy specialized equipment to supply these potentially profitable markets.
+
+Specialized farmers producing export commodities were hardest hit by the finan- cial crisis of American agriculture in the early 1980s. They had taken the risks associated with dependence on external inputs, including capital and labor-saving equipment in addition to chemical fertilizers and synthetic pesticides, to produce for markets that were vulnerable to an unpredictable world economy."
+
+## Chavez, M. D., Berentsen, P. B. M., & Oude Lansink, A. G. J. M. (2014). Analyzing diversification possibilities on specialized tobacco farms in Argentina using a bio-economic farm model. Agricultural Systems, 128, 35–43. https://doi.org/10.1016/j.agsy.2014.03.009
+
+high profitability and low variability of income from tobacco mean that the optimal farming strategy (regardless of risk profile) is to specialize as much as possible on tobacco (given alternatives such as soybean, alfalfa, chickpeas, ...) -- great reference to use -- quadratic optimization 
+
+## Barbieri, C., Mahoney, E., & Butler, L. (2008). Understanding the nature and extent of farm and ranch diversification in North America. Rural Sociology, 73(2), 205–229. https://doi.org/10.1526/003601108784514543
+
+a great review of the type and extent of farming diversification in North America 
+
+those that were highly diversified tended to be younger 
+
+diversification can happen in many ways such as through distribution, adding recreation or tourism or hospitality, consulting or education, ...
+
+size of farm was not related to level of diversity - for example, many small farms use diversification to maximize revenue given their limited land 
+
+## Barrett, C. B., Reardon, T., & Webb, P. (2001). Nonfarm income diversification and household livelihood strategies in rural Africa: concepts, dynamics, and policy implications. Food Policy, 26(4), 315–331. https://doi.org/10.1016/S0306-9192(01)00014-8
+
+Introduction to special issue on income diversification and livelihoods in rural Africa 
+
+poor farmers face many barriers to diversifying due to the expense of initial investments -- diversification (including non-farm activities) positively correlated with income (on page 324 they cite a number of papers in the special issue with specific examples):
+
+"Block and Webb ﬁnd more income diversiﬁcation associated with higher welfare measured in both income and nutritional terms in Ethiopia, and that the least diversiﬁed ﬁght hard to increase their diversiﬁcation over time. Nonfarm income shares in peri-urban Tanzania rise sharply and monotonically with per capita food consumption quantiles according to Lanjouw et al. Barrett et al. report a strong association between greater income diversiﬁcation ˆ and higher wealth and income in Cote d’Ivoire and Kenya. Canagarajah et al. show that nonfarm earnings fuel increased income inequality in Uganda. The poor, unedu- cated, women, recent immigrants to a community, and others lacking social ties rarely enjoy the same access to remunerative opportunities as do educated males with strong social networks in the community."
+
+nonfarm sources account for a substantial portion of average farm household income (40-45%) 
+
+key paper, cite this
+
+they note that diversification is a form of self-insurance... but this should be stronger for poorer individuals but in fact it is stronger for richer individuals. so insurance isn't the only factor 
+
+another roll for diversification is to deal with shocks to income 
+
+entry barriers mean that poor farmers tend to be less diversified and are forced to experience lower returns and higher variability in earnings 
+
+"Greater physical access to market likewise consistently improves nonfarm earnings opportunities, as shown in Uganda by Smith et al. and in Tanzania by Lanjouw et al."
+
+## Illukpitiya, P., & Yanagida, J. F. (2008). Role of income diversification in protecting natural forests: evidence from rural households in forest margins of Sri Lanka. Agroforestry Systems, 74(1), 51–62. https://doi.org/10.1007/s10457-008-9153-2
+
+diversified income sources for those living in "forest margins" include "crop farming, off-farm employment, animal husbandry, home gardening, and extraction of nontimber forest products and fuel wood"
+
+overall, diversification was positively related with total income for those living in "forest margins"
+
+Another example of a paper that uses the Simpsons diversity index in a regression model 
+
+## Mertz, O., Wadley, R. L., & Christensen, A. E. (2005). Local land use strategies in a globalizing world: Subsistence farming, cash crops and income diversification. Agricultural Systems, 85(3), 209–215. https://doi.org/10.1016/j.agsy.2005.06.007
+
+introduction to a special issue on "subsistence farming, cash crops and income diversification"
+
+For example, in Indonesia, swidden agriculture is often used to buffer income in the face of rubber price fluctuations (Sulistiawati et al. 2005 in the special issue). An example of "subsistence farming and cash crop interaction"
+
+## Mustapha, A. R. (1999). Cocoa farming and income diversification in South-western Nigeria.
+
+Cocoa the most profitable crop export in Nigeria
+
+when cocoa prices were high, most cocoa farmers were highly specialized; now there is much more diversification to other sources of income... for example trading and electronic repairs 
+
+"Historically, cocoa farmers rarely engaged in non-farm commercial or artisanal activities. When cocoa farmers took to non-farm occupations in the 1970s and 19803, it was as a result of the severe crisis of accumulation confronting them (Berry 1985). Indeed, only 5 per cent of the 1964 Alade sample had any non-farm occupation (Oloko 1964: 57). My 1992 study established that by the early 1980s, that is just before SAP, about 35 per cent of the Lower stratum in that survey, 30 per cent of the Middle, and 33 percent of the Upper had non‐farm occupations."
+
+## Okoh, G., & Hilson, G. (2011). Poverty and Livelihood Diversification: Exploring the Linkages Between Smallholder Farming and Artisanal Mining in Rural Ghana. Journal of International Development, 23(8), 1100–1114. https://doi.org/10.1002/jid.1834
+
+in rural Ghana individuals often combine small-scale farming with mining to generate sufficient and stable livelihoods 
