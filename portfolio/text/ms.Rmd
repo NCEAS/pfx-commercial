@@ -56,7 +56,7 @@ existing permit was associated with increased revenue variability. Thus, over
 the past 30 years as the Alaskan commercial fishing fleet has become
 increasingly specialized and most individuals only participate under a single
 permit, the practical benefits accrued from increased species diversification
-are limited. 
+are limited.
 
 Our results suggest that the benefit of species diversity for revenue
 variability is mostly an across-permit effect, not a benefit that can be easily
@@ -92,7 +92,7 @@ limit how individuals diversify, or incentivize against diversification. For
 example, in terrestrial agriculture, crop subsidies in the US may incentivize
 some farms to specialize (e.g. dairy, grains, soybeans; @mishra2002). In other
 instances, external market forces (e.g. prices or demand) may discourage the
-adoption of diverse strategies and help promote specialization [@bradshaw2004]. 
+adoption of diverse strategies and help promote specialization [@bradshaw2004].
 
 Commercial fishers present an interesting example of diversification, given the
 extreme risk that some individuals experience, particularly relative to
@@ -125,7 +125,7 @@ to a single species, diversifying by purchasing additional fishing permits can
 be expensive (e.g. ~\$192K USD for a king and tanner crab permit in Southeast
 Alaska in 2016; <https://www.cfec.state.ak.us/pmtvalue/X_K69A.HTM>), and some
 fisheries limit the entry of new participants through individual fishing quotas
-(IFQs) [@grimm2012]. 
+(IFQs) [@grimm2012].
 
 Using a unique dataset collected over 30 years (1985--2014) on individuals,
 rather than fleets or vessels, we examine how revenue and revenue variability of
@@ -133,10 +133,10 @@ individuals is affected by diversification. By tracking individuals we can track
 people that switch fishery permits over time or use multiple vessels. Similarly,
 we can disentangle fishers that share the same vessel. We develop and apply
 a hierarchical Bayesian model to understand the effect of fished species
-diversity [OLE: Call this diversity of catch rather than fished?] on individual 
+diversity [OLE: Call this diversity of catch rather than fished?] on individual
 revenue and revenue variability that builds on results
 from vessel [@kasperski2013], fleet [@sethi2012b], and community-level
-[@sethi2014] variability. 
+[@sethi2014] variability.
 
 We develop a variance-function regression model [@davidian1987; @hall1989], to
 simultaneously models changes in the mean and variance of individual revenue as
@@ -196,7 +196,7 @@ associated with increased revenue but also increased variability (Fig.
 average, there is a ~0.5% increase in the year-to-year revenue ratio per 1%
 decrease in species diversity, and across strategies, `r g2_dens`% of the
 probability density supports a positive relationship between specialization and
-revenue. 
+revenue.
 
 <!--This benefit of specializing is most apparent after accounting for fishing
 effort ().-->
@@ -211,9 +211,9 @@ experienced a ~2% increase in variability for a 1% change in the year-to-year
 ratio of species diversity (Fig. \ref{fig:within}). Becoming more generalized in
 species diversity also leads to increased revenue variability (Fig.
 S\ref{fig:mirror}A), suggesting that the act of changing strategies is
-a contributor to increased variability of revenue. 
+a contributor to increased variability of revenue.
 
-<!-- TODO mention the quadrants in figure 4 --> 
+<!-- TODO mention the quadrants in figure 4 -->
 
 Alaskan halibut and sablefish fisheries were converted to individual fishery
 quota (IFQ) management in 1994, which potentially confounds our estimates with
@@ -232,21 +232,20 @@ a salmon permit (Fig. S\ref{fig:ifq}B).
 
 For individuals deriving livelihoods from natural resources, theory suggests
 that adopting strategies with a diversity of assets provides substantial
-benefits over strategies with lower diversity [REFS]. However, the ability of
-individuals to effectively diversify is limited by regulation and market forces
-in practice. Here we document the effect of changing species diversity on
-revenue and revenue variability across three scale. Each scale reflects
-individual-level choices that can affect species diversity. We find that
-individuals with fishing permit sets that allow high levels of species diversity
-tend to have lower revenue variability. Adding a fisheries permit usually
-increases revenue and decreases revenue variability. Within the constraints of
-a permit and accounting for effort, specializing (reducing species diversity)
-tends to increase revenue while both specializing or generalizing tends to be
-associated with greater revenue variability - though there are considerable
-differences among fisheries. Thus, the most effective mechanism by which species
-diversity can lower revenue variability for individual fishers --- switching or
-adding fishing permits --- is costly, limited by regulations, and consequently
-unavailable to many individuals in practice.
+benefits over strategies with lower diversity [REFS]. However, in practice, the
+ability of individuals to effectively diversify is limited by regulation and
+market forces. Here we document the effect of individual-level changes in
+species diversity on revenue and revenue variability across three scales. We
+find that (1) individuals with fishing permit sets that allow high levels of
+species diversity tend to have lower revenue variability. (2) Adding a fisheries
+permit usually increases revenue and decreases revenue variability. However, (3)
+within the constraints of a permit and accounting for effort, specializing tends
+to increase revenue while both specializing and generalizing tend to correlate
+with greater revenue variability with considerable differences amongst
+fisheries. Thus, the most effective mechanism by which species diversity can
+lower revenue variability for individual fishers --- switching or adding fishing
+permits --- is costly, limited by regulations, and consequently unavailable to
+many individuals.
 
 Our findings across fishing strategies are in line with previous findings
 [@kasperski2013, @sethi2012b, @sethi2014], but we also found that within
@@ -256,20 +255,19 @@ revenue variability. Specializing has been shown to be profitable in some
 circumstances for other natural resource sectors. For example, while
 diversification is generally helpful for small-scale farmers, farmers that
 specialize on high-demand and high-value crops such as tobacco or cocoa can
-benefit, at least in the short term, from specializing on these crops (REF). In
-terms of variance, there are number of reasons by annual revenue variability
-might be expected to increase with changes to individual fished species
-diversity. First, changes to fishing patterns will sometimes be associated with
-a learning or adaptation phase as individuals become accustomed to new
-locations, new gear, or new species. Secondly, changes in diversity might
-reflect years in which targeted species were less available and fishers were
-forced to target other species or landed more bycatch. Most importantly, this
-increased variability technically reflects an inability for our large-scale
-model to predict an individual's revenue in a subsequent year. There are many
-reasons, often unique to an individual permit holder and therefore not included
-in a large-scale model, that might make that specific individual's revenue less
-predictable given a change in species diversity compared to not changing species
-diversity from one year to the next. 
+benefit, at least in the short term, from specializing (REF). In terms of
+variance, there are number of reasons by annual revenue variability might
+increase with changes to individual fished species diversity. First, changes to
+fishing patterns will sometimes be associated with a learning or adaptation
+phase as individuals become accustomed to new locations, new gear, or new
+species. Secondly, changes in diversity might reflect years in which targeted
+species were less available and fishers were forced to target other species or
+landed more bycatch. Most importantly, this increased variability technically
+reflects an inability for our large-scale model to predict an individual's
+revenue in a subsequent year. There are many reasons, often unique to an
+individual permit holder and therefore not included in a large-scale model, that
+might make that specific individual's revenue less predictable if species
+diversity changes.
 
 Our analysis provides a synthetic view of the effects of species diversity on
 individuals over 30 years in one of the most productive fishing regions in the
@@ -282,7 +280,7 @@ events (e.g. the Exxon Valdez oil spill in 1989) that had significant
 consequences for the ecosystem and social system in Alaska (REF). In addition to
 variability, ... it is important to understand the benefits of diversification
 in the context of rare and extreme disturbances which occur in marine systems
-worldwide. 
+worldwide.
 
 TODO: cut apart and recombine the following couple chunks:
 
@@ -298,7 +296,7 @@ inadvertently act as barrier to diversification and promote specializing
 (Hilborn et al. 2003; Kasperski and Holland 2013). While some of these
 specialized fishing strategies may be associated with increased revenue
 variability, the benefit may be that they are also associated with increased
-revenue. 
+revenue.
 
 Worldwide, fisheries confront the challenge of sustainable management (). While
 many fisheries are well managed and productive, many are also rebuilding from
@@ -342,7 +340,7 @@ Ecology & Evolution 19, 598–604.
 Read, A.J., Drinker, P. and Northridge, S. (2006) Bycatch of marine mammals in
 US and global fisheries. Conservation Biology 20, 163–169. -->
 
-<!-- Reconciling the different levels of effects --> 
+<!-- Reconciling the different levels of effects -->
 
 <!--In terrestrial agriculture for instance, there are many instances of
 specializing being profitable; drivers include the ability to specialize on
@@ -373,13 +371,13 @@ industrial scale (REF).-->
   multiple sources of risk to income for those that rely on extracting natural
   resources, but not all forms of diversification are equal, and on an
   individual level there can be economic benefits to specializing and risks to
-  adjusting ones strategy 
+  adjusting ones strategy
 - with increasing environmental variability and extremes due to climate change
   those that rely on natural resources for their livelihoods need approaches to
-  buffer risk more than ever 
+  buffer risk more than ever
 - regulations that limit the ability to diversify can have other considerable
   benefits but it's important to be aware of trade-offs inherent in these
-  regulations when making management decisions 
+  regulations when making management decisions
 -->
 
 External market forces may interact in concert with management regulations to
@@ -387,11 +385,10 @@ promote specialization for fishers or other individuals dependent on natural
 resources. With increasing environmental variability and extreme events in
 a changing climate (REF), it is particularly important that individuals who rely
 on natural resources as a primary source of income have strategies to reduce
-risk. Though variability in individual revenues may not be actively incorporated
+risk. Though variability in individual revenue may not be actively incorporated
 into many management decisions, analyses like ours help to understand the range
 of diversification strategies available and how their benefits may change over
 time.
-
 
 \bibliographystyle{pnas2011}
 \bibliography{refs}
@@ -408,7 +405,7 @@ time.
 regions in Alaska, USA. (B) Total revenue in billions of 2009 U.S. dollars from
 `r range_yrs[1]` to `r range_yrs[2]` for multiple (grey) and single (blue)
 permit holders. (C) Proportion of single permit holders for all fisheries (thick
-black line) and with permit holders omitted each year who fished any of the `r 
+black line) and with permit holders omitted each year who fished any of the `r
 n_jacknifed` top species groups (thin lines). (D) Mean effective diversity of
 species fished (Simpson's diversity index) for all fisheries (thick black line)
 and with permit holders omitted each year who fished any of the `r n_jacknifed`
@@ -648,7 +645,7 @@ capture (Fig. S\ref{fig:resid}). Furthermore, the downside residuals
 (year-individual data points with lower than expected revenue) look
 qualitatively similar to the complete set of residuals (upside and downside)
 (Fig. S\ref{fig:resid-downside}). Therefore, it seemed appropriate to model the
-variability as a proxy for revenue risk. 
+variability as a proxy for revenue risk.
 
 The $\gamma$'s are estimated coefficients, three of which are allowed to vary by
 strategy, constrained by normal distributions:
@@ -725,5 +722,9 @@ analysis is available at <https://github.com/NCEAS/pfx-commercial/portfolios/>.
 <!-- [@jardine2015] -->
 <!-- [@sanchirico2008] -->
 
-<!-- vim: textwidth=80 
+<!-- vim: textwidth=80
+
+
+
+
 -->
