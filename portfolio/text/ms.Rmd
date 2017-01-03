@@ -260,6 +260,41 @@ individual permit holder and therefore not included in a large-scale model, that
 might make that specific individual's revenue less predictable if species
 diversity changes.
 
+
+increased revenue with specialization? 
+why might someone specialize? but this has long-term risks 
+	efficiency 
+		and individual behavior important in fleet dynamics and efficiency of catch @hilborn1985
+		"Specialization, as measured by the share of total cultivated land devoted to rice production, also tends to lower inefficiency," @abdulai2000
+	cash crops 
+		sockeye e.g.
+		cocoa: most profitable crop export in Nigeria @mustapha1999
+			when cocoa prices were high, most cocoa farmers were highly specialized; now there is much more diversification to other sources of income... for example trading and electronic repairs @mustapha1999
+		tobacco: high profitability and low variability of income from tobacco mean that the optimal farming strategy (regardless of risk profile) is to specialize as much as possible on tobacco (given alternatives such as soybean, alfalfa, chickpeas, ...) -- great reference to use -- quadratic optimization @chavez2014
+	conversely, diversification can happen as a consequence of non-ideal situations 
+		poor fishing years mean the fishermen must seek out other options - this paper 
+		downwards economic shocks tend to be associated with increasing diversity for households relying on forests for income @debela2012
+		for example, many small farms use diversification to maximize revenue given their limited land @barbieri2008
+	but has long-term risks 
+		"...most graphic, recent example of such risks was the reliance of U.S. crop producers on export markets for wheat, corn, and soybeans during the 1970s. Many farmers borrowed large sums of money to buy additional land and buy specialized equipment ....
+		
+		Specialized farmers producing export commodities were hardest hit by the financial crisis of American agriculture in the early 1980s...." @ikerd1990
+		"Historically, cocoa farmers rarely engaged in non-farm commercial or artisanal activities. When cocoa farmers took to non-farm occupations in the 1970s and 19803, it was as a result of the severe crisis of accumulation confronting them (Berry 1985). Indeed, only 5 per cent of the 1964 Alade sample had any non-farm occupation (Oloko 1964: 57). My 1992 study established that by the early 1980s, that is just before SAP, about 35 per cent of the Lower stratum in that survey, 30 per cent of the Middle, and 33 percent of the Upper had non‐farm occupations." @mustapha1999
+
+barriers to diversification 
+	cost of entry
+		"poorer households have fewer opportunities in non-cropping activities ... and hence less diversified incomes. ... reflect[s] their relative lack of capital, which makes it difficult for them to diversify away from subsistence agriculture...  " @abdulai2001
+		entry barriers mean that poor farmers tend to be less diversified and are forced to experience lower returns and higher variability in earnings @barrett2001
+			e.g. "Block and Webb and More income diversification associated with higher welfare measured in both income and nutritional terms in Ethiopia, and that the least diversified ft hard to increase their diversification over time. ... Barrett et al. report a strong association between greater income diversification ˆ and higher wealth and income in Cote d’Ivoire and Kenya." @barrett2001
+		access to financial capital important to income diversification for fishing communities in Kenya @olale2012
+		overall, diversification was positively related with total income for those living in "forest margins" @illukpitiya2008
+	ifqs
+		catch shares may help prevent fisheries collapse @costello2008
+		entry expensive
+		diversification declined at a time following catch share programs on the West Coast @holland2016
+		vessels that entered West Coast fisheries less diversified than those that entered before IFQs (and of course cost is increased to get into these fisheries for those that were not already participants) @holland2016
+		catch share programs may reduce variability and offset the effects of lower diversity -- found that year-to-year vessel revenue decreased after catch shares (and average revenue increased for most) @holland2016
+
 Our analysis provides a synthetic view of the effects of species diversity on
 individuals over 30 years in one of the most productive fishing regions in the
 world. However, this large temporal and geographical scope potentially obscures
@@ -653,8 +688,8 @@ species diversity and mean combined fishing season length (effort) for strategy
 $j$. The coefficients $\eta_1$ and $\eta_2$ represent predictors in this
 strategy-level regression estimating effects across strategies.
 
-We fit our models with Stan 2.11.1 [@hoffman2014; @standevelopmentteam2015;
-@standevelopmentteam2015a; @carpenter2015] and R 3.3.1 [@rcoreteam2016]. Stan
+We fit our models with Stan 2.14.1 [@standevelopmentteam2016;
+@standevelopmentteam2016a] and R 3.3.1 [@rcoreteam2016]. Stan
 implements the No-U-Turn Hamiltonian Markov chain Monte Carlo algorithm
 [@hoffman2014] to perform Bayesian statistical inference. We assigned weakly
 informative priors on all parameters: $N(0, 2^2)$ priors on all $\beta$,
@@ -663,7 +698,7 @@ freedom of 3 and scale of 2) on all $\sigma$ and $\tau$. We ran four chains and
 2,000 iterations and discarded the first 1,000 iterations of each chain as warm
 up. We checked for chain convergence visually with trace plots, ensured that
 $\hat{R}<1.05$ (the potential scale reduction factor) and that the effective
-sample size, as calculated by the rstan R package [@standevelopmentteam2015],
+sample size, as calculated by the rstan R package [@standevelopmentteam2016],
 was greater than 200 for all parameters [@gelman2014]. We verified that our
 model returned sensible estimates by comparing our estimates to an ad-hoc
 two-stage model fit with the lme4 R package [@bates2015], where we first fit
