@@ -10,60 +10,49 @@ g2_dens <- readRDS("../data-generated/g2_prob_dens_above_zero.rds")
 n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 ```
 
-<!-- Diversified portfolios of fishing permits and species reduce risk for fishermen, -->
-<!-- but changing species diversity can be risky, costly, and limited by regulations. -->
-<!-- Goal: Introduction, Methods, Results, Discussion, Conclusion:
+<!-- Introduction, Methods, Results, Discussion, Conclusion -->
 <!-- 600, 900, 500, 800, 200, -->
 
 # Abstract
 
-<!-- TODO slash length of abstract -->
+<!-- TODO < 250 words -->
 
-A fundamental challenge for individuals who rely on the extraction of natural
-resources for their livelihood is income variability. Fishers, loggers, farmers,
-and miners, among others, face high levels of income uncertainty driven by a mix
-of environmental, biological, and economic variability. A key component
-underlying the sustainability of these industries is identifying both how
-regulatory actions and individual behaviour affect income variability and by
-extension the economic stability and sustainable use of natural resources. For
-commercial fisheries, recent work has identified that targeting a diversity of
-species can reduce income variability. However, any diversity-variability
-relationship is embedded in a regulatory framework that restricts individual
-ability to change fishing behaviour. Here we identify three primary axes by
-which fishers in Alaska, one of the world's most productive fishery regions, can
-potentially diversify fishing activities and investigate how individual actions
-along each diversity axis affect both revenue and revenue variability. We
-construct a novel statistical model to simultaneously assess the value to
-individual fishers of choosing to (1) own permits that allow targeting a diverse
-fish species assemblage, (2) diversify by owning multiple permits, or (3) catch
-a greater species diversity within the constraints of a given permit. We show
-contrasting effects of diversity on revenue and revenue variability along the
-three axes. First, we show that fishing permits with higher species diversity
-reduces variability (`r h1[[2]]`% [`r h1[[1]]`--`r h1[[3]]`% 95% CI] reduction
-per unit increase in mean effective species diversity). Next, we show that
-fishing an additional permit is associated with higher revenue and lower
-variability (e.g., `r 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`%
-IQR] decline in standard deviation for fishers with halibut and another permit
-vs. only a halibut permit). Finally, we show that increasing species diversity
-within the constraints of a permit set has a fishery-dependent effect on revenue
-and is usually (`r g2_dens`% probability) associated with increased uncertainty
-in revenue the following year. Thus, while there are clear benefits to some axes
-of diversification, others are less effective. Importantly, the most effective
-mechanism for increasing revenue and decreasing risk --- purchasing additional
-permits to participate in additional fisheries --- was also the most costly.
-Furthermore, the least costly option of increasing catch diversity within an
-existing permit was associated with increased revenue variability. Thus, over
-the past 30 years as the Alaskan commercial fishing fleet has become
-increasingly specialized and most individuals only participate under a single
-permit, the practical benefits accrued from increased species diversification
-are limited.
-
-Our results suggest that the benefit of species diversity for revenue
+Individuals who rely on the extraction of natural resources for their
+livelihood --- fishers, farmers, and loggers, among others --- face high levels
+of income variability driven by a mix of environmental, biological, and
+economic variability.
+A key component to managing these industries is identifying how regulatory
+actions and individual behaviour affect income variability and by extension the
+economic stability and sustainable use of natural resources. For commercial
+fisheries, recent work has identified that communities and vessels can lower
+revenue variability by increasing the diversity of species fished. 
+<!-- fix: One sentence clearly stating the general problem being addressed by
+this particular study --> 
+However, it is unclear if ... extend to individual... year to year changes
+<!-- cut down, 1 sentence: -->
+Here we identify three axes by which fishers in Alaska, one of the world's most
+productive fishery regions, can potentially diversify fishing activities and
+investigate how individual actions along each diversity axis affect revenue and
+revenue variability. 
+<!-- We simultaneously assess the value to individual fishers of choosing to (1) own -->
+<!-- permits that allow targeting a diverse fish species assemblage, (2) diversify -->
+<!-- by adding additional permits, or (3) catch a greater species diversity within -->
+<!-- the constraints of a given permit. --> 
+We show that fishing permits with higher species diversity reduces revenue
+variability and fishing an additional permit is associated with higher revenue
+and lower variability. However, increasing species diversity within the
+constraints of a permit set has a fishery-dependent effect on revenue and is
+usually (`r g2_dens`% probability) associated with increased uncertainty in
+revenue the following year. 
+Our results suggest that the benefit of species diversity for reducing revenue
 variability is mostly an across-permit effect, not a benefit that can be easily
-harnessed by an individual permit holder. Effective methods of diversification
---- purchasing additional permits or switching permits --- are costly and often
-limited by regulations such as limited entry programs and individual
-transferable quotas (ITQs). Take home ...
+harnessed by individual permit holders. The most effective mechanism for
+increasing revenue and decreasing variability --- purchasing permits to
+participate in additional fisheries --- is also the most costly and often
+limited by regulations such as limited entry and catch share programs.
+
+<!-- Thus, over the past 30 years as the Alaskan commercial fishing fleet has become -->
+<!-- increasingly specialized, --> 
 
 \clearpage
 
