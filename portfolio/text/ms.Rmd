@@ -55,7 +55,7 @@ increasingly specialized, -->
 <!-- Papers to cite [@smith1986] -->
 
 Managing natural resources and sustaining the livelihoods of those that depend
-on their extraction is hard. These livelihoods tend to have high year-to-year
+on their extraction is hard. These livelihoods tend to have high annual
 variability in income relative to other professions [@mishra2002; @sethi2012b].
 In addition to economic risk, such as changes in demand or prices, individuals
 dependent on natural resources are also subject to biological and environmental
@@ -72,7 +72,7 @@ harvest in geographical areas to buffer against disease outbreak, wildfires, and
 price variation (REF). However, external forces may restrict the available
 options to dampen income variability. Otherwise well-intentioned regulations may
 limit how individuals diversify, or incentivize against diversification. For
-example, in terrestrial agriculture, crop subsidies in the US may incentivize
+example, in terrestrial agriculture, crop subsidies in the U.S. may incentivize
 some farms to specialize (e.g. dairy, grains, soybeans; @mishra2002). In other
 instances, external market forces (e.g. prices or demand) may discourage the
 adoption of diverse strategies and help promote specialization [@bradshaw2004].
@@ -226,43 +226,43 @@ lower revenue variability for individual fishers --- switching or adding fishing
 permits --- is costly, limited by regulations, and consequently unavailable to
 many individuals.
 
-Our results across fishing strategies are in line with previous findings
-[@kasperski2013, @sethi2012b, @sethi2014] at the community and vessel levels,
-but our results with respect to individual year-to-year behaviour provide new
-insights. Within strategies, specializing tended to be associated with
-increased revenue. This could be for a number of reasons. First, specialization
-can increase efficiency [@smith1986] and individual behaviour is an important
-component to the efficiency of catch [@hilborn1985]. Indeed, specialization can
-also increase efficiency in other natural resource industries, such as rice
-production [@abdulai2000]. Second, given the availability of "cash crops",
-specializing can be highly profitable. For example, when cocoa prices have been
-high, cocoa farmers in Nigeria have been highly specialized on the crop
+Our results across fishing strategies are in line with previous findings at the
+community and vessel levels [@kasperski2013; @sethi2012b; @sethi2014], but our
+results with respect to individual year-to-year behaviour provide new insights.
+Within strategies, specializing tended to be associated with increased revenue.
+This could be for a number of reasons. First, specialization can increase
+fishing efficiency [@smith1986]. Efficiency gains from specialization can be
+seen in other natural resource sectors. For example, rice farmers in Ghana can
+increase their efficiency by devoting more land and labor to rice production
+compared to other crops [@abdulai2000]. Second, given the availability of "cash
+crops", specializing can be highly profitable. For instance, when cocoa prices
+have been high, farmers in Nigeria have been highly specialized on the crop
 [@mustapha1999] and specializing on valuable tobacco farming can be the optimal
 strategy regardless of alternative crops [@chavez2014]. In our analyses,
-fishers with available sockeye salmon, a highly valuable species, benefited the
-most from specializing. However, specializing can have long-term risks if
-marker, biological, or environmental conditions change. For instance, U.S.
-farmers specialized on wheat, corn, or soybeans were hardest hit in the early
-1980s when a financial crisis hit [@ikerd1990]. Third, a lack of specialization
-can happen as a consequence of non-ideal circumstances such as poor
-availability of a more valuable fish stock in a given year. For example,
-downward economic shocks have been associated with increased diversity for
-households relying on forests for income [@debela2012]. 
+fishers with the opportunity to fish highly valuable sockeye salmon benefited
+the most from specializing. However, specializing can have longterm risks if
+market, biological, or environmental conditions change. For example, U.S.
+farmers specialized on wheat, corn, or soybeans were hit harder than
+diversified farmers in the early 1980s when a financial crisis hit
+[@ikerd1990]. Third, a lack of specialization can happen as a consequence of
+non-ideal circumstances such as poor availability of a more valuable fish stock
+in a given year. For example, downward economic shocks have been associated
+with increased diversity for households relying on forests for income
+[@debela2012]. 
 
 We also found that altering species diversity tended to be associated with
-increased revenue variability. There are number of reasons by annual revenue
-variability might increase with changes to individual fished species diversity.
-First, changes to fishing patterns will sometimes be associated with a learning
-or adaptation phase as individuals become accustomed to new locations, new
-gear, or new species [REF]. Secondly, changes in diversity might reflect years
-in which targeted species were less available and fishers were forced to target
-other species or landed more bycatch adding stochasticity to their revenue.
-Most importantly, this increased variability technically reflects an inability
-for our large-scale model to predict an individual's revenue in a subsequent
-year. There are many reasons, often unique to an individual permit holder's
-behaviour [@hilborn1985] and therefore not included in a large-scale model, that
-might make that specific individual's revenue less predictable if species
-diversity changes.
+increased revenue variability. There are number of possible reasons for this
+relationship. For instance, changes to fishing patterns will sometimes be
+associated with a learning or adaptation phase as individuals become accustomed
+to new locations, new gear, or new species [REF]. Additionally, changes in
+diversity might reflect years in which targeted species were less available and
+fishers were forced to target other species or landed more bycatch adding
+stochasticity to their revenue. Most importantly, this increased variability
+reflects an inability for our large-scale model to predict an individual's
+revenue in a subsequent year. There are many reasons, often unique to an
+individual permit holder's behaviour [@hilborn1985] and therefore not included
+in our large-scale model, that might make that specific individual's revenue
+less predictable if species diversity changes.
 
 There are many possible barriers to diversification for individuals relying on
 natural resources for their livelihood. A primary barrier is the cost of
