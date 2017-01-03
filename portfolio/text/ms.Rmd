@@ -18,9 +18,9 @@ n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 <!-- TODO < 250 words -->
 
 Individuals who rely on the extraction of natural resources for their
-livelihood --- fishers, farmers, and loggers, among others --- face high levels
-of income variability driven by a mix of environmental, biological, and
-economic variability.
+livelihood --- fishers, farmers, miners, and loggers, among others --- face
+high levels of income variability driven by a mix of environmental, biological,
+and economic variability.
 A key component to managing these industries is identifying how regulatory
 actions and individual behaviour affect income variability and by extension the
 economic stability and sustainable use of natural resources. For commercial
@@ -31,9 +31,9 @@ this particular study -->
 However, it is unclear if ... extend to individual... year to year changes
 <!-- cut down, 1 sentence: -->
 Here we identify three axes by which fishers in Alaska, one of the world's most
-productive fishery regions, can potentially diversify fishing activities and
-investigate how individual actions along each diversity axis affect revenue and
-revenue variability. 
+productive fishing regions, can potentially diversify fishing activities and
+investigate how individual actions along each axis affect revenue and revenue
+variability. 
 <!-- We simultaneously assess the value to individual fishers of choosing to (1) own -->
 <!-- permits that allow targeting a diverse fish species assemblage, (2) diversify -->
 <!-- by adding additional permits, or (3) catch a greater species diversity within -->
@@ -42,14 +42,16 @@ We show that fishing permits with higher species diversity reduces revenue
 variability and fishing an additional permit is associated with higher revenue
 and lower variability. However, increasing species diversity within the
 constraints of a permit set has a fishery-dependent effect on revenue and is
-usually (`r g2_dens`% probability) associated with increased uncertainty in
-revenue the following year. 
-Our results suggest that the benefit of species diversity for reducing revenue
-variability is mostly an across-permit effect, not a benefit that can be easily
-harnessed by individual permit holders. The most effective mechanism for
-increasing revenue and decreasing variability --- purchasing permits to
-participate in additional fisheries --- is also the most costly and often
-limited by regulations such as limited entry and catch share programs.
+usually (`r g2_dens`% probability) associated with increased revenue uncertainty
+the following year. 
+Our results demonstrate that the most effective option for individuals to
+increase revenue and decrease variability is to purchase permits to participate
+in additional or more diverse fisheries. However, this option is costly
+and often limited by regulations such as limited entry and catch share
+programs.
+With increasing environmental variability in a changing climate, it will be
+particularly important that individuals who rely on natural resources for
+their livelihood have effective strategies to reduce income variability. 
 
 <!-- Thus, over the past 30 years as the Alaskan commercial fishing fleet has become -->
 <!-- increasingly specialized, --> 
