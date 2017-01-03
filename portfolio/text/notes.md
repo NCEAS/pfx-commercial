@@ -121,3 +121,9 @@ in rural Ghana individuals often combine small-scale farming with mining to gene
 "Portfolio management seems a logical choice given that the overall productivity of fishery systems is more stable than individual species are." @hilborn2001
 
 "Other examples are numerous. While the crab fisheries of Alaska collapsed, the salmon and groundfish fisheries blossomed. While chinook and coho salmon in British Columbia collapsed, sockeye, pink, and chum salmon did well." @hilborn2001
+
+----------------
+
+"Limited entry, which allows fishing time to be spread out, works against generalists, who gain advantage with shortened seasons.Seasons, especially shortened seasons, hurt the specialist because their catch effectiveness compared to the generalists reduced. Catch quotas have the same impact on specialists as seasons.The only difference is that quotas make it difficult to know the length of a season." @smith1986
+
+"The hypothesis is that a multipurpose fishery composed of specialists and generalists is the best adaptation. The ratio of specialists to generalists is a function of the variability in the fishery, the capital costs of entering the fishery, and the costs of switching between fisheries." @smith1986
