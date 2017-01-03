@@ -51,8 +51,6 @@ increasingly specialized, -->
 
 # Introduction
 
-<!-- Papers to cite [@smith1986] -->
-
 Managing natural resources and sustaining the livelihoods of those that depend
 on their extraction is hard. These livelihoods tend to have high annual
 variability in income relative to other professions [@mishra2002; @sethi2012b].
@@ -233,21 +231,19 @@ fishing efficiency [@smith1986]. Efficiency gains from specialization can be
 seen in other natural resource sectors. For example, rice farmers in Ghana can
 increase their efficiency by devoting more land and labor to rice production
 compared to other crops [@abdulai2000]. Second, given the availability of
-valuable resources, specializing can be highly profitable. For instance, when cocoa prices
-have been high, Nigerian farmers have tended to specialize on the crop
-[@mustapha1999] and specializing on valuable tobacco farming can be the optimal
-strategy regardless of alternative crops [@chavez2014]. In our analyses,
+valuable resources, specializing can be highly profitable. For instance, when
+cocoa prices have been high, Nigerian farmers have tended to specialize on the
+crop [@mustapha1999] and specializing on valuable tobacco farming can be the
+optimal strategy regardless of alternative crops [@chavez2014]. In our analyses,
 fishers with the opportunity to fish highly valuable sockeye salmon benefited
 the most from specializing. However, specializing can have longterm risks if
 market, biological, or environmental conditions change. For example, U.S.
-farmers specialized on wheat, corn, or soybeans were hit harder than
-diversified farmers in the early 1980s when a financial crisis hit
-[@ikerd1990]. Third, generalization --- a lack of specialization ---
-can happen as a consequence of
+farmers specialized on wheat, corn, or soybeans were hit harder than diversified
+farmers in the early 1980s when a financial crisis hit [@ikerd1990]. Third,
+generalization --- a lack of specialization --- can happen as a consequence of
 non-ideal circumstances such as poor availability of a more valuable fish stock
-in a given year. For example, downward economic shocks have been associated
-with increased diversity for households relying on forests for income
-[@debela2012].
+in a given year. For example, downward economic shocks have been associated with
+increased diversity for households relying on forests for income [@debela2012].
 
 We also found that altering species diversity tended to be associated with
 increased revenue variability. There are number of possible reasons for this
@@ -292,22 +288,6 @@ addition to revenue or income variability, it is important to understand the
 benefits of diversification in the context of rare and extreme disturbances
 which occur in natural systems worldwide [REF].
 
-<!-- TODO: cut apart and recombine the following couple chunks:-->
-
-<!--Our results provide additional support for the idea that individual fishers can
-reduce their income variability by diversifying their catch portfolios. However,
-most individuals do not change their catch diversity substantially from year to
-year [OLE: is there a supplemental figure or statistic that speaks to this
-point?], and most strategies adopted by Alaskan fishermen lie in a high-risk,
-high-reward quadrant in which reducing diversification increases both revenue
-variability and expected revenue. Previous work has suggested that changes to
-fisheries management such as limited entry or catch share programs may
-inadvertently act as barrier to diversification and promote specializing
-(Hilborn et al. 2003; Kasperski and Holland 2013). While some of these
-specialized fishing strategies may be associated with increased revenue
-variability, the benefit may be that they are also associated with increased
-revenue.-->
-
 <!--
 Worldwide, fisheries confront the challenge of sustainable management (). While
 many fisheries are well managed and productive, many are also rebuilding from
@@ -327,50 +307,6 @@ al. 2008 ) - may ultimately restrict individual diversification or at least make
 developing a diverse fishing portfolio more costly. Add Alaska example of
 IFQs...?
 -->
-
-<!-- Chakravorty, U. and Nemoto, K. (2001) Modeling the effects of area closure
-and tax policies: a spatial-temporal model of the hawaii longline fishery.
-Marine Resource Economics 15, 179–204.
-
-Costello C, Gaines SD, Lynham J (2008) Can catch shares prevent fisheries
-collapse? Science 321(5896):1678–1681
-
-Crowder, L.B. and Murawski, S.A. (1998) Fisheries bycatch: implications for
-management. Fisheries Management 23, 8–17.
-
-Curtis, R. and Hicks, R.L. (2000) The Cost of sea turtle preservation: the case
-of Hawaii’s Pelagic longliners. American Journal of Agricultural Economics 82,
-1191– 1197.
-
-Hilborn R, Ovando D. 2014 Reflections on the success of traditional fisheries
-management. ICES J. Mar. Sci. 71, 1040–1046.
-
-Lewison, R.L., Crowder, L.B., Rimprove fishing gear ead, A.J. and Freeman, S.A.
-(2004) Understanding impacts of fisheries bycatch on marine megafauna. Trends in
-Ecology & Evolution 19, 598–604.
-
-Read, A.J., Drinker, P. and Northridge, S. (2006) Bycatch of marine mammals in
-US and global fisheries. Conservation Biology 20, 163–169. -->
-
-<!-- Reconciling the different levels of effects -->
-
-<!--In terrestrial agriculture for instance, there are many instances of
-specializing being profitable; drivers include the ability to specialize on
-high-profit cash crops (tobacco, cocoa), the availability of government
-agricultural subsidies (soybeans, corn in the USA), and farming on a large
-industrial scale (REF).-->
-
-<!-- Limitations + obvious extensions paragraph -->
-
-<!-- ### Implications for limited entry, ITQs, and catch shares -->
-
-<!-- - concerning because in many areas of the world and fisheries, regulations and -->
-<!--   market forces have encouraged specialization / limited (effective) -->
-<!--   diversification (e.g. multiple permits or diverse permits) -->
-
-<!-- - locking into permits limits ability to pick lower risk strategies and is -->
-<!--   getting people locked into low diversity permits that may be doing well now, -->
-<!--   but not necessarily always -->
 
 <!-- Conclusions + recommendations
 
@@ -392,6 +328,21 @@ industrial scale (REF).-->
   regulations when making management decisions
 -->
 
+<!--Our results provide additional support for the idea that individual fishers can
+reduce their income variability by diversifying their catch portfolios. However,
+most individuals do not change their catch diversity substantially from year to
+year [OLE: is there a supplemental figure or statistic that speaks to this
+point?], and most strategies adopted by Alaskan fishermen lie in a high-risk,
+high-reward quadrant in which reducing diversification increases both revenue
+variability and expected revenue. Previous work has suggested that changes to
+fisheries management such as limited entry or catch share programs may
+inadvertently act as barrier to diversification and promote specializing
+(Hilborn et al. 2003; Kasperski and Holland 2013). While some of these
+specialized fishing strategies may be associated with increased revenue
+variability, the benefit may be that they are also associated with increased
+revenue.-->
+
+TODO: finish this:
 External market forces may interact in concert with management regulations to
 promote specialization for fishers or other individuals dependent on natural
 resources. With increasing environmental variability and extreme events in
@@ -704,49 +655,4 @@ group *Applying portfolio effects to the Gulf of Alaska ecosystem: Did
 multi-scale diversity buffer against the Exxon Valdez oil spill?*. Other
 participants... Smith...
 
-<!-- # Notes -->
-
-<!-- ## @kasperski2013 -->
-<!-- - vessel-level CFEC data -->
-<!-- - dome-shaped result -->
-<!-- - Herfindahl-Hirschman Index/HHI (Simpson) -->
-<!-- - diversity decreasing for those still fishing in 2010, but not otherwise -->
-
-<!-- ## @sethi2012b -->
-<!-- - risk measures to 90 Alaskan fishing fishery/fleets -->
-<!-- - revenue more variable than catch (+ price = extra variability) -->
-<!-- - large catches, big fleets = lower risk -->
-
-<!-- ## @sethi2010b -->
-<!-- - risk management for fisheries review -->
-
-<!-- ## @sethi2012 -->
-<!-- - equal-share catch-pooling cooperatives in king and snow crab -->
-<!-- - "variability reduction depends on the degree of correlation amongst -->
-<!--   participants’ catches" -->
-
-<!-- ## @sethi2014 -->
-<!-- - community-level CFEC data -->
-<!-- - number of fisheries strongest predictor of (lower) CV/CVaR -->
-<!-- - also simpson index -->
-<!-- - suggest barriers to commercial entry increase community risk by restricting -->
-<!--   access to 'variety of fisheries' -->
-<!-- - some communities have limited ability to diversify; may need to diversify -->
-<!--   outside of fishing -->
-
-<!-- [@perruso2005] -->
-<!-- [@hilborn2001] -->
-<!-- [@edwards2004] -->
-<!-- [@trenkel2013] -->
-<!-- [@mumford2009] -->
-<!-- [@oostenbrugge2002] -->
-<!-- [@baldursson1997] -->
-<!-- [@jardine2015] -->
-<!-- [@sanchirico2008] -->
-
-<!-- vim: textwidth=80
-
-
-
-
--->
+<!-- vim: textwidth=80 -->
