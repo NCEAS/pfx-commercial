@@ -201,7 +201,7 @@ This reduced the rows (person-year combinations)
 in the final dataset from \Sexpr{ndat$annual} to
 \Sexpr{ndat$annual_diff}.
 
-TODO length(unique(pholders))
+% TODO length(unique(pholders))
 % Rows of data: \Sexpr{ndat$final}
 % Number of permit holders: \Sexpr{npholders}
 % Range of years: \Sexpr{range_yrs}
