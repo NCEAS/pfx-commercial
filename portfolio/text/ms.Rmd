@@ -294,73 +294,19 @@ addition to revenue or income variability, it is important to understand the
 benefits of diversification in the context of rare and extreme disturbances
 which occur in natural systems worldwide [@anderson2016].
 
-<!--
-Worldwide, fisheries confront the challenge of sustainable management (). While
-many fisheries are well managed and productive, many are also rebuilding from
-periods of over-exploitation (Worm et al. Science 2009). A common tactic to aid
-in fisheries rebuilding is to modify regulations to reduce the unintended
-harvest rebuilding stocks while allowing the continued harvest of healthy stocks
-(need REF). Such bycatch reduction is an important goal for both ecological
-(Crowder and Murawski 1998, Lewison et al. 2004) and economic (Curtis and Hicks
-2000; Chakravorty and Nemoto 2001) reasons. Cumulatively, though, regulatory
-changes for bycatch reduction as well as other reasons gradually lead to
-fisheries that target one or a few species and individual fishers wishing to
-participate in multiple fisheries must own (or purchase) multiple permits. Thus
-a general consequence of fisheries regulations that are shown to improve
-sustainability of fish stocks and avoid overfishing - including improved
-assessments (Hilborn and Ovando 2014) and individual quota systems (Costello et
-al. 2008 ) - may ultimately restrict individual diversification or at least make
-developing a diverse fishing portfolio more expensive. Add Alaska example of
-IFQs...?
--->
-
-<!-- Conclusions + recommendations
-
-- bring it out to wider than fisheries (farming, timber industry, ...)
-- 2 dimensions to think about (revenue and variability); and the trade-off is
-  fishery specific: effects within a permit strategy are permit specific;
-  sometimes make more money by specializing... some highly variable single
-  species permits make a ton of money
-- broadly, diversification can provide a powerful form of protection from
-  multiple sources of risk to income for those that rely on extracting natural
-  resources, but not all forms of diversification are equal, and on an
-  individual level there can be economic benefits to specializing and risks to
-  adjusting ones strategy
-- with increasing environmental variability and extremes due to climate change
-  those that rely on natural resources for their livelihoods need approaches to
-  buffer risk more than ever
-- regulations that limit the ability to diversify can have other considerable
-  benefits but it's important to be aware of trade-offs inherent in these
-  regulations when making management decisions
--->
-
-<!--Our results provide additional support for the idea that individual fishers can
-reduce their income variability by diversifying their catch portfolios. However,
-most individuals do not change their catch diversity substantially from year to
-year [OLE: is there a supplemental figure or statistic that speaks to this
-point?], and most strategies adopted by Alaskan fishermen lie in a high-risk,
-high-reward quadrant in which reducing diversification increases both revenue
-variability and expected revenue. Previous work has suggested that changes to
-fisheries management such as limited entry or catch share programs may
-inadvertently act as barrier to diversification and promote specializing
-(Hilborn et al. 2003; Kasperski and Holland 2013). While some of these
-specialized fishing strategies may be associated with increased revenue
-variability, the benefit may be that they are also associated with increased
-revenue.-->
-
-TODO: finish this:
-External market forces may interact in concert with management regulations to
-promote specialization for fishers or other individuals dependent on natural
-resources. With increasing environmental variability and extreme events in
-a changing climate [@easterling2000], it is particularly important that
-individuals who rely on natural resources as a primary source of income have
-strategies to reduce risk. Although variability in individual revenue may not be
-actively incorporated into many management decisions, analyses like ours help to
-understand the range of diversification strategies available and how their
-benefits may change over time.
-
-<!--take home is the management context is key and controls show that
-it's more complicated-->
+With increasing environmental variability and extreme events in a changing
+climate [@easterling2000], it is particularly important that individuals who
+rely on natural resources as a primary source of income, such as fishers,
+farmers, and forestry workers, have effective strategies to reduce risk. While
+diversification can provide a powerful form of risk buffering, we have shown
+that the relationship between individual changes to diversification and income
+variability is complex and context specific. Furthermore, external market forces
+can interact with management regulations, which have other considerable
+benefits, to restrict individual diversification opportunities and promote
+specialization. Although variability in individual revenue may not be actively
+incorporated into management decisions, analyses such as ours help to understand
+the range of diversification strategies available, trade-offs inherent in such
+management decisions, and how these trade-offs may change over time.
 
 \bibliographystyle{pnas2011}
 \bibliography{refs}
@@ -451,10 +397,6 @@ medians and 50\% credible intervals of posteriors. The effect of generalizing
 \clearpage
 
 # Materials and methods
-
-<!-- TODO: get fig:re in results -->
-<!-- Our model estimates overall average effects (Fig. S\ref{fig:fe}) and
-effects --> <!-- that vary by strategy (Fig. S\ref{fig:re}). -->
 
 We obtained commercial fisheries landings and revenue data for all permit
 holders in Alaska from `r range_yrs[1]` to `r range_yrs[2]` from the Alaskan
