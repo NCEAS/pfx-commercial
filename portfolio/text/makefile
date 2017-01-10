@@ -36,7 +36,8 @@ dropbox: $(TEXT).pdf $(SOM).pdf $(TEXT).rtf
 	cp $(TEXT).rtf ~/Dropbox/Public/$(TEXT).rtf
 
 rtf: $(TEXT).pdf
-	latex2rtf -f0 -M6 -E0 $(TEXT).tex
+	latex2rtf -f0 -M3 -E0 $(TEXT).tex
+	# latex2rtf $(TEXT).tex
 
 clean:
 	latexmk -c

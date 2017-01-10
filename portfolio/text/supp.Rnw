@@ -129,7 +129,7 @@ A list of all CFEC permit codes and descriptions is available at:
 We then proceeded to combine similar permits in the following steps.
 We combined a number of permits that were the same except for vessel size.
 We combined permits for
-otter troll,
+otter trawl,
 longline finfish,
 pot gear.
 king crab,
@@ -147,8 +147,8 @@ herring roe gillnet,
 herring hand picked,
 herring pound fishing,
 sea cucumber,
-sea urchin,
-tanner crabs
+sea urchin, and
+tanner crabs.
 
 Combining salmon permits was more difficult because
 the species composition varies widely based on geography.
@@ -178,6 +178,8 @@ and Kuskokwim because of similar species compositions.
 The remaining salmon permits were relatively unique
 and were left ungrouped.
 
+% TODO: Are you saying that PWS sockeye permits were combined with BB sockeye permits?I can't remember but that's what it sounds like so I just wanted to be clear.
+
 After this process of combining permits,
 we were left with \Sexpr{n_grouped_permits}
 unique fishing strategies (Table~\ref{tab:strategies}),
@@ -201,7 +203,7 @@ This reduced the rows (person-year combinations)
 in the final dataset from \Sexpr{ndat$annual} to
 \Sexpr{ndat$annual_diff}.
 
-TODO length(unique(pholders))
+% TODO length(unique(pholders))
 % Rows of data: \Sexpr{ndat$final}
 % Number of permit holders: \Sexpr{npholders}
 % Range of years: \Sexpr{range_yrs}
@@ -287,7 +289,7 @@ species diversity from top to bottom.}
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1\textwidth]{../figs/stan-gg-spoke-all.pdf}
-\caption{The effect of adding a permit to ones strategy
+\caption{The effect of adding a permit to one's strategy
 on estimated revenue variability and median revenue.
 This is an extended version of Fig.~2 that includes all major
 strategy combinations.}
@@ -299,7 +301,7 @@ strategy combinations.}
 \begin{center}
 \includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid.png}
 \caption{The log-absolute value residuals from the mean-component model (Eq.~\ref{eq:mean}).
-It is these residuals that are modeled in the variance-component model
+These residuals are modelled in the variance-component model
 (Eq.~\ref{eq:cv}).
 Breakpoint linear regression fits are overlaid in red for visual interpretation.}
 \label{fig:resid}
