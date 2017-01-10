@@ -1,0 +1,2703 @@
+stat6,region,assigned_by,Suggested_Change,Anne_Region,ADF.G_Region,Notes,final
+0,NA,AB (Groundfish-Salmon),0,NA,NA,"FISHERY_GROUPs = H, S, I. Lots of harvest. Inverts. Max of 100K pounds since 1985",NA
+51,NA,AB (Groundfish-Salmon),51,,4,Default statistical areas - reference NMFS Reporting Areas. Lots of harvest.,NA
+52,NA,AB (Groundfish-Salmon),52,,4,Default statistical areas - reference NMFS Reporting Areas,NA
+140,SEAK Outside,AB (IPHC),NA,,NA,,SEAK Outside
+141,SEAK Outside,AB (IPHC),NA,,NA,,SEAK Outside
+142,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+143,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+144,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+150,SEAK Outside,AB (IPHC),NA,,NA,,SEAK Outside
+151,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+152,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+153,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+160,SEAK Outside,AB (IPHC),NA,,NA,,SEAK Outside
+161,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+162,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+163,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+170,SEAK Outside,AB (IPHC),NA,,NA,,SEAK Outside
+171,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+172,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+173,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+174,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+181,SEAK Outside,AB (IPHC),NA,,NA,,SEAK Outside
+182,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+183,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+184,SEAK Inside,AB (IPHC),NA,,NA,,SEAK Inside
+185,SEAK Outside,AB (IPHC),NA,,NA,,SEAK Outside
+190,Yakutat,AB (IPHC),NA,,NA,,Yakutat
+200,Yakutat,AB (IPHC),NA,,NA,,Yakutat
+210,Yakutat,AB (IPHC),NA,,NA,,Yakutat
+220,Yakutat,AB (IPHC),NA,,NA,,Yakutat
+230,PWS,AB (IPHC),NA,,NA,,PWS
+231,PWS,AB (IPHC),NA,,NA,,PWS
+232,PWS,AB (IPHC),NA,,NA,,PWS
+240,PWS,AB (IPHC),NA,,NA,,PWS
+241,PWS,AB (IPHC),NA,,NA,,PWS
+242,PWS,AB (IPHC),NA,,NA,,PWS
+250,Cook Inlet,AB (IPHC),NA,,NA,,Cook Inlet
+251,Cook Inlet,AB (IPHC),NA,,NA,,Cook Inlet
+260,Cook Inlet,AB (IPHC),NA,,NA,,Cook Inlet
+261,Cook Inlet,AB (IPHC),NA,,NA,,Cook Inlet
+270,Kodiak,AB (IPHC),NA,,NA,,Kodiak
+271,Kodiak,AB (IPHC),NA,,NA,,Kodiak
+272,Kodiak,AB (IPHC),NA,,NA,,Kodiak
+280,Kodiak,AB (IPHC),NA,,NA,,Kodiak
+281,Kodiak,AB (IPHC),NA,,NA,,Kodiak
+290,Kodiak,AB (IPHC),NA,,NA,,Kodiak
+291,Kodiak,AB (IPHC),NA,,NA,,Kodiak
+300,Alaska Peninsula,AB (IPHC),NA,,NA,,Alaska Peninsula
+310,Alaska Peninsula,AB (IPHC),NA,,NA,,Alaska Peninsula
+320,Alaska Peninsula,AB (IPHC),NA,,NA,,Alaska Peninsula
+330,Alaska Peninsula,AB (IPHC),NA,,NA,,Alaska Peninsula
+340,Alaska Peninsula,AB (IPHC),NA,,NA,,Alaska Peninsula
+350,Alaska Peninsula,AB (IPHC),NA,,NA,,Alaska Peninsula
+360,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+370,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+380,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+390,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+395,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+400,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+410,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+420,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+430,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+440,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+450,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+460,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+470,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+480,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+490,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+500,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+513,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+515,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+517,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+518,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+519,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+521,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+530,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+540,NA,AB (Groundfish-Salmon),540,,4,Spans western and eastern aleutians. ~1 million lbs.,NA
+541,NA,AB (Groundfish-Salmon),541,,4,Eastern\Aleutian Islands but also cuts into our designation of western Aleutians,NA
+610,NA,AB (Groundfish-Salmon),610,Alaska Peninsula,4,"Fed. 610. Western Gulf of Alaska, Shumagin District. >1 million lbs.",NA
+620,NA,AB (Groundfish-Salmon),620,Kodiak,4,"Fed. 620. Central Gulf of Alaska, Chirikof District. >3 million lbs.",NA
+630,NA,AB (Groundfish-Salmon),630,PWS,2,"Fed. 630. Central Gulf of Alaska, Kodiak District. >13 million pounds.",NA
+640,NA,AB (Groundfish-Salmon),640,Yakutat,2,"Eastern Gulf of Alaska, West Yakutat District",NA
+650,NA,AB (Groundfish-Salmon),650,SEAK Outside,1,"Eastern Gulf of Alaska, Southeast Outside District",NA
+659,NA,AB (Groundfish-Salmon),659,SEAK Inside,1,"Eastern Gulf of Alaska, Southeast Inside District",NA
+680,NA,AB (Groundfish-Salmon),680,SEAK Outside,1,"Eastern Gulf of Alaska, Southeast Outside District",NA
+690,NA,AB (Groundfish-Salmon),690,Unassigned,4,GOA Outside the U.S. EEZ. Harvest >350000 lbs.,NA
+1065,NA,AB (Groundfish-Salmon),1065,SEAK Inside,1,"Federal 659. Eastern Gulf of Alaska, Southeast Inside District. >120K lbs.",NA
+2065,NA,AB (Groundfish-Salmon),2065,SEAK Inside,1,"Federal 659. Eastern Gulf of Alaska, Southeast Inside District. >2 million lbs.",NA
+3065,NA,AB (Groundfish-Salmon),3065,SEAK Outside,1,"Federal 650. Eastern Gulf of Alaska, Southeast Outside District. Only ~9K pounds harvest",NA
+4065,NA,AB (Groundfish-Salmon),4065,SEAK Outside,1,"Federal 650. Eastern Gulf of Alaska, Southeast Outside District. Only ~6K pounds harvest",NA
+5065,NA,AB (Groundfish-Salmon),5065,SEAK Outside,1,"Federal 650. Eastern Gulf of Alaska, Southeast Outside District. Only ~20K pounds harvest",NA
+10100,NA,AB (Groundfish-Salmon),10110,SEAK Inside,1,District-wide statistical areas for Southeast Alaska. Used historically to record groundfish and shellfish catch when only the district was known. They are currently not valid statistical areas for either fishery. >5 million pounds.,SEAK Inside
+10110,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10111,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10113,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10115,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10121,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10122,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10123,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10124,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10125,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10126,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10127,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10128,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10129,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10130,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10140,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10141,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10142,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10143,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10144,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10145,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10146,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10147,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10148,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10151,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10153,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10155,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10160,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10171,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10173,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10175,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10177,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10180,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10185,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10190,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10195,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10200,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10209,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10210,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10215,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10220,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10230,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10240,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10250,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10260,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10270,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10280,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10300,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10311,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10315,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10321,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10323,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10325,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10330,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10340,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10350,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10360,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10365,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10370,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10380,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10390,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10400,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10410,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10420,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10430,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10435,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10440,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10450,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10500,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10510,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10520,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10531,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10532,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10541,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10542,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10543,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10550,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10600,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10610,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10620,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10622,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10625,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10630,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10635,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10641,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10642,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10643,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10644,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10700,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10710,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10720,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10730,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10735,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10740,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10745,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10747,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10800,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10810,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10820,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10830,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10840,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10841,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10845,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10850,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10860,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10900,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10910,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10911,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10912,SEAK Inside,EW,NA,,NA,,SEAK Inside
+10913,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10920,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10930,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10940,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10941,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10942,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10943,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10944,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10945,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10950,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10951,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10952,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10961,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10962,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+10963,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11000,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11011,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11012,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11013,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11014,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11015,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11016,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11017,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11021,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11022,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11023,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11024,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11031,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11032,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11033,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11034,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11100,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11111,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11112,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11113,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11114,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11115,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11116,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11117,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11120,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11121,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11131,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11132,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11133,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11134,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11135,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11140,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11141,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11143,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11150,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11155,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11190,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11200,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11211,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11212,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11213,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11214,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11215,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11216,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11217,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11218,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11219,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11221,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11222,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11241,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11242,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11243,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11244,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11245,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11246,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11247,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11248,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11250,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11261,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11263,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11265,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11267,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11271,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11272,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11273,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11280,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11290,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11300,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11301,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11311,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11312,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11313,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11321,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11322,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11330,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11331,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11332,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11333,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11334,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11335,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11336,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11337,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11338,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11340,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11341,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11342,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11343,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11344,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11345,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11351,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11352,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11353,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11354,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11355,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11356,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11357,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11358,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11359,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11361,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11362,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11363,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11364,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11365,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11366,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11371,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11372,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11373,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11381,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11391,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11392,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11393,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11394,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11395,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11396,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11397,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11400,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11421,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11423,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11425,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11427,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11430,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11431,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11432,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11433,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11434,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11440,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11450,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11460,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11470,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11471,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11472,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11473,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11474,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11475,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11477,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11480,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11500,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11510,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11511,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11520,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11530,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11531,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11532,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11533,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11534,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11535,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11600,SEAK Inside,EW,NA,,NA,,SEAK Inside
+11611,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11612,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11613,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+11614,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+15000,SEAK Inside,EW,NA,,NA,,SEAK Inside
+15200,SEAK Inside,EW,NA,,NA,,SEAK Inside
+15400,SEAK Inside,EW,NA,,NA,,SEAK Inside
+15600,SEAK Inside,EW,NA,,NA,,SEAK Inside
+15700,SEAK Inside,EW,NA,,NA,,SEAK Inside
+18100,Yakutat,EW,NA,,NA,,Yakutat
+18110,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18140,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18150,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18160,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18220,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18230,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18240,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18250,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18252,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18255,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18260,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18270,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18280,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18300,Yakutat,EW,NA,,NA,,Yakutat
+18310,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18311,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18320,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18325,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18330,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18340,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18355,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18380,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18390,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18505,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18510,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18615,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18900,Yakutat,EW,NA,,NA,,Yakutat
+18930,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18940,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+18950,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+19100,Yakutat,EW,NA,,NA,,Yakutat
+19110,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+19120,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+19125,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+19241,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+19242,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+19250,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+19255,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+19260,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+20010,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+20020,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+20030,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+20100,PWS,EW,NA,,NA,,PWS
+20101,PWS,EW,NA,,NA,,PWS
+20102,PWS,EW,NA,,NA,,PWS
+20103,PWS,EW,NA,,NA,,PWS
+20104,PWS,EW,NA,,NA,,PWS
+20105,PWS,EW,NA,,NA,,PWS
+20106,PWS,EW,NA,,NA,,PWS
+20200,PWS,EW,NA,,NA,,PWS
+20201,PWS,EW,NA,,NA,,PWS
+20202,PWS,EW,NA,,NA,,PWS
+20203,PWS,EW,NA,,NA,,PWS
+20204,PWS,EW,NA,,NA,,PWS
+20205,PWS,EW,NA,,NA,,PWS
+20208,PWS,EW,NA,,NA,,PWS
+20209,PWS,EW,NA,,NA,,PWS
+20210,PWS,EW,NA,,NA,,PWS
+20211,PWS,EW,NA,,NA,,PWS
+20300,PWS,EW,NA,,NA,,PWS
+20301,PWS,EW,NA,,NA,,PWS
+20302,PWS,EW,NA,,NA,,PWS
+20303,PWS,EW,NA,,NA,,PWS
+20304,PWS,EW,NA,,NA,,PWS
+20305,PWS,EW,NA,,NA,,PWS
+20306,PWS,EW,NA,,NA,,PWS
+20307,PWS,EW,NA,,NA,,PWS
+20308,PWS,EW,NA,,NA,,PWS
+20310,PWS,EW,NA,,NA,,PWS
+20311,PWS,EW,NA,,NA,,PWS
+20312,PWS,EW,NA,,NA,,PWS
+20400,PWS,EW,NA,,NA,,PWS
+20401,PWS,EW,NA,,NA,,PWS
+21210,PWS,EW,NA,,NA,,PWS
+21211,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+21215,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+21220,PWS,EW,NA,,NA,,PWS
+21221,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+21225,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+21230,PWS,EW,NA,,NA,,PWS
+21231,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+21235,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22110,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22120,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22130,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22140,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22145,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22150,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22160,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22161,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22162,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22167,PWS,EW,NA,,NA,,PWS
+22168,PWS,EW,NA,,NA,,PWS
+22210,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22220,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22221,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22222,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22227,PWS,EW,NA,,NA,,PWS
+22228,PWS,EW,NA,,NA,,PWS
+22230,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22235,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22240,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22250,PWS,EW,NA,,NA,,PWS
+22310,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22311,PWS,EW,NA,,NA,,PWS
+22312,PWS,EW,NA,,NA,,PWS
+22320,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22321,PWS,EW,NA,,NA,,PWS
+22322,PWS,EW,NA,,NA,,PWS
+22330,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22340,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22347,PWS,EW,NA,,NA,,PWS
+22348,PWS,EW,NA,,NA,,PWS
+22410,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22420,PWS,EW,NA,,NA,,PWS
+22430,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22440,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22510,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22520,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22521,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22527,PWS,EW,NA,,NA,,PWS
+22528,PWS,EW,NA,,NA,,PWS
+22529,PWS,EW,NA,,NA,,PWS
+22530,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22610,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22620,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22630,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22640,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22650,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22651,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22660,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22661,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22662,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22667,PWS,EW,NA,,NA,,PWS
+22668,PWS,EW,NA,,NA,,PWS
+22710,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22720,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22727,PWS,EW,NA,,NA,,PWS
+22730,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22740,PWS,EW,NA,,NA,,PWS
+22810,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22820,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22830,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22840,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22850,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22860,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22870,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+22910,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+23105,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23110,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23120,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23125,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23130,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23140,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23150,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23160,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23170,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23180,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23185,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23190,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23201,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23202,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23203,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23204,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23205,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23206,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23207,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23208,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23209,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23210,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23211,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23212,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23213,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23215,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23221,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23222,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23223,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23225,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23230,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+23235,Cook Inlet,EW,NA,,NA,,Cook Inlet
+23236,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24106,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24108,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24109,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24110,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24111,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24112,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24113,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24114,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24115,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24116,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24117,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24118,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24120,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24130,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24160,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24190,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24191,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24410,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24421,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24422,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24425,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24426,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24430,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24431,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24432,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24440,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24441,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24442,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24450,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24451,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24455,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24456,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24457,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24460,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24461,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24470,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24510,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24520,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24530,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24540,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24550,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24555,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24560,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24570,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24580,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24590,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24610,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24620,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24710,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24720,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24730,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24741,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24742,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24743,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24750,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24770,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24780,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24790,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24820,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24910,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24920,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24925,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24930,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24935,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24940,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24945,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24950,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24952,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24955,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24960,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24965,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24970,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24972,Cook Inlet,EW,NA,,NA,,Cook Inlet
+24975,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24978,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24980,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24983,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24985,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+24990,Cook Inlet,EW,NA,,NA,,Cook Inlet
+25105,Kodiak,EW,NA,,NA,,Kodiak
+25110,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25111,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25112,Kodiak,EW,NA,,NA,,Kodiak
+25120,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25130,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25140,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25141,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25150,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25160,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25170,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25181,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25182,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25183,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25184,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25185,Kodiak,EW,NA,,NA,,Kodiak
+25190,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25201,Kodiak,EW,NA,,NA,,Kodiak
+25210,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25220,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25230,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25231,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25232,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25233,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25234,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25235,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25238,Kodiak,EW,NA,,NA,,Kodiak
+25311,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25312,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25313,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25314,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25331,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25332,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25333,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25334,Kodiak,EW,NA,,NA,,Kodiak
+25335,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25410,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25420,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25421,Kodiak,EW,NA,,NA,,Kodiak
+25430,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25431,Kodiak,EW,NA,,NA,,Kodiak
+25440,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25441,Kodiak,EW,NA,,NA,,Kodiak
+25450,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25510,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25520,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25603,Kodiak,EW,NA,,NA,,Kodiak
+25610,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25615,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25620,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25625,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25630,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25640,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25710,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25720,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25730,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25740,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25741,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25742,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25743,Kodiak,EW,NA,,NA,,Kodiak
+25750,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25760,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25770,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25806,Kodiak,EW,NA,,NA,,Kodiak
+25810,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25820,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25830,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25840,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25851,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25852,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25853,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25854,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25855,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25860,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25870,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25880,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25885,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25890,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25910,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25921,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25922,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25923,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25924,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25925,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25926,Kodiak,EW,NA,,NA,,Kodiak
+25927,Kodiak,EW,NA,,NA,,Kodiak
+25930,Kodiak,EW,NA,,NA,,Kodiak
+25931,Kodiak,EW,NA,,NA,,Kodiak
+25932,Kodiak,EW,NA,,NA,,Kodiak
+25933,Kodiak,EW,NA,,NA,,Kodiak
+25934,Kodiak,EW,NA,,NA,,Kodiak
+25935,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25936,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25937,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25938,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25939,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25940,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25941,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25942,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+25943,Kodiak,EW,NA,,NA,,Kodiak
+25944,Kodiak,EW,NA,,NA,,Kodiak
+25945,Kodiak,EW,NA,,NA,,Kodiak
+25946,Kodiak,EW,NA,,NA,,Kodiak
+26210,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26215,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26220,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26225,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26227,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26230,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26235,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26240,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26245,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26250,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26255,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26260,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26265,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26270,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26275,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26280,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+26285,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+26290,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+26295,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27110,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27220,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27230,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27240,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27250,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27260,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27262,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27264,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27270,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27272,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27280,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27290,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27292,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27296,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27370,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27372,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27374,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27380,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27382,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27384,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27390,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27393,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+27394,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27395,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+27540,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27550,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+27560,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28110,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28115,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28120,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28125,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28130,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28131,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28132,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28133,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28134,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28135,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28136,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28140,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28150,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28155,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28160,NA,AB (Groundfish-Salmon),28160,Kodiak,4,~4 million pounds of salmon harvested,Alaska Peninsula
+28162,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28165,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28167,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28170,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28180,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28190,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28210,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28211,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28212,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28213,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28214,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28215,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28220,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28221,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28222,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28223,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28224,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28225,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28230,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28232,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28235,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28240,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28242,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28245,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28250,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28265,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28270,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28275,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28280,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28310,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28312,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28313,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28315,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28317,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28320,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28321,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28323,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28324,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28325,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28326,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28331,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28332,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28333,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28334,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28335,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28341,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28342,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28351,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28352,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28361,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28362,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28363,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28364,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28365,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28370,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28375,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28380,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28390,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28410,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28420,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28424,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28436,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28437,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28438,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28439,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28440,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28442,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28445,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28447,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28450,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28455,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28460,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28462,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28465,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28467,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28470,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28472,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+28475,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28480,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28490,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28510,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28520,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28530,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+28540,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+30214,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+30216,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+30217,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+30218,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+30219,Eastern Aleutians,EW,NA,,NA,,Eastern Aleutians
+30221,Eastern Aleutians,EW,NA,,NA,,Eastern Aleutians
+30222,Eastern Aleutians,EW,NA,,NA,,Eastern Aleutians
+30224,Eastern Aleutians,EW,NA,,NA,,Eastern Aleutians
+30225,Eastern Aleutians,EW,NA,,NA,,Eastern Aleutians
+30228,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+30231,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+30235,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+30240,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+30245,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+30250,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+30533,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+30542,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+30545,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+30546,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+30547,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+30549,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+30670,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+30842,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+30843,Western Aleutians,EW,NA,,NA,,Western Aleutians
+30932,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+30933,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+30938,Western Aleutians,EW,NA,,NA,,Western Aleutians
+30943,Western Aleutians,EW,NA,,NA,,Western Aleutians
+31120,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31132,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31152,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31158,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31160,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31210,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31220,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31240,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31310,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31330,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31410,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+31412,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31420,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31430,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31440,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+31510,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+31511,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31512,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+31520,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31550,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+31553,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+31610,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31620,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31622,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31625,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31710,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31720,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+31810,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+31820,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+32005,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+32010,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+32020,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+32030,Alaska Peninsula,EW,NA,,NA,,Alaska Peninsula
+32100,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32105,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32110,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32120,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32130,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32133,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32140,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32150,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32160,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32170,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32180,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32200,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32210,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32220,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32230,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32240,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32250,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32260,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32270,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32400,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32411,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32412,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32413,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32416,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32417,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32420,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32421,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32422,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32423,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32424,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32425,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32426,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32429,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32500,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32510,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32511,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32520,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32521,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32525,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32530,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32531,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32532,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32533,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32534,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32535,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32540,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32541,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32600,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32610,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32611,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32612,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32620,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32621,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32622,Bristol Bay,EW,NA,,NA,,Bristol Bay
+32630,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32631,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32640,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+32670,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32671,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+32672,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+33101,Kotzebue,AB (Groundfish-Salmon),NA,,NA,,Kotzebue
+33102,Kotzebue,AB (Groundfish-Salmon),NA,,NA,,Kotzebue
+33103,Kotzebue,AB (Groundfish-Salmon),NA,,NA,,Kotzebue
+33104,Kotzebue,AB (Groundfish-Salmon),NA,,NA,,Kotzebue
+33105,Kotzebue,AB (Groundfish-Salmon),NA,,NA,,Kotzebue
+33106,Kotzebue,AB (Groundfish-Salmon),NA,,NA,,Kotzebue
+33146,NA,AB (Groundfish-Salmon),33146,NA,3,Hist Data/Unresearched  (added Jan04). ~35K pounds,Unassigned
+33150,NA,AB (Groundfish-Salmon),33150,NA,3,Hist Data/Unresearched  (added Jan04). 117 lbs.,Kotzebue
+33200,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+33254,Norton Sound,AB (Herring),NA,,NA,,Kotzebue
+33256,Norton Sound,AB (Herring),NA,,NA,,Kotzebue
+33258,NA,AB (Herring),33258,NA,3,UnResearched > Last Used: 88. 150K pounds.,Kotzebue
+33310,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+33320,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+33330,NA,AB (Groundfish-Salmon),33330,Norton Sound,3,"Fed. 650. Eastern Gulf of Alaska, Southeast Outside District. LOTS of salmon harvest!",Norton Sound
+33331,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+33332,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+33333,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+33340,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+33350,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+33360,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+33370,Norton Sound,AB (Herring),NA,,NA,,Norton Sound
+33372,Norton Sound,AB (Herring),NA,,NA,,Norton Sound
+33374,Norton Sound,AB (Herring),NA,,NA,,Norton Sound
+33377,Norton Sound,AB (Herring),NA,,NA,,Norton Sound
+33378,Norton Sound,AB (Herring),NA,,NA,,Norton Sound
+33380,Norton Sound,AB (Herring),NA,,NA,,Norton Sound
+33408,Yukon,AB (Herring),NA,,NA,,Yukon
+33409,Yukon,AB (Herring),NA,,NA,,Yukon
+33411,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33412,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33413,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33414,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33415,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33416,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33417,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33418,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33421,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33422,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33423,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33424,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33425,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33431,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33432,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33441,NA,AB (Groundfish-Salmon),33441,Yukon,3,~1.7 million lbs. salmon since 1985.,Yukon
+33442,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33443,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33444,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33445,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33446,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33447,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33451,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33452,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33453,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33454,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33455,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+33461,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33462,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33463,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+33511,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33512,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33513,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33514,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33520,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33530,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33540,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33549,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33550,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33560,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33570,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+33580,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+34000,NA,AB (Groundfish-Salmon),34000,Bristol Bay,2,UnResearched > Last Used: 85 . Only 22K lbs. herring.,Bristol Bay
+51011,Kodiak,EW,NA,,NA,,Kodiak
+51021,Kodiak,EW,NA,,NA,,Kodiak
+51031,Kodiak,EW,NA,,NA,,Kodiak
+51032,Kodiak,EW,NA,,NA,,Kodiak
+51041,Kodiak,EW,NA,,NA,,Kodiak
+51042,Kodiak,EW,NA,,NA,,Kodiak
+51051,Kodiak,EW,NA,,NA,,Kodiak
+51061,Kodiak,EW,NA,,NA,,Kodiak
+51071,Kodiak,EW,NA,,NA,,Kodiak
+51072,Kodiak,EW,NA,,NA,,Kodiak
+51073,Kodiak,EW,NA,,NA,,Kodiak
+51081,Kodiak,EW,NA,,NA,,Kodiak
+51091,Kodiak,EW,NA,,NA,,Kodiak
+51092,Kodiak,EW,NA,,NA,,Kodiak
+51093,Kodiak,EW,NA,,NA,,Kodiak
+51101,Kodiak,EW,NA,,NA,,Kodiak
+51102,Kodiak,EW,NA,,NA,,Kodiak
+51103,Kodiak,EW,NA,,NA,,Kodiak
+52011,Kodiak,EW,NA,,NA,,Kodiak
+52021,Kodiak,EW,NA,,NA,,Kodiak
+52022,Kodiak,EW,NA,,NA,,Kodiak
+52031,Kodiak,EW,NA,,NA,,Kodiak
+52032,Kodiak,EW,NA,,NA,,Kodiak
+52033,Kodiak,EW,NA,,NA,,Kodiak
+52034,Kodiak,EW,NA,,NA,,Kodiak
+52035,Kodiak,EW,NA,,NA,,Kodiak
+53011,Kodiak,EW,NA,,NA,,Kodiak
+53021,Kodiak,EW,NA,,NA,,Kodiak
+53031,Kodiak,EW,NA,,NA,,Kodiak
+53032,Kodiak,EW,NA,,NA,,Kodiak
+53033,Kodiak,EW,NA,,NA,,Kodiak
+53041,Kodiak,EW,NA,,NA,,Kodiak
+53051,Kodiak,EW,NA,,NA,,Kodiak
+56011,Kodiak,EW,NA,,NA,,Kodiak
+56021,Kodiak,EW,NA,,NA,,Kodiak
+56031,Kodiak,EW,NA,,NA,,Kodiak
+56032,Kodiak,EW,NA,,NA,,Kodiak
+56041,Kodiak,EW,NA,,NA,,Kodiak
+56042,Kodiak,EW,NA,,NA,,Kodiak
+56051,Kodiak,EW,NA,,NA,,Kodiak
+56052,Kodiak,EW,NA,,NA,,Kodiak
+56053,Kodiak,EW,NA,,NA,,Kodiak
+56061,Kodiak,EW,NA,,NA,,Kodiak
+56062,Kodiak,EW,NA,,NA,,Kodiak
+57011,Kodiak,EW,NA,,NA,,Kodiak
+57012,Kodiak,EW,NA,,NA,,Kodiak
+57013,Kodiak,EW,NA,,NA,,Kodiak
+57014,Kodiak,EW,NA,,NA,,Kodiak
+57021,Kodiak,EW,NA,,NA,,Kodiak
+57031,Kodiak,EW,NA,,NA,,Kodiak
+57041,Kodiak,EW,NA,,NA,,Kodiak
+57042,Kodiak,EW,NA,,NA,,Kodiak
+57051,Kodiak,EW,NA,,NA,,Kodiak
+57052,Kodiak,EW,NA,,NA,,Kodiak
+57053,Kodiak,EW,NA,,NA,,Kodiak
+57054,Kodiak,EW,NA,,NA,,Kodiak
+57071,Kodiak,EW,NA,,NA,,Kodiak
+57072,Kodiak,EW,NA,,NA,,Kodiak
+57073,Kodiak,EW,NA,,NA,,Kodiak
+58021,Kodiak,EW,NA,,NA,,Kodiak
+58031,Kodiak,EW,NA,,NA,,Kodiak
+58041,Kodiak,EW,NA,,NA,,Kodiak
+58051,Kodiak,EW,NA,,NA,,Kodiak
+58061,Kodiak,EW,NA,,NA,,Kodiak
+58071,Kodiak,EW,NA,,NA,,Kodiak
+58081,Kodiak,EW,NA,,NA,,Kodiak
+58091,Kodiak,EW,NA,,NA,,Kodiak
+58101,Kodiak,EW,NA,,NA,,Kodiak
+59021,Kodiak,EW,NA,,NA,,Kodiak
+59041,Kodiak,EW,NA,,NA,,Kodiak
+59051,Kodiak,EW,NA,,NA,,Kodiak
+59071,Kodiak,EW,NA,,NA,,Kodiak
+59101,Kodiak,EW,NA,,NA,,Kodiak
+99998,NA,AB (Groundfish-Salmon),NA,NA,NA,interim value for FT entry,NA
+99999,NA,AB (Groundfish-Salmon),NA,NA,NA,missing value for FT entry,NA
+152100,NA,AB (Groundfish-Salmon),755210,Western Aleutians,4,"Or 755210. 2.5 million pounds of sablefish, 1 vessel. Used 1 instead of 7. Based on previous deliveries.",Unassigned
+177737,NA,AB (Groundfish-Salmon),325533,SEAK Inside,1,1 vessel. All other harvest in SEAK: 315502 to 325602. State waters only.,Unassigned
+305431,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+305501,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+305502,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+305503,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+305531,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+305532,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+315401,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+315431,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+315432,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+315501,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+315502,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+315503,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+315504,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+315531,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+315532,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+315600,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325401,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325402,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+325431,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325432,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325433,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325434,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+325501,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325502,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325503,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325504,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325531,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325532,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325533,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325600,NA,AB (Groundfish-Salmon),325602,SEAK Inside,1,1 vessel. All other harvest from 325602. State waters.,SEAK Inside
+325601,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325602,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325603,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325604,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325631,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325632,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+325700,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335401,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+335431,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+335432,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335433,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335501,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+335502,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335503,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335504,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335505,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335506,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335531,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335532,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335533,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335534,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335535,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335601,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335602,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335603,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335631,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335632,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335633,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335634,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335701,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335702,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335703,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335704,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335705,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335731,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335732,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335733,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335734,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335735,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+335830,NA,AB (Groundfish-Salmon),355830,SEAK Inside,1,3 permist. 1986-2004.,SEAK Inside
+345401,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+345430,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+345500,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+345531,NA,AB (Groundfish-Salmon),345531,SEAK Inside,1,Lots of permits and deliveries to old code,SEAK Inside
+345532,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345533,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345534,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345535,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345536,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345537,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+345601,NA,AB (Groundfish-Salmon),345601,SEAK Outside,1,,SEAK Inside
+345602,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345603,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345604,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345605,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345606,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345607,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+345608,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345630,NA,AB (Groundfish-Salmon),345630,SEAK Inside,1,Very little harvest,SEAK Inside
+345631,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345632,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345701,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345702,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345703,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345704,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345705,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345706,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345731,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345732,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345801,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345802,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345803,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+345830,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355300,NA,AB (Groundfish-Salmon),355300,Unassigned,NA,Outside EEZ,Unassigned
+355304,NA,AB (Groundfish-Salmon),355304,Unassigned,NA,Only 3494 lbs. harvest in 1985,Unassigned
+355401,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+355430,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+355500,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+355530,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+355601,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+355602,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355631,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+355632,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355633,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355634,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355635,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355701,NA,AB (Groundfish-Salmon),355701,SEAK Outside,1,,SEAK Inside
+355702,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355703,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355704,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355705,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355706,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355707,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355731,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355732,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355733,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355801,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355802,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355830,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+355900,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+365430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+365434,NA,AB (Groundfish-Salmon),365434,SEAK Outside,1,,Unassigned
+365500,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+365530,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+365600,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+365630,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+365701,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+365702,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365731,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+365732,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365733,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365734,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365735,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365801,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+365802,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365803,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365804,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365805,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365830,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+365831,NA,AB (Groundfish-Salmon),365831,SEAK Inside,1,,SEAK Inside
+375530,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+375532,NA,AB (Groundfish-Salmon),375532,SEAK Outside,1,,Unassigned
+375600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+375630,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+375700,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+375730,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+375800,NA,AB (Groundfish-Salmon),375800,SEAK Outside,1,,SEAK Outside
+375801,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+375802,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+375831,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+375832,SEAK Inside,AB (Groundfish-Salmon),NA,,NA,,SEAK Inside
+375901,NA,AB (Groundfish-Salmon),375901,SEAK Inside,1,24 pounds,SEAK Outside
+385400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+385430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+385500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+385600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+385630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+385700,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+385730,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+385800,SEAK Outside,AB (Groundfish-Salmon),NA,,NA,,SEAK Outside
+385831,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+385832,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+385901,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+385902,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+395500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+395600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+395630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+395700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+395730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+395800,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+395830,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+395900,NA,AB (Groundfish-Salmon),395900,Yakutat,1,,Yakutat
+395901,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+395902,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+395931,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+405430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+405530,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+405630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+405700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+405730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+405800,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+405830,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+405900,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+405931,NA,AB (Groundfish-Salmon),405931,Yakutat,1,"405931 Split into 405933, 405934. Clarify federal/state waters near Yakutat Bay, new IBS",Yakutat
+405932,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+405933,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+405934,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+415500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+415530,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+415600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+415630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+415800,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+415830,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+415900,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+415931,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+415932,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+425530,NA,AB (Groundfish-Salmon),425530,Unassigned,NA,Fed 690. GOA Outside the U.S. EEZ,Unassigned
+425600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+425700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+425800,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+425830,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+425900,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+425930,NA,AB (Groundfish-Salmon),425930,Yakutat,1,,Unassigned
+425931,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+426002,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+435300,NA,AB (Groundfish-Salmon),435300,Unassigned,NA,Fed 690. GOA Outside the U.S. EEZ,Unassigned
+435530,NA,AB (Groundfish-Salmon),435530,Unassigned,NA,Fed 690. GOA Outside the U.S. EEZ,Unassigned
+435600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+435630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+435700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+435730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+435800,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+435830,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+435900,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+435901,NA,AB (Groundfish-Salmon),435901,Yakutat,1,,Yakutat
+435930,NA,AB (Groundfish-Salmon),435930,Yakutat,1,,Yakutat
+435931,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+435932,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+436000,Yakutat,AB (Groundfish-Salmon),NA,,NA,,Yakutat
+445530,NA,AB (Groundfish-Salmon),445530,Unassigned,NA,,Unassigned
+445600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+445730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+445800,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+445830,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+445900,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+445931,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+445932,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+446001,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+446002,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+446003,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+455500,NA,AB (Groundfish-Salmon),455500,Unassigned,NA,,Unassigned
+455700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+455730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+455800,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+455830,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+455900,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+455930,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+456001,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+456002,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+456003,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+456004,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+456031,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+456032,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+465600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+465630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+465700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+465730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+465800,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+465830,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+465901,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+465902,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+465903,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+465904,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+465931,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+465932,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+465933,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+466000,NA,AB (Groundfish-Salmon),466000,PWS,2,,Unassigned
+466001,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+466002,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+466003,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+466004,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+466005,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+466030,NA,AB (Groundfish-Salmon),466030,PWS,2,,Unassigned
+466031,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+466032,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+466033,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+466100,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+475500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+475600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+475700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+475730,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+475800,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+475830,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+475900,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+475931,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+475932,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+475933,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+475934,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476001,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476002,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476003,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476004,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476005,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476006,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476007,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476008,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476009,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476030,NA,AB (Groundfish-Salmon),476030,PWS,2,,Unassigned
+476031,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476032,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476033,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476034,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476035,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476036,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476101,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+476102,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+485430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+485500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+485700,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+485730,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+485800,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+485831,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+485832,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+485900,NA,AB (Groundfish-Salmon),485900,PWS,2,,PWS
+485901,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+485902,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+485931,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+485932,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+485933,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+485934,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+485935,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+485936,NA,AB (Groundfish-Salmon),485936,PWS,2,,PWS
+486001,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+486002,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+486003,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+486004,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+486005,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+486031,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+486032,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+486033,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+486034,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+486100,PWS,AB (Groundfish-Salmon),NA,,NA,,PWS
+495400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+495430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+495500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+495600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+495630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+495700,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+495730,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+495731,NA,AB (Groundfish-Salmon),495731,Kodiak,4,,Kodiak
+495800,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+495830,NA,AB (Groundfish-Salmon),495830,Kodiak,4,,Kodiak
+495831,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495832,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+495901,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495902,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495931,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495932,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495933,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495934,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495935,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495936,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495937,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495938,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+495939,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+496001,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+496002,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505000,NA,AB (Groundfish-Salmon),505000,Unassigned,NA,,Unassigned
+505100,NA,AB (Groundfish-Salmon),505100,Unassigned,NA,,Unassigned
+505400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+505430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+505500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+505600,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+505630,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+505700,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+505730,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+505800,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+505831,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505832,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+505901,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505902,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505903,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505904,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505905,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505906,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505907,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505908,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505909,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505931,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505932,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505933,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+505934,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+513175,NA,AB (Groundfish-Salmon),513175,Unassigned,NA,No records. Possible typo,Unassigned
+513176,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+513177,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+513178,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+513179,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+513277,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+513278,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+513279,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+514700,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+515300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+515430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+515500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+515530,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+515600,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+515630,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+515700,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+515730,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+515801,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+515802,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+515831,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515832,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515833,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+515901,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515902,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515903,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515904,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515905,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515906,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515907,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515908,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515931,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515932,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515933,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515934,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515935,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515936,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515937,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515938,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+515939,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+516001,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+516002,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+516030,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+520172,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520173,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520174,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520175,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520176,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520177,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520178,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520179,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520274,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520275,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520276,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520277,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520278,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+520279,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523168,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+523169,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+523170,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+523171,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+523172,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523173,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523174,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523175,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523176,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523179,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523272,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523273,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523274,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+523279,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+525300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+525330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+525430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+525500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+525530,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+525600,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525630,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525701,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525702,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525703,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525721,NA,AB (Groundfish-Salmon),525721,Kodiak,4,,Unassigned
+525731,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525732,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525733,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525801,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525802,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525803,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525804,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525805,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525806,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525807,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525831,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+525832,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+525833,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525834,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+525835,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+525836,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+525837,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+525901,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+525902,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+525931,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+525932,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+526002,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+526003,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+530167,NA,AB (Groundfish-Salmon),530167,Unassigned,NA,No records. Possible typo,Unassigned
+530168,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+530169,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+530170,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+530172,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+530173,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+530174,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+530175,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+530179,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+530272,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+530273,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+530279,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+533166,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+533167,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+533168,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+533170,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+533172,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+533173,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+533174,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+535300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+535330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+535400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+535430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+535500,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535530,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535601,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535602,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535631,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535632,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535633,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535634,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535635,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535701,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535702,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535703,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535704,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535705,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535706,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535707,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535731,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535732,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535733,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535734,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535735,NA,AB (Groundfish-Salmon),535735,Kodiak,4,,Kodiak
+535801,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535802,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535803,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535831,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535832,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+535833,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+535834,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+535901,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+535902,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+535903,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+535904,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+535905,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+535906,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+535931,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+535932,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+535933,Cook Inlet,AB (Groundfish-Salmon),NA,,NA,,Cook Inlet
+540165,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+540166,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+540167,Eastern Aleutians,AB (IPHC),NA,,NA,,Eastern Aleutians
+540168,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+540169,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+540175,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+540179,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+540273,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+540279,Western Aleutians,AB (IPHC),NA,,NA,,Western Aleutians
+543165,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+543166,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+543167,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+545030,NA,AB (Groundfish-Salmon),545030,Unassigned,NA,,Unassigned
+545330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+545400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+545430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+545500,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545530,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545601,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545602,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545631,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545632,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545633,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545701,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545702,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545703,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545704,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545731,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545732,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545733,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545734,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545801,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545802,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545803,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+545804,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+550166,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+550167,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+550168,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+550169,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+550170,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+553168,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+553169,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+553170,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+555330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+555400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+555430,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+555500,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+555531,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+555532,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+555600,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+555630,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+555701,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+555702,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+555731,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+555732,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+555733,Kodiak,AB (Groundfish-Salmon),NA,,NA,,Kodiak
+560168,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+560169,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+560170,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+560171,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+563158,Alaska Peninsula,AB (IPHC),NA,,NA,,Alaska Peninsula
+563167,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+563168,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+563169,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+563170,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+563171,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+563172,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+563173,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+563174,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+563177,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+565300,NA,AB (Groundfish-Salmon),565630,Alaska Peninsula,4,"565300 Split into 565301, 565302. Groundfish Area K,L,M split; King Crab Area K,M split",Unassigned
+565302,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+565330,NA,AB (Groundfish-Salmon),565330,Alaska Peninsula,4,,Unassigned
+565333,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+565402,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+565430,NA,AB (Groundfish-Salmon),565430,Alaska Peninsula,4,,Alaska Peninsula
+565431,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565432,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565500,NA,AB (Groundfish-Salmon),565500,Alaska Peninsula,4,,Alaska Peninsula
+565501,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565502,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565531,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565532,NA,AB (Groundfish-Salmon),565532,Alaska Peninsula,4,,Alaska Peninsula
+565533,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565534,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565601,NA,AB (Groundfish-Salmon),565601,Alaska Peninsula,4,,Alaska Peninsula
+565602,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565603,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565604,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565631,NA,AB (Groundfish-Salmon),565631,Alaska Peninsula,4,,Alaska Peninsula
+565632,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565633,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565634,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565635,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565701,NA,AB (Groundfish-Salmon),565701,Alaska Peninsula,4,,Alaska Peninsula
+565702,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565703,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+565704,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+570158,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+570159,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+570166,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+570167,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+570169,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+570170,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+570171,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+570172,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+570173,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+570174,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+573157,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+573158,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+573159,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+573167,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+573170,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+573171,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+573173,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+573174,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+573175,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+574700,NA,AB (Groundfish-Salmon),575700,Alaska Peninsula,4,No records. Possible typo,Unassigned
+575232,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+575301,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+575400,NA,AB (Groundfish-Salmon),575400,Alaska Peninsula,4,,Alaska Peninsula
+575401,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575402,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575403,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575430,NA,AB (Groundfish-Salmon),575430,Alaska Peninsula,4,,Alaska Peninsula
+575431,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575432,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575433,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575500,NA,AB (Groundfish-Salmon),575500,Alaska Peninsula,4,,Alaska Peninsula
+575501,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575502,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575530,NA,AB (Groundfish-Salmon),575530,Alaska Peninsula,4,,Alaska Peninsula
+575531,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575532,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575601,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575602,NA,AB (Groundfish-Salmon),575602,Alaska Peninsula,4,,Alaska Peninsula
+575603,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575604,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575605,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575631,NA,AB (Groundfish-Salmon),575602,Alaska Peninsula,4,,Alaska Peninsula
+575632,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575633,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575634,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575635,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+575731,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+575732,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+575801,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+575802,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+575830,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+580157,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+580158,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+580159,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+580160,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+580161,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+580165,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+580167,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+580172,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+580173,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+580174,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+580175,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+580178,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+583157,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+583158,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+583159,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+583160,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+583161,Bristol Bay,AB (IPHC),NA,,NA,,Bristol Bay
+583162,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+583165,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+583166,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+583168,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+583172,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+583173,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+583174,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+583175,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+583176,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+583177,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+583178,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+584800,NA,AB (Groundfish-Salmon),584800,Unassigned,NA,Outside EEZ,Unassigned
+584930,NA,AB (Groundfish-Salmon),584930,NA,NA,Possible typo,Unassigned
+585400,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585430,NA,AB (Groundfish-Salmon),585430,Alaska Peninsula,4,"585430 Split into 585430, 585432. Groundfish Area K,L,M split; King Crab Area K,M split",Alaska Peninsula
+585431,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585432,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585500,NA,AB (Groundfish-Salmon),585500,Alaska Peninsula,4,,Alaska Peninsula
+585501,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585502,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585531,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585532,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585601,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585602,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585603,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585631,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+585632,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+585701,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+585730,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+585801,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+585802,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+585830,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+590162,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+590165,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+590176,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+590177,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+590178,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+593164,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+593165,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+593166,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+593167,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+593176,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+593177,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+593178,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+595030,NA,AB (Groundfish-Salmon),595030,Unassigned,NA,,Unassigned
+595300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+595330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+595400,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595430,NA,AB (Groundfish-Salmon),595430,Alaska Peninsula,4,,Alaska Peninsula
+595431,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595432,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595433,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595434,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595501,NA,AB (Groundfish-Salmon),595501,Alaska Peninsula,4,,Alaska Peninsula
+595502,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595503,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595504,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595505,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595506,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595531,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595532,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595533,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+595631,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+595632,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+595700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+595730,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+595801,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+595802,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+595831,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+595832,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+600164,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+600165,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+600166,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+600167,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+600168,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+600171,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+600172,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+600173,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+603165,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+603166,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+603167,Kuskokwim,AB (IPHC),NA,,NA,,Kuskokwim
+603172,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+603173,Bering Sea,AB (IPHC),NA,,NA,,Bering Sea
+605300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+605330,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605400,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605431,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605432,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605501,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605502,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605503,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605504,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605505,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605506,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605507,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605531,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605532,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605533,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605534,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605535,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605601,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+605602,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+605630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+605700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+605730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+605800,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+605831,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+605832,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+605833,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+605834,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+613166,Yukon,AB (IPHC),NA,,NA,,Yukon
+613167,Yukon,AB (IPHC),NA,,NA,,Yukon
+615300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+615330,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615400,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615431,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615432,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615501,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615502,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615503,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615504,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615505,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615506,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615507,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615508,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615509,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615531,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615532,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615534,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+615601,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+615602,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+615630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+615700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+615730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+615800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+615831,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+615832,Bristol Bay,AB (Groundfish-Salmon),NA,,NA,,Bristol Bay
+616331,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+616332,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+616401,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+616402,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+616432,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+623165,Yukon,AB (IPHC),NA,,NA,,Yukon
+625000,NA,AB (Groundfish-Salmon),625000,Unassigned,NA,Outside EEZ,Unassigned
+625200,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+625300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+625330,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625401,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625402,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625403,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625404,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625431,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625432,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625433,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625434,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625435,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625436,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625437,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625438,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625500,NA,AB (Groundfish-Salmon),625500,Alaska Peninsula,4,,Alaska Peninsula
+625501,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625502,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625503,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625504,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625531,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+625532,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+625600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+625630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+625700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+625730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+625800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+625831,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+625832,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+625901,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+625931,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+626331,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+626332,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+626401,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+626402,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+626403,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+626432,NA,AB (Groundfish-Salmon),626432,Norton Sound,3,"Significant bounday change, assigned new number. Reconfigure Norton Sound",Norton Sound
+626433,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+626632,Kotzebue,AB (Groundfish-Salmon),NA,,NA,,Kotzebue
+630168,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+630173,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+633165,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+633166,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+633170,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+635230,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+635300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+635330,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635400,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635431,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635432,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635433,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635434,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635435,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635436,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635501,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635502,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635503,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+635504,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+635530,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+635580,NA,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+635600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+635630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+635700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+635730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+635800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+635830,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+635900,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+635931,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+636330,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+636401,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+636402,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+636403,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+640164,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+640165,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+640166,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+640167,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+640168,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+643166,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+643168,Norton Sound,AB (IPHC),NA,,NA,,Norton Sound
+645000,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+645030,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+645200,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+645300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+645331,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+645332,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+645401,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+645402,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+645403,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+645404,NA,AB (Groundfish-Salmon),645404,Bering Sea,4,"645404 Split into 645410, 645412. Bering Sea-Pacfic Ocean demarcation",Alaska Peninsula
+645405,NA,AB (Groundfish-Salmon),645405,Bering Sea,4,"645405 Split into 645411, 645413. Bering Sea-Pacfic Ocean demarcation",Alaska Peninsula
+645406,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+645407,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+645408,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+645410,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+645411,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+645412,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+645413,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+645431,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+645432,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+645433,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+645434,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+645435,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+645500,NA,AB (Groundfish-Salmon),645500,Bering Sea,4,,Bering Sea
+645501,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+645502,Alaska Peninsula,AB (Groundfish-Salmon),NA,,NA,,Alaska Peninsula
+645530,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+645600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+645630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+645700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+645730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+645800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+645830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+645900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+645931,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+645932,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+646001,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+646301,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+646330,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+646401,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+646402,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+646403,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+655000,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+655200,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+655230,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+655300,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655301,NA,AB (Groundfish-Salmon),655301,Eastern Aleutians,4,,Eastern Aleutians
+655330,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655401,NA,AB (Groundfish-Salmon),655401,Eastern Aleutians,4,,Eastern Aleutians
+655402,NA,AB (Groundfish-Salmon),655402,Eastern Aleutians,4,,Eastern Aleutians
+655403,NA,AB (Groundfish-Salmon),655403,Eastern Aleutians,4,,Eastern Aleutians
+655404,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655405,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655406,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655407,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655408,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655409,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655410,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655411,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655412,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655413,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+655430,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+655500,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+655501,NA,AB (Groundfish-Salmon),655501,Bering Sea,4,,Bering Sea
+655530,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+655600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+655630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+655700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+655730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+655800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+655830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+655900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+655930,NA,AB (Groundfish-Salmon),655930,Bering Sea,4,,Bering Sea
+655931,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+655932,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+656001,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+656002,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+656003,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+656031,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+656032,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+656231,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+656300,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+656330,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+656401,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+656402,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+656403,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+656430,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+657600,NA,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665200,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+665300,NA,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665301,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665302,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665331,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665332,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665333,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665334,NA,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665335,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665336,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665337,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665338,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665401,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665402,NA,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665403,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665404,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665405,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665409,NA,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+665430,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665500,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665530,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+665931,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+665932,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+666001,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+666002,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+666031,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+666131,Yukon,AB (Groundfish-Salmon),NA,,NA,,Yukon
+666300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+666330,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+666401,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+666402,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+666431,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+666432,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+675200,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+675230,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675301,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675302,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675303,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675304,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675305,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675331,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675332,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675333,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675334,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675400,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+675430,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675500,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675530,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675567,NA,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+675931,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+675932,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+676001,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+676002,Kuskokwim,AB (Groundfish-Salmon),NA,,NA,,Kuskokwim
+676300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+676330,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+676400,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+676430,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+676501,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+685030,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+685060,NA,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685200,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+685231,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685232,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685233,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685301,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685302,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685303,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685304,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685305,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685331,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685332,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685333,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+685400,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685430,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685500,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685530,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685660,NA,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+685930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+686000,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+686030,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+686230,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+686301,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+686302,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+686400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+686431,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+686500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+686530,NA,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695000,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+695130,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+695200,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695231,NA,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695232,NA,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695233,NA,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695234,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695235,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695236,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695237,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695238,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695239,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695240,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695241,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695301,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695302,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+695330,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695400,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695430,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695500,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695530,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695631,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695632,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695701,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+695930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+696000,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+696030,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+696301,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+696302,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+696330,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+705030,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+705130,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+705200,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+705231,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+705232,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+705233,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+705234,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+705300,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+705330,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705400,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705430,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705500,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705530,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705701,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705702,NA,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705703,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+705930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+706000,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+706030,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+706100,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+706230,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+706331,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+706332,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+715100,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+715130,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+715201,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+715202,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+715230,NA,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+715231,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+715232,Eastern Aleutians,AB (Groundfish-Salmon),NA,,NA,,Eastern Aleutians
+715300,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715330,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715400,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715430,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+715530,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+715600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+715930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+716000,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+716100,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+716331,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+725100,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+725130,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+725201,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+725202,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+725203,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+725230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+725300,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+725330,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+725400,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+725500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+725530,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+725600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+725630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+725700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+725730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+725800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+725830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+725900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+725930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+726001,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+726002,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+726003,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+726031,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+726032,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+726300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+726330,Norton Sound,AB (Groundfish-Salmon),NA,,NA,,Norton Sound
+735100,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+735130,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+735201,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+735202,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+735203,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+735230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+735300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+735400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+735430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+735530,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+735600,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+735630,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+735700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+735730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+735800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+735830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+735900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+735930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+736000,NA,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+736001,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+736002,NA,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+736031,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+736032,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+736100,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+736200,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+736230,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+736300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+736330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+744930,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+745000,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+745100,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+745131,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+745132,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+745201,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+745202,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+745203,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+745204,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+745205,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+745206,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+745207,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+745230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+745300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+745330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+745400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+745600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+745630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+745700,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+745730,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+745800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+745830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+745900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+745930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+746000,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+746030,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+746100,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+746130,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+746230,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755100,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755131,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755132,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755133,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755134,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755135,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755201,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755202,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755203,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755204,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755205,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755206,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755207,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755208,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755209,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+755300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+755800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+755830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+755900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+755930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+756000,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+756030,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+756100,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+756130,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+756200,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+756230,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+765000,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+765100,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765131,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765132,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765133,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765134,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765135,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765136,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765137,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765138,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765139,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765141,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765142,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765143,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765144,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765145,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765146,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765147,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765148,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765201,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765202,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765203,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765204,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765205,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765206,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+765300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+765430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+765500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+765530,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+765600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+765630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+765700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+765730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+765800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+765830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+765900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+765930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+766000,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+766030,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+766100,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+766130,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+766200,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+775000,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+775030,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+775100,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775131,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775132,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775133,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775134,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775135,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775136,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775137,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775138,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775139,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775200,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+775430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+775530,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+775630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+775700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+775730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+775800,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+775830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+775900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+775930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+776000,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+776030,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+776100,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+776130,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+785030,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+785101,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+785102,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+785103,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+785130,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+785131,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+785132,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+785134,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+785135,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+785200,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+785230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+785430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+785500,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+785600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+785630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+785800,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+785830,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+785900,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+785930,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+786000,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+786030,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+786100,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+786130,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+795101,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+795102,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+795131,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+795132,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+795134,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+795200,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+795230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+795300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+795330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+795400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+795430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+795600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+795730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+795800,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+795830,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+795900,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+795930,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+796000,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+796030,Bering Sea,AB (Groundfish-Salmon),NA,,NA,,Bering Sea
+805101,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+805102,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+805103,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+805131,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+805132,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+805133,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+805201,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+805202,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+805230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+805330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+805400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+805430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+805600,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+815100,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815101,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815131,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815132,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815133,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815134,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815135,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815136,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815201,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815202,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+815430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+815431,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+815630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+815700,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+815730,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+815800,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+825100,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+825131,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+825132,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+825133,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+825134,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+825201,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+825202,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+825203,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+825230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+825400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+825430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+825630,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+825830,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+835100,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+835130,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+835200,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+835230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+835300,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+835400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+835430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+835800,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+835830,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+845100,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+845130,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+845201,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+845202,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+845230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+845430,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+846130,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+855130,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+855200,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+855230,NA,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+855231,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+855232,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+855233,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+855234,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+855300,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865130,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+865201,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865202,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865203,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865204,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865205,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865231,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865232,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865233,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865234,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865235,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865236,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865300,NA,AB (Groundfish-Salmon),865300,Western Aleutians,4,,Western Aleutians
+865301,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+865302,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+875130,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+875200,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+875231,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+875232,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+875233,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+875301,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+875302,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+885130,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+885200,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+885230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+885300,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+885400,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+895130,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+895200,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+895230,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+895300,Western Aleutians,AB (Groundfish-Salmon),NA,,NA,,Western Aleutians
+895330,Unassigned,AB (Groundfish-Salmon),NA,,NA,,Unassigned
+999999,NA,AB (Groundfish-Salmon),999999,NA,NA,Interim value for fish ticket entry,NA
