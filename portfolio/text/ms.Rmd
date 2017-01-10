@@ -232,26 +232,26 @@ a salmon permit (Fig. S\ref{fig:ifq}B).
 
 For individuals deriving livelihoods from natural resources, theory suggests
 that adopting strategies with a diversity of assets provides substantial
-benefits over strategies with lower diversity [REFS]. However, the ability to
-effectively diversify in practice is limited by regulation and market forces.
+benefits over strategies with lower diversity [REFS]. However, the ability of individuals to
+effectively diversify is limited by regulation and market forces in practice.
 Here we document the effect of changing species diversity on revenue and revenue
 variability across three scale. Each scale reflects individual-level choices
-that produce varied levels of species diversity. We find that individuals
+that can affect species diversity. We find that individuals with
 fishing permit sets that allow high levels of species diversity tend to have
-lower revenue variability. Adding an additional fisheries permit usually
-increases revenue and decreases revenue variability. However, within the
+lower revenue variability. Adding a fisheries permit usually
+increases revenue and decreases revenue variability. Within the
 constraints of a permit and accounting for effort, specializing (reducing
-species diversity) tends to increase revenue and specializing or generalizing
-tends to be associated with greater revenue variability, with considerable
-differences across fisheries. Thus, the most effective mechanism by which
+species diversity) tends to increase revenue while both specializing or generalizing
+tends to be associated with greater revenue variability - though there are considerable
+differences among fisheries. Thus, the most effective mechanism by which
 species diversity can lower revenue variability for individual fishers ---
-switching or adding fishing permits --- is often costly, limited by regulations,
+switching or adding fishing permits --- is costly, limited by regulations,
 and consequently unavailable to many individuals in practice.
 
 Our results shows additional support for the idea that individual fishers can
 reduce their income variability by diversifying their catch portfolios. However,
 most individuals do not appear to change their catch diversity substantially
-from year to year, and most strategies adopted by Alaskan fishermen lie in
+from year to year [OLE: is there a supplemental figure or statistic that speaks to this point?], and most strategies adopted by Alaskan fishermen lie in
 a high-risk, high-reward quadrant in which reducing diversification increases
 both revenue variability and expected revenue. Previous work has suggested that
 changes to fisheries management such as limited entry or catch share programs
@@ -259,13 +259,15 @@ may inadvertently act as barrier to diversification and promote specializing
 (Hilborn et al. 2003; Kasperski and Holland 2013). While some of these
 specialized fishing strategies may be associated with increased revenue
 variability, the benefit may be that they are also associated with increased
-revenue. External market forces may interact in concert with management
+revenue. 
+
+External market forces may interact in concert with management
 regulations to promote specialization for fishers or other individuals dependent
-on natural resources. In terrestrial agriculture for instance, there are also
+on natural resources. In terrestrial agriculture for instance, there are 
 many instances of specializing being profitable; drivers include the ability to
 specialize on high-profit cash crops (tobacco, cocoa), the availability of
 government agricultural subsidies (soybeans, corn in the USA), and farming on
-a large industrial scale. With increasing environmental variability and extreme
+a large industrial scale (REF). With increasing environmental variability and extreme
 events in a changing climate (REF), it is particularly important that
 individuals who rely on natural resources as a primary source of income have
 strategies to reduce risk. Though variability in individual revenues may not be
@@ -273,8 +275,22 @@ actively incorporated into many management decisions, analyses like ours help to
 understand the range of diversification strategies available and how their
 benefits may change over time.
 
-Our work compliments previous results that have examined the effects of species diversity at the 
-community (Ref) and vessel(Ref) level that show THIS (Sethi, Kasperski, others)
+Worldwide, fisheries confront the challenge of sustainable management (). While many fisheries are well managed and productive, many are also rebuilding from periods of over-exploitation (Worm et al. Science 2009). A common tactic to aid in fisheries rebuilding is to improve fishing gear modify regulations to reduce the unintended harvest rebuilding stocks while allowing the continued harvest of healthy stocks (need REF). Such bycatch reduction is an important goal for both ecological (Crowder and Murawski 1998, Lewison et al. 2004) and economic (Curtis and Hicks 2000; Chakravorty and Nemoto 2001) reasons. Cumulatively, though, regulatory changes for bycatch reduction as well as other reasons gradually lead to fisheries that target one or a few species and individual fishers wishing to participate in multiple fisheries must own (or purchase) multiple permits. Thus a general consequence of fisheries regulations that are shown to improve sustainability of fish stocks and avoid overfishing - including improved assessments (Hilborn and Ovando 2014) and individual quota systems (Costello et al. 2008 ) - may ultimately restrict individual diversification or at least make developing a diverse fishing portfolio more costly. Add Alaska example of IFQs...?
+
+Chakravorty, U. and Nemoto, K. (2001) Modeling the effects of area closure and tax policies: a spatial-temporal model of the hawaii longline fishery. Marine Resource Economics 15, 179–204.
+
+Costello C, Gaines SD, Lynham J (2008) Can catch shares prevent fisheries collapse? Science 321(5896):1678–1681
+
+Crowder, L.B. and Murawski, S.A. (1998) Fisheries bycatch: implications for management. Fisheries Management 23, 8–17.
+
+Curtis, R. and Hicks, R.L. (2000) The Cost of sea turtle preservation: the case of Hawaii’s Pelagic longliners. American Journal of Agricultural Economics 82, 1191– 1197.
+
+Hilborn R, Ovando D. 2014 Reflections on the success of traditional fisheries management. ICES J. Mar. Sci. 71, 1040–1046.
+
+Lewison, R.L., Crowder, L.B., Read, A.J. and Freeman, S.A. (2004) Understanding impacts of fisheries bycatch on marine megafauna. Trends in Ecology & Evolution 19, 598–604.
+
+Read, A.J., Drinker, P. and Northridge, S. (2006) Bycatch of marine mammals in US and global fisheries. Conservation Biology 20, 163–169.
+
 
 ### Reconciling the effects at different levels of species diversity
 
@@ -311,7 +327,11 @@ Other:
   large-scale industrial farmers.
 
 
-### Limitations + obvious extensions
+### Limitations + obvious extensions paragraph by Ole:
+
+Our analysis provides a synthetic view of the effects of species diversity on individuals over 30 years in one of the most productive fisheries regions in the world. However, our analysis simultaneously uses data from across the broad geography of Alaska and over 30 years, potentially obscuring regional or time-variation in the consequences of diversification on revenue and revenue variability. We expect future research examining diversification over finer spatial and temporal scales will uncover additional interesting relationships. Furthermore, in addressing the overall pattern, we have averaged out several important of major discrete events (e.g., the Exxon Valdez oil spill in 1989) that had significant consequences for the ecosystem and social system in Alaska (general EVOS consequences REF). We do not wish to minimize the important of such events, but note that it is important to understand the benefits of diversification in the context of rare and extreme disturbances which occur in marine systems worldwide. 
+
+
 
 There are a number of limitations to our model and extensions that could further
 our understanding of the role of diversification...
