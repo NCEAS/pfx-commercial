@@ -1,0 +1,153 @@
+\documentclass[12pt,english]{article}
+\usepackage{geometry}
+\geometry{verbose, letterpaper, tmargin = 2.54cm, bmargin = 2.54cm,
+  lmargin = 2.54cm, rmargin = 2.54cm}
+\geometry{letterpaper}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabu} % for spacing between rows in longtable
+\usepackage{titlesec}
+\usepackage{url}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{commath} % for \abs{}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{4pt}\setlength{\parskip}{0pt}}
+
+\usepackage{lineno}
+\usepackage{xcolor}
+\renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
+\modulolinenumbers[2]
+
+% Linux Libertine:
+\usepackage{textcomp}
+\usepackage[sb]{libertine}
+\usepackage[varqu,varl]{inconsolata}% sans serif typewriter
+\usepackage[libertine,bigdelims,vvarbb]{newtxmath} % bb from STIX
+\usepackage[cal=boondoxo]{mathalfa} % mathcal
+\useosf % osf for text, not math
+\usepackage[supstfm=libertinesups,%
+  supscaled=1.2,%
+  raised=-.13em]{superiors}
+
+\textheight 22.0cm
+
+% \usepackage[round,sectionbib]{natbib}
+% \bibpunct{(}{)}{;}{a}{}{;}
+
+% Fix line numbering and align environment
+% http://phaseportrait.blogspot.ca/2007/08/lineno-and-amsmath-compatibility.html
+\newcommand*\patchAmsMathEnvironmentForLineno[1]{%
+  \expandafter\let\csname old#1\expandafter\endcsname\csname #1\endcsname
+  \expandafter\let\csname oldend#1\expandafter\endcsname\csname end#1\endcsname
+  \renewenvironment{#1}%
+     {\linenomath\csname old#1\endcsname}%
+     {\csname oldend#1\endcsname\endlinenomath}}%
+\newcommand*\patchBothAmsMathEnvironmentsForLineno[1]{%
+  \patchAmsMathEnvironmentForLineno{#1}%
+  \patchAmsMathEnvironmentForLineno{#1*}}%
+\AtBeginDocument{%
+\patchBothAmsMathEnvironmentsForLineno{equation}%
+\patchBothAmsMathEnvironmentsForLineno{align}%
+\patchBothAmsMathEnvironmentsForLineno{flalign}%
+\patchBothAmsMathEnvironmentsForLineno{alignat}%
+\patchBothAmsMathEnvironmentsForLineno{gather}%
+\patchBothAmsMathEnvironmentsForLineno{multline}%
+}
+
+\title{
+  Benefits and risks of diversification\\ for individual fishers
+  % Benefits of diversification and risks of
+  % changing strategies for individual fishers\\
+% Benefits of diversification are unavailable to many fishermen\\
+}
+\author{
+Sean C. Anderson$^1$,
+Eric J. Ward$^2$,
+Andrew O. Shelton$^2$,\\
+Milo D. Adkison$^3$,
+Anne H. Beaudreau$^3$,
+Richard E. Brenner$^4$,\\
+Alan C. Haynie$^5$,
+Jennifer C. Shriver$^4$,
+Jordan T. Watson$^6$,
+Benjamin C. Williams$^{4}$,
+\ldots
+}
+
+\newlabel{tab:strategies}{1}
+\newlabel{fig:fe}{1}
+\newlabel{fig:re}{2}
+\newlabel{fig:spoke-all}{3}
+\newlabel{fig:resid}{4}
+\newlabel{fig:resid-downside}{5}
+\newlabel{fig:str-yrs}{6}
+\newlabel{fig:ifq}{7}
+\newlabel{fig:mirror}{8}
+\newlabel{fig:noeffort}{9}
+
+\date{}
+
+% remove numbers in front of sections:
+\makeatletter
+\renewcommand\@seccntformat[1]{}
+\makeatother
+
+\begin{document}
+% \begin{flushleft}
+
+\maketitle
+
+% TODO: standardize and complete addresses
+
+\noindent
+$^1$School of Aquatic and Fishery Sciences, Box 355020,
+University of Washington, Seattle, WA 98195, USA
+
+\noindent
+$^2$Conservation Biology Division, Northwest Fisheries Science Center,
+National Marine Fisheries Service, National Oceanographic and
+Atmospheric Administration, 2725 Montlake Blvd E, Seattle, WA 98112, USA
+
+\noindent
+$^3$College of Fisheries and Ocean Sciences, University of Alaska Fairbanks,
+17101 Point Lena Loop Rd, Juneau, AK, 99801, USA
+
+\noindent
+$^4$
+Alaska Department of Fish and Game,
+Division of Commercial Fisheries,
+PO BOX 115526,
+Juneau, AK, USA 99811-5526, USA
+
+\noindent
+$^5$Alaska Fisheries Science Center,
+National Marine Fisheries Service, National Oceanographic and
+Atmospheric Administration, Bldg 4,
+7600 Sand Point Way NE, Seattle, WA, 98115, USA
+
+\noindent
+$^6$NOAA / National Marine Fisheries Service, Alaska Fisheries Science Center, Auke
+Bay Laboratories, 17109 Pt. Lena Loop Rd., Juneau, AK 99801, USA
+
+\setlength{\parindent}{0.9cm}
+\setlength\parskip{0in}
+
+\thispagestyle{empty}
+
+\clearpage
+
+\linenumbers
+
+\begin{spacing}{1.4}
+\input{ms}
+
+\end{spacing}
+% \end{flushleft}
+\end{document}
