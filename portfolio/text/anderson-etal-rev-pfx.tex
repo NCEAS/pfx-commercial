@@ -125,24 +125,66 @@ strategies to reduce income variability.
 \input{ms}
 
 \matmethods{
-We obtained commercial fisheries landings and revenue data for all permit holders in Alaska from 1985 to 2014 from the Alaskan Commercial Fisheries Entry Commission (CFEC). These data represent a total of nearly 43 billion 2009 USD. We adjusted for inflation by setting all revenues to 2009 USD \cite{bea2016}. We implemented a number of filtering steps to focus on individuals actively engaged in commercial fishing (Supporting Information). In particular, we removed permit holders whose median revenue was less than \$10,000 USD to focus on individuals for whom commercial fishing formed a substantial part of their income.
 
-We used combinations of state and federal fishing permits held by an individual in a specific year to define fishing ``strategies'', representing the species targeted (Supporting Information). For example, we combined permits that were otherwise the same except for vessel size (e.g.~a longliner fishing sablefish on a vessel under 60 ft was considered to have the same strategy as a longliner fishing sablefish on a vessel over 60 ft), and we combined a number of permits that were targeting a single species and differed only in region fished. For example, someone fishing herring roe in Kodiak and someone fishing herring roe in Alaska Peninsula were both considered to have a ``herring roe'' permit group. For salmon permits, we formed salmon strategies based on similarities in gear type and species composition (Supporting Information).
+We obtained commercial fisheries landings and revenue data for all permit
+holders in Alaska from 1985 to 2014 from the Alaskan Commercial Fisheries Entry
+Commission (CFEC). These data represent a total of nearly 43 billion 2009 USD.
+We adjusted for inflation by setting all revenues to 2009 USD \cite{bea2016}.
+We implemented a number of filtering steps to focus on individuals actively
+engaged in commercial fishing (Supporting Information). In particular, we
+removed permit holders whose median revenue was less than \$10,000 USD to focus
+on individuals for whom commercial fishing formed a substantial part of their
+income.
 
-After this process of combining permits, we were left with 23 unique fishing permit groups (Table~S\tabstrategies), which we aggregated within each person-year combination to form permit strategies. For example, if someone fished halibut and sablefish in the same year, their strategy for that year would be ``halibut-sablefish''. Specific details on our strategy definitions are available in the Supporting Information.
+We used combinations of state and federal fishing permits held by an individual
+in a specific year to define fishing ``strategies'', representing the species
+targeted (Supporting Information). For example, we combined permits that were
+otherwise the same except for vessel size (e.g.~a longliner fishing sablefish
+on a vessel under 60 ft was considered to have the same strategy as a longliner
+fishing sablefish on a vessel over 60 ft), and we combined a number of permits
+that were targeting a single species and differed only in region fished. For
+example, someone fishing herring roe in Kodiak and someone fishing herring roe
+in Alaska Peninsula were both considered to have a ``herring roe'' permit
+group. For salmon permits, we formed salmon strategies based on similarities in
+gear type and species composition (Supporting Information).
 
-Our models focused on species diversity as a possible predictor of revenue and revenue variability while controlling for effort. For consistency with previous analyses {[}\cite{vedeld2007}; \cite{illukpitiya2008}; \cite{debela2012}; \cite{kasperski2013}; sethi2014{]}, we calculated effective species diversity for permit holder \(i\) and time (year) \(t\) as the inverse of Simpson's diversity index \(\lambda\) \cite{simpson1949, jost2006} (also referred to in economics as the Herfindahl-Hirschman Index \cite{hirschman1964}) weighted by revenue \(R\):
+After this process of combining permits, we were left with 23 unique fishing
+permit groups (Table~S\tabstrategies), which we aggregated within each
+person-year combination to form permit strategies. For example, if someone
+fished halibut and sablefish in the same year, their strategy for that year
+would be ``halibut-sablefish''. Specific details on our strategy definitions
+are available in the Supporting Information.
+
+Our models focused on species diversity as a possible predictor of revenue and
+revenue variability while controlling for effort. For consistency with previous
+analyses {[}\cite{vedeld2007}; \cite{illukpitiya2008}; \cite{debela2012};
+\cite{kasperski2013}; sethi2014{]}, we calculated effective species diversity
+for permit holder \(i\) and time (year) \(t\) as the inverse of Simpson's
+diversity index \(\lambda\) \cite{simpson1949, jost2006} (also referred to in
+economics as the Herfindahl-Hirschman Index \cite{hirschman1964}) weighted by
+revenue \(R\):
 
 \begin{equation}
 1/\lambda_{i,t} = 1 / \left(\sum\limits_{s=1}^{n_{i,t}}
   \left(R_{i,s,t}/ \sum\limits_{s=1}^{n_{i,t}} R_{i,s,t}\right)\right)^2,
 \end{equation}
 
-\noindent where \(s\) indexes species from \(1\) through \(n\). We calculated effort or effective season length as the sum of the season lengths for each permit each year. Season length for a given permit was calculated as the number of days between the first instance of fishing a permit and the last instance of fishing a permit each year. For example, if someone fished for 30 days on a salmon drift gillnet permit in Southeast Alaska and 40 days on a statewide longline halibut permit, that individual's season length was calculated as 70 days.
+\noindent where \(s\) indexes species from \(1\) through \(n\). We calculated
+effort or effective season length as the sum of the season lengths for each
+permit each year. Season length for a given permit was calculated as the number
+of days between the first instance of fishing a permit and the last instance of
+fishing a permit each year. For example, if someone fished for 30 days on a
+salmon drift gillnet permit in Southeast Alaska and 40 days on a statewide
+longline halibut permit, that individual's season length was calculated as 70
+days.
 
 \subsection{Hierarchical model}\label{hierarchical-model}
 
-To jointly model revenue and revenue variability as a function of individual-level covariates, we extended the basic variance-function regression to a hierarchical Bayesian variance-function regression model with Gaussian errors predicting \(\log\) revenue, \(\log(R_{i,t})\), for each fisher \(i\) and time \(t\):
+To jointly model revenue and revenue variability as a function of
+individual-level covariates, we extended the basic variance-function regression
+to a hierarchical Bayesian variance-function regression model with Gaussian
+errors predicting \(\log\) revenue, \(\log(R_{i,t})\), for each fisher \(i\)
+and time \(t\):
 
 \begin{equation}
 \log(R_{i,t}) \sim \mathrm{N} \left(\mu_{i,t}, \sigma_{i,t}^2 \right).
@@ -150,54 +192,108 @@ To jointly model revenue and revenue variability as a function of individual-lev
 
 \noindent Each year \(t\) of revenue for fisher \(i\) is assigned a strategy (permit set) indexed by \(j\) (Supporting Information, Table~\tabstrategies) and \(\mu_{i,t}\) is modelled as:
 
-\begin{equation}
+\begin{equation*}
+  \begin{split}
 \label{eq:mean}
 \mu_{i,t} = \beta_{0,j,t} -
   \beta_{1,j} S_{i,t} I_{i,t} +
   \beta_{2,j} S_{i,t} I_{i,t} +
-  \beta_3 D_{i,t} -
+  \beta_3 D_{i,t} -\\
   \beta_4 S_{i,t} D_{i,t} I_{i,t} +
   \beta_5 S_{i,t} D_{i,t} I_{i,t} +
   \log(R_{i,t-1}),
-\end{equation}
+  \end{split}
+\end{equation*}
 
-\noindent where \(S_{i,t}\) is the log ratio of species diversity from year-to-year, \(\log \left(\mathrm{div}_{i,t}/\mathrm{div}_{i,t-1}\right)\), \(D_{i,t}\) is the log ratio of days fished from year-to-year, \(\log \left(\mathrm{days}_{i,t}/\mathrm{days}_{i,t-1}\right)\), and \(I_{i,t}\) is an indicator variable that takes a value \(0\) if \(\mathrm{div}_{i,t} \ge \mathrm{div}_{i,t-1}\) (species diversity increasing; generalizing) and takes a value \(1\) if \(\mathrm{div}_{i,t} < \mathrm{div}_{i,t-1}\) (species diversity decreasing; specializing). Estimating a separate coefficient for the effect of increasing diversity and decreasing diversity allows the costs and benefits of these changes to be asymmetric (Fig.~S\figresid).
+\noindent where \(S_{i,t}\) is the log ratio of species diversity from
+year-to-year, \(\log \left(\mathrm{div}_{i,t}/\mathrm{div}_{i,t-1}\right)\),
+\(D_{i,t}\) is the log ratio of days fished from year-to-year, \(\log
+  \left(\mathrm{days}_{i,t}/\mathrm{days}_{i,t-1}\right)\), and \(I_{i,t}\) is
+an indicator variable that takes a value \(0\) if \(\mathrm{div}_{i,t} \ge
+  \mathrm{div}_{i,t-1}\) (species diversity increasing; generalizing) and takes
+a value \(1\) if \(\mathrm{div}_{i,t} < \mathrm{div}_{i,t-1}\) (species
+diversity decreasing; specializing). Estimating a separate coefficient for the
+effect of increasing diversity and decreasing diversity allows the costs and
+benefits of these changes to be asymmetric (Fig.~S\figresid).
 
-We use \(\log(R_{i,t-1}\)) as an offset, and thus our model describes the log ratio of revenue from year-to-year, i.e., \(\log(R_{i,t}) - \log(R_{i,t-1}) = \log(R_{i,t}/R_{i,t-1})\). We model change in revenue because preliminary analysis revealed non-stationary trends in revenue (resulting from experience or other unmodelled factors). This approach eliminates having to deal with the non-stationary time series and eliminates having to estimate thousands of mean-revenue intercepts associated with individual fishers. We removed person-year combinations without a subsequent year of revenue.
+We use \(\log(R_{i,t-1}\)) as an offset, and thus our model describes the log
+ratio of revenue from year-to-year, i.e., \(\log(R_{i,t}) - \log(R_{i,t-1}) =
+  \log(R_{i,t}/R_{i,t-1})\). We model change in revenue because preliminary
+analysis revealed non-stationary trends in revenue (resulting from experience
+or other unmodelled factors). This approach eliminates having to deal with the
+non-stationary time series and eliminates having to estimate thousands of
+mean-revenue intercepts associated with individual fishers. We removed
+person-year combinations without a subsequent year of revenue.
 
-The \(\beta\) terms represent estimated coefficients, some of which are allowed to vary as ``random effect'' terms. The intercepts \(\beta_{0,j,t}\) are allowed to vary by strategy-year combinations, are centred on zero, and are constrained by a normal distribution:
+The \(\beta\) terms represent estimated coefficients, some of which are allowed
+to vary as ``random effect'' terms. The intercepts \(\beta_{0,j,t}\) are
+allowed to vary by strategy-year combinations, are centred on zero, and are
+constrained by a normal distribution:
 
 \begin{equation}
 \beta_{0,j,t} \sim \mathrm{N} \left(0, \sigma^2_{\beta_{j,t}} \right).
 \end{equation}
 
-\noindent This approach, combined with the lack of a global intercept, constrains the mean change in log revenue across all fishers and years to be zero. I.e., we assume that the data are stationary after accounting for all covariates and including an intercept that varies with strategy-year combinations. Initial versions of the model confirmed that the global intercept along with strategy-level intercepts would be estimated at almost exactly zero. The estimated \(\beta_{j,t}\)'s represent years when people with a particular set of permits tended to collectively do better or worse than the long-term average (Fig.~S\figstryrs). Therefore, an individual's expected change in revenue (and variability) represents the expectation after accounting for the general trend in revenue for that set of permits.
+\noindent This approach, combined with the lack of a global intercept,
+constrains the mean change in log revenue across all fishers and years to be
+zero. I.e., we assume that the data are stationary after accounting for all
+covariates and including an intercept that varies with strategy-year
+combinations. Initial versions of the model confirmed that the global intercept
+along with strategy-level intercepts would be estimated at almost exactly zero.
+The estimated \(\beta_{j,t}\)'s represent years when people with a particular
+set of permits tended to collectively do better or worse than the long-term
+average (Fig.~S\figstryrs). Therefore, an individual's expected change in
+revenue (and variability) represents the expectation after accounting for the
+general trend in revenue for that set of permits.
 
-The slopes \(\beta_{1,j}\) and \(\beta_{1,j}\) are then allowed to vary by strategy with estimated means:
+The slopes \(\beta_{1,j}\) and \(\beta_{1,j}\) are then allowed to vary by
+strategy with estimated means:
 
 \begin{align}
 \beta_{1,j} &\sim \mathrm{N} \left(\mu_{\beta_1}, \tau^2_{\beta_1}\right),\\
 \beta_{2,j} &\sim \mathrm{N} \left(\mu_{\beta_2}, \tau^2_{\beta_2}\right).
 \end{align}
 
-\noindent The \(\beta_{1,j}\)'s and \(\beta_{2,j}\)'s represent how much a 1\% decrease and 1\% increase, respectively, in the ratio of species diversity from year-to-year within a strategy translates to a given percent change in the ratio of revenue from year-to-year. These are after controlling for changes in effort, \(\beta_3\), and the interaction between changes in effort and changes in species diversity, \(\beta_4\) and \(\beta_5\).
+\noindent The \(\beta_{1,j}\)'s and \(\beta_{2,j}\)'s represent how much a 1\%
+decrease and 1\% increase, respectively, in the ratio of species diversity from
+year-to-year within a strategy translates to a given percent change in the
+ratio of revenue from year-to-year. These are after controlling for changes in
+effort, \(\beta_3\), and the interaction between changes in effort and changes
+in species diversity, \(\beta_4\) and \(\beta_5\).
 
-Whereas traditional hierarchical linear models assume homoscedasticity --- that the residual variance does not vary systematically --- our variance-function regression model allows the residual variance to be heteroscedastic and vary as a function of predictors. Instead of estimating a single residual error scale term, \(\sigma\), we model the scale of the residual error with another hierarchical model with a similar form:
+Whereas traditional hierarchical linear models assume homoscedasticity --- that
+the residual variance does not vary systematically --- our variance-function
+regression model allows the residual variance to be heteroscedastic and vary as
+a function of predictors. Instead of estimating a single residual error scale
+term, \(\sigma\), we model the scale of the residual error with another
+hierarchical model with a similar form:
 
-\begin{equation}
+\begin{equation*}
+\begin{split}
 \label{eq:cv}
 \sigma_{i,t} =
-\exp \left( \gamma_{0,j} -
+\exp (\gamma_{0,j} -
 \gamma_{1,j} S_{i,t} I_{i,t} +
 \gamma_{2,j} S_{i,t} I_{i,t} +
-\gamma_3 D_{i,t} -
+\gamma_3 D_{i,t} -\\
 \gamma_4 S_{i,t} D_{i,t} I_{i,t} +
-\gamma_5 S_{i,t} D_{i,t} I_{i,t}\right).
-\end{equation}
+\gamma_5 S_{i,t} D_{i,t} I_{i,t}).
+\end{split}
+\end{equation*}
 
-\noindent Again, \(S_{i,t}\) and \(I_{i,t}\) represent, respectively, the log ratio of species diversity from year-to-year and an indicator variable for increasing or decreasing species diversity. We exponentiate the equation to ensure all scale parameters, \(\sigma_{i,t}\), are positive. Residuals from the mean component of our model clearly show a ``V''-shaped pattern, which the variance component of our model can capture (Fig.~S\figresid). Furthermore, the downside residuals (year-individual data points with lower than expected revenue) look qualitatively similar to the complete set of residuals (upside and downside) (Fig.~S\figresiddownside). Therefore, it seemed appropriate to model the variability as a proxy for revenue risk.
+\noindent Again, \(S_{i,t}\) and \(I_{i,t}\) represent, respectively, the log
+ratio of species diversity from year-to-year and an indicator variable for
+increasing or decreasing species diversity. We exponentiate the equation to
+ensure all scale parameters, \(\sigma_{i,t}\), are positive. Residuals from the
+mean component of our model clearly show a ``V''-shaped pattern, which the
+variance component of our model can capture (Fig.~S\figresid). Furthermore, the
+downside residuals (year-individual data points with lower than expected
+revenue) look qualitatively similar to the complete set of residuals (upside
+and downside) (Fig.~S\figresiddownside). Therefore, it seemed appropriate to
+model the variability as a proxy for revenue risk.
 
-The \(\gamma\)'s are estimated coefficients, three of which are allowed to vary by strategy, constrained by normal distributions:
+The \(\gamma\)'s are estimated coefficients, three of which are allowed to vary
+by strategy, constrained by normal distributions:
 
 \begin{align}
 \gamma_{0,j}  &\sim \mathrm{N} \left(\eta_0 + \eta_1 M_j + \eta_2 E_j, \tau^2_{\gamma_0}\right),\\
@@ -205,11 +301,32 @@ The \(\gamma\)'s are estimated coefficients, three of which are allowed to vary 
 \gamma_{2,j}  &\sim \mathrm{N} \left(\mu_{\gamma_2}, \tau^2_{\gamma_2}\right).
 \end{align}
 
-\noindent The \(\gamma_{0,j}\) coefficients are modelled with two strategy-level predictors. The symbols \(M_j\) and \(E_j\) represent the mean species diversity and mean combined fishing season length (effort) for strategy \(j\). The coefficients \(\eta_1\) and \(\eta_2\) represent predictors in this strategy-level regression estimating effects across strategies.
+\noindent The \(\gamma_{0,j}\) coefficients are modelled with two
+strategy-level predictors. The symbols \(M_j\) and \(E_j\) represent the mean
+species diversity and mean combined fishing season length (effort) for strategy
+\(j\). The coefficients \(\eta_1\) and \(\eta_2\) represent predictors in this
+strategy-level regression estimating effects across strategies.
 
-We fit our models with Stan 2.14.1 \cite{standevelopmentteam2016, standevelopmentteam2016a} and R 3.3.2 \cite{rcoreteam2016}. Stan implements the No-U-Turn Hamiltonian Markov chain Monte Carlo algorithm \cite{hoffman2014} to perform Bayesian statistical inference. We assigned weakly informative priors on all parameters: \(N(0, 2^2)\) priors on all \(\beta\), \(\gamma\), and \(\eta\) parameters, and half-\(t(3, 0, 2)\) priors (i.e.~degrees of freedom of 3 and scale of 2) on all \(\sigma\) and \(\tau\). We ran four chains and 2,000 iterations and discarded the first 1,000 iterations of each chain as warm up. We checked for chain convergence visually with trace plots, ensured that \(\hat{R}<1.05\) (the potential scale reduction factor) and that the effective sample size, as calculated by the rstan R package \cite{standevelopmentteam2016}, was greater than 200 for all parameters \cite{gelman2014}. We verified that our model returned sensible estimates by comparing our estimates to an ad-hoc two-stage model fit with the lme4 R package \cite{bates2015}, where we first fit a mixed-effects regression model to the mean, and then modelled the absolute residuals from that first model in a second mixed-effects model representing the variance component. We also validated the model with simulated data, and were able to recover the true values (Supporting Information). Code used in our analysis is available at \url{https://github.com/NCEAS/pfx-commercial/portfolios/}.
-}
-\showmatmethods
+We fit our models with Stan 2.14.1 \cite{standevelopmentteam2016,
+  standevelopmentteam2016a} and R 3.3.2 \cite{rcoreteam2016}. Stan implements
+the No-U-Turn Hamiltonian Markov chain Monte Carlo algorithm \cite{hoffman2014}
+to perform Bayesian statistical inference. We assigned weakly informative
+priors on all parameters: \(N(0, 2^2)\) priors on all \(\beta\), \(\gamma\),
+and \(\eta\) parameters, and half-\(t(3, 0, 2)\) priors (i.e.~degrees of
+freedom of 3 and scale of 2) on all \(\sigma\) and \(\tau\). We ran four chains
+and 2,000 iterations and discarded the first 1,000 iterations of each chain as
+warm up. We checked for chain convergence visually with trace plots, ensured
+that \(\hat{R}<1.05\) (the potential scale reduction factor) and that the
+effective sample size, as calculated by the rstan R package
+\cite{standevelopmentteam2016}, was greater than 200 for all parameters
+\cite{gelman2014}. We verified that our model returned sensible estimates by
+comparing our estimates to an ad-hoc two-stage model fit with the lme4 R
+package \cite{bates2015}, where we first fit a mixed-effects regression model
+to the mean, and then modelled the absolute residuals from that first model in
+a second mixed-effects model representing the variance component. We also
+validated the model with simulated data, and were able to recover the true
+values (Supporting Information). Code used in our analysis is available at
+\url{https://github.com/NCEAS/pfx-commercial/portfolios/}. } \showmatmethods
 
 \showacknow % Display the acknowledgments section
 
