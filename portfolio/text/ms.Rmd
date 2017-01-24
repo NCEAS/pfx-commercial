@@ -365,7 +365,7 @@ management decisions, and how these trade-offs may change over time.
 \acknow{TODO. National Center for Ecological Analysis and Synthesis (NCEAS) working
 group *Applying portfolio effects to the Gulf of Alaska ecosystem: Did
 multi-scale diversity buffer against the Exxon Valdez oil spill?*. Other
-participants... Smith...
+participants... Smith... Support of Jordan Watson came from NOAA Fisheries' Spatial Economics Toolbox for Fisheries (FishSET) Project.
 }
 
 

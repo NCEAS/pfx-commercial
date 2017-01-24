@@ -135,19 +135,18 @@ We adjusted for inflation by setting all revenues to 2009 USD \cite{bea2016}.
 We implemented a number of filtering steps to focus on individuals actively
 engaged in commercial fishing (Supporting Information). In particular, we
 removed permit holders whose median revenue was less than \$10,000 USD to focus
-on individuals for whom commercial fishing formed a substantial part of their
-income.
+on individuals with substantial income from commercial fishing.
 
 We used combinations of state and federal fishing permits held by an individual
 in a specific year to define fishing ``strategies'', representing the species
-targeted (Supporting Information). For example, we combined permits that were
+caught (Supporting Information). For example, we combined permits that were
 otherwise the same except for vessel size (e.g.~a longliner fishing sablefish
 on a vessel under 60 ft was considered to have the same strategy as a longliner
 fishing sablefish on a vessel over 60 ft), and we combined a number of permits
-that were targeting a single species and differed only in region fished. For
+that were caught a single species and differed only in region fished. For
 example, someone fishing herring roe in Kodiak and someone fishing herring roe
 in Alaska Peninsula were both considered to have a ``herring roe'' permit
-group. For salmon permits, we formed salmon strategies based on similarities in
+strategy. For salmon permits, we formed salmon strategies based on similarities in
 gear type and species composition (Supporting Information).
 
 After this process of combining permits, we were left with 23 unique fishing
@@ -156,14 +155,14 @@ person-year combination to form permit strategies. For example, if someone
 fished halibut and sablefish in the same year, their strategy for that year
 would be ``halibut-sablefish''. Specific details on our strategy definitions
 are available in the Supporting Information.
+% TODO AB: Since Table 1 defines all of the fishng strategies that are then used as figure labels (and not defined elsewhere in the text), I think it should go into the main body of the text rather than Suppl Info. This would also help clarify any confusion a reader might have about the difference between a permit strategy and an individual permit.  I suggest 2 additional columns in Table 1: 1) potential species that could be harvested under each permit strategy, 2) number of unique permits contained within each strategy. This would really help to show how much flexibility someone within each permit strategy might have.
 
 Our models focused on species diversity as a possible predictor of revenue and
 revenue variability while controlling for effort. For consistency with previous
-analyses {[}\cite{vedeld2007}; \cite{illukpitiya2008}; \cite{debela2012};
-\cite{kasperski2013}; sethi2014{]}, we calculated effective species diversity
+analyses \cite{vedeld2007, illukpitiya2008, debela2012, kasperski2013, sethi2014, cline2017}, we calculated effective species diversity
 for permit holder \(i\) and time (year) \(t\) as the inverse of Simpson's
 diversity index \(\lambda\) \cite{simpson1949, jost2006} (also referred to in
-economics as the Herfindahl-Hirschman Index \cite{hirschman1964}) weighted by
+economics as the Herfindahl-Hirschman Index (HHI) \cite{hirschman1964}) weighted by
 revenue \(R\):
 
 \begin{equation}
@@ -171,14 +170,17 @@ revenue \(R\):
   \left(R_{i,s,t}/ \sum\limits_{s=1}^{n_{i,t}} R_{i,s,t}\right)\right)^2,
 \end{equation}
 
-\noindent where \(s\) indexes species from \(1\) through \(n\). We calculated
+\noindent where \(s\) indexes species from \(1\) through \(n\).
+
+We calculated
 effort or effective season length as the sum of the season lengths for each
 permit each year. Season length for a given permit was calculated as the number
 of days between the first instance of fishing a permit and the last instance of
-fishing a permit each year. For example, if someone fished for 30 days on a
+fishing a permit each year. For example, if an individual's season lated for 30 days on a
 salmon drift gillnet permit in Southeast Alaska and 40 days on a statewide
 longline halibut permit, that individual's season length was calculated as 70
 days.
+% AH: I imagine at our scale this may not matter much, but did you use actualy fishing days too? If people are fishing another permit at the start and end of their main permit, this would show up as a huge increase in effort, even though it’s really small.
 
 \subsection{Hierarchical model}\label{hierarchical-model}
 
@@ -212,9 +214,9 @@ year-to-year, \(\log \left(\mathrm{div}_{i,t}/\mathrm{div}_{i,t-1}\right)\),
 \(D_{i,t}\) is the log ratio of days fished from year-to-year, \(\log
   \left(\mathrm{days}_{i,t}/\mathrm{days}_{i,t-1}\right)\), and \(I_{i,t}\) is
 an indicator variable that takes a value \(0\) if \(\mathrm{div}_{i,t} \ge
-  \mathrm{div}_{i,t-1}\) (species diversity increasing; generalizing) and takes
+  \mathrm{div}_{i,t-1}\) (species diversity increasing year-to-year; generalizing) and takes
 a value \(1\) if \(\mathrm{div}_{i,t} < \mathrm{div}_{i,t-1}\) (species
-diversity decreasing; specializing). Estimating a separate coefficient for the
+diversity decreasing year-to-year; specializing). Estimating a separate coefficient for the
 effect of increasing diversity and decreasing diversity allows the costs and
 benefits of these changes to be asymmetric (Fig.~S\figresid).
 
@@ -224,8 +226,11 @@ ratio of revenue from year-to-year, i.e., \(\log(R_{i,t}) - \log(R_{i,t-1}) =
 analysis revealed non-stationary trends in revenue (resulting from experience
 or other unmodelled factors). This approach eliminates having to deal with the
 non-stationary time series and eliminates having to estimate thousands of
-mean-revenue intercepts associated with individual fishers. We removed
+mean-revenue intercepts associated with individual fishers.
+% TODO AH: Should you note that you tested for it?  You say that you assume stationarity after you differnece, but why don’t you test and report it?
+We removed
 person-year combinations without a subsequent year of revenue.
+% TODO AH: what proportion of the data is this?
 
 The \(\beta\) terms represent estimated coefficients, some of which are allowed
 to vary as ``random effect'' terms. The intercepts \(\beta_{0,j,t}\) are
@@ -242,13 +247,13 @@ zero. I.e., we assume that the data are stationary after accounting for all
 covariates and including an intercept that varies with strategy-year
 combinations. Initial versions of the model confirmed that the global intercept
 along with strategy-level intercepts would be estimated at almost exactly zero.
-The estimated \(\beta_{j,t}\)'s represent years when people with a particular
+The estimated \(\beta_{j,t}\) coefficients represent years when people with a particular
 set of permits tended to collectively do better or worse than the long-term
 average (Fig.~S\figstryrs). Therefore, an individual's expected change in
 revenue (and variability) represents the expectation after accounting for the
 general trend in revenue for that set of permits.
 
-The slopes \(\beta_{1,j}\) and \(\beta_{1,j}\) are then allowed to vary by
+The slopes \(\beta_{1,j}\) and \(\beta_{2,j}\) are then allowed to vary by
 strategy with estimated means:
 
 \begin{align}
@@ -256,7 +261,7 @@ strategy with estimated means:
 \beta_{2,j} &\sim \mathrm{N} \left(\mu_{\beta_2}, \tau^2_{\beta_2}\right).
 \end{align}
 
-\noindent The \(\beta_{1,j}\)'s and \(\beta_{2,j}\)'s represent how much a 1\%
+\noindent The \(\beta_{1,j}\) and \(\beta_{2,j}\) coefficients represent how much a 1\%
 decrease and 1\% increase, respectively, in the ratio of species diversity from
 year-to-year within a strategy translates to a given percent change in the
 ratio of revenue from year-to-year. These are after controlling for changes in
@@ -269,6 +274,8 @@ regression model allows the residual variance to be heteroscedastic and vary as
 a function of predictors. Instead of estimating a single residual error scale
 term, \(\sigma\), we model the scale of the residual error with another
 hierarchical model with a similar form:
+
+% TODO AH: explain here somewhere why gamma 1 &4 are negative
 
 \begin{equation*}
 \begin{split}
@@ -290,7 +297,7 @@ ensure all scale parameters, \(\sigma_{i,t}\), are positive. Residuals from the
 mean component of our model clearly show a ``V''-shaped pattern, which the
 variance component of our model can capture (Fig.~S\figresid). Furthermore, the
 downside residuals (year-individual data points with lower than expected
-revenue) look qualitatively similar to the complete set of residuals (upside
+revenue) appear qualitatively similar to the complete set of residuals (upside
 and downside) (Fig.~S\figresiddownside). Therefore, it seemed appropriate to
 model the variability as a proxy for revenue risk.
 
