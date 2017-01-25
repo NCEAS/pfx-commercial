@@ -12,8 +12,9 @@ n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 
 # Introduction
 
-\dropcap{M}anaging natural resources and sustaining the livelihoods of those that depend
-on their extraction is challenged by multiple sources of variability in the coupled human-natural system. These livelihoods tend to have high annual
+\dropcap{It} can be difficult for individuals to sustain a 
+livelihood from natural resource extraction.
+These livelihoods tend to have high annual
 variability in income relative to other professions [@mishra2002; @sethi2012b].
 In addition to economic risk, such as changes in demand or prices, individuals
 dependent on natural resources are also subject to biological and environmental
@@ -21,18 +22,21 @@ variability [@smith1986]. For example, drought and flooding are a major source
 of risk for agricultural food security and farmers' incomes [@gregory2005], and
 catastrophic disease outbreaks and wildfires increase risk for the logging
 industry [@kirilenko2007].
+<!-- TODO Could add anthropogenic perturbations (e.g., Exxon Valdez) to this list or in the next paragraph. -->
 
 <!-- rotate -> plant multiple? -->
 
 Individuals who rely on natural resources for income develop strategies to
-reduce income variability. For example, farmers may rotate their crops to buffer
+reduce income variability. For example, farmers may TODO 
+to buffer
 short-term climate variation and long-term environmental trends [@zentner1988].
 Similarly, loggers maintain a diverse mix of tree species, age structure, and
 harvest in multiple areas to buffer against disease outbreak, wildfires, and
 price variation (REF). However, otherwise well-intentioned regulations may limit
 how individuals diversify, or incentivize against diversification. For example,
 in terrestrial agriculture, crop subsidies in the U.S. may incentivize some
-farms to specialize (e.g. dairy, grains, soybeans; @mishra2002). In other
+farms to specialize (e.g. dairy, grains, soybeans; @mishra2002). <!-- TODO LP: ? -->
+In other
 instances, market forces (e.g. prices or demand) may discourage the
 adoption of diverse strategies and help promote specialization [@bradshaw2004].
 
@@ -41,7 +45,9 @@ extreme economic risk that some individuals experience, particularly relative to
 terrestrial agriculture [@sethi2012b]. The majority of risk insurance programs
 available to terrestrial farmers (e.g. crop insurance programs) are not
 obtainable by commercial fishers [@kasperski2013]. However, fishers maintain the
-ability to lower risk by diversifying their fishing portfolio. They can, for
+ability to lower risk by diversifying their fishing portfolio.
+ <!-- TODO LP: this is the question you are trying to answer -->
+They can, for
 example, target as many species as allowed by a permit, own multiple
 permits, or diversify spatially and fish in multiple regions. The effectiveness
 of these diversification strategies for increasing revenue and reducing revenue
@@ -74,7 +80,7 @@ participants through individual fishing quotas (IFQs) [@grimm2012].
 [^1]: For example, it cost ~\$192K USD for a king and tanner crab permit in
 Southeast Alaska in 2016: <https://www.cfec.state.ak.us/pmtvalue/X_K69A.HTM>.
 
-<!-- TODO AH: I think our fisher apporach is good, but I wonder if it’s worth a footnote to address the potential critique that at the indivdual level we don’t observe their wages in non-fishing activities.  I’m not sure if this is worth bringing up, but this is always the case anyway with vessels where the skipper may do other things. -->
+<!-- TODO AH: I think our fisher apporach is good, but I wonder if it’s worth a footnote to address the potential critique that at the indivdual level we don’t observe their wages in non-fishing activities.  I’m not sure if this is worth bringing up, but this is always the case anyway with vessels where the skipper may do other things. triue, and for others-->
 
 Using a unique dataset collected over 30 years on individual fishers, rather
 than fleets or vessels, we examine how revenue and revenue variability of
@@ -115,8 +121,8 @@ if salmon license holders are excluded (Fig. \ref{fig:ts}D).
 \begin{center}
 \includegraphics[width=0.5\textwidth]{../figs/fig1-jk.pdf}
 
-\caption{Trends in revenue and diversification over time. (A) Map of fishing
-regions in Alaska, USA. (B) Total revenue in billions of USD from `r
+\caption{Trends in revenue and diversification over time. (A) Map of major fishing
+areas in Alaska, USA. (B) Total revenue in billions of USD from `r
 range_yrs[1]` to `r range_yrs[2]` for multiple (grey) and single (blue) permit
 holders. (C) Proportion of single permit holders for all fisheries (thick black
 line) and with permit holders omitted each year who fished any of the `r
@@ -158,7 +164,7 @@ with a salmon permit and had high levels of fished species diversity (Fig.
 \ref{fig:across}).
 
 Comparing single permit holders to individuals holding that same permit plus
-additional permits illustrates the expected reduction in revenue variability
+additional permits illustrates the expected reduction in year-to-year revenue variability
 from purchasing additional permits (Fig. \ref{fig:spokes}, Fig.
 S\figspokeall). For example, individuals fishing a halibut permit plus
 one additional permit always had lower expected revenue variability compared to
@@ -185,7 +191,6 @@ of return.}
 \end{center}
 \end{figure*}
 
-
 In contrast to the clear across-strategy effects of species diversity on revenue
 and revenue variability, the effect of changing fished species diversity for an
 individual *within* the constraints of a given strategy (set of permits) is more variable
@@ -193,6 +198,7 @@ individual *within* the constraints of a given strategy (set of permits) is more
 annual average revenue for fishers with the same set of permits, specializing
 tends to be associated with increased revenue but also increased variability
 (Fig. \ref{fig:within}; Figs S\figfe, S\figre, S\ref{fig:noeffort}).
+ <!-- TODO LP: effort is endogenous? -->
 On average, there is a ~0.5% increase in the year-to-year revenue ratio per 1%
 decrease in species diversity, and across strategies weighted equally, `r
 g2_dens`% of the probability density supports a positive relationship between
@@ -222,15 +228,15 @@ medians and 50\% credible intervals of posteriors. The effect of generalizing
 \end{center}
 \end{figure}
 
-
 Changing (increasing or decreasing) an individual's fished species diversity
 within the constraints of a set of permits tends to be associated with greater
 expected variability or uncertainty in year-to-year revenue (Fig.
 \ref{fig:within} strategies above zero; Figs. S\figfe, S\figre,
-S\figmirror). This effect was strongest for individuals with a halibut
-permit or halibut and sablefish permits. Individuals with these strategies
+S\figmirror). This effect was strongest for individuals with a halibut and sablefish permit. 
+Individuals with this strategies
 experienced a ~2% increase in variability for a 1% change in the year-to-year
-ratio of species diversity (Fig. \ref{fig:within}). Becoming more generalized in
+ratio of species diversity (Fig. \ref{fig:within}).
+Becoming more generalized in
 species diversity also leads to increased revenue variability (Fig.
 S\ref{fig:mirror}A), suggesting that the act of changing the number of species fished for a given set of permits is
 a contributor to increased variability of revenue.
@@ -278,7 +284,8 @@ revenue. This could be for a number of reasons. First, specialization can
 increase fishing efficiency [@smith1986]. Efficiency gains from specialization
 can be seen in other natural resource sectors. For example, rice farmers in
 Ghana can increase their efficiency by devoting more land and labor to rice
-production compared to other crops [@abdulai2000]. Second, given the
+production compared to other crops [@abdulai2000]. <!-- TODO: weak -->
+Second, given the
 availability of valuable resources, specializing can be highly profitable. For
 instance, when cocoa prices have been high, Nigerian farmers have tended to
 specialize on the crop [@mustapha1999] and specializing on valuable tobacco
@@ -340,9 +347,11 @@ individuals over 30 years in one of the most productive fishing regions in the
 world. However, this large temporal and geographical scope potentially obscures
 time or regional-variation in the consequences of diversification on revenue and
 revenue variability. Furthermore, in
-addressing the overall pattern, we have averaged out the potential signal of several major discrete
-events, such as the Exxon Valdez oil spill in 1989, that had significant
-consequences for the ecological and social systems in Alaska [@paine1996]. In
+addressing the overall pattern, we have averaged out the potential 
+signal of several major discrete
+events, such as the *Exxon Valdez* oil spill in 1989, that was a significant
+disruption to the management, ecological, 
+and social structure of fisheries in Alaska [@paine1996]. In
 addition to revenue or income variability, it is important to understand the
 benefits of diversification in the context of rare and extreme disturbances
 which occur in natural systems worldwide [@anderson2017].

@@ -131,7 +131,7 @@ We combined a number of permits that were the same except for vessel size.
 We combined permits for
 otter trawl,
 longline finfish,
-pot gear.
+pot gear,
 king crab,
 and
 shrimp.
@@ -141,7 +141,7 @@ For example, someone fishing herring roe in Kodiak (G34K)
 and someone fishing herring roe in Alaska Peninsula (G34M)
 were both considered to have a herring roe permit strategy.
 We combined permits across each of
-dungeness crab,
+Dungeness crab,
 herring roe purse seining,
 herring roe gillnet,
 herring hand picked,
@@ -160,8 +160,8 @@ Cook Inlet, Bristol Bay, and Alaska Peninsula because sockeye
 represents greater than 90\% of species revenue.
 For the purse seine permits (S01),
 there was a wide variety in species revenue by
-area ($\sim$ 85\% pink in Prince William Sound to
-85\% sockeye on the Alaskan Peninsula).
+area ($\sim$ 85\% pink salmon in Prince William Sound to
+85\% sockeye salmon on the Alaskan Peninsula).
 Of the five permits, only two had similar species compositions,
 so we grouped Kodiak and Cook Inlet.
 For the set gillnet salmon permits (S04),
@@ -188,13 +188,14 @@ within each person-year combination.
 For example, if someone fished halibut
 and sablefish in the same year
 their strategy for that year would be `halibut-sablefish'.
-We removed people who switched strategies from one year to the next
-since we were working with changes in revenue from year to year
+We removed data for pairs of years in which people switched
+strategies from one year to the next
+since we were working with changes in revenue from year-to-year
 and so needed consistent strategies across any pair of years
 for a permit holder.
 We removed strategies with less than 100 unique permit holders
 across all years to focus on the major strategies
-leaving us with a total of \Sexpr{nstr} strategies.
+leaving us with a total of \Sexpr{nstr} (unique or combined) strategies.
 Finally, we removed all person-year combinations without
 revenue recorded in the following year
 in order to calculate percent change in revenue
@@ -243,14 +244,15 @@ matched the estimates of the same model in lme4 almost exactly.
 \end{spacing}
 
 \clearpage
-
+% TODO: AB: I suggest 2 additional columns: 1) potential species that could be harvested under each permit strategy, 2) number of unique permits contained within each strategy. This would really help to show how much flexibility someone within each permit strategy might have.
 \begin{table}[h!]
+\footnotesize
   \centering
-  \caption{Labels and descriptions of fishing strategies. In many cases,
+  \caption{Labels and descriptions of unique fishing strategies. In many cases,
 a particular strategy represents a group of similar permits across areas
 or vessel sizes.}
   \label{tab:strategies}
-  \begin{tabular}{ll}
+  \begin{tabular}{lll}
   \toprule
 \input{../figs/strategy-table.tex}
   \end{tabular}
@@ -277,7 +279,7 @@ to the magnitude of residual error. (TODO symbols need to be updated)}
 \begin{center}
 \includegraphics[width=1.06\textwidth]{../figs/stan-str-posteriors-dot.pdf}
 \caption{Estimates of within-strategy effects from the hierarchical model.
-Panels refer to parameters in Eqns \ref{eq:mean} and \ref{eq:cv}.
+Panels refer to parameters in equations \ref{eq:mean} and \ref{eq:cv}.
 Shown are medians (dots) and 50\% and 95\% credible intervals
 (thick and thin line segments).
 Strategies are ordered from high to low mean
@@ -286,6 +288,7 @@ species diversity from top to bottom.}
 \end{center}
 \end{figure}
 
+% TODO: tweak labels to fit
 \begin{figure}[htbp]
 \begin{center}
 \includegraphics[width=1\textwidth]{../figs/stan-gg-spoke-all.pdf}
@@ -296,6 +299,8 @@ strategy combinations.}
 \label{fig:spoke-all}
 \end{center}
 \end{figure}
+
+% TODO: all figs referenced?
 
 \begin{figure}[htbp]
 \begin{center}
