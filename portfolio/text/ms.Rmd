@@ -242,15 +242,15 @@ increased revenue variability (Fig. S\ref{fig:mirror}A), suggesting that the act
 of changing the number of species fished for a given set of permits is a
 contributor to increased variability of revenue.
 
-<!-- TODO mention the quadrants in figure 4 -->
+<!-- TODO mention the quadrants in figure 4? -->
 
 Alaskan halibut and sablefish fisheries were converted to individual fishery 
 quota (IFQ) management in 1995, which potentially confounds our estimates with a
 major regulatory change. Therefore, we refit our models allowing all 
 strategy-level effects involving halibut and sablefish permits to vary 
 separately before and after the introduction of IFQs. The introduction of IFQs 
-was associated with a reduction in revenue variability of ~25% (TODO XX--XX 95%
-CI) for individuals with only halibut or sablefish permits (Fig. S\figifq A).
+was associated with a reduction in revenue variability of ~20--30% for
+individuals with only halibut or sablefish permits (Fig. S\figifq A).
 <!-- TODO AH: We need to note that the populatoin changed -->
 Furthermore, for individuals within most
 strategies, the association between changing species diversity and increased
