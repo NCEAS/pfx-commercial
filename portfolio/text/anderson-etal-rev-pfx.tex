@@ -60,8 +60,11 @@ authors.}
 
 % Keywords are not mandatory, but authors are strongly encouraged to provide them. If provided, please include two to five keywords, separated by the pipe symbol, e.g:
 \keywords{
-TODO $|$
-TODO
+diversity-stability $|$
+Bayesian variance-function regression $|$
+income variability $|$
+natural resource management $|$
+ecological portfolio effects
 }
 
 \newcommand{\tabstrategies}{1}
@@ -97,7 +100,7 @@ and lower variability. However, increasing species diversity within the
 constraints of existing permits has a fishery-dependent effect on revenue and is
 usually (93\% probability) associated with increased revenue uncertainty
 the following year. Our results demonstrate that the most effective option for
-individuals to decrease revenue variability is to purchase permits to
+individuals to decrease revenue variability is to
 participate in additional or more diverse fisheries. However, this option is
 expensive, often limited by regulations such as license limitation or catch share programs, and
 consequently unavailable to many individuals. With increasing climatic variability,
@@ -153,7 +156,6 @@ person-year combination to form permit strategies. For example, if someone
 fished halibut and sablefish in the same year, their strategy for that year
 would be ``halibut-sablefish''. Specific details on our strategy definitions
 are available in the Supporting Information.
-% TODO AB: Since Table 1 defines all of the fishng strategies that are then used as figure labels (and not defined elsewhere in the text), I think it should go into the main body of the text rather than Suppl Info. This would also help clarify any confusion a reader might have about the difference between a permit strategy and an individual permit.  I suggest 2 additional columns in Table 1: 1) potential species that could be harvested under each permit strategy, 2) number of unique permits contained within each strategy. This would really help to show how much flexibility someone within each permit strategy might have.
 
 Our models focused on species diversity as a possible predictor of revenue and
 revenue variability while controlling for effort. For consistency with previous
@@ -192,7 +194,9 @@ and time \(t\):
 \log(R_{i,t}) \sim \mathrm{N} \left(\mu_{i,t}, \sigma_{i,t}^2 \right).
 \end{equation}
 
-\noindent Each year \(t\) of revenue for fisher \(i\) is assigned a strategy (permit set) indexed by \(j\) (Supporting Information, Table~\tabstrategies) and \(\mu_{i,t}\) is modelled as:
+\noindent Each year \(t\) of revenue for fisher \(i\) is assigned a strategy
+(permit set) indexed by \(j\) (Supporting Information, Table~\tabstrategies)
+and \(\mu_{i,t}\) is modelled as:
 
 \begin{equation*}
   \begin{split}
@@ -212,23 +216,24 @@ year-to-year, \(\log \left(\mathrm{div}_{i,t}/\mathrm{div}_{i,t-1}\right)\),
 \(D_{i,t}\) is the log ratio of days fished from year-to-year, \(\log
   \left(\mathrm{days}_{i,t}/\mathrm{days}_{i,t-1}\right)\), and \(I_{i,t}\) is
 an indicator variable that takes a value \(0\) if \(\mathrm{div}_{i,t} \ge
-  \mathrm{div}_{i,t-1}\) (species diversity increasing year-to-year; generalizing) and takes
-a value \(1\) if \(\mathrm{div}_{i,t} < \mathrm{div}_{i,t-1}\) (species
-diversity decreasing year-to-year; specializing). Estimating a separate coefficient for the
-effect of increasing diversity and decreasing diversity allows the costs and
-benefits of these changes to be asymmetric (Fig.~S\figresid).
+  \mathrm{div}_{i,t-1}\) (species diversity increasing year-to-year;
+generalizing) and takes a value \(1\) if \(\mathrm{div}_{i,t} <
+  \mathrm{div}_{i,t-1}\) (species diversity decreasing year-to-year;
+specializing). Estimating a separate coefficient for the effect of increasing
+diversity and decreasing diversity allows the costs and benefits of these
+changes to be asymmetric (Fig.~S\figresid). The negative signs in front of
+$\beta_{1,j}$ and $\beta_4$ makes these coefficients interpretable as effects of
+increasing specialization (as opposed to decreasing specialization).
 
 We use \(\log(R_{i,t-1}\)) as an offset, and thus our model describes the log
 ratio of revenue from year-to-year, i.e., \(\log(R_{i,t}) - \log(R_{i,t-1}) =
   \log(R_{i,t}/R_{i,t-1})\). We model change in revenue because preliminary
-analysis revealed non-stationary trends in revenue (resulting from experience
-or other unmodelled factors). This approach eliminates having to deal with the
-non-stationary time series and eliminates having to estimate thousands of
+analyses revealed non-stationary trends in revenue (resulting from experience
+or other unmodelled factors). This approach reduces the
+non-stationarity of the time series and allows us to avoid estimating thousands of
 mean-revenue intercepts associated with individual fishers.
-% TODO AH: Should you note that you tested for it?  You say that you assume stationarity after you differnece, but why don’t you test and report it? reduces...?
-We removed
-person-year combinations without a subsequent year of revenue.
-% TODO AH: what proportion of the data is this?
+Because we were modelling year-to-year changes,
+we removed person-year combinations without a subsequent year of revenue.
 
 The \(\beta\) terms represent estimated coefficients, some of which are allowed
 to vary as ``random effect'' terms. The intercepts \(\beta_{0,j,t}\) are
@@ -245,11 +250,11 @@ zero. I.e., we assume that the data are stationary after accounting for all
 covariates and including an intercept that varies with strategy-year
 combinations. Initial versions of the model confirmed that the global intercept
 along with strategy-level intercepts would be estimated at almost exactly zero.
-The estimated \(\beta_{j,t}\) coefficients represent years when people with a particular
-set of permits tended to collectively do better or worse than the long-term
-average (Fig.~S\figstryrs). Therefore, an individual's expected change in
-revenue (and variability) represents the expectation after accounting for the
-general trend in revenue for that set of permits.
+The estimated \(\beta_{j,t}\) coefficients represent years when people with a
+particular set of permits tended to collectively do better or worse than the
+long-term average (Fig.~S\figstryrs). Therefore, an individual's expected
+change in revenue (and variability) represents the expectation after accounting
+for the general trend in revenue for that set of permits.
 
 The slopes \(\beta_{1,j}\) and \(\beta_{2,j}\) are then allowed to vary by
 strategy with estimated means:
@@ -266,14 +271,12 @@ ratio of revenue from year-to-year. These are after controlling for changes in
 effort, \(\beta_3\), and the interaction between changes in effort and changes
 in species diversity, \(\beta_4\) and \(\beta_5\).
 
-Whereas traditional hierarchical linear models assume homoscedasticity --- that
-the residual variance does not vary systematically --- our variance-function
+Whereas traditional hierarchical linear models assume homoscedasticity---that
+the residual variance does not vary systematically---our variance-function
 regression model allows the residual variance to be heteroscedastic and vary as
 a function of predictors. Instead of estimating a single residual error scale
 term, \(\sigma\), we model the scale of the residual error with another
 hierarchical model with a similar form:
-
-% TODO AH: explain here somewhere why gamma 1 &4 are negative
 
 \begin{equation*}
 \begin{split}
@@ -334,6 +337,14 @@ a second mixed-effects model representing the variance component. We also
 validated the model with simulated data, and were able to recover the true
 values (Supporting Information). Code used in our analysis is available at
 \url{https://github.com/NCEAS/pfx-commercial/portfolios/}. } \showmatmethods
+
+\acknow{This work was conducted as part of the National Center for Ecological
+  Analysis and Synthesis working group "Applying portfolio effects to the Gulf
+  of Alaska ecosystem: Did multi-scale diversity buffer against the Exxon
+  Valdez oil spill?", funded by TODO. We thank other participants of the
+  working group for helpful discussions. Additional support was provided by a
+  David H. Smith Conservation Research Fellowship (S.C.A.), the NOAA Fisheries'
+  Spatial Economics Toolbox for Fisheries (FishSET) Project (J.T.W), \ldots }
 
 \showacknow % Display the acknowledgments section
 
