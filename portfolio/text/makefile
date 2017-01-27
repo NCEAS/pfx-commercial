@@ -8,7 +8,7 @@ all: $(TEXT).pdf $(SOM).pdf
 %.md: %.Rmd
 	cp $< temp.Rmd
 	perl -p -i -e "s/ \`r\n/ \`r \n/g" temp.Rmd # add space at end for in-line R code 
-	perl -p -i -e "s/\(\`r\n/ \`r \n/g" temp.Rmd # add space at end for in-line R code
+	perl -p -i -e "s/\(\`r\n/ \(\`r \n/g" temp.Rmd # add space at end for in-line R code
 	Rscript -e "knitr::knit('temp.Rmd', output = '$(basename $<).md')"
 	rm temp.Rmd
 

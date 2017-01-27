@@ -234,9 +234,7 @@ to quickly iterate and build intuition about the models.
 A version of the Stan model without the variance-component
 matched the estimates of the same model in lme4 almost exactly.
 
-
 % \verbatiminput{../analysis/portfolio-offset.stan}
-
 
 \bibliographystyle{apalike}
 \bibliography{refs}
@@ -244,7 +242,7 @@ matched the estimates of the same model in lme4 almost exactly.
 \end{spacing}
 
 \clearpage
-% TODO: AB: I suggest 2 additional columns: 1) potential species that could be harvested under each permit strategy, 2) number of unique permits contained within each strategy. This would really help to show how much flexibility someone within each permit strategy might have.
+
 \begin{table}[h!]
 \footnotesize
   \centering
@@ -260,15 +258,26 @@ or vessel sizes.}
 
 \begin{figure}[htbp]
 \begin{center}
+\includegraphics[width=1\textwidth]{../figs/stan-gg-spoke-all.pdf}
+\caption{The effect of adding a permit to one's strategy
+on estimated revenue variability and median revenue.
+This is an extended version of Fig.~2 that includes all major
+strategy combinations.}
+\label{fig:spoke-all}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
 \includegraphics[width=5in]{../figs/stan-main-effects.pdf}
 \caption{Main effects from the hierarchical model
 predicting revenue ($\beta$) and variability ($\gamma$) in revenue.
-The $\eta$ coefficients represents strategy-level predictors
+The $\eta$ coefficients represent strategy-level predictors
 relating mean species diversity and mean days fished
 within a strategy
 (both centered by their means and divided by
 two times their standard deivations)
-to the magnitude of residual error. (TODO symbols need to be updated)}
+to the magnitude of residual error.}
 \label{fig:fe}
 \end{center}
 \end{figure}
@@ -288,49 +297,31 @@ species diversity from top to bottom.}
 \end{center}
 \end{figure}
 
-% TODO: tweak labels to fit
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[width=1\textwidth]{../figs/stan-gg-spoke-all.pdf}
-\caption{The effect of adding a permit to one's strategy
-on estimated revenue variability and median revenue.
-This is an extended version of Fig.~2 that includes all major
-strategy combinations.}
-\label{fig:spoke-all}
-\end{center}
-\end{figure}
-
-% TODO: all figs referenced?
+\clearpage
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid.png}
-\caption{The log-absolute value residuals from the mean-component model (Eq.~\ref{eq:mean}).
-These residuals are modelled in the variance-component model
-(Eq.~\ref{eq:cv}).
-Breakpoint linear regression fits are overlaid in red for visual interpretation.}
-\label{fig:resid}
+\includegraphics[width=1.05\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
+\caption{Effects of (A) generalizing and (B) specializing from year-to-year for
+  individual permit holders \emph{within} the \Sexpr{nstr} most common
+  strategies. Changing species diversity from year-to-year is associated with
+  higher variability for individuals within the strategies above the zero line.
+  Generalizing (A) or specializing (B) is associated with greater expected
+  revenue ratios to the right of the zero line and lower expected revenue ratios
+  to the left of the zero line. These effects are estimated holding fishing
+  season length constant from year-to-year. Dots and line segments represent
+  medians and 50\% credible intervals of posteriors. Panel B and Fig.~4 are the
+  same.}
+\label{fig:mirror}
 \end{center}
 \end{figure}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid-down.png}
-\caption{The log-absolute value of downside (negative) residuals from the main
-component model.
-Figure looks qualitatively the same as Fig.~\ref{fig:resid} and so justifies
-using variability (positive and negative residuals) as a measure of risk.}
-\label{fig:resid-downside}
-\end{center}
-\end{figure}
-
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[width=1\textwidth]{../figs/strategy-year-effects.pdf}
-\caption{Strategy-year intercept estimates ($\beta_{0,j,t}$ in
-Eq.~\ref{eq:mean}) from the hierarchical model.
-Shown are 40 samples from the posterior distribution.}
-\label{fig:str-yrs}
+\includegraphics[width=0.6\textwidth]{../figs/stan-offset-break-anti-spaghetti-specializing-no-effort.pdf}
+\caption{Same as Fig.~4 but without the effort (days fished) predictor and
+  without its interaction with species diversity.}
+\label{fig:noeffort}
 \end{center}
 \end{figure}
 
@@ -352,29 +343,33 @@ Shown are 40 samples from the posterior distribution.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1.05\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
-\caption{Effects of (A) generalizing and (B) specializing from year-to-year for
-  individual permit holders \emph{within} the \Sexpr{nstr} most common
-  strategies. Changing species diversity from year-to-year is associated with
-  higher variability for individuals within the strategies above the zero line.
-  Generalizing (A) or specializing (B) is associated with greater expected
-  revenue ratios to the right of the zero line and lower expected revenue ratios
-  to the left of the zero line. These effects are estimated holding fishing
-  season length constant from year-to-year. Dots and line segments represent
-  medians and 50\% credible intervals of posteriors. Panel B and Fig.~4 are the
-  same.}
-\label{fig:mirror}
+\includegraphics[width=1\textwidth]{../figs/strategy-year-effects.pdf}
+\caption{Strategy-year intercept estimates ($\beta_{0,j,t}$ in
+Eq.~\ref{eq:mean}) from the hierarchical model.
+Shown are 40 samples from the posterior distribution.}
+\label{fig:str-yrs}
 \end{center}
 \end{figure}
 
-\clearpage
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid.png}
+\caption{The log-absolute value residuals from the mean-component model (Eq.~\ref{eq:mean}).
+These residuals are modelled in the variance-component model
+(Eq.~\ref{eq:cv}).
+Breakpoint linear regression fits are overlaid in red for visual interpretation.}
+\label{fig:resid}
+\end{center}
+\end{figure}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{../figs/stan-offset-break-anti-spaghetti-specializing-no-effort.pdf}
-\caption{Same as Fig.~4 but without the effort (days fished) predictor and
-  without its interaction with species diversity.}
-\label{fig:noeffort}
+\includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid-down.png}
+\caption{The log-absolute value of downside (negative) residuals from the main
+component model.
+Figure looks qualitatively the same as Fig.~\ref{fig:resid} and so justifies
+using variability (positive and negative residuals) as a measure of risk.}
+\label{fig:resid-downside}
 \end{center}
 \end{figure}
 

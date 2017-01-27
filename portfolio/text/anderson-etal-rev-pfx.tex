@@ -68,15 +68,15 @@ ecological portfolio effects
 }
 
 \newcommand{\tabstrategies}{1}
-\newcommand{\figfe}{1}
-\newcommand{\figre}{2}
-\newcommand{\figspokeall}{3}
-\newcommand{\figresid}{4}
-\newcommand{\figresiddownside}{5}
-\newcommand{\figstryrs}{6}
-\newcommand{\figifq}{7}
-\newcommand{\figmirror}{8}
-\newcommand{\fignoeffort}{9}
+\newcommand{\figspokeall}{1}
+\newcommand{\figfe}{2}
+\newcommand{\figre}{3}
+\newcommand{\figmirror}{4}
+\newcommand{\fignoeffort}{5}
+\newcommand{\figifq}{6}
+\newcommand{\figstryrs}{7}
+\newcommand{\figresid}{8}
+\newcommand{\figresiddownside}{9}
 
 % 250:
 \begin{abstract}
@@ -198,7 +198,7 @@ and time \(t\):
 (permit set) indexed by \(j\) (Supporting Information, Table~\tabstrategies)
 and \(\mu_{i,t}\) is modelled as:
 
-\begin{equation*}
+\begin{equation}
   \begin{split}
 \label{eq:mean}
 \mu_{i,t} = \beta_{0,j,t} -
@@ -209,7 +209,7 @@ and \(\mu_{i,t}\) is modelled as:
   \beta_5 S_{i,t} D_{i,t} I_{i,t} +
   \log(R_{i,t-1}),
   \end{split}
-\end{equation*}
+\end{equation}
 
 \noindent where \(S_{i,t}\) is the log ratio of species diversity from
 year-to-year, \(\log \left(\mathrm{div}_{i,t}/\mathrm{div}_{i,t-1}\right)\),
@@ -278,7 +278,7 @@ a function of predictors. Instead of estimating a single residual error scale
 term, \(\sigma\), we model the scale of the residual error with another
 hierarchical model with a similar form:
 
-\begin{equation*}
+\begin{equation}
 \begin{split}
 \label{eq:cv}
 \sigma_{i,t} =
@@ -289,7 +289,7 @@ hierarchical model with a similar form:
 \gamma_4 S_{i,t} D_{i,t} I_{i,t} +
 \gamma_5 S_{i,t} D_{i,t} I_{i,t}).
 \end{split}
-\end{equation*}
+\end{equation}
 
 \noindent Again, \(S_{i,t}\) and \(I_{i,t}\) represent, respectively, the log
 ratio of species diversity from year-to-year and an indicator variable for
@@ -326,7 +326,7 @@ and \(\eta\) parameters, and half-\(t(3, 0, 2)\) priors (i.e.~degrees of
 freedom of 3 and scale of 2) on all \(\sigma\) and \(\tau\). We ran four chains
 and 2,000 iterations and discarded the first 1,000 iterations of each chain as
 warm up. We checked for chain convergence visually with trace plots, ensured
-that \(\hat{R}<1.05\) (the potential scale reduction factor) and that the
+that \(\hat{R}<1.05\) (the potential scale reduction factor), and that the
 effective sample size, as calculated by the rstan R package
 \cite{standevelopmentteam2016}, was greater than 200 for all parameters
 \cite{gelman2014}. We verified that our model returned sensible estimates by

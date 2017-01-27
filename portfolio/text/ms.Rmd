@@ -149,7 +149,6 @@ diversity or days fished from year-to-year. }
 \label{fig:across}
 \end{center}
 \end{figure}
-
 <!-- TODO AB: To me it is more intuitive that the darker, hotter colors would
 represent higher values. Consdier reversing the color scale to go from red
 (highest # of permit holders) to yellow (lowest #).  -->
@@ -166,10 +165,10 @@ with a salmon permit and had high levels of fished species diversity (Fig.
 \ref{fig:across}).
 
 Comparing single permit holders to individuals holding that same permit plus
-additional permits illustrates the expected reduction in year-to-year revenue variability
-from purchasing additional permits (Fig. \ref{fig:spokes}, Fig.
-S\figspokeall). For example, individuals fishing a halibut permit plus
-one additional permit always had lower expected revenue variability compared to
+additional permits illustrates the expected reduction in year-to-year revenue
+variability from purchasing additional permits (Fig. \ref{fig:spokes}, Fig.
+S\figspokeall). For example, individuals fishing a halibut permit plus one
+additional permit always had lower expected revenue variability compared to
 individuals fishing only a halibut permit (median reduction of `r
 100-spoke[[2]]`% [`r 100-spoke[[3]]`--`r 100-spoke[[1]]`% IQR], Fig.
 \ref{fig:spokes}A). Likewise, adding a permit to a herring roe gillnet strategy
@@ -195,16 +194,17 @@ of return.}
 
 In contrast to the clear across-strategy effects of species diversity on revenue
 and revenue variability, the effect of changing fished species diversity for an
-individual *within* the constraints of a given strategy (set of permits) is more variable
-(Fig. \ref{fig:within}). After accounting for fishing effort and changes in
-annual average revenue for fishers with the same set of permits, specializing
-tends to be associated with increased revenue but also increased variability
-(Fig. \ref{fig:within}; Figs S\figfe, S\figre, S\ref{fig:noeffort}).
- <!-- TODO LP: effort is endogenous? -->
-On average, there is a ~0.5% increase in the year-to-year revenue ratio per 1%
-decrease in species diversity, and across strategies weighted equally, `r
-g2_dens`% of the probability density supports a positive relationship between
-specialization and revenue.
+individual *within* the constraints of a given strategy (set of permits) is more
+variable (Fig. \ref{fig:within}). After accounting for fishing effort and
+changes in annual average revenue for fishers with the same set of permits,
+specializing tends to be associated with increased revenue but also increased
+variability (Fig. \ref{fig:within}; Figs S\figfe, S\figre, S\figmirror). <!--
+TODO LP: effort is endogenous? --> On average, there is a ~0.5% increase in the
+year-to-year revenue ratio per 1% decrease in species diversity, and across
+strategies weighted equally, `r g2_dens`% of the probability density supports
+a positive relationship between specialization and revenue. However, when
+not controlling for effort, the average effect of specializing on revenue
+becomes more neutral (Fig. S\fignoeffort).
 
 \begin{figure}[htbp]
 \begin{center}
@@ -230,17 +230,18 @@ medians and 50\% credible intervals of posteriors. The effect of generalizing
 \end{center}
 \end{figure}
 
-Changing (increasing or decreasing) an individual's fished species diversity 
-within the constraints of a set of permits tends to be associated with greater 
-expected variability or uncertainty in year-to-year revenue (Fig. 
+Changing (increasing or decreasing) an individual's fished species diversity
+within the constraints of a strategy tends to be associated with greater
+expected variability or uncertainty in year-to-year revenue (Fig.
 \ref{fig:within} strategies above zero; Figs. S\figfe, S\figre, S\figmirror).
-This effect was strongest for individuals with a halibut and sablefish permit. 
-Individuals with this strategies experienced a ~2% increase in variability for a
-1% change in the year-to-year ratio of species diversity (Fig.
-\ref{fig:within}). Becoming more generalized in species diversity also leads to
-increased revenue variability (Fig. S\ref{fig:mirror}A), suggesting that the act
-of changing the number of species fished for a given set of permits is a
-contributor to increased variability of revenue.
+This effect was strongest for individuals with a halibut and sablefish permit.
+Individuals with this strategy experienced a ~2% increase in variability for
+a 1% change in the year-to-year ratio of species diversity (Figs
+\ref{fig:within}, S\figmirror). 
+<!-- Becoming more generalized in species diversity -->
+<!-- also leads to increased revenue variability (Fig. S\figmirror A), suggesting -->
+<!-- that the act of changing the number of species fished for a given set of permits -->
+<!-- is a contributor to increased variability of revenue. -->
 
 <!-- TODO mention the quadrants in figure 4? -->
 
@@ -251,7 +252,7 @@ strategy-level effects involving halibut and sablefish permits to vary
 separately before and after the introduction of IFQs. The introduction of IFQs 
 was associated with a reduction in revenue variability of ~20--30% for
 individuals with only halibut or sablefish permits (Fig. S\figifq A).
-<!-- TODO AH: We need to note that the populatoin changed -->
+<!-- TODO AH: We need to note that the population changed -->
 Furthermore, for individuals within most
 strategies, the association between changing species diversity and increased
 revenue variability became stronger after the introduction of IFQs (Fig.

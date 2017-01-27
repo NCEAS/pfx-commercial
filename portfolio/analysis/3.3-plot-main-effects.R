@@ -42,12 +42,14 @@ term_lu <- data.frame(
     "η0 (global intercept, variability)",
     "η1 (strategy-level diversity effect, variability)",
     "η2 (strategy-level days-fished effect, variability)"
-  )
+  ), stringsAsFactors = FALSE
 )
+term_lu$order <- seq_len(nrow(term_lu))
 p$term_clean <- NULL
+p$order <- NULL
 p <- inner_join(p, term_lu)
 p$term_clean <- factor(p$term_clean,
-  levels = rev(sort(as.character(p$term_clean))))
+  levels = p$term_clean[rev(p$order)])
 
 # invert specializing coefs to match fig 4:
 p[grepl("specializing", p$term_clean),c("l", "l.5", "m", "u.5", "u")] <-
@@ -60,7 +62,7 @@ p1 <- ggplot(p, aes(x = term_clean, y = m)) +
   ylab("Parameter estimate") +
   geom_hline(aes(yintercept = 0), lty = 2, col = "grey60") +
   geom_vline(aes(xintercept = 8.5), lty = 2, col = "grey60") +
-  geom_vline(aes(xintercept = 2.5), lty = 2, col = "grey60") +
+  geom_vline(aes(xintercept = 3.5), lty = 2, col = "grey60") +
   coord_flip() + theme_gg() + xlab("")
 # ggsave("portfolio/figs/stan-main-effects.pdf", width = 5.6, height = 4)
 cairo_pdf("portfolio/figs/stan-main-effects.pdf", width = 5.6, height = 4)
