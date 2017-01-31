@@ -21,7 +21,7 @@ variability [@smith1986]. For example, drought and flooding are a major source
 of risk for agricultural food security and farmers' incomes [@gregory2005], and 
 catastrophic disease outbreaks and wildfires increase risk for the logging 
 industry [@kirilenko2007].
-<!-- TODO Could add anthropogenic perturbations (e.g., Exxon Valdez) to this
+<!-- Could add anthropogenic perturbations (e.g., Exxon Valdez) to this
 list or in the next paragraph. -->
 
 Individuals who rely on natural resources for income develop strategies to
@@ -77,7 +77,7 @@ Southeast Alaska in 2016: <https://www.cfec.state.ak.us/pmtvalue/X_K69A.HTM>.
 a footnote to address the potential critique that at the indivdual level we
 don’t observe their wages in non-fishing activities.  I’m not sure if this is
 worth bringing up, but this is always the case anyway with vessels where the
-skipper may do other things. triue, and for others-->
+skipper may do other things. triue, and for others - KH and Cl et al. ...-->
 
 Using a unique dataset collected over 30 years on individual fishers, rather 
 than fleets or vessels, we examine how revenue and revenue variability of 
@@ -198,8 +198,8 @@ individual *within* the constraints of a given strategy (set of permits) is more
 variable (Fig. \ref{fig:within}). After accounting for fishing effort and
 changes in annual average revenue for fishers with the same set of permits,
 specializing tends to be associated with increased revenue but also increased
-variability (Fig. \ref{fig:within}; Figs S\figfe, S\figre, S\figmirror). <!--
-TODO LP: effort is endogenous? --> On average, there is a ~0.5% increase in the
+variability (Fig. \ref{fig:within}; Figs S\figfe, S\figre, S\figmirror).
+On average, there is a ~0.5% increase in the
 year-to-year revenue ratio per 1% decrease in species diversity, and across
 strategies weighted equally, `r g2_dens`% of the probability density supports
 a positive relationship between specialization and revenue. However, when
@@ -252,7 +252,7 @@ strategy-level effects involving halibut and sablefish permits to vary
 separately before and after the introduction of IFQs. The introduction of IFQs 
 was associated with a reduction in revenue variability of ~20--30% for
 individuals with only halibut or sablefish permits (Fig. S\figifq A).
-<!-- TODO AH: We need to note that the population changed -->
+<!-- TODO AH: although ... We need to note that the population changed -->
 Furthermore, for individuals within most
 strategies, the association between changing species diversity and increased
 revenue variability became stronger after the introduction of IFQs (Fig.
@@ -298,7 +298,8 @@ specializing can have longterm risks if market, management, biological, or
 environmental conditions change. For example, U.S. farmers specialized on wheat,
 corn, or soybeans were hit harder than diversified farmers in the early 1980s
 when a financial crisis hit [@ikerd1990].
-<!-- TODO AB: We might want to include more examples / references from fisheries. -->
+<!-- AB: We might want to include more examples / references from fisheries.
+herring - affected by closures? value declined...-->
 Third, diversifying---a lack of
 specialization---can happen as a consequence of non-ideal circumstances such
 as poor availability of a more valuable resource. For example, Ugandan
@@ -314,11 +315,16 @@ reasons for this relationship. For instance, local knowledge and experience are
 a major determinant of fishing efficiency [@hilborn1985a]. Therefore, changes to
 fishing patterns may sometimes be associated with a learning or adaptation phase
 as individuals become accustomed to new locations, gear, or species.
-<!-- TODO AB: I think in this paragraph it would be good to pick an example or two and speculate on potential reasons specific to those permit strategies. Otherwise, statements like this one aren’t really anchored to anything concrete.  For example, what does increased specialization look like in the Hal ll permit, which showed one of the greatest effects of specialization on revenue diversity? How many permits could a Hal ll permit holder potentially fish? This goes back to my comment re: Table 1 (see p. 15) -->
+<!-- TODO AB: I think in this paragraph it would be good to pick an example or two and speculate on potential reasons specific to those permit strategies. Otherwise, statements like this one aren’t really anchored to anything concrete.  For example, what does increased specialization look like in the Hal ll permit, which showed one of the greatest effects of specialization on revenue diversity? How many permits could a Hal ll permit holder potentially fish? This goes back to my comment re: Table 1 (see p. 15) 
+sea cuc - H W book - learning...
+herring - alaska 1970s - learn to fish for roe ... [ref]
+salmon - hatchery production - change target from diverse to most abundant... PWS seine - pink salmon or SE
+Hal ll + S troll...
+-->
 Additionally, changes in diversity might reflect years in which targeted species
 were less available and fishers instead chose to target other species or landed
-more bycatch,
-<!-- TODO AB: This is the first time bycatch is explicitly mentioned in the study and it raises some questions about how target vs. bycatch species are defined and considered in the analysis. Some clarification in the methods would be helpful. -->
+more non-target species,
+<!-- TODO AB: This is the first time bycatch is explicitly mentioned in the study and it raises some questions about how target vs. bycatch species are defined and considered in the analysis. Some clarification in the methods would be helpful. all catch including bycatch non-target species-->
 adding stochasticity to their revenue. Most importantly, this
 increased variability reflects an inability for our model to predict
 an individual's revenue in a subsequent year. There are many reasons, often

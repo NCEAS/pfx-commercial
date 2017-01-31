@@ -178,8 +178,6 @@ and Kuskokwim because of similar species compositions.
 The remaining salmon permits were relatively unique
 and were left ungrouped.
 
-% TODO: Are you saying that PWS sockeye permits were combined with BB sockeye permits?I can't remember but that's what it sounds like so I just wanted to be clear.
-
 After this process of combining permits,
 we were left with \Sexpr{n_grouped_permits}
 unique fishing strategies (Table~\ref{tab:strategies}),
