@@ -242,13 +242,15 @@ matched the estimates of the same model in lme4 almost exactly.
 \clearpage
 
 \begin{table}[h!]
-\footnotesize
+\scriptsize
   \centering
   \caption{Labels and descriptions of unique fishing strategies. In many cases,
 a particular strategy represents a group of similar permits across areas
-or vessel sizes.}
+or vessel sizes. The column ``Main species'' indicates species that make up at
+least 10\% of the total revenue across all years and individuals for that
+fishing strategy. ``Sock'' refers to sockeye salmon.}
   \label{tab:strategies}
-  \begin{tabular}{lll}
+  \begin{tabular}{llll}
   \toprule
 \input{../figs/strategy-table.tex}
   \end{tabular}
