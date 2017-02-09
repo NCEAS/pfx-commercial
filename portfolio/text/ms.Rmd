@@ -251,8 +251,8 @@ major regulatory change. Therefore, we refit our models allowing all
 strategy-level effects involving halibut and sablefish permits to vary 
 separately before and after the introduction of IFQs. The introduction of IFQs 
 was associated with a reduction in revenue variability of ~20--30% for
-individuals with only halibut or sablefish permits (Fig. S\figifq A).
-<!-- TODO AH: although ... We need to note that the population changed -->
+individuals with only halibut or sablefish permits (Fig. S\figifq A;
+although other changes in fish populations occurred concurrently).
 Furthermore, for individuals within most
 strategies, the association between changing species diversity and increased
 revenue variability became stronger after the introduction of IFQs (Fig.
@@ -283,10 +283,12 @@ community and vessel levels [@kasperski2013; @sethi2012b; @sethi2014; @cline2017
 findings within strategies, with respect to individual year-to-year behavior,
 provide new insights. Here, specializing tended to be associated with increased
 revenue. This could be for a number of reasons. First, specialization can
-increase fishing efficiency [@smith1986]. Efficiency gains from specialization
-can be seen in other natural resource sectors. For example, rice farmers in
-Ghana can increase their efficiency by devoting more land and labor to rice
-production compared to other crops [@abdulai2000]. <!-- TODO: weak -->
+increase fishing efficiency [@smith1986]. 
+Similar efficiency gains from specialization are well known in 
+agricultural fields [@ikerd1990; @abdulai2000].
+<!-- For example, rice farmers in -->
+<!-- Ghana can increase their efficiency by devoting more land and labor to rice -->
+<!-- production compared to other crops [@abdulai2000]. -->
 Second, given the
 availability of valuable resources, specializing can be highly profitable. For
 instance, when cocoa prices have been high, Nigerian farmers have tended to
@@ -315,7 +317,8 @@ reasons for this relationship. For instance, local knowledge and experience are
 a major determinant of fishing efficiency [@hilborn1985a]. Therefore, changes to
 fishing patterns may sometimes be associated with a learning or adaptation phase
 as individuals become accustomed to new locations, gear, or species.
-<!-- TODO AB: I think in this paragraph it would be good to pick an example or two and speculate on potential reasons specific to those permit strategies. Otherwise, statements like this one aren’t really anchored to anything concrete.  For example, what does increased specialization look like in the Hal ll permit, which showed one of the greatest effects of specialization on revenue diversity? How many permits could a Hal ll permit holder potentially fish? This goes back to my comment re: Table 1 (see p. 15) 
+For example, many individuals fishing herring in Alaska in the 1970s 
+<!-- AB: I think in this paragraph it would be good to pick an example or two and speculate on potential reasons specific to those permit strategies. Otherwise, statements like this one aren’t really anchored to anything concrete.  For example, what does increased specialization look like in the Hal ll permit, which showed one of the greatest effects of specialization on revenue diversity? How many permits could a Hal ll permit holder potentially fish? This goes back to my comment re: Table 1 (see p. 15) 
 sea cuc - H W book - learning...
 herring - alaska 1970s - learn to fish for roe ... [ref]
 salmon - hatchery production - change target from diverse to most abundant... PWS seine - pink salmon or SE
@@ -324,7 +327,6 @@ Hal ll + S troll...
 Additionally, changes in diversity might reflect years in which targeted species
 were less available and fishers instead chose to target other species or landed
 more non-target species,
-<!-- TODO AB: This is the first time bycatch is explicitly mentioned in the study and it raises some questions about how target vs. bycatch species are defined and considered in the analysis. Some clarification in the methods would be helpful. all catch including bycatch non-target species-->
 adding stochasticity to their revenue. Most importantly, this
 increased variability reflects an inability for our model to predict
 an individual's revenue in a subsequent year. There are many reasons, often
