@@ -45,6 +45,12 @@ n_jacknifed <- names(nums[n_jacknifed])
 
 mean_permit_days <- round(mean(md$strategy_mean_days)/10) * 10
 
+e1 <- -1 * rstan::extract(m)$coef_g1_strategy
+e2 <- rstan::extract(m)$coef_g2_strategy
+
+e <- rbind(e1, e2)
+prob_change_inc_variance <- round(sum(e > 0) / (nrow(e)*ncol(e)), 2) * 100
+
 ndat <- readRDS("portfolio/data-generated/ndat.rds")
 ndat_cull <- readRDS("portfolio/data-generated/ndat-cull.rds")
 ndat <- c(ndat, ndat_cull)
