@@ -1,8 +1,8 @@
 ---
 title: 'Reduced diversity and increased specialization of Alaska salmon fishermen:
   effects on variation in individual revenues'
-author: "Eric, Sean, Ole, Rich, Milo, Jordan, Jen, Alan, others"
-date: ''
+author: "Eric, Sean, Ole, Rich, Milo, Jordan, Jen, Alan, Ben, etc."
+date: '2017-02-08'
 output:
   pdf_document:
     fig_caption: yes
@@ -17,15 +17,15 @@ library(knitr)
 library(tidyverse)
 library(reshape2)
 library(date)
-library(ggtern)
+#library(ggtern)
 library(mgcv)
-library(fpc)
+#library(fpc)
 library(gridExtra)
-library(glmmTMB)
+#library(glmmTMB)
 library(zoo)
 library(rstan)
+library(ggrepel)
 modelname = "model-linear" # model-linear-nointeractions
-
 ```
 
 ## Abstract
@@ -57,7 +57,7 @@ The objective of our analysis is to better understand the effects of diversifica
 
 ### Data  
 
-We obtained fisheries landings and revenue data for all permit holders in Alaska from 1985-2014 from the Commercial Fisheries Entry Commission (CFEC). We adjusted for inflation by setting all revenues in 2009 USD. Because we were only interested in single permit fisheries, we adopted a simplified version of the filtering steps described in [@anderson_benefits]. After aggregating individual trip-level fish tickets to annual data, we retained individuals who only fished one of the six salmon permits included in a year (Table 1, Fig. A5). Like [@anderson_benefits] we also worked with a log-differenced dataset to remove non-stationary individuals; to avoid complications of individuals switching strategies, we only included pairs of years for a given person where they did not change strategies (i.e., didn’t change fisheries or add permits, etc.).  
+We obtained fisheries landings and revenue data for all iundividual permit holders in Alaska from 1985-2014 from the Commercial Fisheries Entry Commission (CFEC). Each permit holder has a unique identifier that allows us to track quantities including the species caught and revenue received. We adjusted for inflation by converting all revenues to 2009 USD. Because of our focus on salmon fishers, we were only interested in single permit fisheries, and we adopted a simplified version of the filtering steps described in [@anderson_benefits]. After aggregating individual trip-level catch and revenue to annual data, we retained permit holders who fished only one of the six salmon permits included in a year (Table 1, Fig. A5). Like [@anderson_benefits] we also worked with a log-differenced dataset to remove non-stationary individuals; to avoid complications of individuals switching strategies (e.g. changing from a seine fishery in Kodiak to a gillnet fishery in Bristol Bay), we only included pairs of years for a given person where they did not change strategies (i.e., didn’t change fisheries or add permits, etc.).  
 
 ```{r, echo=FALSE}
 m = matrix("", 6, 3)
@@ -73,7 +73,7 @@ kable(m)
 
 ### As hatchery programs have increased production, have individual salmon fishermen experienced reduced variability?  
 
-Hatchery release trends for some regions included in our data have been summarized previously (e.g. [@ward_evaluating] summarized the trends for Prince William Sound). Release patterns have been dominated by pink and chum salmon ([@ward_evaluating], cite more specific #?) and production has increased since the late 1970s (217 million juvenile pink salmon in PWS in 1985 versus 672 million in 2014). Though our analysis with CFEC data doesn't separate hatchery versus wild fish, as a contrast we can make coarse comparisons across regions and species to examine potential effects of hatchery fish on variability. For example, we can compare the variation in the largely hatchery pink salmon returns (earnings and weight) from Prince William Sound to the largely wild pink salmon returns from Southeast Alaska. Similarly, we can compare the variability in earnings from species dominated by hatchery returns (pink, chum) to those with less hatchery influence (Chinook, sockeye). To make these comparisons, we aggregated the earnings and landings by species and permit, then calculated 3-year rolling CVs. As a second comparison, we examined whether long-term participants in any of the fisheries had experienced a change in variability. Similar to [@kasperski_income_2013] who calculated CVs of vessels before and after significant management events, we identified individuals who fished the same permit for at least three years in the first decade of our data (1985-1995) and at least three years in the last decade of the data (2004-2014). 
+Hatchery release trends for some regions included in our data have been summarized previously (e.g. [@ward_evaluating] summarized the trends for Prince William Sound). Release patterns have been dominated by pink and chum salmon ([@stopha2016]) and production has increased since the late 1970s (217 million juvenile pink salmon in PWS in 1985 versus 672 million in 2014). Though our analysis with CFEC data doesn't separate hatchery versus wild fish, as a contrast we can make comparisons across regions and species to examine potential effects of hatchery fish on variability. For example, we can compare the variation in the largely hatchery pink salmon returns (earnings and weight) from Prince William Sound to the largely wild pink salmon returns from Southeast Alaska. Similarly, we can compare the variability in earnings from species dominated by hatchery returns (pink, chum) to those with less hatchery influence (Chinook, sockeye). To make these comparisons, we aggregated the earnings and landings by species and permit, then calculated 3-year rolling CVs. As a second comparison, we examined whether long-term participants in any of the fisheries had experienced a change in variability. Similar to [@kasperski_income_2013] who calculated CVs of vessels before and after significant management events, we identified individuals who fished the same permit for at least three years in the first decade of our data (1985-1995) and at least three years in the last decade of the data (2004-2014). 
 
 ### Analysis 3: [Core of paper] Does effect of diversification change over time?
 
@@ -141,6 +141,73 @@ Using purse seine permit holders in Prince William Sound as an example, we first
 Larger values of $\Delta { p }_{ ind,t }$ indicate greater year-to-year discrepancy in species composition. To focus on individuals who had more constant strategies in adjacent years, we ommitted data corresponding to the upper third of this distribution (retaining $\Delta { p }_{ ind,t }$ < 0.334). Next, we used the species composition from each individual and pair of years to cluster individuals into strategies. Clustering was performed using the partitioning around medoids (pam) algorithm in R with an estimated number of clusters (using 'pamk' in fpc library), and selected 2 groups of individual strategies: pink salmon specialization (medoid proportion of pink salmon = 0.95), and a strategy focused on pink salmon and chum (medoid proportions of 0.64 and 0.31 respectively). For each group, we then calculated the mean and CV of revenue; we calculated the log difference of revenue for each individual, $\Delta { R }_{ i }=\log\left( { R }_{ i,t+1 }/{ R }_{ i,t } \right)$ and then calculated the CV as the standard deviation over people, $sd(\Delta { R }_{ i=1:n })$.  
 
 \break  
+
+```{r, echo=FALSE, fig.pos="placeHere", fig.cap="CV and mean annual revenue by salmon permit, 1975-2014. Average participation (unique fishers) given by circle size, and effective species diversity is shown with color shading.", fig.height=3.2, eval=FALSE}
+dat.annual = readRDS(file="../../portfolio/data-generated/salmon-annual-for-modeling.rds")
+
+cfec_all = readRDS("../../portfolio/data-generated/salmon_data_for_paper.rds")
+people = group_by(cfec_all, p_fshy, year) %>% 
+  summarize(n = length(unique(p_holder))) %>% 
+  group_by(p_fshy) %>% summarize(n = mean(n,na.rm=T))
+names(people)[which(names(people)=="p_fshy")] = "strategy_permit"
+people$strategy_permit = paste0(substr(people$strategy_permit,1,1), substr(people$strategy_permit,3,5))
+
+dat.annual = filter(dat.annual, npermit==1 & substr(strategy_permit,1,1)=="S") %>%
+  group_by(strategy_permit) %>% 
+  mutate(nPeople = length(unique(p_holder))) %>% 
+  filter(nPeople > 200) %>% 
+  dplyr::select(-nPeople) %>% 
+  group_by(strategy_permit, year) %>% 
+  summarize(meanrev = mean(revenue), meandiv = mean(specDiv)) %>% 
+  arrange(strategy_permit, year) %>% 
+  group_by(strategy_permit) %>% 
+  summarize(mean_rev = mean(meanrev,na.rm=T), cv_rev = sd(diff(log(meanrev)),na.rm=T),
+    diversity = mean(meandiv,na.rm=T)) %>% as.data.frame
+  
+dat.annual = left_join(dat.annual, people)
+dat.annual$gear = substr(dat.annual$strategy_permit,2,3)
+dat.annual$gear[which(dat.annual$gear=="01")]="Purse seine"
+dat.annual$gear[which(dat.annual$gear=="03")]="Drift gillnet"
+dat.annual$gear[which(dat.annual$gear=="04")]="Set gillnet"
+dat.annual$gear[which(dat.annual$gear=="05")]="Hand troll"
+dat.annual$gear[which(dat.annual$gear=="15")]="Power troll"
+
+dat.annual$price = NA
+dat.annual$price[dat.annual$strategy_permit=="S01A"]=250000
+dat.annual$price[dat.annual$strategy_permit=="S01E"]=186700
+dat.annual$price[dat.annual$strategy_permit=="S01H"]=84800
+dat.annual$price[dat.annual$strategy_permit=="S01K"]=40000
+dat.annual$price[dat.annual$strategy_permit=="S01L"]=227500
+dat.annual$price[dat.annual$strategy_permit=="S01M"]=56900
+
+dat.annual$price[dat.annual$strategy_permit=="S03A"]=88900
+dat.annual$price[dat.annual$strategy_permit=="S03E"]=224200
+dat.annual$price[dat.annual$strategy_permit=="S03H"]=63500
+dat.annual$price[dat.annual$strategy_permit=="S03M"]=119500
+dat.annual$price[dat.annual$strategy_permit=="S03T"]=148200
+dat.annual$price[dat.annual$strategy_permit=="S03W"]=NA
+
+dat.annual$price[dat.annual$strategy_permit=="S04D"]=88900
+dat.annual$price[dat.annual$strategy_permit=="S04H"]=15300
+dat.annual$price[dat.annual$strategy_permit=="S04K"]=77000
+dat.annual$price[dat.annual$strategy_permit=="S04M"]=55900
+dat.annual$price[dat.annual$strategy_permit=="S04T"]=38500
+dat.annual$price[dat.annual$strategy_permit=="S04W"]=7300
+dat.annual$price[dat.annual$strategy_permit=="S04X"]=5400
+dat.annual$price[dat.annual$strategy_permit=="S04Y"]=9900
+dat.annual$price[dat.annual$strategy_permit=="S04Z"]=11100
+
+dat.annual$price[dat.annual$strategy_permit=="S05B"]=11000
+dat.annual$price[dat.annual$strategy_permit=="S15B"]=38300
+
+g1 = ggplot(dat.annual, aes(x=log(mean_rev), y=log(cv_rev), label = dat.annual$strategy_permit)) + geom_point(aes(col=gear,size=diversity,alpha=0.7)) + scale_size(range = c(0, 20)) + geom_text_repel() + ylab("CV annual revenue") + xlab("Mean revenue (dollars)") + theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
+print(g1)
+pdf("Figure_01.pdf")
+print(g1)
+dev.off()
+```
+
 
 ```{r, echo=FALSE, fig.pos="placeHere", fig.cap="Harvest of hatchery produced salmon through time and by area.", fig.height=3.2}
 

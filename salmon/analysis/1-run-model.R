@@ -73,6 +73,25 @@ if(modelname=="linear") {
   save.image("salmon/analysis/model-linear.Rdata")
 }
 
+if(modelname=="linear_varrw") {
+  stan_pars = c("b0_str_yr", "b0_str_yr_tau", "g_0", "g0_strategy_tau",
+    "b_1", "b_2", "b_4", "b1_str_yr_tau", "b2_str_yr_tau",
+    "b4_str_yr_tau", "b1_str_yr_mu", "b2_str_yr_mu",
+    "b4_str_yr_mu", "g0", "g_1", "g_2", "g_4", "g1_str_yr_tau", "g2_str_yr_tau",
+    "g4_str_yr_tau", "g1_str_yr_mu", "g2_str_yr_mu",
+    "g4_str_yr_mu")
+
+  library(rstan)
+  rstan_options(auto_write = TRUE)
+  options(mc.cores = parallel::detectCores())
+
+  # estimate model. This model is modified from the simulation model by (1) including indices to allow NAs in the inputted data, and (2) including estimated year effects (intercepts)
+  mod = stan(file = 'salmon/analysis/portfolio-offset-linear-varrw.stan',data = stan_data,
+    verbose = TRUE, chains = 3, thin = 1, warmup = 1000, iter = 2000, pars = stan_pars)
+
+  save.image("salmon/analysis/model-linear-varrw.Rdata")
+}
+
 if(modelname=="interceptonly") {
 stan_pars = c("b0_str_yr", "b0_str_yr_tau", "g0_strategy", "g0_strategy_tau",
   "b_1", "b_4", "b1_str_yr_tau", "b4_str_yr_tau",

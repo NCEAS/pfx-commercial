@@ -128,8 +128,6 @@ appendixPlot0_p2 = ggplot(seasons, aes(year, length, color = permit, group=permi
 ```
 
 
-
-
 ```{r, echo = FALSE, eval=FALSE}
 dat = dat.salmon
 # create other category, lumping coho/chinook
