@@ -98,13 +98,13 @@ standat <- list(
 )
 
 msim <- stan("portfolio/analysis/portfolio-offset-sim.stan",
-  data = standat, iter = 500, chains = 2,
+  data = standat, iter = 700, chains = 2,
   pars = c("mu", "sigma"), include = FALSE)
 save(msim, file = "portfolio/data-generated/nsim.rda")
 load("portfolio/data-generated/nsim.rda")
 
 b <- broom::tidy(msim, estimate.method = "median", rhat = T, ess = T)
-filter(b, grepl("^b_j|^g_k|^h", term))
+filter(b, grepl("^b_j|^g_k", term))
 filter(b, grepl("^g0$", term))
 filter(b, grepl("tau", term))
 
@@ -126,4 +126,8 @@ plot(xh1, g0 + h1 * xh1 + residual)
 abline(a = g0, b = h1)
 
 plot(xh1, stan_g0 + stan_h1 * xh1 + stan_residual)
-abline(a = stan_g0, b = stan_h1)
+# abline(a = stan_g0, b = 2*stan_h1)
+abline(a = g0, b = h1)
+
+plot(xh2, stan_g0 + stan_h2 * xh2 + stan_residual)
+abline(a = g0, b = h2)
