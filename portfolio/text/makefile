@@ -3,7 +3,10 @@ MS = ms
 SOM = supp
 REFS = refs
 
-all: $(TEXT).pdf $(SOM).pdf
+all: $(TEXT).pdf $(SOM).pdf anderson-rev-pfx-cover.pdf
+
+anderson-rev-pfx-cover.pdf: anderson-rev-pfx-cover.tex
+	pdflatex $<
 
 %.md: %.Rmd
 	cp $< temp.Rmd
