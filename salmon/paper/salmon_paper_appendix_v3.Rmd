@@ -1,5 +1,5 @@
 ---
-title: "Supplement for Ward et al., 'Reduced diversity and increased specialization of Alaska salmon fishermen...' "
+title: "Supplement for Ward et al., 'Reduced diversity and increased specialization of Alaska salmon fishermen' "
 author: ''
 date: ''
 output:
