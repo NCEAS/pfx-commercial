@@ -105,19 +105,3 @@ portfolio/text/abstract.md
 *.xwm
 
 portfolio/text/anderson-rev-pfx-cover.tex
-
-pounds_by_stat6.csv
-
-refs.bib
-
-salmon/analysis/varfunc_fishery2.R
-
-salmon/analysis/varfunc_avg_people.R
-
-salmon/analysis/hatchery_var_rw.stan
-
-salmon/analysis/hatchery_var.stan
-
-salmon/analysis/varfunc_fishery.R
-
-salmon/analysis/varfunc_region.R
