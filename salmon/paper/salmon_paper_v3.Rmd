@@ -1,7 +1,7 @@
 ---
 title: 'Reduced diversity and increased specialization of Alaska salmon fishermen:
   effects on variation in individual revenues'
-author: "Eric, Sean, Ole, Rich, Milo, Jordan, Jen, Alan, Ben..."
+author: "Eric, Sean, Ole, Rich, Milo, Jordan, Jen, Alan, Ben, etc."
 date: ''
 output:
   pdf_document:
