@@ -108,16 +108,35 @@ portfolio/text/anderson-rev-pfx-cover.tex
 
 pounds_by_stat6.csv
 
+<<<<<<< Updated upstream
 refs.bib
 
 salmon/analysis/varfunc_fishery2.R
 
 salmon/analysis/varfunc_avg_people.R
 
+=======
+>>>>>>> Stashed changes
 salmon/analysis/hatchery_var_rw.stan
 
 salmon/analysis/hatchery_var.stan
 
+<<<<<<< Updated upstream
 salmon/analysis/varfunc_fishery.R
 
 salmon/analysis/varfunc_region.R
+=======
+salmon/analysis/varfunc_avg_people.R
+
+salmon/analysis/varfunc_fishery.R
+
+salmon/analysis/varfunc_region.R
+
+salmon/analysis/varfunc_fishery2.R
+
+refs.bib
+>>>>>>> Stashed changes
+
+salmon/data-generated/commonPropertyCommercialCatch.csv
+
+salmon/data-generated/commonPropertyCommercialCatch.csv
