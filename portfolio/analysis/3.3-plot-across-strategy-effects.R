@@ -119,7 +119,7 @@ pl <-  g0 %>% mutate(str_label = ifelse(nn > 150, str_label, NA)) %>%
   alpha = 1, segment.color = "grey80",
   point.padding = unit(0.0001, "lines"), max.iter = 3e4, segment.size = 0.2) +
   geom_point(aes(bg = nn), pch = 21, size = 1.9) +
-  scale_fill_distiller(palette = "YlOrRd", trans = "log10", direction = 1,
+  scale_fill_distiller(palette = "YlOrRd", trans = "log10", direction = -1,
     breaks = c(200, 1000, 5000)) +
   coord_cartesian(ylim = c(0.2, 1.2)) +
   theme_gg() +
