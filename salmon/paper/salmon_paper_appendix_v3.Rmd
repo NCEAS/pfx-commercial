@@ -122,7 +122,16 @@ seasons = group_by(cfec.raw, p_fshy, year) %>%
     lower = quantile(sample(jday, size = 10000, replace=T, prob=g_earn),0.025),
     upper = quantile(sample(jday, size = 10000, replace=T, prob=g_earn),0.975),
     length = upper - lower)
+
 seasons = rename(seasons, permit = p_fshy)
+
+seasons$permit[which(seasons$permit=="S 01A")] = "SEAK-seine"
+seasons$permit[which(seasons$permit=="S 01E")] = "PWS-seine"
+seasons$permit[which(seasons$permit=="S 01K")] = "Kodiak-seine"
+seasons$permit[which(seasons$permit=="S 01M")] = "AKP-seine"
+seasons$permit[which(seasons$permit=="S 03A")] = "SEAK-gillnet"
+seasons$permit[which(seasons$permit=="S 03E")] = "PWS-gillnet"
+
 appendixPlot0_p1 = ggplot(seasons, aes(year, q, color = permit, group=permit)) + geom_line() + xlab("Year") + ylab("Mean julian day")
 appendixPlot0_p2 = ggplot(seasons, aes(year, length, color = permit, group=permit)) + geom_line() + xlab("Year") + ylab("Season length")
 ```
@@ -145,13 +154,13 @@ appendixPlot2_p3 = ggplot(agg.diff, aes(log(meanrev), cv, colour = specDiv, labe
 
 ## Overall trends in participation across permits  
   
-```{r figa1, fig.cap="Participation (unique people)", fig.pos="placeHere", echo=FALSE}
+```{r figa1, fig.cap="Participation (unique people). Permits are coded by gear ('01'=seine, '03' = drift gillnet, '04' = set gillnet) and region ('A'=SEAK, 'D'=Yakutat, 'E'=PWS, 'H'=Cook Inlet, 'K'=Kodiak', 'L'=Chignik, 'M' = Alaskan Peninsula', 'T'=Bristol Bay', 'W'=Kotzebue). Effective species diversity is calculated as 1/Simpson's Diversity.", fig.pos="placeHere", echo=FALSE}
 print(appendixPlot1)
 ```
 
 \break  
 
-```{r figa2, fig.cap="Diversity, mean revenue and CV (aggregated across years)", fig.pos="placeHere", echo=FALSE}
+```{r figa2, fig.cap="Diversity, mean revenue and CV (aggregated across years). Permits are coded by gear ('01'=seine, '03' = drift gillnet, '04' = set gillnet) and region ('A'=SEAK, 'D'=Yakutat, 'E'=PWS, 'H'=Cook Inlet, 'K'=Kodiak', 'L'=Chignik, 'M' = Alaskan Peninsula', 'T'=Bristol Bay', 'W'=Kotzebue). Effective species diversity is calculated as 1/Simpson's Diversity.", fig.pos="placeHere", echo=FALSE}
 gridExtra::grid.arrange(appendixPlot2_p1,appendixPlot2_p2,appendixPlot2_p3, ncol=2)
 ```
 
@@ -170,7 +179,7 @@ cbPalette <- c("#009E73", "#4B2E83", "#999999", "#CC79A7", "#D55E00")
 g1 = group_by(cfec.raw[cfec.raw$p_fshy=="S 01A" & cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S01A") + 
+  ylab("Species %") + xlab("") + ggtitle("SEAK-seine") + 
 scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
     'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]), name="Species",
     labels =c("Chinook","Chum","Coho","Pink","Sockeye")) + theme(legend.position="none")
@@ -178,35 +187,35 @@ scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2],
 g2 = group_by(cfec.raw[cfec.raw$p_fshy=="S 01E" & cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S01E") + theme(legend.position="none") + 
+  ylab("Species %") + xlab("") + ggtitle("PWS-seine") + theme(legend.position="none") + 
 scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
     'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]))
 
 g3 = group_by(cfec.raw[cfec.raw$p_fshy=="S 01K" & cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S01K") + theme(legend.position="none") + 
+  ylab("Species %") + xlab("") + ggtitle("Kodiak-seine") + theme(legend.position="none") + 
 scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
     'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]))
 
 g4 = group_by(cfec.raw[cfec.raw$p_fshy=="S 01M" & cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S01M") + theme(legend.position="none") + 
+  ylab("Species %") + xlab("") + ggtitle("AKP-seine") + theme(legend.position="none") + 
 scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
     'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]), name = "Species", labels =c("Chinook","Chum","Coho","Pink","Sockeye")) + theme(legend.position="none")
 
 g5 = group_by(cfec.raw[cfec.raw$p_fshy=="S 03A" & cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK"),], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S03A") + theme(legend.position="none") + 
+  ylab("Species %") + xlab("") + ggtitle("SEAK-gillnet") + theme(legend.position="none") + 
 scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
     'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]))
 
 g6 = group_by(cfec.raw[cfec.raw$p_fshy=="S 03E" & cfec.raw$spec %in% c("CHUM","COHO","SOCK","PINK","CHNK") & cfec.raw$year > 0,], year, spec, p_fshy) %>%
   summarize(p = sum(g_earn)) %>% group_by(year, p_fshy) %>% mutate(p = p/sum(p), col = as.numeric(as.factor(spec))) %>%
   ggplot(aes(year, p, group=spec, color = spec)) + geom_line() +  
-  ylab("Species %") + xlab("") + ggtitle("S03E") + theme(legend.position="none") + 
+  ylab("Species %") + xlab("") + ggtitle("PWS-gillnet") + theme(legend.position="none") + 
 scale_colour_manual(values = c('CHNK'=cbPalette[1], 'CHUM'=cbPalette[2], 
     'COHO'=cbPalette[3], 'PINK'=cbPalette[4], 'SOCK'=cbPalette[5]))
 
@@ -259,7 +268,7 @@ gridExtra::grid.arrange(g4, g5, g6, h4, h5, h6, nrow=2)
 ## Model Results  
 
 
-```{r figa5, fig.pos="placeHere", fig.cap="Time varying effects of adding 1 species on log standard deviation of revenue for hypothetical individuals with species diversity ~ 1.", echo=FALSE}
+```{r figa5, fig.pos="placeHere", fig.cap="Time varying effects of increasing the effective species diversity of catch from 1 to 2 species, on log standard deviation of revenue.", echo=FALSE}
 
 diffdat = readRDS(file="../../salmon/data-generated/salmon.rds")
 years = seq(min(diffdat$year), max(diffdat$year))
@@ -301,6 +310,13 @@ df$pred = 0
 df$low = 0
 df$high = 0
 
+df$permits[which(df$permits=="S01A")] = "SEAK-seine"
+df$permits[which(df$permits=="S01E")] = "PWS-seine"
+df$permits[which(df$permits=="S01K")] = "Kodiak-seine"
+df$permits[which(df$permits=="S01M")] = "AKP-seine"
+df$permits[which(df$permits=="S03A")] = "SEAK-gillnet"
+df$permits[which(df$permits=="S03E")] = "PWS-gillnet"
+
 for(i in 1:nrow(df)) {
   #tmp = est$g0 + est$g0_strategy[,df$permit[i]] + 
   tmp = 
@@ -314,7 +330,7 @@ for(i in 1:nrow(df)) {
 ggplot(df[df$diversity==1,], aes(x=years,y=pred,group=permits)) +
   geom_line() +
   geom_ribbon(aes(ymin=low,ymax=high), alpha=0.4) +
-  facet_wrap(~permits) + xlab("Year") + ylab("Predicted marginal benefit of adding +1 spp (ln $)") + geom_hline(yintercept=0, color="red")
+  facet_wrap(~permits) + xlab("Year") + ylab("Predicted marginal benefit (ln $)") + geom_hline(yintercept=0, color="red")
 
 ``` 
 
@@ -340,7 +356,15 @@ yearpermit$b0 = apply(est$b0_str_yr,2,median)
 yearpermit$b0_low = apply(est$b0_str_yr,2,quantile,0.025)
 yearpermit$b0_hi = apply(est$b0_str_yr,2,quantile,0.975)
 
-ggplot(data=yearpermit) + 
+yearpermit2 = yearpermit
+yearpermit2$permit[which(yearpermit2$permit=="S01A")] = "SEAK-seine"
+yearpermit2$permit[which(yearpermit2$permit=="S01E")] = "PWS-seine"
+yearpermit2$permit[which(yearpermit2$permit=="S01K")] = "Kodiak-seine"
+yearpermit2$permit[which(yearpermit2$permit=="S01M")] = "AKP-seine"
+yearpermit2$permit[which(yearpermit2$permit=="S03A")] = "SEAK-gillnet"
+yearpermit2$permit[which(yearpermit2$permit=="S03E")] = "PWS-gillnet"
+
+ggplot(data=yearpermit2) + 
   geom_ribbon(aes(x=year,ymin=b0_low,ymax=b0_hi),alpha=0.3) +
   geom_line(aes(x=year,y=b0)) + 
   facet_wrap(~permit) + xlab("Year") + 
@@ -417,7 +441,7 @@ df_s01e_b1 = df
 ```
 
 
-```{r figa9, echo=FALSE, fig.pos="placeHere", fig.cap = "As model validation, we can compare the estimated intercepts for PWS S01E (purse seine) representing average year to year change in revenue versus the change year over year in ln(pink salmon returns). Correlation between them is ~ 0.8. This suggests (as expected) people on average make a lot more money in years when pink salmon returns are high. [side note: diversification may only be beneficial here when returns and prices are both low.]", eval=FALSE}
+```{r figa9, echo=FALSE, fig.pos="placeHere", fig.cap = "As model validation, we can compare the estimated intercepts for PWS S01E (purse seine) representing average year to year change in revenue versus the change year over year in ln(pink salmon returns). Correlation between them is ~ 0.8. This suggests (as expected) people on average make a lot more money in years when pink salmon returns are high. [EW side note: diversification may only be beneficial here when returns and prices are both low.]"}
 
 yearpermit$b0 = apply(est$b0_str_yr,2,median)
 yearpermit$b0_low = apply(est$b0_str_yr,2,quantile,0.025)

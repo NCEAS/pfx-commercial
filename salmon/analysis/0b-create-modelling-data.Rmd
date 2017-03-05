@@ -1,0 +1,315 @@
+---
+title: "Create data sets for modeling"
+output:
+  pdf_document:
+    fig_caption: yes
+---
+
+## Differenced vs. undifferenced datasets:
+
+1. Excluding observations that we don't have consecutive years for
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE)
+```
+
+## Load cleaned data
+
+```{r dataLoad, warning = FALSE, message=FALSE, results="hide", echo=FALSE}
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(date)
+library(reshape2)
+cfec <- feather::read_feather("portfolio/data-generated/salmon.feather")
+
+maxYear = 2015
+cfec = filter(cfec, year %in% seq(1975,maxYear))
+
+saveRDS(cfec, "portfolio/data-generated/salmon_data_for_paper.rds")
+
+# convert 6-dig p_fshy codes to 5 digits
+# removing blank space - now they're all length(5)
+idx = which(nchar(cfec$p_fshy)==6)
+cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1),
+  substr(cfec$p_fshy[idx], 3, 6), sep="")
+
+# remove white space in 2nd position
+idx = which(substr(cfec$p_fshy, 2, 2) == " ")
+cfec$p_fshy[idx] = paste(substr(cfec$p_fshy[idx], 1, 1),
+  substr(cfec$p_fshy[idx], 3, length(cfec$p_fshy[idx])), sep="")
+```
+
+## Function definition
+
+We need to define a few functions for calculating diversity. We'll use the
+Simpson's diversity index (HHI) to calculate the entropy-based inverse, which
+is a proxy for effective species diversity.
+
+```{r, warning = FALSE, message=FALSE, echo=FALSE}
+simp.div = function(x) {
+  1/sum((x/sum(x))^2)
+}
+```
+
+## Previously, we excluded people using 2 boats in a year, but now we'll include them. 
+
+```{r}
+# Now we'll filter out (i.e. keep) individuals who only used 1 boat in a year, and boats with
+# only one permit holder fishing in a year.
+cfecnew = cfec
+#cfec.1boat = group_by(cfecnew, p_holder, year) %>%
+#  summarize(nBoat = length(unique(cadfg))) %>%
+#  filter(nBoat==1) %>%
+#  left_join(cfecnew)
+#cfecnew = cfec.1boat
+
+dim(cfecnew)[1]
+ndat <- list()
+ndat$initial <- nrow(cfecnew)
+ndat$initial_tot_rev <- sum(cfecnew$g_earn)
+```
+
+## Combine some strategies 
+
+```{r}
+codes <- readr::read_csv("data/cfec-codes.csv")
+# convert 6-dig p_fshy codes to 5 digits
+# removing blank space - now they're all length(5)
+idx = which(nchar(codes$p_fshy)==6)
+codes$p_fshy[idx] = paste(substr(codes$p_fshy[idx], 1, 1),
+  substr(codes$p_fshy[idx], 3, 6), sep="")
+
+# remove white space in 2nd position
+idx = which(substr(codes$p_fshy, 2, 2) == " ")
+codes$p_fshy[idx] = paste(substr(codes$p_fshy[idx], 1, 1),
+  substr(codes$p_fshy[idx], 3, length(codes$p_fshy[idx])), sep="")
+
+codes$description <- gsub(", VESSEL OVER 80", " VESSEL OVER 80", codes$description)
+codes$description <- gsub(";97m", "", codes$description)
+codes$description <- gsub(", VESSEL PERMIT OVER 80", " VESSEL PERMIT OVER 80", codes$description)
+codes$description <- gsub(", VESSEL PERMIT TO 80", " VESSEL PERMIT TO 80", codes$description)
+reg <- "([A-Za-z0-9/&(). -]+),([A-Za-z0-9()%/&.' -]+),([A-Za-z0-9/&.' ,()-]+)"
+codes$pfshy_species <- tolower(gsub(reg, "\\1", codes$description))
+codes$pfshy_gear <- tolower(gsub(reg, "\\2", codes$description))
+codes$pfshy_area <- tolower(gsub(reg, "\\3", codes$description))
+codes$pfshy_species <- sub(" +$", "", codes$pfshy_species)
+#readr::write_csv(codes, path = "portfolio/data-generated/cfec-codes.csv")
+# as.data.frame(codes)
+```
+
+## Identify most popular strategies by person-year combination
+
+Any person in a year will need to have 10% or more of their revenue to come
+from each strategy (otherwise doesn't count as a strategy).
+
+```{r}
+cfecnew$p_spec = substr(cfecnew$p_fshy,1,1)
+cfecnew$p_spec[cfecnew$p_spec == "B"] = "Halibut"
+cfecnew$p_spec[cfecnew$p_spec == "C"] = "Sablefish"
+cfecnew$p_spec[cfecnew$p_spec %in% c("D","E","K","T")] = "Crab"
+cfecnew$p_spec[cfecnew$p_spec %in% c("F")] = "Freshwater"
+cfecnew$p_spec[cfecnew$p_spec %in% c("G","H","L")] = "Herring"
+cfecnew$p_spec[cfecnew$p_spec %in% c("I")] = "Lingcod"
+cfecnew$p_spec[cfecnew$p_spec %in% c("A","J","N","R","W")] = "Shellfish"
+cfecnew$p_spec[cfecnew$p_spec %in% c("O","P","Q","U","Z")] = "Invert"
+cfecnew$p_spec[cfecnew$p_spec %in% c("M")] = "Misc"
+cfecnew$p_spec[cfecnew$p_spec %in% c("S")] = "Salmon"
+cfecnew$p_spec[cfecnew$p_spec %in% c("Y")] = "Rockfish"
+cfecnew <- filter(cfecnew, p_spec != "Freshwater") # only 1400 rows
+rev(sort(table(cfecnew$p_spec)))
+
+permit_rev = group_by(cfecnew, p_holder, year, p_fshy) %>%
+  summarize(permit.rev = sum(g_earn)) %>%
+  as_data_frame() %>%
+  group_by(p_holder, year) %>%
+  mutate(tot.rev = sum(permit.rev))
+permit_rev$permit.rev = permit_rev$permit.rev/permit_rev$tot.rev # fraction of total
+ndat$rev_b4_10perc <- sum(permit_rev$permit.rev)
+permit_rev = permit_rev[permit_rev$permit.rev < 0.1,]
+ndat$rev_after_10perc <- sum(permit_rev$permit.rev)
+
+# Delete these minimal earnings
+nrow(cfecnew)
+ndat$before_10_perc <- nrow(cfecnew)
+cfecnew = cfecnew[-which(paste(cfecnew$p_holder, cfecnew$year, cfecnew$p_fshy) %in% 
+  paste(permit_rev$p_holder, permit_rev$year, permit_rev$p_fshy)), ]
+nrow(cfecnew)
+ndat$nrow_over_10_perc <- nrow(cfecnew)
+
+topstrategies = group_by(cfecnew, p_holder, year) %>%
+  summarize(strategy = paste(sort(unique(p_spec)), collapse = ", ")) %>%
+  as_data_frame()
+rev(sort(table(topstrategies$strategy)))[1:50]
+cfecnew = left_join(cfecnew, topstrategies) # adds strategy column
+#write.csv(rev(sort(table(topstrategies$strategy))), file = "portfolio/data-generated/strategies.csv")
+
+topstrategies.bypermit = group_by(cfecnew, p_holder, year) %>%
+  summarize(strategy.permit = paste(sort(unique(p_fshy)), collapse = " ")) %>%
+  as_data_frame()
+cfecnew = left_join(cfecnew, topstrategies.bypermit) # adds strategy.permit column
+
+# Summarize key species landings by strategy.permit -- this is for interpretation later
+key.spec = c("SOCK","COHO","CHUM","PINK","CHNK","PCOD","PHLB","SABL","TCRB","KCRB","DCRB","PLCK","SAC","POUND")
+species_by_strategy = group_by(cfecnew, strategy.permit, spec) %>%
+  summarize(earn.bySpec = sum(g_earn)) %>% 
+  data.frame %>% 
+  group_by(strategy.permit) %>% 
+  mutate(totEarn = sum(earn.bySpec)) %>% 
+  filter(spec %in% key.spec)
+species_by_strategy$earn.bySpec = species_by_strategy$earn.bySpec/species_by_strategy$totEarn
+species_by_strategy = filter(species_by_strategy, earn.bySpec > 0.1) %>% select(-totEarn)
+# convert to wide format
+
+melted_sbs <- melt(species_by_strategy, id.vars = c("strategy.permit", "spec"))
+species_by_strategy <- dcast(melted_sbs, strategy.permit ~ spec + variable)
+#write.csv(species_by_strategy, file = "portfolio/data-generated/species_by_strategy.csv")
+
+```
+
+Calculate gear based strategies:
+
+```{r}
+codes <- mutate(codes, p_gear = substr(codes$p_fshy, 2, 3))
+gears <- select(codes, p_gear, pfshy_gear) %>% distinct()
+cfecnew$p_gear = substr(cfecnew$p_fshy,2,3)
+gear_freq <- sort(table(cfecnew$p_gear)) %>% as_data_frame()  %>% 
+  rename(p_gear = Var1)
+gears <- left_join(gear_freq, gears)
+trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+gears <- mutate(gears, pfshy_gear = trim(pfshy_gear))
+gears <- group_by(gears, p_gear) %>% 
+  summarize(n = n[1], pfshy_gear = paste(pfshy_gear, collapse = "-")) %>% 
+    as_data_frame() %>% 
+      arrange(-n)
+#gears %>% readr::write_csv(path = "portfolio/data-generated/gear-strategies.csv")
+
+# hand edited with groups:
+gears <- readr::read_csv("data/gear-strategies-edited.csv")
+gears <- mutate(gears, p_gear = 
+  ifelse(nchar(p_gear) == 1, paste0("0", p_gear), p_gear))
+
+# adds gear group column:
+cfecnew$gear_group <- NULL
+cfecnew <- left_join(cfecnew, select(gears, p_gear, gear_group))
+
+cfecnew$gear_group[cfecnew$p_spec == "Salmon" & 
+  cfecnew$gear_group == "drift gillnet"] <- "drift gillnet salmon"
+cfecnew$gear_group[cfecnew$p_spec == "Salmon" & 
+  cfecnew$gear_group == "purse seine"] <- "purse seine salmon"
+cfecnew$gear_group[(cfecnew$p_spec == "Sablefish" | cfecnew$p_spec == "Halibut") & 
+  cfecnew$gear_group == "pot gear"] <- "pot gear sablefish/halibut"
+cfecnew$gear_group[(cfecnew$p_spec == "Sablefish" | cfecnew$p_spec == "Halibut") & 
+  cfecnew$gear_group == "longline under 60"] <- "longline under 60 sablefish/halibut"
+cfecnew$gear_group[(cfecnew$p_spec == "Sablefish" | cfecnew$p_spec == "Halibut") & 
+  cfecnew$gear_group == "longline over 60"] <- "longline over 60 sablefish/halibut"
+cfecnew$gear_group[(cfecnew$p_spec == "Sablefish" | cfecnew$p_spec == "Halibut") & 
+  cfecnew$gear_group == "longline over 90"] <- "longline over 90 sablefish/halibut"
+
+topstrategies_gear <- group_by(cfecnew, p_holder, year) %>%
+  summarize(strategy_gear = paste(sort(unique(gear_group)), collapse = ", ")) %>%
+  as_data_frame()
+rev(sort(table(topstrategies_gear$strategy_gear)))[1:50]
+
+cfecnew <- left_join(cfecnew, topstrategies_gear) # adds gear strategy column
+
+# xx <- filter(topstrategies_gear, strategy_gear == "")
+# filter(cfecnew, p_holder == 138, year == 1990) %>% as.data.frame()
+```
+
+Aggregate annual metrics by person,
+
+```{r}
+cfecnew$yday <- paste(cfecnew$year, cfecnew$day, sep = "-") %>%
+  lubridate::ymd() %>%
+  lubridate::yday() - 1
+  
+if ("VLength" %in% names(cfecnew)) {
+  cfecnew <- rename(cfecnew, vlength = VLength)
+}
+
+# calculate 
+permit_days = group_by(cfecnew, p_holder, year, p_fshy) %>%
+  summarize(permitDays = diff(range(yday)+1)) %>%
+  group_by(p_holder, year) %>% 
+  summarize(tot.permitDays = sum(permitDays))
+cfecnew = left_join(cfecnew, permit_days)  
+
+cfecAnnual = group_by(cfecnew, p_holder, year) %>%
+  summarize(permit = p_fshy[1], boat = cadfg[1],
+    days = diff(range(yday) + 1),
+    days_n = length(unique(yday)),
+    days_permit = tot.permitDays[1], 
+    ngear = length(unique(gearn)),
+    nspec = length(unique(specn)),
+    npermit = length(unique(p_fshy)),
+    revenue = sum(g_earn),
+    weight = sum(g_pounds),
+    strategy = strategy[1],
+    strategy_gear = strategy_gear[1],
+    strategy_permit = strategy.permit[1],
+    chnk = sum(g_earn[spec=="CHNK"]),
+    coho = sum(g_earn[spec=="COHO"]),
+    pink = sum(g_earn[spec=="PINK"]),
+    sock = sum(g_earn[spec=="SOCK"]),
+    chum = sum(g_earn[spec=="CHUM"]),
+    region = region[1],
+    nregion = length(unique(region)))
+
+# for the synthesis paper :
+#saveRDS(cfecnew, file = "portfolio/data-generated/cfec-cleaned.rds")
+
+cfecAnnual = left_join(cfecAnnual, permit_days)
+# also calculate weighted simpson diversity of species
+cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, specn) %>%
+  summarize(totRev.spec = sum(g_earn)) %>%
+  group_by(p_holder, year) %>%
+  summarize(specDiv = simp.div(totRev.spec)))
+
+# also calculate weighted simpson diversity of gears
+cfecAnnual = left_join(cfecAnnual, group_by(cfecnew, p_holder, year, gearn) %>%
+  summarize(totRev.gear = sum(g_earn)) %>%
+  group_by(p_holder, year) %>%
+  summarize(gearDiv = simp.div(totRev.gear)))
+
+# Also merge in previous revenue. Idx stores index of people last year
+idx = match(paste(cfecAnnual$p_holder,cfecAnnual$year-1), paste(cfecAnnual$p_holder,cfecAnnual$year))
+
+cfecAnnual$permit.prev = cfecAnnual$permit[idx]
+cfecAnnual$ngear.prev = cfecAnnual$ngear[idx]
+cfecAnnual$nspec.prev = cfecAnnual$nspec[idx]
+cfecAnnual$npermit.prev = cfecAnnual$npermit[idx]
+cfecAnnual$revenue.prev = cfecAnnual$revenue[idx]
+cfecAnnual$specdiv.prev = cfecAnnual$specDiv[idx]
+cfecAnnual$geardiv.prev = cfecAnnual$gearDiv[idx]
+cfecAnnual$strategy.prev = cfecAnnual$strategy[idx]
+cfecAnnual$strategy_gear.prev = cfecAnnual$strategy_gear[idx]
+cfecAnnual$strategy_permit.prev = cfecAnnual$strategy_permit[idx]
+cfecAnnual$weight.prev = cfecAnnual$weight[idx]
+cfecAnnual$days.prev = cfecAnnual$days[idx]
+cfecAnnual$days_permit.prev = cfecAnnual$days_permit[idx]
+cfecAnnual$chnk.prev = cfecAnnual$chnk[idx]
+cfecAnnual$coho.prev = cfecAnnual$coho[idx]
+cfecAnnual$chum.prev = cfecAnnual$chum[idx]
+cfecAnnual$pink.prev = cfecAnnual$pink[idx]
+cfecAnnual$sock.prev = cfecAnnual$sock[idx]
+
+cfecAnnual$region.prev = cfecAnnual$region[idx]
+cfecAnnual$nregion.prev = cfecAnnual$nregion[idx]
+```
+
+Save the data for modeling:
+
+```{r}
+# make sure the data are tidy:
+cfecAnnual <- as_data_frame(cfecAnnual)
+ndat$annual <- nrow(cfecAnnual)
+
+saveRDS(cfecAnnual, file="portfolio/data-generated/salmon-annual-for-modeling.rds")
+
+cfecAnnual$specDiv.change = cfecAnnual$specDiv - cfecAnnual$specdiv.prev
+cfecAnnual.diff = cfecAnnual[is.na(cfecAnnual$specDiv.change)==FALSE, ]
+saveRDS(cfecAnnual.diff, file="portfolio/data-generated/salmon-diff-for-modeling.rds")
+#ndat$annual_diff <- nrow(cfecAnnual.diff)
+#saveRDS(ndat, file = "portfolio/data-generated/ndat.rds")
+```
