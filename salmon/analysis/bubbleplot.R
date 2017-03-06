@@ -3,6 +3,24 @@ dat.annual <- read.table("salmon/data-generated/bubble_plot_data_fig2.csv", stri
 dat.annual <- mutate(dat.annual,
   gear = factor(gear, levels = c("Drift gillnet", "Set gillnet", "Hand troll",
     "Power troll", "Purse seine")))
+
+l <- tibble::tribble(~let, ~label,
+  "H", "CI",
+  "E", "PWS",
+  "L", "CH",
+  "K", "KO",
+  "M", "AP",
+  "T", "BB",
+  "A", "SE",
+  "B", "State",
+  "Z", "NS",
+  "W", "KU",
+  "D", "YAK")
+
+dat.annual <- mutate(dat.annual,
+  let = sub("S[0-9]+([A-Z])", "\\1", dat.annual$strategy_permit)) %>%
+  left_join(l)
+
 library(tidyverse)
 library(ggrepel)
 library(ggsidekick) # see my GitHub
@@ -10,12 +28,12 @@ dir.create("salmon/figs", showWarnings = FALSE)
 
 g <- ggplot(dat.annual,
   aes(x = mean_rev/1e3, y = cv_rev,
-    label = dat.annual$strategy_permit)) +
+    label = label)) +
   geom_point(alpha = 0.5, aes(fill = gear, size = diversity), pch = 21,
     colour = "grey20") +
   scale_size(range = c(1.5, 15), breaks = seq(1.2, 2.4, 0.4)) +
   guides(fill = guide_legend(override.aes = list(size = 4, alpha = 0.7), order = 1)) +
-  geom_text_repel(size = 2.3, colour = "grey20",
+  geom_text_repel(size = 2.6, colour = "grey20",
     alpha = 1, segment.color = "grey70",
     point.padding = unit(0, "lines"), max.iter = 1e4, segment.size = 0.3) +
   scale_fill_brewer(palette = "Set3") +
