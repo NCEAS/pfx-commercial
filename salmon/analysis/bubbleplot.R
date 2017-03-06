@@ -23,7 +23,8 @@ dat.annual <- mutate(dat.annual,
 
 library(tidyverse)
 library(ggrepel)
-library(ggsidekick) # see my GitHub
+# devtools::install_github("seananderson/ggsidekick")
+library(ggsidekick)
 dir.create("salmon/figs", showWarnings = FALSE)
 
 g <- ggplot(dat.annual,
