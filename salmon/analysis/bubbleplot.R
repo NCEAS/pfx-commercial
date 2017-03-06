@@ -15,11 +15,13 @@ l <- tibble::tribble(~let, ~label,
   "B", "State",
   "Z", "NS",
   "W", "KU",
-  "D", "YAK")
+  "D", "YAK",
+  "Y", "YUK")
 
 dat.annual <- mutate(dat.annual,
   let = sub("S[0-9]+([A-Z])", "\\1", dat.annual$strategy_permit)) %>%
-  left_join(l)
+  left_join(l) %>%
+  filter(strategy_permit != "S04Y")
 
 library(tidyverse)
 library(ggrepel)
