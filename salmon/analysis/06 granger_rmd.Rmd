@@ -1,0 +1,90 @@
+---
+title: "granger_test"
+author: ""
+date: "March 6, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE)
+library(dplyr)
+library(lmtest)
+```
+
+### Load data
+
+```{r loaddat}
+# inflation adjusted price data
+cfec_all = readRDS("portfolio/data-generated/salmon_data_for_paper.rds")
+```
+
+### Filter and difference data
+```{r datafilter}
+# which is leading/lagging between prices / abundance harvest
+g = filter(cfec_all, substr(p_fshy,1,1) == "S") %>%
+  filter(spec %in% c("CHUM","COHO","CHNK","SOCK","PINK")) %>%
+  group_by(year, spec, p_fshy) %>%
+  summarize(earn = sum(g_earn, na.rm=T),
+    pounds = sum(g_pounds, na.rm=T),
+    price = earn/pounds)
+
+g = filter(g, p_fshy %in% c("S 01A", "S 01E", "S 01H", "S 01L", "S 01M", "S 03A",
+  "S 03E", "S 03M", "S 03T", "S 04D", "S 04H", "S 04K", "S 04M", "S 04T", "S 05B",
+  "S 15B"))
+
+# first difference all the data so it's stationary
+gdiff = arrange(g, p_fshy, spec, year) %>%
+  group_by(p_fshy, spec) %>%
+  mutate(dearn = c(NA,diff(log(earn))),
+    dpounds = c(NA,diff(log(pounds))),
+    dprice = c(NA,diff(log(price)))) %>%
+  filter(!is.na(dearn))
+```
+
+### Run granger causality tests
+
+```{r}
+#out = matrix("0", length(unique(gdiff$p_fshy)), 
+#  length(unique(gdiff$spec)))
+
+df = data.frame("Fishery" = rep(NA,40), "Species" = rep(NA,40), "Lags" = rep(NA,40))
+indx = 0
+for(i in 1:nrow(out)) {
+  for(j in 1:ncol(out)) {
+    Z = filter(gdiff, p_fshy == unique(gdiff$p_fshy)[i] & spec == unique(gdiff$spec)[j]) %>% 
+      data.frame()
+    
+    #em <- dynlm(egg ~ L(egg, 1) + L(egg, 2) + L(egg, 3), data = ChickEgg)
+    #em2 <- update(em, . ~ . + L(chicken, 1) + L(chicken, 2) + L(chicken, 3))
+    #waldtest(em, em2)
+    
+    mod1_p = grangertest(y=Z$dprice, x=Z$dpounds, order=1)[2,4]
+    mod2_p = grangertest(y=Z$dprice, x=Z$dpounds, order=2)[2,4]
+    
+    mod3_p = grangertest(y=Z$dpounds, x=Z$dprice, order=1)[2,4]
+    mod4_p = grangertest(y=Z$dpounds, x=Z$dprice, order=2)[2,4]    
+    #mod3_p = grangertest(y=Z$dprice, x=Z$dpounds, order=3)[2,4]
+    str = paste0(ifelse(mod1_p <= 0.05 & mod3_p > 0.05, "1", ""), 
+      ifelse(mod2_p <= 0.05 & mod4_p > 0.05, "2", ""))
+    if(str != "") {
+      indx = indx + 1
+      df$Lags[indx] = str
+      df$Fishery[indx] = unique(gdiff$p_fshy)[i]
+      df$Species[indx] = unique(gdiff$spec)[j]
+    }
+  }
+}
+df = df[!is.na(df$Fishery),]
+write.table(df, "salmon/data-generated/granger_table.csv", row.names=F, col.names=T)
+
+# make fitted values for each fishery
+Z = filter(gdiff, p_fshy == "S 01A" & spec == "CHNK") %>% data.frame()
+Z$lag_price = Z$dprice - lag(Z$dprice)
+Z$lag_pounds = lag(Z$dpounds)
+write.table(Z, "salmon/data-generated/granger_table_s01a.csv", row.names=F, col.names=T)
+#em <- dynlm(dprice ~ L(dprice, 1), data = Z)
+#em2 = update(em, . ~ . + L(dpounds, 1))
+
+
+```
+
