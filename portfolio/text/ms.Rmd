@@ -155,10 +155,10 @@ represent higher values. Consdier reversing the color scale to go from red
 
 Individual revenue variability decreases exponentially with higher mean fished
 species diversity across combinations of state and federal fishing permits
-("strategies"; Fig. \ref{fig:across}). Controlling for effort, strategies with
+("strategies"; Fig. \ref{fig:across}). This pattern is
+qualitatively similar with or without individuals targeting salmon. Controlling for effort, strategies with
 one unit higher mean species diversity had on average `r h1[[2]]`% (`r
-h1[[1]]`--`r h1[[3]]`% 95% CI) lower variability. This pattern is
-qualitatively similar with or without individuals targeting salmon. As examples,
+h1[[1]]`--`r h1[[3]]`% 95% CI) lower variability. As examples,
 revenue variability was highest for the herring roe gillnet and king crab fisheries.
 Most strategies with the lowest estimated revenue variability combined halibut
 with a salmon permit and had high levels of fished species diversity (Fig.
@@ -186,7 +186,7 @@ individual halibut and (B) gillnet herring roe permits (dark blue) compared with
 owners of the same permit plus one more (medium blue) or two more (light
 blue) permits. On the y-axis, dots and lines represent posterior median and 95\%
 credible intervals of expected standard deviations of year-to-year revenue rates
-of return.}
+of return. Angled lines connects permit sets that differ by one permit.}
 
 \label{fig:spokes}
 \end{center}
@@ -317,7 +317,7 @@ reasons for this relationship. For instance, local knowledge and experience are
 a major determinant of fishing efficiency [@hilborn1985a]. Therefore, changes to
 fishing patterns may sometimes be associated with a learning or adaptation phase
 as individuals become accustomed to new locations, gear, or species.
-For example, many individuals fishing herring in Alaska in the 1970s 
+<!-- For example, many individuals fishing herring in Alaska in the 1970s --> 
 <!-- AB: I think in this paragraph it would be good to pick an example or two and speculate on potential reasons specific to those permit strategies. Otherwise, statements like this one aren’t really anchored to anything concrete.  For example, what does increased specialization look like in the Hal ll permit, which showed one of the greatest effects of specialization on revenue diversity? How many permits could a Hal ll permit holder potentially fish? This goes back to my comment re: Table 1 (see p. 15) 
 sea cuc - H W book - learning...
 herring - alaska 1970s - learn to fish for roe ... [ref]
