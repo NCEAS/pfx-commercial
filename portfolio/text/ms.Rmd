@@ -43,8 +43,7 @@ commercial fishers [@kasperski2013]. However, fishers may be able to lower risk
 by diversifying their fishing portfolio. They can, for example, target as many
 species as allowed by a permit, own multiple permits, or diversify spatially and
 fish in multiple regions. The effectiveness of these diversification strategies
-for increasing revenue and reducing revenue variability remains uncertain. For
-example, theory and empirical studies demonstrate that there can be substantial
+for increasing revenue and reducing revenue variability remains uncertain. Theory and empirical studies demonstrate that there can be substantial
 benefits to specialization for both farmers and fishers [@smith1986;
 @abdulai2000; @arnason2005]. Furthermore, the majority of research examining the
 effects of diversification on revenue do so at aggregate levels that combine
@@ -61,8 +60,7 @@ The state and federal fisheries of Alaska provide a unique opportunity to
 understand the role of individuals' strategies in determining income and income
 variability. Fisheries in Alaska are among the highest-valued fisheries in the
 world with ~2.7 billion kg landed biomass valued at nearly 2 billion USD
-annually [@nmfs2016]. The days of open, unregulated fisheries in most developed
-countries have passed---fishers must own a permit to participate in virtually
+annually [@nmfs2016]. Fishers must own a permit to participate in virtually
 all fisheries [@hilborn2003a]. While such regulations have helped reduce
 overfishing and in many fisheries have increased profits, they limit the
 available strategies to reduce income variability. For example, many permits
@@ -94,8 +92,7 @@ function of covariates. We simultaneously estimate the effect of species
 diversity (the inverse of Simpson's diversity index [@simpson1949; @jost2006])
 on individual revenue and revenue variability, and estimate effects both within
 and across fishing strategies while controlling for fishing effort and latent
-time effects (e.g. changing environmental conditions). The model was used to
-evaluate two axes by which fishers in Alaska can diversify fishing activities:
+time effects (e.g. changing environmental conditions). We use the model to evaluate two axes by which fishers in Alaska can diversify fishing activities:
 (1) choice of permit strategy (i.e., permit or set of permits fished), and (2)
 choice of what species to fish *within* a permit strategy. To our knowledge,
 this is the first application of this type of model in any natural resource
@@ -119,7 +116,7 @@ appears largely driven by an increase in salmon specialists in the late 1980s an
 
 \begin{figure}[htb]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{../figs/fig1-jk.pdf}
+\includegraphics[width=0.45\textwidth]{../figs/fig1-jk.pdf}
 
 \caption{Trends in revenue and diversification over time. (A) Map of major fishing
 areas in Alaska, USA. (B) Total revenue in billions of USD from `r
@@ -134,7 +131,7 @@ top species groups (thin lines). } \label{fig:ts} \end{center}
 
 \begin{figure}[htb]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{../figs/stan-across-strategy-variability2.pdf}
+\includegraphics[width=0.45\textwidth]{../figs/stan-across-strategy-variability2.pdf}
 
 \caption{Individuals who fish permits and permit combinations (permit
 strategies) with higher species diversity have lower expected revenue
@@ -178,7 +175,7 @@ themselves represent a significant expense.
 
 \begin{figure*}[htbp]
 \begin{center}
-\includegraphics[width=0.8\textwidth]{../figs/stan-gg-spoke2.pdf}
+\includegraphics[width=0.65\textwidth]{../figs/stan-gg-spoke2.pdf}
 
 \caption{Diversifying permits reduces risk and usually increases revenue. Two
 examples of expected revenue variability and median revenue for owners of (A)
@@ -208,7 +205,7 @@ becomes more neutral (Fig. S\fignoeffort).
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{../figs/stan-offset-break-anti-spaghetti-specializing.pdf}
+\includegraphics[width=0.46\textwidth]{../figs/stan-offset-break-anti-spaghetti-specializing.pdf}
 
 \caption{Effect of specializing on year-to-year changes in revenue and revenue
 variability for individual permit holders \emph{within} the `r nstr` most common
@@ -224,7 +221,7 @@ their revenue variability (vertical axis) for a 1\% decrease in their ratio of
 year-to-year species diversity. These effects are estimated holding fishing
 season length constant from year-to-year. Dots and line segments represent
 medians and 50\% credible intervals of posteriors. 
-In other words, the axes represent coefficient values from the strategy-level slopes. Moving along an axis (say from left to right on the horizontal axis representing the effect of specializing on revenue) represents an increase in how steep the slope is between specialization and revenue.
+In other words, the axes represent coefficient values from the strategy-level slopes. Moving along an axis (say from left to right on the horizontal axis) represents an increase in how steep the slope is between specialization and the year-to-year revenue ratio.
 The effect of generalizing
 (increasing species diversity) is similar (Fig. S\figmirror).}
 
@@ -274,7 +271,7 @@ revenue variability across two scales. We find that individuals with sets
 of permits that allow high levels of species diversity tend to have lower
 revenue variability and adding a fisheries permit usually increases revenue and
 decreases revenue variability. However, within the constraints of a permit strategy
-and accounting for effort, specializing tends to increase revenue while changes to fished species diversity tend to correlate with greater revenue variability
+and accounting for effort, specializing tends to increase revenue while changes to fished species diversity tend to correlate with greater revenue variability,
 although there are considerable differences amongst fisheries. Thus, the most effective
 mechanism by which species diversity can lower revenue variability for
 individual fishers---switching or adding fishing permits---is expensive,
@@ -308,7 +305,7 @@ Because specialization inherently holds risk from ``putting all one's eggs in on
 basket,'' it is not suprising that a decline in the most valuable resource
 would lead to a shift towards diversification.
 <!-- Response to A1 -->
-Conversely, a specialization may appear as a response to increased revenue. A fisher who achieves high revenue from a hotspot of a particular fish species may choose to stop or pause fishing thereby indirectly limiting catch diversity. For example, pink and chum salmon are the dominant species caught in purse seine fisheries in Prince william Sound and their run timing rarely overlaps. If a fisher achieves high revenue with one species that fisher may cut the season short.
+Conversely, a specialization may appear as a response to increased revenue. A fisher who achieves high revenue from a hotspot of a particular fish species one year may choose to stop or pause fishing thereby indirectly limiting catch diversity. For example, pink and chum salmon are the dominant species caught in purse seine fisheries in Prince william Sound and their run timing rarely overlaps. If a fisher achieves high revenue with one species that fisher may cut the season short.
 
 We also found that, within strategies, altering species diversity tended to be
 associated with increased revenue variability. There are number of possible
@@ -354,7 +351,9 @@ linked with total income or access to financial capital for farmers
 [@abdulai2001; @barrett2001], small-scale fishing communities [@olale2012], and
 those relying on forest resources [@illukpitiya2008].
 <!-- Response to reviewer comment A2 -->
-While we were unable to incorporate costs, it is possible that including license and gear purchase costs along with others such as costs of gear maintenance, catch transportation, and selling to a processor would unveil a different relationship between catch diversification and profits than the relationships between catch diversification and revenue shown here.
+While we were unable to incorporate costs, it is possible that including them 
+ <!-- license and gear purchase costs along with others such as costs of gear maintenance, catch transportation, and selling to a processor -->
+would unveil a different relationship between catch diversification and profits than the relationships between catch diversification and revenue shown here.
 Another major barrier to
 diversification can be management restrictions. In commercial fisheries,
 regulations that have been shown to reduce overfishing---including improved
@@ -369,10 +368,11 @@ Our analysis provides a synthetic view of the effects of species diversity on
 individuals over 30 years in one of the most productive fishing regions in the 
 world. 
 <!-- Response to reviewer comment B2 -->
-Although we focus on Alaska, and expect our results are largely generalizable to other productive and intensely managed fishing regions, it is possible that the benefits of diversification would be stronger in regions where fish stocks are highly variable or in less intensely managed regions where permit costs are lower and more freely available.
-Overall, the large temporal and geographical scope of our analysis potentially obscures 
+Although we focus on Alaska, and expect our results are largely generalizable to other productive and intensely managed fishing regions, it is possible that the benefits of diversification would be stronger in regions where fish stocks are highly variable or in regions where permit costs are lower and more freely available.
+<!--Overall, the large temporal and geographical scope of our analysis potentially obscures 
 time or regional-variation in the consequences of diversification on revenue and
-revenue variability. Furthermore, in addressing the overall pattern, we have
+revenue variability. -->
+Furthermore, in addressing the overall pattern, we have
 averaged out the potential signal of several major discrete events, such as the
 *Exxon Valdez* oil spill in 1989, that was a significant disruption to the
 management, ecological, and social structure of fisheries in Alaska
@@ -391,7 +391,7 @@ can interact with management regulations, which have other considerable
 benefits, to restrict individual diversification opportunities and promote
 specialization. 
 From a management perspective, metrics such as interannual variability in individual fishing revenue or fraction of single permit holders within communities could serve as bioeconomic indicators.
-Although variability in individual revenue is not actively
+Although variability in individual revenue is not yet actively
 incorporated into management decisions, analyses such as ours help to explain
 the range of diversification strategies available, trade-offs inherent in such
 management decisions, and how these trade-offs may change over time.
