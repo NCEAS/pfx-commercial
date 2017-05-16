@@ -305,7 +305,9 @@ Because specialization inherently holds risk from ``putting all one's eggs in on
 basket,'' it is not suprising that a decline in the most valuable resource
 would lead to a shift towards diversification.
 <!-- Response to A1 -->
-Conversely, a specialization may appear as a response to increased revenue. A fisher who achieves high revenue from a hotspot of a particular fish species one year may choose to stop or pause fishing thereby indirectly limiting catch diversity. For example, pink and chum salmon are the dominant species caught in purse seine fisheries in Prince william Sound and their run timing rarely overlaps. If a fisher achieves high revenue with one species that fisher may cut the season short.
+Conversely, a specialization may appear as a response to increased revenue. A fisher who achieves high revenue from a hotspot of a particular fish species one year may choose to stop or pause fishing thereby indirectly limiting catch diversity. For example, pink and chum salmon are the dominant species caught in purse seine fisheries in Prince William Sound, with chum salmon generally arriving 
+before pink salmon. If a fisher targeting chum achieves high revenue early in 
+the season, they may choose to fish less later in the year.
 
 We also found that, within strategies, altering species diversity tended to be
 associated with increased revenue variability. There are number of possible
