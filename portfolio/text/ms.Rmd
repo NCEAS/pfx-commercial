@@ -81,7 +81,7 @@ Using a unique dataset collected over 30 years on individual fishers, rather
 than fleets or vessels, we examine how revenue and revenue variability of 
 individuals is affected by diversification. By tracking individuals, it is
 possible to track people that switch fishery permits over time or use multiple
-vessels and differentiate fishers that share the same vessel. We developped and
+vessels and differentiate fishers that share the same vessel. We developed and
 applied a hierarchical Bayesian model to understand the effect of species
 diversity within fisheries catches on individual revenue and revenue
 variability. Our model builds on results from vessel [@kasperski2013], fleet
@@ -305,9 +305,14 @@ Because specialization inherently holds risk from ``putting all one's eggs in on
 basket,'' it is not suprising that a decline in the most valuable resource
 would lead to a shift towards diversification.
 <!-- Response to A1 -->
-Conversely, a specialization may appear as a response to increased revenue. A fisher who achieves high revenue from a hotspot of a particular fish species one year may choose to stop or pause fishing thereby indirectly limiting catch diversity. For example, pink and chum salmon are the dominant species caught in purse seine fisheries in Prince William Sound, with chum salmon generally arriving 
-before pink salmon. If a fisher targeting chum achieves high revenue early in 
-the season, they may choose to fish less later in the year.
+Conversely, a specialization may appear as a response to increased revenue.
+A fisher who achieves high revenue from a hotspot of a particular fish species
+one year may choose to stop or pause fishing thereby indirectly limiting catch
+diversity. For example, pink and chum salmon are the dominant species caught in
+purse seine fisheries in Prince William Sound, with chum salmon generally
+harvested earlier in the season than pink salmon. If fishers targeting chum salmon
+achieve high revenue early in the season, they may choose to fish less later in
+the season.
 
 We also found that, within strategies, altering species diversity tended to be
 associated with increased revenue variability. There are number of possible
