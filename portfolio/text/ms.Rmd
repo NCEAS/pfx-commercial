@@ -116,7 +116,7 @@ appears largely driven by an increase in salmon specialists in the late 1980s an
 
 \begin{figure}[htb]
 \begin{center}
-\includegraphics[width=0.45\textwidth]{../figs/fig1-jk.pdf}
+\includegraphics[width=0.45\textwidth]{fig1-jk.pdf}
 
 \caption{Trends in revenue and diversification over time. (A) Map of major fishing
 areas in Alaska, USA. (B) Total revenue in billions of USD from `r
@@ -131,7 +131,7 @@ top species groups (thin lines). } \label{fig:ts} \end{center}
 
 \begin{figure}[htb]
 \begin{center}
-\includegraphics[width=0.45\textwidth]{../figs/stan-across-strategy-variability2.pdf}
+\includegraphics[width=0.45\textwidth]{stan-across-strategy-variability2.pdf}
 
 \caption{Individuals who fish permits and permit combinations (permit
 strategies) with higher species diversity have lower expected revenue
@@ -175,7 +175,7 @@ themselves represent a significant expense.
 
 \begin{figure*}[htbp]
 \begin{center}
-\includegraphics[width=0.65\textwidth]{../figs/stan-gg-spoke2.pdf}
+\includegraphics[width=0.65\textwidth]{stan-gg-spoke2.pdf}
 
 \caption{Diversifying permits reduces risk and usually increases revenue. Two
 examples of expected revenue variability and median revenue for owners of (A)
@@ -205,7 +205,7 @@ becomes more neutral (Fig. S\fignoeffort).
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=0.46\textwidth]{../figs/stan-offset-break-anti-spaghetti-specializing.pdf}
+\includegraphics[width=0.46\textwidth]{stan-offset-break-anti-spaghetti-specializing.pdf}
 
 \caption{Effect of specializing on year-to-year changes in revenue and revenue
 variability for individual permit holders \emph{within} the `r nstr` most common
@@ -358,9 +358,11 @@ linked with total income or access to financial capital for farmers
 [@abdulai2001; @barrett2001], small-scale fishing communities [@olale2012], and
 those relying on forest resources [@illukpitiya2008].
 <!-- Response to reviewer comment A2 -->
-While we were unable to incorporate costs, it is possible that including them 
- <!-- license and gear purchase costs along with others such as costs of gear maintenance, catch transportation, and selling to a processor -->
-would unveil a different relationship between catch diversification and profits than the relationships between catch diversification and revenue shown here.
+While we were unable to incorporate costs, it is possible that 
+including license and gear purchase costs along with others such as costs of
+gear maintenance, catch transportation, and selling to a processor
+would alter the relationship between catch diversification and profits.
+<!-- unveil a different relationship between catch diversification and profits than the relationships between catch diversification and revenue shown here. -->
 Another major barrier to
 diversification can be management restrictions. In commercial fisheries,
 regulations that have been shown to reduce overfishing---including improved
