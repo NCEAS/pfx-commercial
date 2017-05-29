@@ -59,3 +59,15 @@ touch:
 	touch $(SOM).Rnw
 	touch $(TEXT).tex
 
+suppfigs:
+	cp ../figs/strategy-table.tex .
+	cp ../figs/stan-gg-spoke-all.pdf .
+	cp ../figs/stan-main-effects.pdf .
+	cp ../figs/stan-str-posteriors-dot.pdf .
+	cp ../figs/stan-offset-break-anti-spaghetti.pdf .
+	cp ../figs/stan-offset-break-anti-spaghetti-specializing-no-effort.pdf .
+	cp ../figs/itq-combined.pdf .
+	cp ../figs/strategy-year-effects.pdf .
+	cp ../figs/stan-offset-panel-mean-resid.png .
+	cp ../figs/stan-offset-panel-mean-resid-down.png .
+
