@@ -9,25 +9,25 @@
 \usepackage{amsfonts}
 \usepackage{setspace}
 \usepackage{booktabs}
-\usepackage{verbatim}
+% \usepackage{verbatim}
 \usepackage{amsmath}
 \usepackage{url}
 \usepackage{mathtools}
-\usepackage{lineno}
-\usepackage{xcolor}
-\renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
-\modulolinenumbers[2]
+% \usepackage{lineno}
+% \usepackage{xcolor}
+% \renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
+% \modulolinenumbers[2]
 
-% Linux Libertine:
-\usepackage{textcomp}
-\usepackage[sb]{libertine}
-\usepackage[varqu,varl]{inconsolata}% sans serif typewriter
-\usepackage[libertine,bigdelims,vvarbb]{newtxmath} % bb from STIX
-\usepackage[cal=boondoxo]{mathalfa} % mathcal
-%\useosf % osf for text, not math
-\usepackage[supstfm=libertinesups,%
-  supscaled=1.2,%
-  raised=-.13em]{superiors}
+% % Linux Libertine:
+% \usepackage{textcomp}
+% \usepackage[sb]{libertine}
+% \usepackage[varqu,varl]{inconsolata}% sans serif typewriter
+% \usepackage[libertine,bigdelims,vvarbb]{newtxmath} % bb from STIX
+% \usepackage[cal=boondoxo]{mathalfa} % mathcal
+% %\useosf % osf for text, not math
+% \usepackage[supstfm=libertinesups,%
+%   supscaled=1.2,%
+%   raised=-.13em]{superiors}
 
 \textheight 22.0cm
 
@@ -39,23 +39,23 @@
 
 % Fix line numbering and align environment
 % http://phaseportrait.blogspot.ca/2007/08/lineno-and-amsmath-compatibility.html
-\newcommand*\patchAmsMathEnvironmentForLineno[1]{%
-  \expandafter\let\csname old#1\expandafter\endcsname\csname #1\endcsname
-  \expandafter\let\csname oldend#1\expandafter\endcsname\csname end#1\endcsname
-  \renewenvironment{#1}%
-     {\linenomath\csname old#1\endcsname}%
-     {\csname oldend#1\endcsname\endlinenomath}}%
-\newcommand*\patchBothAmsMathEnvironmentsForLineno[1]{%
-  \patchAmsMathEnvironmentForLineno{#1}%
-  \patchAmsMathEnvironmentForLineno{#1*}}%
-\AtBeginDocument{%
-\patchBothAmsMathEnvironmentsForLineno{equation}%
-\patchBothAmsMathEnvironmentsForLineno{align}%
-\patchBothAmsMathEnvironmentsForLineno{flalign}%
-\patchBothAmsMathEnvironmentsForLineno{alignat}%
-\patchBothAmsMathEnvironmentsForLineno{gather}%
-\patchBothAmsMathEnvironmentsForLineno{multline}%
-}
+% \newcommand*\patchAmsMathEnvironmentForLineno[1]{%
+%   \expandafter\let\csname old#1\expandafter\endcsname\csname #1\endcsname
+%   \expandafter\let\csname oldend#1\expandafter\endcsname\csname end#1\endcsname
+%   \renewenvironment{#1}%
+%      {\linenomath\csname old#1\endcsname}%
+%      {\csname oldend#1\endcsname\endlinenomath}}%
+% \newcommand*\patchBothAmsMathEnvironmentsForLineno[1]{%
+%   \patchAmsMathEnvironmentForLineno{#1}%
+%   \patchAmsMathEnvironmentForLineno{#1*}}%
+% \AtBeginDocument{%
+% \patchBothAmsMathEnvironmentsForLineno{equation}%
+% \patchBothAmsMathEnvironmentsForLineno{align}%
+% \patchBothAmsMathEnvironmentsForLineno{flalign}%
+% \patchBothAmsMathEnvironmentsForLineno{alignat}%
+% \patchBothAmsMathEnvironmentsForLineno{gather}%
+% \patchBothAmsMathEnvironmentsForLineno{multline}%
+% }
 
 % remove numbers in front of sections:
 \makeatletter
@@ -217,7 +217,7 @@ in the final dataset from \Sexpr{ndat$annual} to
 \section{Model checking with two-stage approach}
 
 We checked our models with a two-stage modelling approach
-using the R package lme4 \citep{bates2015}.
+using the R package lme4 [49].
 To do this, we fit the initial model of the mean component $\log(R_{i,t})$
 and then fit the second model to the log absolute value of the
 residuals, $\log | \widehat{\log(R_{i,t})} - \log(R_{i,t}) |$.
@@ -234,8 +234,8 @@ matched the estimates of the same model in lme4 almost exactly.
 
 % \verbatiminput{../analysis/portfolio-offset.stan}
 
-\bibliographystyle{apalike}
-\bibliography{refs}
+% \bibliographystyle{apalike}
+% \bibliography{refs}
 
 \end{spacing}
 
@@ -252,13 +252,13 @@ fishing strategy. ``Sock'' refers to sockeye salmon.}
   \label{tab:strategies}
   \begin{tabular}{llll}
   \toprule
-\input{../figs/strategy-table.tex}
+\input{strategy-table.tex}
   \end{tabular}
 \end{table}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1\textwidth]{../figs/stan-gg-spoke-all.pdf}
+\includegraphics[width=1\textwidth]{stan-gg-spoke-all.pdf}
 \caption{The effect of adding a permit to one's strategy
 on estimated revenue variability and median revenue.
 This is an extended version of Fig.~2 that includes all major
@@ -269,7 +269,7 @@ strategy combinations.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=5in]{../figs/stan-main-effects.pdf}
+\includegraphics[width=5in]{stan-main-effects.pdf}
 \caption{Main effects from the hierarchical model
 predicting revenue ($\beta$) and variability ($\gamma$) in revenue.
 The $\eta$ coefficients represent strategy-level predictors
@@ -286,7 +286,7 @@ to the magnitude of residual error.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1.06\textwidth]{../figs/stan-str-posteriors-dot.pdf}
+\includegraphics[width=1.06\textwidth]{stan-str-posteriors-dot.pdf}
 \caption{Estimates of within-strategy effects from the hierarchical model.
 Panels refer to parameters in equations \ref{eq:mean} and \ref{eq:cv}.
 Shown are medians (dots) and 50\% and 95\% credible intervals
@@ -301,7 +301,7 @@ species diversity from top to bottom.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1.05\textwidth]{../figs/stan-offset-break-anti-spaghetti.pdf}
+\includegraphics[width=1.05\textwidth]{stan-offset-break-anti-spaghetti.pdf}
 \caption{Effects of (A) generalizing and (B) specializing from year-to-year for
   individual permit holders \emph{within} the \Sexpr{nstr} most common
   strategies. Changing species diversity from year-to-year is associated with
@@ -318,7 +318,7 @@ species diversity from top to bottom.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=0.6\textwidth]{../figs/stan-offset-break-anti-spaghetti-specializing-no-effort.pdf}
+\includegraphics[width=0.6\textwidth]{stan-offset-break-anti-spaghetti-specializing-no-effort.pdf}
 \caption{Same as Fig.~4 but without the effort (days fished) predictor and
   without its interaction with species diversity.}
 \label{fig:noeffort}
@@ -327,7 +327,7 @@ species diversity from top to bottom.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1\textwidth]{../figs/itq-combined.pdf}
+\includegraphics[width=1\textwidth]{itq-combined.pdf}
 \caption{The effect of IFQs (individual fishing quotas) on model estimates. (A)
   Posterior density of the ratio between strategy-level estimates of
   standardized revenue variability ($\gamma_{0j}$'s) after the introduction of
@@ -343,7 +343,7 @@ species diversity from top to bottom.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1\textwidth]{../figs/strategy-year-effects.pdf}
+\includegraphics[width=1\textwidth]{strategy-year-effects.pdf}
 \caption{Strategy-year intercept estimates ($\beta_{0,j,t}$ in
 Eq.~\ref{eq:mean}) from the hierarchical model.
 Shown are 40 samples from the posterior distribution.}
@@ -353,7 +353,7 @@ Shown are 40 samples from the posterior distribution.}
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid.png}
+\includegraphics[width=1\textwidth]{stan-offset-panel-mean-resid.png}
 \caption{The log-absolute value residuals from the mean-component model (Eq.~\ref{eq:mean}).
 These residuals are modelled in the variance-component model
 (Eq.~\ref{eq:cv}).
@@ -364,7 +364,7 @@ Breakpoint linear regression fits are overlaid in red for visual interpretation.
 
 \begin{figure}[htbp]
 \begin{center}
-\includegraphics[width=1\textwidth]{../figs/stan-offset-panel-mean-resid-down.png}
+\includegraphics[width=1\textwidth]{stan-offset-panel-mean-resid-down.png}
 \caption{The log-absolute value of downside (negative) residuals from the main
 component model.
 Figure looks qualitatively the same as Fig.~\ref{fig:resid} and so justifies
@@ -375,7 +375,7 @@ using variability (positive and negative residuals) as a measure of risk.}
 
 % \begin{figure}[htbp]
 % \begin{center}
-% \includegraphics[width=0.9\textwidth]{../figs/lmer-vs-stan2.pdf}
+% \includegraphics[width=0.9\textwidth]{lmer-vs-stan2.pdf}
 % \caption{Comparison of }
 % \label{fig:lmer-stan}
 % \end{center}
