@@ -78,22 +78,25 @@ don’t observe their wages in non-fishing activities.  I’m not sure if this i
 worth bringing up, but this is always the case anyway with vessels where the
 skipper may do other things. triue, and for others - KH and Cl et al. ...-->
 
-Using a unique dataset collected over 30 years on individual fishers, rather 
-than fleets or vessels, we examine how revenue and revenue variability of 
+Using a unique dataset collected over 30 years on individual fishers, rather
+than fleets or vessels, we examine how revenue and revenue variability of
 individuals is affected by diversification. By tracking individuals, it is
 possible to track people that switch fishery permits over time or use multiple
-vessels and differentiate fishers that share the same vessel. We developed and
-applied a hierarchical Bayesian model to understand the effect of species
-diversity within fisheries catches on individual revenue and revenue
-variability. Our model builds on results from vessel [@kasperski2013], fleet
-[@sethi2012b], and community-level [@sethi2014; @cline2017] variability. We
-developped a variance-function regression model [@davidian1987; @hall1989], to
-simultaneously model changes in the mean and variance of individual revenue as a
-function of covariates. We simultaneously estimate the effect of species
+vessels and differentiate fishers that share the same vessel. We develop
+a hierarchical variance-function regression model [@davidian1987; @hall1989] to
+simultaneously understand the effect of species
+diversity within fisheries catches on individual revenue and revenue variability.
+Our model builds on results from vessel [@kasperski2013], fleet [@sethi2012b],
+and community-level [@sethi2014; @cline2017] variability,
+and although we model revenue *variability*, we herein equate revenue
+variability with risk for consistency with Kasperski and Holland [@kasperski2013].
+We simultaneously estimate the effect of species
 diversity (the inverse of Simpson's diversity index [@simpson1949; @jost2006])
 on individual revenue and revenue variability, and estimate effects both within
 and across fishing strategies while controlling for fishing effort and latent
-time effects (e.g. changing environmental conditions). We use the model to evaluate two axes by which fishers in Alaska can diversify fishing activities:
+time effects (e.g. changing environmental conditions).
+We use the model to evaluate two axes by which fishers in Alaska can
+diversify fishing activities:
 (1) choice of permit strategy (i.e., permit or set of permits fished), and (2)
 choice of what species to fish *within* a permit strategy. To our knowledge,
 this is the first application of this type of model in any natural resource
