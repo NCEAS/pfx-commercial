@@ -44,7 +44,6 @@ commercial fishers [@kasperski2013]. However, fishers may be able to lower risk
 by diversifying their fishing portfolio. They can, for example, target as many
 species as allowed by a permit, own multiple permits, or diversify spatially and
 fish in multiple regions.
-
 The effectiveness of these diversification strategies
 for increasing revenue and reducing revenue variability remains uncertain.
 Theory and empirical studies demonstrate that there can be substantial
@@ -75,14 +74,15 @@ Using a unique dataset collected over 30 years on individual fishers, rather
 than fleets or vessels, we examine how revenue and revenue variability of
 individuals is affected by diversification. By tracking individuals, it is
 possible to track people that switch fishery permits over time or use multiple
-vessels and differentiate fishers that share the same vessel. We develop
-a hierarchical variance-function regression model [@davidian1987; @hall1989] to
-simultaneously understand the effect of species
-diversity within fisheries catches on individual revenue and revenue variability.
+vessels and differentiate fishers that share the same vessel.
+To simultaneously understand the effect of species
+diversity within fisheries catches on individual revenue and revenue variability,
+we develop a hierarchical variance-function regression model [@davidian1987; @hall1989].
 Our model builds on results from vessel [@kasperski2013], fleet [@sethi2012b],
 and community-level [@sethi2014; @cline2017] variability,
-and although we model revenue *variability*, we herein equate revenue
-variability with risk for consistency with Kasperski and Holland [@kasperski2013].
+and, although we model revenue variability, we herein equate revenue
+variability with financial risk for consistency 
+with Kasperski and Holland [@kasperski2013][^2].
 We simultaneously estimate the effect of species
 diversity (the inverse of Simpson's diversity index [@simpson1949; @jost2006])
 on individual revenue and revenue variability, and estimate effects both within
@@ -94,6 +94,10 @@ diversify fishing activities:
 choice of what species to fish *within* a permit strategy. To our knowledge,
 this is the first application of this type of model in any natural resource
 field.
+
+[^2]: More specifically, variability is one component of risk. Risk combines
+elements of variability, uncertainty, and loss to define the "possibility of
+a bad thing happening" [@sethi2010b].
 
 \section*{Results}
 
@@ -143,9 +147,6 @@ diversity or days fished from year-to-year. }
 \label{fig:across}
 \end{center}
 \end{figure}
-<!-- TODO AB: To me it is more intuitive that the darker, hotter colors would
-represent higher values. Consdier reversing the color scale to go from red
-(highest # of permit holders) to yellow (lowest #).  -->
 
 Individual revenue variability decreases exponentially with higher mean fished
 species diversity across combinations of state and federal fishing permits
@@ -174,7 +175,7 @@ themselves represent a significant expense.
 \begin{center}
 \includegraphics[width=0.65\textwidth]{stan-gg-spoke2.pdf}
 
-\caption{Diversifying permits reduces risk and usually increases revenue. Two
+\caption{Diversifying permits reduces revenue variability and usually increases revenue. Two
 examples of expected revenue variability and median revenue for owners of (A)
 individual halibut and (B) gillnet herring roe permits (dark blue) compared with
 owners of the same permit plus one more (medium blue) or two more (light
