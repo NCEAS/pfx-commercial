@@ -10,9 +10,9 @@
 \usepackage{setspace}
 \usepackage{booktabs}
 % \usepackage{verbatim}
-\usepackage{amsmath}
+% \usepackage{amsmath}
 \usepackage{url}
-\usepackage{mathtools}
+% \usepackage{mathtools}
 % \usepackage{lineno}
 % \usepackage{xcolor}
 % \renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
@@ -31,8 +31,8 @@
 
 \textheight 22.0cm
 
-\usepackage[round,sectionbib]{natbib}
-\bibpunct{(}{)}{;}{a}{}{;}
+% \usepackage[round,sectionbib]{natbib}
+% \bibpunct{(}{)}{;}{a}{}{;}
 
 \setlength\parskip{0.10in}
 \setlength\parindent{0in}
@@ -71,9 +71,12 @@
 \newlabel{eq:mean}{3}
 \newlabel{eq:cv}{7}
 
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+
 \begin{document}
 
-\linenumbers
+% \linenumbers
 
 \setlength{\parindent}{0.9cm}
 \setlength\parskip{0in}
@@ -97,9 +100,6 @@ n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 @
 
 \maketitle
-
-\renewcommand{\thefigure}{S\arabic{figure}}
-\renewcommand{\thetable}{S\arabic{table}}
 
 \section{Filtering data and grouping permits into strategies}
 
@@ -277,7 +277,12 @@ relating mean species diversity and mean days fished
 within a strategy
 (both centered by their means and divided by
 two times their standard deivations)
-to the magnitude of residual error.}
+to the magnitude of residual error.
+Note that $\mu_{\beta_1}$, $\beta_4$, $\mu_{\gamma_1}$, and $\gamma_4$
+have been multiplied by $-1$
+to make these coefficients interpretable as effects of
+increasing specialization (as opposed to decreasing specialization).
+}
 \label{fig:fe}
 \end{center}
 \end{figure}
@@ -292,7 +297,10 @@ Panels refer to parameters in equations \ref{eq:mean} and \ref{eq:cv}.
 Shown are medians (dots) and 50\% and 95\% credible intervals
 (thick and thin line segments).
 Strategies are ordered from high to low mean
-species diversity from top to bottom.}
+species diversity from top to bottom.
+Note that $\gamma_{1,j}$ and $\beta_{1,j}$ have been multiplied by $-1$
+to make these coefficients interpretable as effects of
+increasing specialization (as opposed to decreasing specialization).}
 \label{fig:re}
 \end{center}
 \end{figure}
@@ -311,7 +319,14 @@ species diversity from top to bottom.}
   to the left of the zero line. These effects are estimated holding fishing
   season length constant from year-to-year. Dots and line segments represent
   medians and 50\% credible intervals of posteriors. Panel B and Fig.~4 are the
-  same.}
+  same.
+This is a bivariate display of the $\gamma_{1,j}$, $\gamma_{2,j}$, $\beta_{1,j}$,
+  and $\beta_{2,j}$ coefficient estimates displayed in Fig.~\ref{fig:re}.
+  Note that $\gamma_{1,j}$ (panel B vertical axis) and $\beta_{1,j}$ (panel B
+  horizontal axis) have been multiplied by $-1$ to make these coefficients
+  interpretable as effects of increasing specialization (as opposed to
+  decreasing specialization).
+  }
 \label{fig:mirror}
 \end{center}
 \end{figure}

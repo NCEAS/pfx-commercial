@@ -207,10 +207,10 @@ and \(\mu_{i,t}\) is modelled as:
 \begin{equation}
   \begin{split}
 \label{eq:mean}
-\mu_{i,t} = \beta_{0,j,t} -
+\mu_{i,t} = \beta_{0,j,t} +
   \beta_{1,j} S_{i,t} I_{i,t} +
   \beta_{2,j} S_{i,t} I_{i,t} +
-  \beta_3 D_{i,t} -\\
+  \beta_3 D_{i,t} +\\
   \beta_4 S_{i,t} D_{i,t} I_{i,t} +
   \beta_5 S_{i,t} D_{i,t} I_{i,t} +
   \log(R_{i,t-1}),
@@ -227,9 +227,10 @@ generalizing) and takes a value \(1\) if \(\mathrm{div}_{i,t} <
   \mathrm{div}_{i,t-1}\) (species diversity decreasing year-to-year;
 specializing). Estimating a separate coefficient for the effect of increasing
 diversity and decreasing diversity allows the costs and benefits of these
-changes to be asymmetric (Fig.~S\figresid). The negative signs in front of
-$\beta_{1,j}$ and $\beta_4$ makes these coefficients interpretable as effects of
-increasing specialization (as opposed to decreasing specialization).
+changes to be asymmetric (Fig.~S\figresid). 
+% The negative signs in front of
+% $\beta_{1,j}$ and $\beta_4$ makes these coefficients interpretable as effects of
+% increasing specialization (as opposed to decreasing specialization).
 
 We use \(\log(R_{i,t-1}\)) as an offset, and thus our model describes the log
 ratio of revenue from year-to-year, i.e., \(\log(R_{i,t}) - \log(R_{i,t-1}) =
@@ -288,10 +289,10 @@ hierarchical model with a similar form:
 \begin{split}
 \label{eq:cv}
 \sigma_{i,t} =
-\exp (\gamma_{0,j} -
+\exp (\gamma_{0,j} +
 \gamma_{1,j} S_{i,t} I_{i,t} +
 \gamma_{2,j} S_{i,t} I_{i,t} +
-\gamma_3 D_{i,t} -\\
+\gamma_3 D_{i,t} +\\
 \gamma_4 S_{i,t} D_{i,t} I_{i,t} +
 \gamma_5 S_{i,t} D_{i,t} I_{i,t}).
 \end{split}
