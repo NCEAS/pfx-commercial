@@ -69,7 +69,7 @@ permits can be expensive[^1], and some fisheries limit the entry of new
 participants through individual fishing quotas (IFQs) [@grimm2012].
 
 [^1]: For example, it cost ~\$192K USD for a king and tanner crab permit in
-Southeast Alaska in 2016: <https://www.cfec.state.ak.us/pmtvalue/X_K69A.HTM>.
+Southeast Alaska in 2017: <https://www.cfec.state.ak.us/pmtvalue/X_K69A.HTM>.
 
 Using a unique dataset collected over 30 years on individual fishers, rather
 than fleets or vessels, we examine how revenue and revenue variability of
