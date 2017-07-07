@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage{geometry}
 \geometry{verbose, letterpaper, tmargin = 2.54cm, bmargin = 2.54cm,
-  lmargin = 2.54cm, rmargin = 2.54cm}
+  lmargin = 2.64cm, rmargin = 2.64cm}
 \geometry{letterpaper}
 \usepackage{graphicx}
 \usepackage{amssymb}
@@ -17,6 +17,7 @@
 % \usepackage{xcolor}
 % \renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{gray}}
 % \modulolinenumbers[2]
+\usepackage{lscape}
 
 % % Linux Libertine:
 % \usepackage{textcomp}
@@ -62,9 +63,20 @@
 \renewcommand\@seccntformat[1]{}
 \makeatother
 
-\title{Supporting Information}
+\title{Supporting Information Appendix:\\
+  Benefits and risks of diversification for individual fishers}
 
 \author{
+Sean C. Anderson \and
+Eric J. Ward \and
+Andrew O. Shelton \and
+Milo D. Adkison \and
+Anne H. Beaudreau \and
+Richard E. Brenner \and
+Alan C. Haynie \and
+Jennifer C. Shriver \and
+Jordan T. Watson \and
+Benjamin C. Williams
 }
 \date{}
 
@@ -241,6 +253,7 @@ matched the estimates of the same model in lme4 almost exactly.
 
 \clearpage
 
+\begin{landscape}
 \begin{table}[h!]
 \scriptsize
   \centering
@@ -255,6 +268,7 @@ fishing strategy. ``Sock'' refers to sockeye salmon.}
 \input{strategy-table.tex}
   \end{tabular}
 \end{table}
+\end{landscape}
 
 \begin{figure}[htbp]
 \begin{center}
@@ -330,6 +344,8 @@ This is a bivariate display of the $\gamma_{1,j}$, $\gamma_{2,j}$, $\beta_{1,j}$
 \label{fig:mirror}
 \end{center}
 \end{figure}
+
+\clearpage
 
 \begin{figure}[htbp]
 \begin{center}
