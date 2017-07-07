@@ -13,13 +13,14 @@ n_grouped_permits <- readRDS("../data-generated/n_grouped_permits.rds")
 <!-- # Introduction -->
 
 \dropcap{I}t can be difficult for individuals to sustain a livelihood from
-natural resource extraction. These livelihoods tend to have high annual 
-variability in income relative to other professions [@mishra2002; @sethi2012b]. 
-In addition to economic risk, such as changes in demand or prices, individuals 
-dependent on natural resources are also subject to biological and environmental 
-variability [@smith1986]. For example, drought and flooding are a major source 
-of risk for agricultural food security and farmers' incomes [@gregory2005], and 
-catastrophic disease outbreaks and wildfires increase risk for the logging 
+natural resource extraction. These livelihoods tend to have high annual
+variability in income relative to other professions [@mishra2002; @sethi2012b].
+In addition to income variability from economic sources,
+such as changes in demand or prices, individuals
+dependent on natural resources are also subject to biological and environmental
+variability [@smith1986]. For example, drought and flooding are a major source
+of risk for agricultural food security and farmers' incomes [@gregory2005], and
+catastrophic disease outbreaks and wildfires increase risk for the logging
 industry [@kirilenko2007].
 <!-- Could add anthropogenic perturbations (e.g., Exxon Valdez) to this
 list or in the next paragraph. -->
