@@ -21,10 +21,6 @@ colnames(p$coef_b2_strategy) <- md$strategy
 
 library(tidyr)
 
-# g0_strategy <- gather(p$coef_g0_strategy[1,], strategy, g0_strategy)
-# g1_strategy <- gather(p$coef_g1_strategy[1,], strategy, g1_strategy)
-# g2_strategy <- gather(p$coef_g2_strategy[1,], strategy, g2_strategy)
-
 iters <- seq(1, nrow(p$b_j), 10)
 length(iters)
 out <- matrix(ncol = length(iters), nrow = nrow(dat))
@@ -124,20 +120,7 @@ g <- ggplot(o, aes(year, b0_str_yr, group = iter)) + geom_line(alpha = 0.1) +
   ylab("Strategy-year intercept (b0)")
 ggsave("portfolio/figs/strategy-year-effects.pdf", width = 10, height = 9)
 
-# dat_ann = readRDS(file="portfolio/data-generated/cfec-annual-for-modeling.rds")
-# dat_diff = readRDS(file="portfolio/data-generated/cfec-diff-for-modeling.rds")
-
-# filter(dat_diff, substr(strategy_permit,1,3)%in%c("D09","D9C","D9D")) %>%
-
-# rm(mm)
-# source("portfolio/analysis/prep-stan-model-matrix.R")
-# dat$str_label <- NULL
-# dat <- inner_join(dat, select(md, strategy_id, str_label))
-# ggplot(filter(dat, strategy == "D09"), aes(year, revenue)) + geom_point(alpha = 0.1) +
-#   facet_wrap(~strategy) + geom_hline(yintercept = 5000) + xlim(1986, 2015)
-# length(unique(dat$strategy))
-
-# ifq
+# ifqs
 
 ifq <- filter(dat_res, str_label %in% c("Hal ll + Sab", "Fin otter", "King C + Tan C")) %>%
   mutate(ifq0 = year >= 1995 & str_label == "Hal ll + Sab") %>%

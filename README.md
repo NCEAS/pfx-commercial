@@ -1,31 +1,14 @@
-# Commercial fishing portfolio analyses 
+# Analysis for 'Benefits and risks of diversification for individual fishers'
 
-The 4 main projects (each representing a different paper, descriptions below) are in the folders:
-`diversity`,
-`portfolio`,
-`evos-ifq`, and
-`salmon`.
+These subfolders contain code for the paper:
+Anderson, S.C., E.J. Ward, A.O. Shelton, M.D. Adkison, A.H. Beaudreau, R.E.
+Brenner, A.C. Haynie, J.C. Shriver, J.T. Watson, B.C. Williams. Benefits and
+risks of diversification for individual fishers. In press at
+Proceedings of the National Academy of Sciences.
 
-The folder `data` contains the raw data.
+Within the folder `portfolio/analysis`, files are run in order according to their names (`0-...R` then `1-...R`, etc.).
 
-Any data files that are generated throughout analyses 
-are saved in a `data-generated` folder within a given project. 
+The main hierarchical variance function regression Stan model is in the file `portfolio/analysis/portfolio-offset.stan`.
 
-The folder `pfxr` contains an R package with any reusable functions. It can be loaded from within any of the analysis folders with:
-
-```r
-devtools::load_all("pfxr")
-```
-
-## Papers and analyses
-
-### Effects of diversification on individual fishers (Anderson et al.)
-
-The main files for this project are in the `portfolio` folder, including code to replicate the modeling (`portfolio/analysis`) --- including model files in Stan, text and bibliography for the paper (`portfolio/paper`) and plots (`portfolio/figs`) --- including many not included in the main paper.
-
-### Changing benefits of diversification for salmon fishers (Ward et al.)
-
-The main files for this project (`salmon`) are the code to replicate the modeling (`salmon/analysis`) --- including model files in Stan, and the text and bibliography for the paper (`salmon/paper`).
-
-### Dynamics and opportunities of diversification in Alaskan fisheries (Beaudreau et al.)
+The fisheries data used in this study, although confidential, are available from the Commercial Fisheries Entry Commission (<https://www.cfec.state.ak.us/>).
 

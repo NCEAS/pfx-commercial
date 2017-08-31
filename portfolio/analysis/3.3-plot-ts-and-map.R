@@ -1,4 +1,4 @@
-# This figure is meant to illustrate increased specialization
+# This figure is meant to illustrate changes to specialization
 
 # number of permits / person
 library(dplyr)

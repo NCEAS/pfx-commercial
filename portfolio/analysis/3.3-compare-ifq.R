@@ -5,9 +5,9 @@ load("portfolio/data-generated/m_ifq.rda")
 load("portfolio/data-generated/m.rda")
 devtools::load_all("pfxr")
 
-b <- broom::tidyMCMC(m, conf.int = T, estimate.method = "median",
+b <- broom::tidyMCMC(m, conf.int = TRUE, estimate.method = "median",
   conf.level = 0.5, conf.method = "quantile")
-b_ifq <- broom::tidyMCMC(m_ifq, conf.int = T, estimate.method = "median",
+b_ifq <- broom::tidyMCMC(m_ifq, conf.int = TRUE, estimate.method = "median",
   conf.level = 0.5, conf.method = "quantile")
 
 g0 <- b[grepl("coef_g0", b$term), ]

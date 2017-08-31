@@ -8,20 +8,6 @@ load("portfolio/data-generated/m.rda")
 # devtools::install_github("seananderson/stanhelpers")
 p <- stanhelpers::extract_df(m)
 
-# colnames(p$coef_g0_strategy) <- md$strategy
-#
-
-# g0.0 <- p$g0[[1]]
-# g0 <- tidyr::gather(p$coef_g0_strategy, strategy, posterior) %>%
-#   group_by(strategy) %>%
-#   summarise(
-#     g0.l = quantile(posterior/2 + g0.0/2, probs = 0.025),
-#     g0.l.5 = quantile(posterior/2 + g0.0/2, probs = 0.25),
-#     g0.m = quantile(posterior/2+ g0.0/2, probs = 0.5),
-#     g0.u.5 = quantile(posterior/2 + g0.0/2, probs = 0.75),
-#     g0.u = quantile(posterior/2 + g0.0/2, probs = 0.975)) %>%
-#   inner_join(md)
-
 g0_temp <- p$g0_strategy %>%
   tidyr::gather(strategy, posterior) %>%
   mutate(strategy_id =
