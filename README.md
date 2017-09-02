@@ -1,5 +1,7 @@
 # Code for 'Benefits and risks of diversification for individual fishers'
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.883628.svg)](https://doi.org/10.5281/zenodo.883628)
+
 This repository contains code for the paper: Anderson, S.C., E.J. Ward, A.O.
 Shelton, M.D. Adkison, A.H. Beaudreau, R.E. Brenner, A.C. Haynie, J.C. Shriver,
 J.T. Watson, B.C. Williams. Benefits and risks of diversification for
